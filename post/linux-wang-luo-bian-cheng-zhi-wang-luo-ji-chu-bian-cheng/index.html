@@ -1,0 +1,780 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Linux网络编程之网络基础编程 | 小杨同学</title>
+<link rel="stylesheet" href="https://xiaoyangst.github.io//styles/main.css">
+<script src="https://xiaoyangst.github.io//media/script.js"></script>
+
+    
+
+  <meta name="description" content="阻塞与非阻塞的概念
+阻塞是指当一个程序执行某个操作时，如果该操作不能立即完成，程序将会停止执行，一直等待操作完成后才会继续执行下去。在阻塞状态下，程序无法做其他的事情，直到当前操作完成。
+非阻塞则是指当一个程序执行某个操作时，如果该操作不能...">
+  <script src="https://xiaoyangst.github.io//media/prism.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+</head>
+<body>
+  <div class="antialiased">
+    <div class="max-w-5xl mx-auto px-6 md:px-8">
+      <div class="flex justify-between items-center mt-10">
+  <h1 class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-900 font-medium md:font-normal leading-none">
+    <a href="https://xiaoyangst.github.io/">小杨同学</a>
+  </h1>
+  <div class="block lg:hidden" id="thumb-menu">
+    <button id="thumb-open" type="button" class="block">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6H22V7H2V6ZM2 12H22V13H2V12ZM22 18H2V19H22V18Z" class="fill-current text-gray-900"></path></svg>
+    </button>
+    <button id="thumb-close" type="button" class="hidden">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L20 20M20 4L4 20" class="" stroke="#1A202C"></path></svg>
+    </button>
+  </div>
+</div>
+<div id="nav-list" class="lg:block hidden">
+  <div class="w-full block lg:flex lg:justify-between lg:border-b lg:border-gray-400 mt-10 text-gray-700 font-medium lg:text-lg">
+    <div class="lg:flex -mb-px">
+      
+        
+          <a href="/" class="nav-link">首页</a>
+        
+      
+        
+          <a href="/archives" class="nav-link">归档</a>
+        
+      
+        
+          <a href="/tags" class="nav-link">标签</a>
+        
+      
+        
+          <a href="/post/about" class="nav-link">关于</a>
+        
+      
+    </div>
+    <div class="lg:flex">
+      
+        
+          <a href="https://github.com/xiaoyangst" class="block lg:mt-0 lg:ml-8 flex align-center hover:text-gray-900" target="_blank">
+            <div>GitHub</div>
+            <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-1 -mt-px"><path d="M16.5 13V18.5H6.5V8.5H12" stroke="#4A5568"></path> <path d="M10 15L18.5 6.5" stroke="#4A5568"></path> <path d="M14 6.5H18.5V11" stroke="#4A5568"></path></svg>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+      <a href="https://xiaoyangst.github.io//atom.xml" class="block mt-6 lg:mt-0 lg:ml-8 flex align-center hover:text-gray-900" target="_blank">
+        <div>RSS</div>
+        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-1 -mt-px"><path d="M16.5 13V18.5H6.5V8.5H12" stroke="#4A5568"></path> <path d="M10 15L18.5 6.5" stroke="#4A5568"></path> <path d="M14 6.5H18.5V11" stroke="#4A5568"></path></svg>
+      </a>
+    </div>
+  </div>
+</div>
+      <div class="mb-20 md:flex mt-10 lg:mt-6 md:border-t md:border-gray-400 md:pt-2 lg:border-t-0 lg:pt-0">
+        <div class="w-full md:w-2/3 mt-6">
+          <h1 class="text-4xl">Linux网络编程之网络基础编程</h1>
+          
+            <img class="max-w-full mt-6 rounded-sm" src="https://xiaoyangst.github.io//post-images/linux-wang-luo-bian-cheng-zhi-wang-luo-ji-chu-bian-cheng.jpg" alt="">
+          
+          <div class="mt-6 lg:mt-10 post-content">
+            <h2 id="阻塞与非阻塞的概念">阻塞与非阻塞的概念</h2>
+<p>阻塞是指当一个程序执行某个操作时，如果该操作不能立即完成，程序将会停止执行，一直等待操作完成后才会继续执行下去。在阻塞状态下，程序无法做其他的事情，直到当前操作完成。</p>
+<p>非阻塞则是指当一个程序执行某个操作时，如果该操作不能立即完成，程序会立即返回并继续执行下一个操作，而不会停止或等待。在非阻塞状态下，程序可以继续执行其他的任务，而不必等待当前操作完成。</p>
+<p>只是这样去谈阻塞与非阻塞是抽象的，下面实例演示这两个概念的含义。</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;arpa/inet.h&gt;
+
+#define Server_PORT 9999
+#define Client_COUNT 20
+
+int main(){
+
+	struct sockaddr_in Server_Info;
+
+	int Server_Socket = socket(AF_INET,SOCK_STREAM,0);
+	if (Server_Socket == -1) return -1;
+
+	Server_Info.sin_addr.s_addr = htons(INADDR_ANY);
+	Server_Info.sin_port = htonl(Server_PORT);
+	Server_Info.sin_family = AF_INET;
+
+	if((bind(Server_Socket, (struct sockaddr*)&amp;Server_Info, sizeof(Server_Info))) == -1) return -1;
+
+	if(listen(Server_Socket,Client_COUNT) == -1) return -1;
+
+	int NewSocket_Client = accept(Server_Socket, NULL,NULL);
+
+	if(NewSocket_Client == -1) return -1;
+
+	return 0;
+
+}
+</code></pre>
+<p>执行情况：</p>
+<figure data-type="image" tabindex="1"><img src="https://xiaoyangst.github.io//post-images/1688878157072.png" alt="" loading="lazy"></figure>
+<p>你会发现，如果不接收到客户端的连接请求，这个服务端就会一直阻塞在这里。</p>
+<p>下面演示非阻塞，讲一讲如何实现的问题，尽管我只是出于讲清楚这个概念的目的。</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;arpa/inet.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;fcntl.h&gt;
+
+
+#define Server_PORT 9999
+#define Client_COUNT 20
+#define Recv_SIZE 1024
+
+int main(){
+
+	struct sockaddr_in Server_Info;
+	char Server_Send[] = &quot;hello,client!&quot;;
+	char Server_Recv[Recv_SIZE] = {0};
+
+	int Server_Socket = socket(AF_INET,SOCK_STREAM,0);
+	if (Server_Socket == -1) return -1;
+
+	Server_Info.sin_addr.s_addr = htonl(INADDR_ANY);
+	Server_Info.sin_port = htons(Server_PORT);
+	Server_Info.sin_family = AF_INET;
+
+	if((bind(Server_Socket, (struct sockaddr*)&amp;Server_Info, sizeof(Server_Info))) == -1) return -1;
+
+    //设置为非阻塞模式
+	int flag = fcntl(Server_Socket, F_GETFL, 0);
+	flag |= O_NONBLOCK;
+	fcntl(Server_Socket,F_SETFL,flag);
+
+	if(listen(Server_Socket,Client_COUNT) == -1) return -1;
+
+	int NewSocket_Client = accept(Server_Socket, NULL,NULL);
+
+	if(NewSocket_Client == -1) return -1;
+	
+	return 0;
+
+}
+</code></pre>
+<p>执行情况：</p>
+<figure data-type="image" tabindex="2"><img src="https://xiaoyangst.github.io//post-images/1688878212251.png" alt="" loading="lazy"></figure>
+<p>根本没有要等待的意思，如此简陋的程序肯定无法凸显它的意义，暂时只需要知道设置套接字为非阻塞模式的好处是，当进行读取或写入操作时，不会因为没有立即可用的数据或缓冲区已满而阻塞等待，而是立即返回，以便进行其他处理或等待更多数据</p>
+<p>接着把这个服务器实现完整，能够持续处理客户端发送过来的信息，同时自己也回应客户端</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;arpa/inet.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+
+#define Server_PORT 9999
+#define Client_COUNT 20
+#define Recv_SIZE 1024
+
+int main(){
+
+	struct sockaddr_in Server_Info;
+	char Server_Send[] = &quot;hello,client!&quot;;
+	char Server_Recv[Recv_SIZE] = {0};
+
+	int Server_Socket = socket(AF_INET,SOCK_STREAM,0);
+	if (Server_Socket == -1) return -1;
+
+	Server_Info.sin_addr.s_addr = htonl(INADDR_ANY);
+	Server_Info.sin_port = htons(Server_PORT);
+	Server_Info.sin_family = AF_INET;
+
+	if((bind(Server_Socket, (struct sockaddr*)&amp;Server_Info, sizeof(Server_Info))) == -1) return -1;
+
+	if(listen(Server_Socket,Client_COUNT) == -1) return -1;
+
+	int NewSocket_Client = accept(Server_Socket, NULL,NULL);
+
+	if(NewSocket_Client == -1) return -1;
+
+	
+	while(1){
+
+		if((recv(NewSocket_Client, Server_Recv, sizeof(Server_Recv),0)) == -1) return -1;
+		printf(&quot;客户端发送的信息：%s\n&quot;,Server_Recv);
+
+		if((send(NewSocket_Client, Server_Send,sizeof(Server_Send), 0)) == -1) return -1;
+
+		memset(Server_Recv,0,sizeof(Server_Recv));
+
+	}
+
+	close(NewSocket_Client);
+	close(Server_Socket);
+
+	return 0;
+
+}
+</code></pre>
+<p>测试情况：</p>
+<figure data-type="image" tabindex="3"><img src="https://xiaoyangst.github.io//post-images/1688878228664.png" alt="" loading="lazy"></figure>
+<p>评价：代码简单，无需去了解进程、线程的概念，适合学习网络编程的初学者，但是没有任何的实用价值。读者能够理解阻塞与非阻塞的概念即可。</p>
+<h2 id="多进程服务器">多进程服务器</h2>
+<p>示意图以及说明：</p>
+<p>listen类似前台的工作者，会持续监听客户端的请求连接，如果有客户端发送请求连接就会交给accept函数建立新的socket连接，后续客户端和服务端的交流都是通过这个新的socket连接通信。因此，为了给每一个新的客户端一个socket连接，fork函数和accept函数放在第一个while循环中，而子进程是要在得到一个新的socket连接之后才开始创建，即accept函数在fork函数之前。而listen函数之所以不在循环中，因为它会一直监听，无需在循环中去。</p>
+<figure data-type="image" tabindex="4"><img src="https://xiaoyangst.github.io//post-images/1688878243164.png" alt="" loading="lazy"></figure>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;arpa/inet.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/wait.h&gt;
+#define Server_PORT 9999
+#define Client_COUNT 20
+#define Recv_SIZE 1024
+int main() 
+{
+	struct sockaddr_in Server_Info;
+	int NewSocket_Client;
+	char Server_Send[] = &quot;hello,client!&quot;;
+	char Server_Recv[Recv_SIZE] = {0};
+	pid_t StoC_pid;
+	int Server_Socket = socket(AF_INET,SOCK_STREAM,0);
+	if (Server_Socket == -1) return -1;
+	Server_Info.sin_addr.s_addr = htonl(INADDR_ANY);
+	Server_Info.sin_port = htons(Server_PORT);
+	Server_Info.sin_family = AF_INET;
+	if((bind(Server_Socket, (struct sockaddr*)&amp;Server_Info, sizeof(Server_Info))) == -1) return -1;
+	if(listen(Server_Socket,Client_COUNT) == -1) return -1;
+	while(1) 
+	{
+		NewSocket_Client = accept(Server_Socket, NULL,NULL);
+		if(NewSocket_Client == -1) return -1;
+        StoC_pid = fork();
+		if(StoC_pid == 0) 
+		{
+			while(1) 
+			{
+				if((recv(NewSocket_Client, Server_Recv, sizeof(Server_Recv),0)) == -1) return -1;
+				printf(&quot;客户端发送的信息：%s\n&quot;,Server_Recv);
+				if((send(NewSocket_Client, Server_Send,sizeof(Server_Send), 0)) == -1) return -1;
+				memset(Server_Recv,0,sizeof(Server_Recv));
+			}
+		}
+	}
+	return 0;
+}
+</code></pre>
+<p>执行情况：</p>
+<figure data-type="image" tabindex="5"><img src="https://xiaoyangst.github.io//post-images/1688878260363.png" alt="" loading="lazy"></figure>
+<p>说明与评价：多进程服务器的实现各位也看到了，这绝非一个合格的程序，因为进程资源没有回收，客户端这边断开连接就会出现僵尸进程。之所以不以优化为目的，而以实现简单功能为目的，是因为这种服务器在实际生成中也是意义不大，因为主机能创建的进程实在有限，进程开销远比线程大得多。</p>
+<h2 id="多线程服务器">多线程服务器</h2>
+<p>示意图以及说明：</p>
+<p>实际上就是把处理数据部分给线程函数，这就是为什么会写多进程服务器就可以自然而然的写出多线程服务器</p>
+<figure data-type="image" tabindex="6"><img src="https://xiaoyangst.github.io//post-images/1688878273588.png" alt="" loading="lazy"></figure>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;arpa/inet.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/wait.h&gt;
+#include &lt;pthread.h&gt;
+#define Server_PORT 9999
+#define Client_COUNT 20
+#define Recv_SIZE 1024
+void *t1(void* arg) 
+{
+	int NewSocket_Client = *(int *)arg;
+	char Server_Send[] = &quot;hello,client!&quot;;
+	char Server_Recv[Recv_SIZE] = {0};
+	while(1) 
+	{
+		if((recv(NewSocket_Client, Server_Recv, sizeof(Server_Recv),0)) == -1) return NULL;
+		printf(&quot;客户端发送的信息：%s\n&quot;,Server_Recv);
+		if((send(NewSocket_Client, Server_Send,sizeof(Server_Send), 0)) == -1) return NULL;
+		memset(Server_Recv,0,sizeof(Server_Recv));
+	}
+	return NULL;
+}
+int main() 
+{
+	struct sockaddr_in Server_Info;
+	int NewSocket_Client;
+	char Server_Send[] = &quot;hello,client!&quot;;
+	char Server_Recv[Recv_SIZE] = {0};
+	pthread_t tid;
+	int Server_Socket = socket(AF_INET,SOCK_STREAM,0);
+	if (Server_Socket == -1) return -1;
+	Server_Info.sin_addr.s_addr = htonl(INADDR_ANY);
+	Server_Info.sin_port = htons(Server_PORT);
+	Server_Info.sin_family = AF_INET;
+	if((bind(Server_Socket, (struct sockaddr*)&amp;Server_Info, sizeof(Server_Info))) == -1) return -1;
+	if(listen(Server_Socket,Client_COUNT) == -1) return -1;
+	while(1) 
+	{
+		NewSocket_Client = accept(Server_Socket, NULL,NULL);
+		if(NewSocket_Client == -1) return -1;
+		pthread_create(&amp;tid, NULL, &amp;t1, (void *)&amp;NewSocket_Client);
+	}
+	return 0;
+}
+</code></pre>
+<p>执行情况：</p>
+<figure data-type="image" tabindex="7"><img src="https://xiaoyangst.github.io//post-images/1688878283906.png" alt="" loading="lazy"></figure>
+<p>说明与评价：这个多线程程序不会出现僵尸进程，但是当一个客户端断开连接之后，其余的客户端同时也被断开了，这是因为我们没有对线程进行管理，这需要线程池的帮助，但显然不是本篇的内容。虽然开销比进程小，但是线程和进程有着同样的一个问题，即线程的创建也是有限的。不过，倒是有些需求比较小的人会选择这种方式，但这绝非能广泛应用的技术。</p>
+<h2 id="结语">结语</h2>
+<p>好像前面所讲皆无意义，因为得到实践的可能性极低，但这是认知绕不开的过程，初学者尤为必要走完这条路。其次，下面还是给出多进程和多线程的优化代码，尽管这暂时是没有必要的，特别是线程池的事情，后面肯定会花时间认识这个东西。</p>
+<p>优化的多进程服务器代码：</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;arpa/inet.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/wait.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;signal.h&gt;
+
+#define Server_PORT 9999
+#define Client_COUNT 20
+#define Recv_SIZE 1024
+
+void handleChildProcess(int signum)
+{
+    pid_t pid;
+    int status;
+
+    while ((pid = waitpid(-1, &amp;status, WNOHANG)) &gt; 0)
+    {
+        // 处理子进程退出情况
+        if (WIFEXITED(status))
+        {
+            printf(&quot;子进程 %d 退出，退出状态：%d\n&quot;, pid, WEXITSTATUS(status));
+        }
+        else
+        {
+            printf(&quot;子进程 %d 异常退出\n&quot;, pid);
+        }
+    }
+}
+
+int main()
+{
+    struct sockaddr_in Server_Info;
+    int NewSocket_Client;
+    char Server_Send[] = &quot;hello,client!&quot;;
+    char Server_Recv[Recv_SIZE] = {0};
+
+    // 设置 SIGCHLD 信号处理函数
+    signal(SIGCHLD, handleChildProcess);
+
+    int Server_Socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (Server_Socket == -1)
+    {
+        perror(&quot;socket 创建失败&quot;);
+        return -1;
+    }
+
+    Server_Info.sin_addr.s_addr = htonl(INADDR_ANY);
+    Server_Info.sin_port = htons(Server_PORT);
+    Server_Info.sin_family = AF_INET;
+
+    if (bind(Server_Socket, (struct sockaddr *)&amp;Server_Info, sizeof(Server_Info)) == -1)
+    {
+        perror(&quot;bind 绑定失败&quot;);
+        close(Server_Socket);
+        return -1;
+    }
+
+    if (listen(Server_Socket, Client_COUNT) == -1)
+    {
+        perror(&quot;listen 监听失败&quot;);
+        close(Server_Socket);
+        return -1;
+    }
+
+    while (1)
+    {
+        NewSocket_Client = accept(Server_Socket, NULL, NULL);
+        if (NewSocket_Client == -1)
+        {
+            perror(&quot;accept 连接失败&quot;);
+            continue;
+        }
+
+        pid_t StoC_pid = fork();
+        if (StoC_pid == 0)
+        {
+            close(Server_Socket); // 子进程不需要监听套接字
+
+            while (1)
+            {
+                ssize_t bytesReceived = recv(NewSocket_Client, Server_Recv, sizeof(Server_Recv), 0);
+                if (bytesReceived == -1)
+                {
+                    perror(&quot;recv 接收失败&quot;);
+                    break;
+                }
+                else if (bytesReceived == 0)
+                {
+                    printf(&quot;客户端断开连接\n&quot;);
+                    break;
+                }
+
+                printf(&quot;客户端发送的信息：%s\n&quot;, Server_Recv);
+
+                ssize_t bytesSent = send(NewSocket_Client, Server_Send, sizeof(Server_Send), 0);
+                if (bytesSent == -1)
+                {
+                    perror(&quot;send 发送失败&quot;);
+                    break;
+                }
+
+                memset(Server_Recv, 0, sizeof(Server_Recv));
+            }
+
+            close(NewSocket_Client);
+            exit(0); // 子进程退出
+        }
+        else if (StoC_pid &gt; 0)
+        {
+            close(NewSocket_Client); // 父进程不需要客户端套接字
+        }
+        else
+        {
+            perror(&quot;fork 创建子进程失败&quot;);
+            close(NewSocket_Client);
+            continue;
+        }
+    }
+
+    close(Server_Socket);
+    return 0;
+}
+
+</code></pre>
+<p>优化的多线程服务器代码：</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;arpa/inet.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/wait.h&gt;
+#include &lt;pthread.h&gt;
+
+#define Server_PORT 9999
+#define Client_COUNT 20
+#define Recv_SIZE 1024
+
+pthread_mutex_t mutex; // 互斥锁
+pthread_t threads[Client_COUNT]; // 线程数组
+int thread_count = 0; // 当前线程计数
+
+// 线程函数，处理客户端连接
+void *t1(void* arg) 
+{
+    int NewSocket_Client = *(int *)arg;
+    char Server_Send[] = &quot;hello,client!&quot;;
+    char Server_Recv[Recv_SIZE] = {0};
+    
+    while(1) 
+    {
+        // 接收客户端发送的信息
+        int recv_size = recv(NewSocket_Client, Server_Recv, sizeof(Server_Recv), 0);
+        if (recv_size &lt;= 0)
+        {
+            if (recv_size == 0)
+                printf(&quot;客户端断开连接\n&quot;);
+            else
+                perror(&quot;recv&quot;);
+            
+            break;
+        }
+        
+        printf(&quot;客户端发送的信息：%s\n&quot;, Server_Recv);
+        
+        // 向客户端发送信息
+        if (send(NewSocket_Client, Server_Send, sizeof(Server_Send), 0) == -1)
+        {
+            perror(&quot;send&quot;);
+            break;
+        }
+        
+        memset(Server_Recv, 0, sizeof(Server_Recv));
+    }
+    
+    // 关闭客户端套接字
+    close(NewSocket_Client);
+    
+    // 锁定互斥锁，删除线程
+    pthread_mutex_lock(&amp;mutex);
+    
+    int i;
+    for (i = 0; i &lt; thread_count; i++)
+    {
+        if (pthread_equal(threads[i], pthread_self()))
+        {
+            // 找到当前线程，将其从数组中删除
+            threads[i] = threads[thread_count - 1];
+            thread_count--;
+            break;
+        }
+    }
+    
+    // 解锁互斥锁
+    pthread_mutex_unlock(&amp;mutex);
+    
+    pthread_exit(NULL);
+}
+
+int main() 
+{
+    struct sockaddr_in Server_Info;
+    int NewSocket_Client;
+    char Server_Send[] = &quot;hello,client!&quot;;
+    char Server_Recv[Recv_SIZE] = {0};
+    
+    pthread_mutex_init(&amp;mutex, NULL); // 初始化互斥锁
+    
+    int Server_Socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (Server_Socket == -1)
+    {
+        perror(&quot;socket&quot;);
+        return -1;
+    }
+    
+    Server_Info.sin_addr.s_addr = htonl(INADDR_ANY);
+    Server_Info.sin_port = htons(Server_PORT);
+    Server_Info.sin_family = AF_INET;
+    
+    if(bind(Server_Socket, (struct sockaddr*)&amp;Server_Info, sizeof(Server_Info)) == -1)
+    {
+        perror(&quot;bind&quot;);
+        return -1;
+    }
+    
+    if(listen(Server_Socket, Client_COUNT) == -1)
+    {
+        perror(&quot;listen&quot;);
+        return -1;
+    }
+    
+    while(1) 
+    {
+        NewSocket_Client = accept(Server_Socket, NULL, NULL);
+        if(NewSocket_Client == -1)
+        {
+            perror(&quot;accept&quot;);
+            continue;
+        }
+        
+        // 锁定互斥锁，添加线程
+        pthread_mutex_lock(&amp;mutex);
+        
+        if (thread_count &gt;= Client_COUNT)
+        {
+            printf(&quot;达到最大客户端连接数，拒绝新连接\n&quot;);
+            close(NewSocket_Client);
+        }
+        else
+        {
+            pthread_create(&amp;threads[thread_count], NULL, &amp;t1, (void *)&amp;NewSocket_Client);
+            thread_count++;
+        }
+        
+        // 解锁互斥锁
+        pthread_mutex_unlock(&amp;mutex);
+    }
+    
+    // 等待所有线程结束
+    int i;
+    for (i = 0; i &lt; thread_count; i++)
+    {
+        pthread_join(threads[i], NULL);
+    }
+    
+    pthread_mutex_destroy(&amp;mutex); // 销毁互斥锁
+    
+    close(Server_Socket);
+    
+    return 0;
+}
+
+</code></pre>
+
+          </div>
+          
+            
+              <div class="mt-6">
+                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '727c980a037d0d3fd6dc',
+    clientSecret: 'bf61b2a3c16cf29751c8bf78b35632dea40904b9',
+    repo: 'xiaoyangst.github.io',
+    owner: 'xiaoyangst',
+    admin: ['xiaoyangst'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+              </div>
+            
+  
+            
+          
+        </div>
+        
+          <div class="w-full md:w-1/3">
+            <div class="mt-6 md:pl-8">
+              <h4 class="text-base font-thin text-gray-700 mb-2">发布时间</h4>
+              <div class="text-lg mb-6">2023-07-09</div>
+              <h4 class="text-base font-thin text-gray-700 mb-2">标签</h4>
+              <div class="mb-6">
+                
+                  <a href="https://xiaoyangst.github.io/tag/l-OQUKKAu/" class="py-1 px-4 border-gray-300 border text-sm inline-block text-gray-700 hover:text-gray-900 rounded mr-2 mb-2">Linux</a>
+                
+              </div>
+              <h4 class="text-base font-thin text-gray-700 mb-2">阅读时间</h4>
+              <div class="text-lg mb-6">13 min read</div>
+              <h4 class="text-base font-thin text-gray-700 mb-2">相关阅读</h4>
+              <div class="border-b border-gray-400">
+                
+
+  
+    
+      
+    
+  
+
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+        
+        <div class="border-t border-gray-400 py-6">
+          <a href="https://xiaoyangst.github.io/post/linux-xi-tong-diao-yong-zhi-jin-cheng/" class="text-lg hover:underline my-2 inline-block">Linux系统调用之进程</a>
+        </div>
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+
+              </div>
+            </div>
+          </div>
+        
+      </div>
+      <div class="footer border-gray-400 border-t pt-6 mt-6 sm:mt-8 md:mt-10 mb-20 text-gray-700 text-sm sm:text-base lg:text-lg">
+  <center>余虽不敏，然余诚矣</center>
+</div>
+    </div>
+  </div>
+  <script>
+    Prism.highlightAll()
+  </script>
+</body>
+</html>

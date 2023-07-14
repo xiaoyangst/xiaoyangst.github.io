@@ -1,0 +1,723 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Linux系统调用之进程 | 小杨同学</title>
+<link rel="stylesheet" href="https://xiaoyangst.github.io//styles/main.css">
+<script src="https://xiaoyangst.github.io//media/script.js"></script>
+
+    
+
+  <meta name="description" content="fork函数详解
+头文件：
+#include &amp;lt;unistd.h&amp;gt;
+
+函数原型：
+pid_t fork(void);
+
+fork（分支）指的是创建一个进程的副本，从而形成一个新的分支。为了更好理解这层含义，先看看创建进程fork...">
+  <script src="https://xiaoyangst.github.io//media/prism.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+</head>
+<body>
+  <div class="antialiased">
+    <div class="max-w-5xl mx-auto px-6 md:px-8">
+      <div class="flex justify-between items-center mt-10">
+  <h1 class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-900 font-medium md:font-normal leading-none">
+    <a href="https://xiaoyangst.github.io/">小杨同学</a>
+  </h1>
+  <div class="block lg:hidden" id="thumb-menu">
+    <button id="thumb-open" type="button" class="block">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6H22V7H2V6ZM2 12H22V13H2V12ZM22 18H2V19H22V18Z" class="fill-current text-gray-900"></path></svg>
+    </button>
+    <button id="thumb-close" type="button" class="hidden">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L20 20M20 4L4 20" class="" stroke="#1A202C"></path></svg>
+    </button>
+  </div>
+</div>
+<div id="nav-list" class="lg:block hidden">
+  <div class="w-full block lg:flex lg:justify-between lg:border-b lg:border-gray-400 mt-10 text-gray-700 font-medium lg:text-lg">
+    <div class="lg:flex -mb-px">
+      
+        
+          <a href="/" class="nav-link">首页</a>
+        
+      
+        
+          <a href="/archives" class="nav-link">归档</a>
+        
+      
+        
+          <a href="/tags" class="nav-link">标签</a>
+        
+      
+        
+          <a href="/post/about" class="nav-link">关于</a>
+        
+      
+    </div>
+    <div class="lg:flex">
+      
+        
+          <a href="https://github.com/xiaoyangst" class="block lg:mt-0 lg:ml-8 flex align-center hover:text-gray-900" target="_blank">
+            <div>GitHub</div>
+            <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-1 -mt-px"><path d="M16.5 13V18.5H6.5V8.5H12" stroke="#4A5568"></path> <path d="M10 15L18.5 6.5" stroke="#4A5568"></path> <path d="M14 6.5H18.5V11" stroke="#4A5568"></path></svg>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+      <a href="https://xiaoyangst.github.io//atom.xml" class="block mt-6 lg:mt-0 lg:ml-8 flex align-center hover:text-gray-900" target="_blank">
+        <div>RSS</div>
+        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-1 -mt-px"><path d="M16.5 13V18.5H6.5V8.5H12" stroke="#4A5568"></path> <path d="M10 15L18.5 6.5" stroke="#4A5568"></path> <path d="M14 6.5H18.5V11" stroke="#4A5568"></path></svg>
+      </a>
+    </div>
+  </div>
+</div>
+      <div class="mb-20 md:flex mt-10 lg:mt-6 md:border-t md:border-gray-400 md:pt-2 lg:border-t-0 lg:pt-0">
+        <div class="w-full md:w-2/3 mt-6">
+          <h1 class="text-4xl">Linux系统调用之进程</h1>
+          
+            <img class="max-w-full mt-6 rounded-sm" src="https://xiaoyangst.github.io//post-images/linux-xi-tong-diao-yong-zhi-jin-cheng.jpg" alt="">
+          
+          <div class="mt-6 lg:mt-10 post-content">
+            <h2 id="fork函数详解">fork函数详解</h2>
+<p>头文件：</p>
+<pre><code class="language-c">#include &lt;unistd.h&gt;
+</code></pre>
+<p>函数原型：</p>
+<pre><code class="language-c">pid_t fork(void);
+</code></pre>
+<p>fork（分支）指的是创建一个进程的副本，从而形成一个新的分支。为了更好理解这层含义，先看看创建进程fork函数的返回值情况：</p>
+<ul>
+<li>-1，代表创建新进程失败</li>
+<li>0，代表子进程</li>
+<li>非负数，代表父进程</li>
+</ul>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+
+int main(){
+
+	printf(&quot;父进程独享内容...\n&quot;);
+
+
+	pid_t fork_A = fork();	//创建子进程，该函数之前的代码独属于父进程
+
+	
+	if(fork_A == -1){
+
+		perror(&quot;新进程创建失败\n&quot;);
+		return 0;
+	
+	}else if(fork_A == 0){	//该区域内的代码属于子进程
+
+		printf(&quot;子进程的位置，子进程创建成功，PID = %d，PPID = %d\n&quot;,getpid(),getppid());
+
+	}else{//该区域内的代码属于父进程
+
+		printf(&quot;父进程的位置，PID = %d\n&quot;,getpid());
+	}
+
+    //以下代码属于父子进程
+    
+	printf(&quot;父子进程共享内容...\n&quot;);
+	
+
+	return 0;
+}
+</code></pre>
+<p>输出结果：</p>
+<figure data-type="image" tabindex="1"><img src="https://xiaoyangst.github.io//post-images/1687962327618.png" alt="" loading="lazy"></figure>
+<p>尽管图片展示的结果已经非常明了，但我想对于初学者还是有些懵圈，那你结合下面这张图片也许就能明白了。</p>
+<p>图中有凹进去的部分，这代表这部分代码会被执行；而直线下降部分代表被越过，不会被执行。</p>
+<figure data-type="image" tabindex="2"><img src="https://xiaoyangst.github.io//post-images/1687962338623.png" alt="" loading="lazy"></figure>
+<p>我们前面是如何区分父子进程的？</p>
+<p>父进程返回PID（必然大于0），子进程返回0（必然等于0），这就给了我们区分后续代码是属于父进程还是子进程</p>
+<h2 id="循环创建n个子进程">循环创建N个子进程</h2>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(){
+
+	printf(&quot;父进程独享代码部分\n&quot;);
+
+	for(int i = 0; i &lt; 5; i++){
+
+		pid_t pid_A = fork();
+
+		if(pid_A == 0){	子进程创建成功后，break及时退出for循环，防止新创建的子进程去创建新的子进程
+
+			printf(&quot;子进程创建成功，PID = %d，PPID = %d\n&quot;,getpid(),getppid());
+			break;
+		}
+	
+	}
+
+	return 0;
+}
+</code></pre>
+<p>输出结果：</p>
+<figure data-type="image" tabindex="3"><img src="https://xiaoyangst.github.io//post-images/1687962351829.png" alt="" loading="lazy"></figure>
+<p>这段输出可能让人疑惑，为什么输出内容到shell终端上去了？</p>
+<p>因为shell在创建子线程后，即当前的父进程，就暂时退到后台，当前的<code>./LoopCreate</code>就会执行。至于<code>./LoopCreate</code>创建的五个子进程如何，shell不会过问，只要shell知道<code>./LoopCreate</code>到达并执行<code>return 0 </code>。就会从后台到前台，把CPU抢占回来，默认认为<code>./LoopCreate</code>已经结束，但是我们知道这里面还创建了五个线程。所以五个进程的代码还要继续执行，以至于如图中错乱</p>
+<p>想避免这个问题，可以选择让子进程先结束，然后让父进程再结束，利用sleep函数让父进程休眠一会儿，这样子进程就会先结束，就避免这个问题了</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(){
+
+	printf(&quot;父进程独享代码部分\n&quot;);
+
+	for(int i = 0; i &lt; 5; i++){
+
+		pid_t pid_A = fork();
+
+		if(pid_A == 0){
+
+			printf(&quot;子进程创建成功，PID = %d，PPID = %d\n&quot;,getpid(),getppid());
+			break;
+		}else{
+			sleep(1);
+			
+		}
+	
+	}
+
+	return 0;
+}
+</code></pre>
+<p>输出结果：</p>
+<figure data-type="image" tabindex="4"><img src="https://xiaoyangst.github.io//post-images/1687962364065.png" alt="" loading="lazy"></figure>
+<h2 id="父子进程是否共享全局变量">父子进程是否共享全局变量</h2>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int count = 10;
+
+int main(){
+
+	pid_t pid_A = fork();
+
+	
+	if(pid_A == -1){
+
+		perror(&quot;创建失败\n&quot;);
+		
+		return 0;
+	
+	}else if(pid_A == 0){
+
+		for(int i = 0; i &lt; 5; i++){
+
+		count++;
+
+		printf(&quot;子进程: count = %d\n&quot;,count);
+
+			}
+		
+	}else{
+
+		sleep(5);
+
+		for(int i = 0; i &lt; 5; i++){
+		
+		count++;
+	
+		printf(&quot;父进程: count = %d\n&quot;,count);
+
+			}
+		
+	}
+
+	return 0;
+}
+</code></pre>
+<p>输出结果：</p>
+<figure data-type="image" tabindex="5"><img src="https://xiaoyangst.github.io//post-images/1687962385234.png" alt="" loading="lazy"></figure>
+<p>没有共享，子进程的自加操作没有影响到父进程的自加操作，父进程的自加操作也没有影响到子进程的自加操作</p>
+<p>这是因为当一个进程创建子进程时，子进程会继承父进程的内存空间和全局变量的值。但是，父子进程之间的内存是相互独立的，它们有各自的虚拟地址空间，因此对全局变量的修改不会直接影响到对方的全局变量</p>
+<h2 id="孤儿进程和僵尸进程">孤儿进程和僵尸进程</h2>
+<p>我只需要写清楚两个概念的含义，不管是理解它们，还是模拟相应的现象也就手到擒来</p>
+<p>孤儿进程：父进程先于子进程结束，则子进程成为孤儿进程</p>
+<p>僵尸进程：父进程产生子进程后，子进程先于父进程退出</p>
+<hr>
+<p>孤儿进程的代码设计：即让子进程的代码部分放在一个while死循环中，那么父进程必然先于子进程结束，也就能模拟孤儿进程的现象了</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main()
+{
+        printf(&quot;The content before creating the child process\n&quot;);
+        pid_t pid;
+        pid = fork();
+
+        if(pid &lt; 0){
+                printf(&quot;Error\n&quot;);
+                return 0;
+        }else if(pid == 0){
+                while(1){
+                        printf(&quot;I am child,my pid :%d ,my father pid:%d\n&quot;,getpid(),getppid());
+                        sleep(1);
+                }
+
+        }else{
+                printf(&quot;I am father, my pid:%d , my father pid:%d\n&quot;,getpid(),getppid());
+                printf(&quot;pid:%d\n&quot;,pid);
+                sleep(5);
+                printf(&quot;-------------parent process going to dir------------&quot;);
+        }
+        printf(&quot;The content after the child process is created\n&quot;);
+
+        return 0;
+}
+</code></pre>
+<p>输出结果：</p>
+<figure data-type="image" tabindex="6"><img src="https://xiaoyangst.github.io//post-images/1687962394671.png" alt="" loading="lazy"></figure>
+<p>我们又看到子进程持续的打印，而父进程早早就结束，我们如何确认这个程序是孤儿进程呢？</p>
+<ol>
+<li>查找PPID（父进程ID）为1的进程（图中你也看到父进程ID从133645变为1了）</li>
+<li>孤儿进程的状态为&quot;S&quot;</li>
+</ol>
+<figure data-type="image" tabindex="7"><img src="https://xiaoyangst.github.io//post-images/1687962406462.png" alt="" loading="lazy"></figure>
+<hr>
+<p>僵尸进程的代码设计：只需要让父进程在一个while循环中即可，子进程必然先于父进程退出，也就出现僵尸进程了</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main()
+{
+        printf(&quot;The content before creating the child process\n&quot;);
+        pid_t pid;
+        pid = fork();
+
+        if(pid &lt; 0){
+                printf(&quot;Error\n&quot;);
+                return 0;
+        }else if(pid == 0){
+                        printf(&quot;I am child,my pid :%d ,my father pid:%d\n&quot;,getpid(),getppid());
+                        sleep(10);
+                        printf(&quot;-------------child die----------------&quot;);
+
+        }else{
+            while(1){
+                printf(&quot;I am father, my pid:%d , my father pid:%d\n&quot;,getpid(),getppid());
+                sleep(1);
+            }
+        }
+        printf(&quot;The content after the child process is created\n&quot;);
+
+        return 0;
+}
+</code></pre>
+<p>输出结果：</p>
+<figure data-type="image" tabindex="8"><img src="https://xiaoyangst.github.io//post-images/1687962425208.png" alt="" loading="lazy"></figure>
+<p>我们看到子进程早早结束，而父进程在循环打印，如何判断这是一个僵尸进程呢？</p>
+<ul>
+<li><code>ps aux | grep 'Z'</code></li>
+<li><code>ps aux | grep '&lt;defunct&gt;'</code></li>
+</ul>
+<figure data-type="image" tabindex="9"><img src="https://xiaoyangst.github.io//post-images/1687962435712.png" alt="" loading="lazy"></figure>
+<p>如果你想要杀死这个进程，不要去处理（kill）僵尸进程，因为僵尸进程已死，你应该选择杀死僵尸进程上面的那个S+的进程</p>
+<h2 id="wait函数和waitpid函数">wait函数和waitpid函数</h2>
+<p>如果你足够细心，应该看到孤儿进程演示的时候，输出在shell终端错位显示，前面就讲过这个问题，这是因为父进程先于子进程结束导致，所以你看到僵尸进程就不会出现这个问题。但是，孤儿进程和僵尸进程都不会是我们想要看到的，而本节的内容能帮助我们解决这个问题。</p>
+<p>头文件：</p>
+<pre><code class="language-c">#include &lt;sys/types.h&gt;
+#include &lt;sys/wait.h&gt;
+</code></pre>
+<p>函数原型：</p>
+<pre><code class="language-c">pid_t wait(int * status);
+</code></pre>
+<p><strong>wait</strong>()会暂时停止目前进程的执行，直到有信号来到或子进程结束。如果在调用wait()时子进程已经结束，则wait()会<strong>立即返回</strong>子进程结束状态值。子进程的结束状态值会由参数status 返回，而子进程的进程识别码也会一起返回。如果不在意结束状态值，则参数 status 可以设成 NULL。</p>
+<p>我们就简单用wait函数解决僵尸进程的问题</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/wait.h&gt;
+int main()
+{
+        printf(&quot;The content before creating the child process\n&quot;);
+        pid_t pid;
+        pid = fork();
+
+        if(pid &lt; 0){
+                printf(&quot;Error\n&quot;);
+                return 0;
+        }else if(pid == 0){
+                while(1){
+                        printf(&quot;I am child,my pid :%d ,my father pid:%d\n&quot;,getpid(),getppid());
+                        sleep(1);
+                }
+
+        }else{
+                printf(&quot;I am father, my pid:%d , my father pid:%d\n&quot;,getpid(),getppid());
+                printf(&quot;pid:%d\n&quot;,pid);
+                printf(&quot;-------------parent process waitting------------&quot;);
+				wait(NULL);
+        }
+        printf(&quot;The content after the child process is created\n&quot;);
+
+        return 0;
+}
+</code></pre>
+<p>输出结果：</p>
+<figure data-type="image" tabindex="10"><img src="https://xiaoyangst.github.io//post-images/1687962451687.png" alt="" loading="lazy"></figure>
+<p>查看这个程序的状态：</p>
+<figure data-type="image" tabindex="11"><img src="https://xiaoyangst.github.io//post-images/1687962461964.png" alt="" loading="lazy"></figure>
+<p>好吧，我们还要讲一下status这个东西，如果它的值不是NULL，就会把子进程退出时的状态取出并存入其中，这是一个整数值，指出了子进程是正常退出还是被非正常退出的，这需要用到宏函数来进行判断</p>
+<pre><code class="language-tex">WIFEXITED（status）宏判断为真 表示程序正常退出
+
+WEXITSTATUS(status)上一个宏判断为真 则返回状态值
+
+WIFSIGNALED(status) 宏判断为真 表示程序异常退出
+
+WTERMSIG(status) 上一个判断为真，则返回状态值
+
+WIFSTOPPED(status) 宏判断为真，进程处于暂停状态
+
+WSTOPSIG(status)上一个判断为真，则返回状态值
+</code></pre>
+<p>用实际的代码演示就通俗易懂了，不难理解</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/wait.h&gt;
+int main()
+{
+    printf(&quot;The content before creating the child process\n&quot;);
+    pid_t pid,wpid;
+    int status;
+    pid = fork();
+
+    if(pid &lt; 0){
+            printf(&quot;Error\n&quot;);
+            return 0;
+        }else if(pid == 0){
+
+            printf(&quot;I am child,my pid :%d ,my father pid:%d\n&quot;,getpid(),getppid());
+            sleep(3);
+            printf(&quot;-------------child die----------------\n&quot;);
+            return 73;
+
+        }else{
+            wpid = wait(&amp;status);
+            if(wpid == -1){
+                    perror(&quot;wait error:\n&quot;);
+                    exit(1) ;
+                }
+            if(WIFEXITED(status)){
+                    printf(&quot;子进程正常退出 %d\n&quot;,WEXITSTATUS(status));
+                }
+			if(WIFSIGNALED(status)){
+                    printf(&quot;子进程异常退出 %d\n&quot;,WTERMSIG(status));
+                }
+			if(WIFSTOPPED(status)){
+                    printf(&quot;子进程暂停状态 %d\n&quot;,WSTOPSIG(status));
+                }
+			
+        }
+    printf(&quot;The content after the child process is created\n&quot;);
+
+    return 0;
+}
+</code></pre>
+<p>输出结果：</p>
+<figure data-type="image" tabindex="12"><img src="https://xiaoyangst.github.io//post-images/1687962475048.png" alt="" loading="lazy"></figure>
+<hr>
+<p>我们接下来就该介绍waitpid函数了，它和wait函数的功能是相同的，但是多了一些参数</p>
+<pre><code>pid_t waitpid(pid_t pid, int * status, int options);
+</code></pre>
+<p>参数pid为欲等待的子进程识别码，其他数值意义如下：</p>
+<ul>
+<li>pid &lt; -1 等待指定进程组中的任何子进程，这个进程组的ID等于pid的绝对值</li>
+<li>pid = -1 等待任何子进程，相当于<strong>wait</strong>()。</li>
+<li>pid = 0 等待用一个进程组中的任何子进程，如果子进程已经加入别的进程组，就不会等它了</li>
+<li>pid &gt; 0 等待进程ID 等于 pid的子进程。</li>
+</ul>
+<p>参数status：进程退出时的状态信息，和wait函数用法一样</p>
+<p>参数options：提供一些额外的选项控制waitpid()</p>
+<ul>
+<li>0：同wait函数</li>
+<li>WNOHANG：没有任何已经结束的子进程，则立即返回</li>
+<li>WUNTRACED：如果子进程暂停了则此函数马上返回，并且不予以理会子进程的结束状态。</li>
+</ul>
+<p>我们可以看出waitpid是wait的加强版，因为wait有的，waitpid也都有</p>
+<p>还是简单举例演示一下这个函数，即回收指定进程</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/wait.h&gt;
+#include &lt;pthread.h&gt;
+int main(int argc, char *argv[])
+{
+    int i;
+    pid_t pid, wpid, tmpid;
+    for (i = 0; i &lt; 5; i++) {       
+        pid = fork();
+        if (pid == 0) {       // 循环期间, 子进程不 fork 
+            break;
+        }
+        if (i == 2) {
+            tmpid = pid;	//子进程pid，保存该子进程的pid，后续可以实现指定进程回收，也就是该进程
+            printf(&quot;--------pid = %d\n&quot;, tmpid);
+        }
+    }
+
+    if (5 == i) {       // 父进程, 从 表达式 2 跳出
+        printf(&quot;i am parent , 要指定回收的进程ID，即 PID = %d\n&quot;, tmpid);
+        //wpid = waitpid(tmpid, NULL, WNOHANG);   //指定一个进程回收, 不阻塞
+        wpid = waitpid(tmpid, NULL, 0);         //指定一个进程回收, 阻塞回收
+        if (wpid == -1) {	//回收失败返回-1
+            perror(&quot;waitpid error&quot;);
+            exit(1);
+        }
+        printf(&quot;I'm parent, 成功回收并返回该进程的ID，即PID : %d \n&quot;, wpid);
+    } else {            // 子进程, 从 break 跳出
+        sleep(i);
+        printf(&quot;I'm %dth child, pid= %d\n&quot;, i+1, getpid());
+    }
+    return 0;
+}
+</code></pre>
+<p>输出结果：</p>
+<figure data-type="image" tabindex="13"><img src="https://xiaoyangst.github.io//post-images/1687962488872.png" alt="" loading="lazy"></figure>
+<p>唯一还要补充的是关于它的返回值，要比wait复杂些</p>
+<figure data-type="image" tabindex="14"><img src="https://xiaoyangst.github.io//post-images/1687962522877.png" alt="" loading="lazy"></figure>
+<h2 id="退出函数">退出函数</h2>
+<pre><code class="language-tex">1. exit() 函数：
+  ○ 功能：终止进程并返回给操作系统。
+  ○ 用法：exit(status)
+  ○ 描述：exit() 函数可用于在进程执行完毕或达到某个条件时正常退出。退出码是一个整数值，用于表示进程退出的状态。
+2. _exit() 函数：
+  ○ 功能：立即终止进程并返回给操作系统。
+  ○ 用法：_exit(status)
+  ○ 描述：_exit() 函数与 exit() 函数类似，但不会执行任何清理工作或运行终止处理程序。它会立即终止进程的执行
+</code></pre>
+<p>比较常见的status有两个：</p>
+<ol>
+<li>EXIT_SUCCESS，对应0值</li>
+<li>EXIT_FAILURE，对应非0值</li>
+</ol>
+
+          </div>
+          
+            
+              <div class="mt-6">
+                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '727c980a037d0d3fd6dc',
+    clientSecret: 'bf61b2a3c16cf29751c8bf78b35632dea40904b9',
+    repo: 'xiaoyangst.github.io',
+    owner: 'xiaoyangst',
+    admin: ['xiaoyangst'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+              </div>
+            
+  
+            
+          
+        </div>
+        
+          <div class="w-full md:w-1/3">
+            <div class="mt-6 md:pl-8">
+              <h4 class="text-base font-thin text-gray-700 mb-2">发布时间</h4>
+              <div class="text-lg mb-6">2023-06-28</div>
+              <h4 class="text-base font-thin text-gray-700 mb-2">标签</h4>
+              <div class="mb-6">
+                
+                  <a href="https://xiaoyangst.github.io/tag/l-OQUKKAu/" class="py-1 px-4 border-gray-300 border text-sm inline-block text-gray-700 hover:text-gray-900 rounded mr-2 mb-2">Linux</a>
+                
+                  <a href="https://xiaoyangst.github.io/tag/TEF_5IXF2H/" class="py-1 px-4 border-gray-300 border text-sm inline-block text-gray-700 hover:text-gray-900 rounded mr-2 mb-2">学习笔记</a>
+                
+              </div>
+              <h4 class="text-base font-thin text-gray-700 mb-2">阅读时间</h4>
+              <div class="text-lg mb-6">14 min read</div>
+              <h4 class="text-base font-thin text-gray-700 mb-2">相关阅读</h4>
+              <div class="border-b border-gray-400">
+                
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+    
+      
+        
+        <div class="border-t border-gray-400 py-6">
+          <a href="https://xiaoyangst.github.io/post/linux-wang-luo-bian-cheng-zhi-wang-luo-ji-chu-bian-cheng/" class="text-lg hover:underline my-2 inline-block">Linux网络编程之网络基础编程</a>
+        </div>
+      
+    
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+
+  
+    
+      
+    
+      
+        
+        <div class="border-t border-gray-400 py-6">
+          <a href="https://xiaoyangst.github.io/post/lun-yu-wei-ning-gong-pian/" class="text-lg hover:underline my-2 inline-block">论语部分摘抄</a>
+        </div>
+      
+    
+  
+
+  
+    
+      
+    
+      
+        
+        <div class="border-t border-gray-400 py-6">
+          <a href="https://xiaoyangst.github.io/post/ming-xian-dui-xiang-san-da-te-zheng-zhi-ji-cheng/" class="text-lg hover:underline my-2 inline-block">面向对象三大特征之继承</a>
+        </div>
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+  
+    
+      
+    
+      
+    
+  
+
+
+              </div>
+            </div>
+          </div>
+        
+      </div>
+      <div class="footer border-gray-400 border-t pt-6 mt-6 sm:mt-8 md:mt-10 mb-20 text-gray-700 text-sm sm:text-base lg:text-lg">
+  <center>余虽不敏，然余诚矣</center>
+</div>
+    </div>
+  </div>
+  <script>
+    Prism.highlightAll()
+  </script>
+</body>
+</html>
