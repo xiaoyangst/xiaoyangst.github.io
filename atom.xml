@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://xiaoyangst.github.io</id>
+    <title>小杨同学</title>
+    <updated>2024-01-28T05:06:31.490Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://xiaoyangst.github.io"/>
+    <link rel="self" href="https://xiaoyangst.github.io/atom.xml"/>
+    <subtitle>余虽不敏，然余诚也</subtitle>
+    <logo>https://xiaoyangst.github.io/images/avatar.png</logo>
+    <icon>https://xiaoyangst.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2024, 小杨同学</rights>
+    <entry>
+        <title type="html"><![CDATA[物理地址、逻辑地址、虚拟内存的概念]]></title>
+        <id>https://xiaoyangst.github.io/post/wu-li-di-zhi-luo-ji-di-zhi-xu-ni-nei-cun-de-gai-nian/</id>
+        <link href="https://xiaoyangst.github.io/post/wu-li-di-zhi-luo-ji-di-zhi-xu-ni-nei-cun-de-gai-nian/">
+        </link>
+        <updated>2024-01-28T05:05:04.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[介绍一下几种典型的锁]]></title>
+        <id>https://xiaoyangst.github.io/post/jie-shao-yi-xia-ji-chong-dian-xing-de-suo/</id>
+        <link href="https://xiaoyangst.github.io/post/jie-shao-yi-xia-ji-chong-dian-xing-de-suo/">
+        </link>
+        <updated>2024-01-28T04:41:44.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[缓冲区溢出和内存泄漏]]></title>
+        <id>https://xiaoyangst.github.io/post/huan-chong-qu-yi-chu-he-nei-cun-xie-lou/</id>
+        <link href="https://xiaoyangst.github.io/post/huan-chong-qu-yi-chu-he-nei-cun-xie-lou/">
+        </link>
+        <updated>2024-01-23T15:29:31.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[家庭健康管理]]></title>
+        <id>https://xiaoyangst.github.io/post/jia-ting-jian-kang-guan-li/</id>
+        <link href="https://xiaoyangst.github.io/post/jia-ting-jian-kang-guan-li/">
+        </link>
+        <updated>2023-12-26T14:19:30.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[未来的”人性“]]></title>
+        <id>https://xiaoyangst.github.io/post/wei-lai-de-ren-xing/</id>
+        <link href="https://xiaoyangst.github.io/post/wei-lai-de-ren-xing/">
+        </link>
+        <updated>2023-12-24T11:28:32.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[有关爱与美德]]></title>
+        <id>https://xiaoyangst.github.io/post/you-guan-ai-yu-mei-de/</id>
+        <link href="https://xiaoyangst.github.io/post/you-guan-ai-yu-mei-de/">
+        </link>
+        <updated>2023-12-24T06:43:38.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[懂得拒绝]]></title>
+        <id>https://xiaoyangst.github.io/post/dong-de-ju-jue/</id>
+        <link href="https://xiaoyangst.github.io/post/dong-de-ju-jue/">
+        </link>
+        <updated>2023-12-22T14:32:34.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[确定剧情和不确定剧情的应对方式]]></title>
+        <id>https://xiaoyangst.github.io/post/que-ding-ju-qing-he-bu-que-ding-ju-qing-de-ying-dui-fang-shi/</id>
+        <link href="https://xiaoyangst.github.io/post/que-ding-ju-qing-he-bu-que-ding-ju-qing-de-ying-dui-fang-shi/">
+        </link>
+        <updated>2023-11-24T13:26:28.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[学习容易遇到的两大困境]]></title>
+        <id>https://xiaoyangst.github.io/post/xue-xi-rong-yi-yu-dao-de-liang-da-kun-jing/</id>
+        <link href="https://xiaoyangst.github.io/post/xue-xi-rong-yi-yu-dao-de-liang-da-kun-jing/">
+        </link>
+        <updated>2023-11-03T07:17:09.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[偶遇表哥]]></title>
+        <id>https://xiaoyangst.github.io/post/ou-yu-biao-ge/</id>
+        <link href="https://xiaoyangst.github.io/post/ou-yu-biao-ge/">
+        </link>
+        <updated>2023-11-03T02:24:32.000Z</updated>
+    </entry>
+</feed>
