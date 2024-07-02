@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="
+色：苏格拉底，你们见了什么鬼，你吹我捧，搅的什么玩意儿？如果你真是要晓得什么是正义，就不该光是提问题，再以驳倒人家的回答来逞能。你才精哩！你知道提问题总比回答容易。你应该自己来回答，你认为什么是正义。别胡扯什么正义是一种责任、一种权宜之计..." />
+    <meta name="keywords" content="理想国" />
+    <link rel="stylesheet" href="https://xiaoyangst.github.io/media/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://xiaoyangst.github.io/styles/main.css">
+    <!-- 代码渲染风格css -->
+    
+        <link rel="stylesheet" href="https://xiaoyangst.github.io/media/css//dracula.min.css">
+    
+    <!-- 代码高亮插件 -->
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/highlight.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.8.0/dist/highlightjs-line-numbers.min.js"></script>
+    <!-- 代码复制插件 -->
+    <script src="https://cdn.jsdelivr.net/gh/850552586/ericamcdn@0.1/js/clipboard.min.js"></script>
+    <!-- live2d插件 -->
+    <link rel="stylesheet" href="https://xiaoyangst.github.io/media/css/live2d.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <!-- 数学公式 -->
+    
+    <title>理想国第一卷：苏格拉底与色拉叙马霍斯的对话</title>
+
+    <!-- 大纲索引css调整 -->
+    
+    <style>
+        .markdownIt-TOC {
+            margin-left: 28%;
+            padding-left: 2px;
+            width: 80%;
+        }
+
+        .markdownIt-TOC li {
+            padding-left: 8%;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <div id="landlord">
+        <div class="message" style="opacity:0"></div>
+        <canvas id="live2d" width="240" height="250" class="live2d"></canvas>
+    </div>
+    <div id="domainname" style="display:none">https://xiaoyangst.github.io</div>
+    <div id="content">
+        <div>
+            <!----------- 移动端导航栏👇 ----------------->
+            <div id="bar">
+                <style>
+  .navmobile {
+    z-index: 15;
+    max-height: 40vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  @media screen and (max-width: 1200px) {
+    .navbar {
+      max-width: 100vw;
+    }
+  }
+
+  @media screen and (max-width:1200px) and (min-width: 768px) {
+    @media (min-width: 768px) {
+      .navbar-nav {
+        float: right;
+        margin: 0;
+      }
+    }
+  }
+
+  @media screen and (max-width:768px) {
+    .mbapspan {
+      padding: 0;
+    }
+  }
+</style>
+<div class="pjaxloading"  onclick="pjaxloadingClose()">
+  <div class="loadingbackground"></div>
+  <div id="loading">
+    <div class="loading">
+    </div>
+  </div>
+</div>
+<nav class="navbar navbar-inverse navbar-fixed-top navmobile">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#barmenu"
+        aria-expanded="false" id="barbutton">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a data-pjax class="navbar-brand" style="color:white" href="https://xiaoyangst.github.io">小杨同学&nbsp;&nbsp;|</a>
+      <span class="navbar-brand mbapspan"><i id="mbaplayer" class="fa fa-play-circle-o" aria-hidden="true"
+          style="font-size: 28px;top: 12px;position: absolute;" onclick="aplayerPlay();"></i></span>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="barmenu">
+      <ul class="nav navbar-nav">
+        
+        
+        <li>
+          <a data-pjax href="/" style="color:white">
+            首页
+          </a>
+        </li>
+        
+        
+        
+        <li>
+          <a data-pjax href="/archives" style="color:white">
+            归档
+          </a>
+        </li>
+        
+        
+        
+        <li>
+          <a data-pjax href="/tags" style="color:white">
+            标签
+          </a>
+        </li>
+        
+        
+        
+        <li>
+          <a data-pjax href="/post/about" style="color:white">
+            关于
+          </a>
+        </li>
+        
+        
+        
+        <li>
+          <a data-pjax href="https://xiaoyangst.github.io/tag/Thinked/" style="color:white">
+            零碎之思
+          </a>
+        </li>
+        
+        
+        
+        <li>
+          <a data-pjax href="https://xiaoyangst.github.io/tag/CTechnology/" style="color:white">
+            计算机技术
+          </a>
+        </li>
+        
+        
+        
+        <li><a data-pjax href="https://xiaoyangst.github.io/talk" style="color:white">说说</a></li>
+        
+        
+          
+        <li><a data-pjax href="https://xiaoyangst.github.io/friends" style="color:white">友链</a></li>
+
+        
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+
+  <!-- 引入jQuery核心js文件 -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+  <script>
+    let btstate = false;
+    var bt = $("#barbutton");
+    var bm = $("#barmenu");
+    bt.click(function () {
+      dropdown();
+    })
+    function dropdown() {
+      console.log(btstate);
+      //下拉
+      if (btstate == false) {
+        bt.removeClass("collapsed");
+        bt.attr("aria-expanded", "true");
+        bm.attr("aria-expanded", "true")
+        bm.fadeIn(700);
+        btstate = true;
+      }
+      else {
+        bt.addClass("collapsed");
+        bt.attr("aria-expanded", "false");
+        bm.removeClass("in");
+        bm.hide();
+        bm.attr("aria-expanded", "false");
+        btstate = false;
+      }
+    }
+  </script> 
+            </div>
+            <!----------- 移动端导航栏👆 ----------------->
+
+            <!--------------- pc端菜单栏👇 ---------------->
+            <div class="side"><head>
+    <link rel="stylesheet" href="https://xiaoyangst.github.io/media/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://xiaoyangst.github.io/styles/main.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/highlight.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.8.0/dist/highlightjs-line-numbers.min.js"></script>
+    
+        <link rel="stylesheet" href="https://xiaoyangst.github.io/media/css//dracula.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/gh/850552586/ericamcdn@0.1/js/clipboard.min.js"></script>
+    <link rel="stylesheet" href="https://xiaoyangst.github.io/media/css/live2d.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- fancybox -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+    <!--------- 数学公式👇---- -->
+    
+    <!--------- 数学公式👆----------------- -->
+    <!--------- daovocie功能👇 ------------------->
+    
+    <!--------- daovocie功能👆 ------------------->
+    <!-- -----------------twikoo评论系统引入👇 --------->
+    <script src="https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js"></script>
+    <!-- -----------------twikoo评论系统引入👆 --------->
+    <!---------------- leancloud api 功能依赖引入👇 -------->
+    <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@3.13.0/dist/av-min.js"></script>
+    <!---------------- leancloud api 功能依赖引入👆 -------->
+    <!------------------ valine评论系统引入👇 ------------------>
+    <script src="https://xiaoyangst.github.io/media/js/valine.min.js"></script>
+    <!------------------ valine评论系统引入👆 ------------------>
+    <!---------------- 今日诗词api功能依赖👇 ----------------------->
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <!---------------- 今日诗词api功能依赖👆 ----------------------->
+    <!---------------- 今日诗词api功能依赖👇 ----------------------->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ispeak-bber/ispeak-bber.min.js" charset="utf-8"></script>
+    <!---------------- 哔哔功能依赖👆 ----------------------->
+
+
+</head>
+
+<style>
+    body {
+        overflow-x: hidden;
+        height: 100vh;
+        overflow-y: scroll;
+        cursor: url("https://xiaoyangst.github.io/media/images/mouse_cursor.png"), auto
+    }
+</style>
+
+<body>
+    <!--=------ 页面加载动态画面👇 --------------->
+    <div class="pjaxloading" onclick="pjaxloadingClose()">
+        <div class="loadingbackground"></div>
+        <div id="loading-aname">
+            <div class="loading-aname">
+            </div>
+        </div>
+    </div>
+    <!--=------ 页面加载动态画面👆 --------------->
+
+    <!--------------- 左侧菜单栏👇 ------------------------>
+    
+    <div id=side>
+        <div class="r_m_div">
+            <a onclick="showAaplayer()"><i style="font-size: 20px;"><img
+                        src='https://xiaoyangst.github.io/media/images/music.png' alt="音乐播放器" class="musicbtn"></i></a>
+        </div>
+        <div class="avatar-border">
+            <img src="https://xiaoyangst.github.io/images/avatar.png?v=1719933209453" class="avatar">
+        </div>
+        <div class="sitename">小杨同学</div>
+        <span class="description" data-text='["余虽不敏，然余诚也"]'>&nbsp;</span>
+        <div class="siteinfocontainer">
+            <span class="siteinfo">文章</span>
+            <span class="siteinfo">标签</span>
+        </div>
+        <div class="siteinfocontainer">
+            <span class="siteinfo" id="siteinfo-postsnum"></span>
+            <span class="siteinfo">18</span>
+        </div>
+        
+        <div class="search">
+            <!-- <input type="text" class="search-input" placeholder="标题搜索(●'◡'●)" /> -->
+            <input type="text" class="search-input" placeholder="输入文章标题...">
+            <div class="search-results"></div>
+        </div>
+        
+    <div class="share-button">
+        <span></span>
+        
+        <a href="https://github.com/xiaoyangst" target="_blank"><i style="font-size: 20px;"><img class="icon"
+                    src="https://xiaoyangst.github.io/media/images/github.png" alt=""></i></a>
+        
+        
+        
+        
+        
+        
+        
+        
+        <a href="https://steamcommunity.com/profiles/76561199189340385/" target="_blank"><i style="font-size: 20px;"><img class="icon"
+                    src="https://xiaoyangst.github.io/media/images/steam.png" alt=""></i></a>
+        
+    </div>
+    <div id="qq" style="display:none"></div>
+    <!------------ 加载菜单按钮👇 ------------------------->
+    <div class="menucontainer">
+        
+        
+        <div class="mchocie description">
+            <a data-pjax href="/" class="menubutton" style="margin-right: 15px;">
+                <i><img class="icon menuicon" src="" alt="首页"></i>&nbsp;<span
+                    data-text="首页">首页</span>
+            </a>
+        </div>
+        
+        
+        
+        <div class="mchocie description">
+            <a data-pjax href="/archives" class="menubutton" style="margin-right: 15px;">
+                <i><img class="icon menuicon" src="" alt="归档"></i>&nbsp;<span
+                    data-text="归档">归档</span>
+            </a>
+        </div>
+        
+        
+        
+        <div class="mchocie description">
+            <a data-pjax href="/tags" class="menubutton" style="margin-right: 15px;">
+                <i><img class="icon menuicon" src="" alt="标签"></i>&nbsp;<span
+                    data-text="标签">标签</span>
+            </a>
+        </div>
+        
+        
+        
+        <div class="mchocie description">
+            <a data-pjax href="/post/about" class="menubutton" style="margin-right: 15px;">
+                <i><img class="icon menuicon" src="" alt="关于"></i>&nbsp;<span
+                    data-text="关于">关于</span>
+            </a>
+        </div>
+        
+        
+        
+        <div class="mchocie description">
+            <a data-pjax href="https://xiaoyangst.github.io/tag/Thinked/" class="menubutton" style="margin-right: 15px;">
+                <i><img class="icon menuicon" src="" alt="零碎之思"></i>&nbsp;<span
+                    data-text="零碎之思">零碎之思</span>
+            </a>
+        </div>
+        
+        
+        
+        <div class="mchocie description">
+            <a data-pjax href="https://xiaoyangst.github.io/tag/CTechnology/" class="menubutton" style="margin-right: 15px;">
+                <i><img class="icon menuicon" src="" alt="计算机技术"></i>&nbsp;<span
+                    data-text="计算机技术">计算机技术</span>
+            </a>
+        </div>
+        
+        
+
+        
+        <div class="mchocie description">
+            <a data-pjax href="https://xiaoyangst.github.io/talk" class="menubutton" style="margin-right: 15px;">
+                <i><img class="icon menuicon" src="" alt="说说"></i>&nbsp;<span data-text="说说">说说</span>
+            </a>
+        </div>
+        
+        
+        
+        <div class="mchocie description">
+            <a data-pjax href="https://xiaoyangst.github.io/friends" class="menubutton" style="margin-right: 15px;">
+                <i><img class="icon menuicon" src="" alt="友人帐"></i>&nbsp;<span data-text="友人帐">友人帐</span>
+            </a>
+        </div>
+        
+        <!--  -->
+    </div>
+    <!------------ 加载菜单按钮👆 ------------------------->
+    <hr>
+    <style>
+    .copyright {
+        font-size: 15px;
+        color: #d9d9d9;
+    }
+
+
+    @media screen and (min-width: 1200px) {
+        .foot {
+            width: 100%;
+            height: 130px;
+        }
+    }
+
+    @media screen and (max-width: 1200px) {
+        .foot {
+            display: none;
+        }
+    }
+</style>
+
+<body>
+    <div class="foot">
+        <div id="footinfo"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=541131&auto=1&height=32"></iframe> | Theme: <a
+                href="https://github.com/850552586/gridea-theme-fog">Fog</a>
+            <div>
+                
+            </div>
+            <div>
+                
+            </div>
+            <div class="copyright" style="color:white;text-align: center;">
+            </div>
+        </div>
+
+
+
+    </div>
+</body>
+
+    </div>
+
+    <img class="moon" src="https://xiaoyangst.github.io/media/images/moon.png" onclick="moonlight()">
+    <script src="https://xiaoyangst.github.io/media/js/wordshow.js"></script>
+    
+    <!--------------- 左侧菜单栏👆 ------------------------>
+
+    <!----------------- 顶部菜单栏👇 ------------------------>
+    
+    <!----------------- 顶部菜单栏👆 ------------------------>
+
+<!--核心功能加载-->
+<script src="https://xiaoyangst.github.io/media/js/mainfunc.js"></script>
+
+<!------------- Fog1.0版本彩蛋👇 -------------->
+    <!-- <section id="terrestrial" class="popup">
+        <a href="#" class="back">&lt; back</a>
+    </section>
+
+    <div class="flycontainer">
+        <div class="flyword">御风飞行中...</div>
+    </div>
+
+    <script>
+        $("#fog_go").click(function(){fog_go()});
+        async function fog_go(){
+            $(".bars").hide()
+            $("#live2d").hide()
+            await sleep(3000);
+            $(".flycontainer").css("display","flex");
+            $(".popup").fadeOut(500)
+            await sleep(2000);
+            var sitename = "小杨同学";
+            getFogUser(sitename);
+        }
+
+        function fog_goregis(){
+            var sitename = "小杨同学";
+            var siteurl = "https://xiaoyangst.github.io";
+            regisFogUser(sitename,siteurl);
+        }
+        fog_goregis();
+    </script> -->
+<!------------- Fog1.0版本彩蛋👆 -------------->
+<script>
+    function change_topmenu(){
+        tmcolor = "antiquewhite"
+        tsnamecolor = "antiquewhite"
+        $(".navbar-inverse .navbar-nav>li>a").css("color",tmcolor)
+        $(".navbar-inverse .navbar-brand").css("color",tsnamecolor)
+        $(".navbar-fixed-top").css("border-radius","0 0 10px 10px")
+    }
+</script>
+
+<!------ 根据自定义配置声明变量👇 --------------------->
+    
+    <script>
+        var postnumChoice = true
+    </script>
+    
+    
+    <script>
+        var shareChoice = true
+    </script>
+    
+    
+    <script>
+        var donateChoice = false
+    </script>
+    
+    
+    <script>
+        var searchChoice = true
+    </script>
+    
+    <script>let postsnum = 0;</script>
+    <div id="side-posttitle" style="display: none;">
+    
+    
+    4-CMake添加第三方依赖库
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    3-CMake 构建和链接静态库和动态库
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    数组：1.两数之和
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    如何选择数据类型
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    函数重载二义性
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    C++域运算符
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    头文件的3种标准
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    多线程中的虚假唤醒
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    2-生产者与消费者模型
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    1-封装Thread类和Task类
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    高并发、高可用和高性能
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    面向对象的设计原则
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    C++空类占用1字节的意义
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    香弹煮
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    第一章：预备知识
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    模板元编程的意义
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    2-CMake常用内置变量
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    1-CMake管理多个文件和多个目录
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    禁止溯及
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    犯罪人的辩护权
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    法律判断顺序
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    法律的明确性
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    扁平疣
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    Gridea添加友链
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    0-与CMake剪不断理还乱
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    程序优于实体
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    法律的解释
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    平等原则
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    惩罚的依据
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    性同意年龄和合理反抗原则
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    法律的目标
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    实验室开题
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    局限
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    理想国第一卷：苏格拉底与色拉叙马霍斯的对话
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    理想国第一卷：苏格拉底与玻勒马霍斯的对话
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    理想国第一卷：苏格拉底与克法洛斯的对话
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    家庭健康管理
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    未来的”人性“
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    有关爱与美德
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    懂得拒绝
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    确定剧情和不确定剧情的应对方式
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    学习容易遇到的两大困境
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    偶遇表哥
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    七武士
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    怦然心动
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    黄昏的清兵卫
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    男女情感历程的发展
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    浅谈AI参与写作
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    
+    
+    非此即彼之外找寻第三条路
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    性格的一致性和互补性
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    分手以后的两种方案
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    
+    适当谈心的益处
+    <script>
+        postsnum += 1
+    </script>
+    
+    
+    </div>
+    
+        <script>
+            var menupos = 'left';
+            $("#siteinfo-postsnum").html(postsnum);
+        </script>
+    
+    <script>
+        let commentsHide = false
+    </script>
+    <!------ 根据自定义配置声明变量👆 --------------------->
+
+
+    <!----------根据自定义配置设置图标信息👇---------->
+    <script>
+        var icondict = new Array();
+    </script>
+    
+        
+            <script>
+                var iconname = "首页";
+                var iconurl = "https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/26/667bda7bc4c5b.png";
+                icondict[iconname] = iconurl;
+            </script>
+        
+            <script>
+                var iconname = "归档";
+                var iconurl = "https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/26/667bdb1fd79e6.png";
+                icondict[iconname] = iconurl;
+            </script>
+        
+            <script>
+                var iconname = "友人帐";
+                var iconurl = "https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/26/667bda7c0e283.png";
+                icondict[iconname] = iconurl;
+            </script>
+        
+            <script>
+                var iconname = "零碎之思";
+                var iconurl = "https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/27/667cb3a3de70a.png";
+                icondict[iconname] = iconurl;
+            </script>
+        
+            <script>
+                var iconname = "标签";
+                var iconurl = "https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/26/667bda7c95fe0.png";
+                icondict[iconname] = iconurl;
+            </script>
+        
+            <script>
+                var iconname = "关于";
+                var iconurl = "https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/26/667bdc2418b0a.png";
+                icondict[iconname] = iconurl;
+            </script>
+        
+            <script>
+                var iconname = "计算机技术";
+                var iconurl = "https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/26/667bdbde50cbd.png";
+                icondict[iconname] = iconurl;
+            </script>
+        
+            <script>
+                var iconname = "说说";
+                var iconurl = "https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/26/667bdbde5398d.png";
+                icondict[iconname] = iconurl;
+            </script>
+        
+    
+    <!----------根据自定义配置设置图标信息👆---------->
+</body>
+
+<script src="https://xiaoyangst.github.io/media/share/dist/Share.js"></script>
+<!-- 页面pjax测试 -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.js"></script>
+<!--确保jQuery已经在此之前加载-->
+<!-- <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script> -->
+<script src="https://xiaoyangst.github.io/media/js/all-pjax.js"></script>
+<script>
+    //-------------------------------说说功能👇--------------------------------------
+    let talksall = [];
+    let talks = [];
+    let talkindex = 0;
+    get();
+
+    function get() {
+        var t = JSON.parse('[{"author":"图床问题","img":"","text":"之前用的图床检查过于严格，以至于把我图片删除（猜测是AI误删），决定丢弃","time":"2024-6-23"},{"author":"CMake教程问题","img":"","text":"CMake教程搁浅太久，趁着近几日拔牙需要休息的时间，看能更新几章吧","time":"2024-7-2"}]');
+        talkindex = t.length - 1;
+        for (var i = 0; i <= t.length - 1; i++) {
+            var d = {};
+            d["time"] = t[i].time;
+            d["author"] = t[i].author;
+            d["text"] = t[i].text;
+            d["img"] = t[i].img;
+            talksall.push(d);
+        }
+    }
+
+    function add() {
+        for (var i = talkindex; i >= 0 && i > talkindex - 3; i--) {
+            talks.push(talksall[i]);
+        }
+        talkindex = (talkindex - 3) >= 0 ? (talkindex - 3) : -1;
+        if (talkindex < 0) $("#getmorebt").hide();
+        show();
+    }
+
+    function show() {
+        var talkT = document.getElementById("talkContainer");
+        talkT.innerHTML = "";
+        for (var i = 0; i < talks.length; i++) {
+            if (talks[i].img != '') {
+                talkT.innerHTML += '\
+            <div class="talk" v-for="t in talks"> \
+                <span data-fancybox="images" href="' + talks[i].img + '"><img src="' + talks[i].img + '" class="talkimg"></span> \
+                <div class="ainfo">\
+                    <div class="ainfo-intro">\
+                        <div class="author">' + talks[i].author + '</div>·\
+                        <div class="time">' + talks[i].time + '</div>\
+                    </div>\
+                </div>\
+                <div class="talkcontent">' + talks[i].text + '\
+                </div\>\
+            ';
+            } else {
+                talkT.innerHTML += '\
+            <div class="talk" v-for="t in talks"> \
+                <div class="ainfo">\
+                    <div class="ainfo-intro">\
+                        <div class="author">' + talks[i].author + '</div>·\
+                        <div class="time">' + talks[i].time + '</div>\
+                    </div>\
+                </div>\
+                <div class="talkcontent">' + talks[i].text + '\
+                </div\>\
+            ';
+            }
+        }
+    }
+    //-------------------------------说说功能👆--------------------------------------
+</script>
+
+<!---->
+<script>
+    function replaceAvatar() {
+        twikoo_avatar = $(".tk-avatar-img");
+        for (var i = 0; i < twikoo_avatar.length; i++) {
+            var asrc = twikoo_avatar.eq(i).attr('src');
+            if (asrc.search('cn.gravatar.com') != -1) {
+                twikoo_avatar.eq(i).attr('src', 'https://xiaoyangst.github.io/media/images/comavatar.png');
+            }
+        }
+    }
+
+    function showWechat() {
+        var wechat = '';
+        alert("博主微信号：" + wechat);
+        return false;
+    }
+</script>
+
+<script>
+    /**
+     * https://github.com/tangkaichuan/gridea-search
+     */
+    // 检查缓存是否最新
+    function checkCache() {
+        var caches_postsnum = localStorage.getItem("postsnum");
+        var pt = document.getElementById("side-posttitle").innerHTML;
+        pt = pt.replace(/\s+/g, '').replace(/<script>.*?<\/script>/gi, "")
+        var ptlen = pt.length;
+        var ptlen_storage = localStorage.getItem("poststitlelen");
+        if (caches_postsnum != postsnum || ptlen != ptlen_storage) {
+            console.log("更新缓存");
+            return false
+        }
+        return true;
+    }
+
+    (function () {
+        var CACHES = checkCache()
+        if (!CACHES) {
+            var NOW = Date.now()
+            var API_CONTENT = '../api-content/index.html' + '?_=' + NOW
+            preload(API_CONTENT);
+            getContents(show_getContentresult);
+        }
+
+        function show_getContentresult(data) {
+            console.log("获取成功");
+            var postslen = data["posts"].length;
+            localStorage.setItem('postsnum', postslen);
+            var poststitlelen = 0;
+            var pt = document.getElementById("side-posttitle").innerHTML;
+            pt = pt.replace(/\s+/g, '').replace(/<script>.*?<\/script>/gi, "");
+            localStorage.setItem('poststitlelen', pt.length);
+        }
+
+
+
+        // preload
+        function preload(url) {
+            var preloadLink = document.createElement('link')
+            preloadLink.href = url
+            preloadLink.rel = 'preload'
+            preloadLink.as = 'fetch'
+            preloadLink.crossOrigin = 'anonymous'
+            document.head.appendChild(preloadLink)
+        }
+
+        // 异步 GET 请求
+        function get(obj) {
+            var xhr = new XMLHttpRequest()
+            xhr.open('get', obj.url, true)
+            xhr.send(null)
+            xhr.onreadystatechange = function () {
+                // 异步请求：响应状态为4，数据加载完毕
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        obj.success(xhr.responseText)
+                    } else {
+                        obj.error(xhr.status)
+                    }
+                }
+            }
+        }
+
+        // 获取博客全文 api
+        function getContents(callback) {
+            if (CACHES) {
+                callback(CACHES.contents)
+            } else {
+                get({
+                    url: API_CONTENT,
+                    success: function (data) {
+                        callback(JSON.parse(data));
+                        localStorage.setItem('ContentsCache', data);
+                        getStorageContent();
+                    }
+                })
+            }
+        }
+    })()
+    //------------------------核心功能--pjax全局渲染👇-------------------
+    let talkinit = false;
+    $(document).pjax('a[data-pjax]', '#main', {
+        fragment: '#main',
+        timeout: 8000
+    }).on('pjax:complete', function () {
+        //清空搜索栏
+        if (searchChoice) {
+            searchInit();
+            searchInput.value = "";
+        }
+        var pl = window.location.pathname;
+        //说说更新
+        if (pl.search("talk") != -1 && !talkinit) {
+            add();
+            talkinit = true;
+        } else if (pl.search("talk") != -1) {
+            show();
+        }
+        if (pl.search("post") != -1) {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+                hljs.lineNumbersBlock(block);
+            });
+            //文章热度
+            if(postnumChoice){
+                getHotnum();
+            }
+            //文章索引
+            toginit();
+            if (shareChoice)
+                shareInit();
+            if (donateChoice)
+                donateInit();
+            if ("valine" == "default"&&!commentsHide) {
+                $("#comment").hide()
+                commentsHide = true
+            }
+            lazyload();
+            codeinit();
+            if ("valine" == "twikoo") {
+                //twikoo头像更换
+                setTimeout(replaceAvatar, 3000);
+                setTimeout(replaceAvatar, 8000); //部分博主站点速度加载过慢，再添加一个延迟
+            }
+        }
+        if (btstate == true)
+            dropdown();
+    }).on('pjax:start', function () {
+        $(".pjaxloading").fadeIn(50);
+    }).on('pjax:end', function () {
+        $(".pjaxloading").fadeOut(50);
+    });
+    //------------------------核心功能--pjax全局渲染👆-------------------
+
+    //-------------------------------------------------搜索
+    // 获取搜索框、搜索按钮、清空搜索、结果输出对应的元素
+    if (searchChoice) {
+        var searchInput = document.querySelector('.search-input');
+        var searchResults = document.querySelector('.search-results');
+    }
+    // 申明保存文章的标题、链接、内容的数组变量
+    var searchValue = '',
+        arrItems = [],
+        arrLinks = [],
+        arrTitles = [],
+        arrContents = [],
+        arrResults = [],
+        indexItem = [],
+        itemLength = 0;
+    var tmpDiv = document.createElement('div');
+    tmpDiv.className = 'result-item';
+
+
+    function getStorageContent() {
+        var data = localStorage.getItem('ContentsCache');
+        data = JSON.parse(data);
+        posts = data["posts"];
+        for (var i = 0; i < posts.length; i++) {
+            arrLinks[i] = posts[i].link;
+            arrTitles[i] = posts[i].title;
+            arrContents[i] = posts[i].content;
+            itemLength++;
+        }
+    }
+    if (checkCache())
+        getStorageContent();
+    // 输入框内容变化后就开始匹配，可以不用点按钮
+    // 经测试，onkeydown, onchange 等方法效果不太理想，
+    // 存在输入延迟等问题，最后发现触发 input 事件最理想，
+    // 并且可以处理中文输入法拼写的变化
+    searchInput.oninput = function () {
+        setTimeout(searchConfirm, 0);
+    }
+    searchInput.onfocus = function () {
+        searchResults.style.display = 'block';
+    }
+
+    function searchConfirm() {
+        if (searchInput.value == '') {
+            searchResults.style.display = 'none';
+        } else if (searchInput.value.search(/^\s+$/) >= 0) {
+            // 检测输入值全是空白的情况
+            searchInit();
+            var itemDiv = tmpDiv.cloneNode(true);
+            itemDiv.innerText = '请输入有效内容...';
+            searchResults.appendChild(itemDiv);
+        } else {
+            // 合法输入值的情况
+            searchInit();
+            searchValue = searchInput.value;
+            // 在标题、内容中查找
+            searchMatching(arrTitles, arrContents, searchValue);
+        }
+    }
+
+    // 每次搜索完成后的初始化
+    function searchInit() {
+        arrResults = [];
+        indexItem = [];
+        searchResults.innerHTML = '';
+        searchResults.style.display = 'block';
+    }
+
+    function searchMatching(arr1, arr2, input) {
+        // 忽略输入大小写
+        input = new RegExp(input, 'i');
+        var step = 10;
+        // 在所有文章标题、内容中匹配查询值
+        for (i = 0; i < itemLength; i++) {
+            var indexContent = arr2[i].search(input);
+            //标题匹配
+            if (arr1[i].search(input) != -1) {
+                indexItem.push(i); // 保存匹配值的索引
+                if (indexContent != -1) {
+                    startindex = (indexContent - step) >= 0 ? (indexContent - step) : 0;
+                    var searchcontent = arr2[i].slice(indexContent - step, indexContent + 5)
+                    arrResults.push("....." + searchcontent + ".....");
+                } else
+                    arrResults.push("");
+            }
+            //内容匹配
+            else if (indexContent != -1) {
+                indexItem.push(i); // 保存匹配值的索引
+
+                startindex = (indexContent - step) >= 0 ? (indexContent - step) : 0;
+                var searchcontent = arr2[i].slice(indexContent - step, indexContent + 5)
+                arrResults.push("....." + searchcontent + ".....");
+            }
+        }
+
+        // 输出总共匹配到的数目
+        var totalDiv = tmpDiv.cloneNode(true);
+        totalDiv.innerHTML = '<b>总匹配：' + indexItem.length + ' 项<hr></b>';
+        searchResults.appendChild(totalDiv);
+
+        // 未匹配到内容的情况
+        if (indexItem.length == 0) {
+            var itemDiv = tmpDiv.cloneNode(true);
+            itemDiv.innerText = '未匹配到内容...';
+            searchResults.appendChild(itemDiv);
+        }
+
+        // 将所有匹配内容进行组合
+        for (i = 0; i < arrResults.length; i++) {
+            var itemDiv = tmpDiv.cloneNode(true);
+            itemDiv.innerHTML = '<a data-pjax class="searchresults" href="' + arrLinks[indexItem[i]] + '"><b>[' +
+                arrTitles[indexItem[i]] +
+                ']</b><p>' + arrResults[i] + '</p></a><hr />';
+            searchResults.appendChild(itemDiv);
+        }
+    }
+</script>
+
+
+
+<!--------------------- 菜单栏图标加载功能👇 ----------------------->
+<script>
+var menulist = $(".menuicon");
+var menulength = menulist.length;
+for (var i = 0; i < menulength; i++) {
+    var altname = menulist.eq(i).attr("alt");
+    var iconurl = icondict[altname];
+    if (iconurl == undefined || iconurl == '')
+        continue;
+    if (iconurl == 'Home') {
+        menulist.eq(i).attr("src", "https://xiaoyangst.github.io/media/images/Home.png");
+menulist.eq(i).show();
+} else if (iconurl == 'Archive') {
+menulist.eq(i).attr("src", "https://xiaoyangst.github.io/media/images/Archive.png");
+menulist.eq(i).show();
+} else if (iconurl == 'Tag') {
+menulist.eq(i).attr("src", "https://xiaoyangst.github.io/media/images/Tag.png");
+menulist.eq(i).show();
+} else if (iconurl == 'About') {
+menulist.eq(i).attr("src", "https://xiaoyangst.github.io/media/images/About.png");
+menulist.eq(i).show();
+} else if (iconurl == 'Talk') {
+menulist.eq(i).attr("src", "https://xiaoyangst.github.io/media/images/Talk.png");
+menulist.eq(i).show();
+} else if (iconurl == 'Friends') {
+menulist.eq(i).attr("src", "https://xiaoyangst.github.io/media/images/Friends.png");
+menulist.eq(i).show();
+} else if (iconurl == 'Fly') {
+menulist.eq(i).attr("src", "https://xiaoyangst.github.io/media/images/wind.png");
+menulist.eq(i).show();
+} else {
+menulist.eq(i).attr("src", iconurl);
+menulist.eq(i).show();
+}
+}
+</script>
+<!--------------------- 菜单栏图标加载功能👆 ----------------------->
+
+<script>
+    //--------------------bber-onetalk加载👇--------------------------------
+    function bberonetalkLoad(){
+        bberjsonurl = '';
+        if ( $("#bber-talk").length > 0 ) {
+        jsonUrl = bberjsonurl
+        $.getJSON(jsonUrl+"?t="+Date.parse( new Date()),function(res){
+        var bberHtml = ''
+        $.each(res.data, function(i, item){
+            d = new Date(item.date)
+            date = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate() +' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()
+            dataTime = '<span class="datatime">'+date+'</span>'
+            bberHtml += '<li class="item item-'+(i+1)+'">'+dataTime+'： <a data-pjax href="https://xiaoyangst.github.io/bber">'+item.content+'</a></li>'
+        });
+        $('#bber-talk').append('<span class="index-talk-icon"><svg viewBox="0 0 1024 1024" width="21" height="21"><path d="M184.32 891.667692c-12.603077 0-25.206154-2.363077-37.809231-7.876923-37.021538-14.966154-59.864615-49.624615-59.864615-89.009231v-275.692307c0-212.676923 173.292308-385.969231 385.969231-385.969231h78.76923c212.676923 0 385.969231 173.292308 385.969231 385.969231 0 169.353846-137.846154 307.2-307.2 307.2H289.083077l-37.021539 37.021538c-18.904615 18.116923-43.323077 28.356923-67.741538 28.356923zM472.615385 195.347692c-178.018462 0-322.953846 144.935385-322.953847 322.953846v275.692308c0 21.267692 15.753846 29.144615 20.48 31.507692 4.726154 2.363077 22.055385 7.876923 37.021539-7.08923l46.473846-46.473846c6.301538-6.301538 14.178462-9.452308 22.055385-9.452308h354.461538c134.695385 0 244.184615-109.489231 244.184616-244.184616 0-178.018462-144.935385-322.953846-322.953847-322.953846H472.615385z"></path><path d="M321.378462 512m-59.076924 0a59.076923 59.076923 0 1 0 118.153847 0 59.076923 59.076923 0 1 0-118.153847 0Z"></path><path d="M518.301538 512m-59.076923 0a59.076923 59.076923 0 1 0 118.153847 0 59.076923 59.076923 0 1 0-118.153847 0Z"></path><path d="M715.224615 512m-59.076923 0a59.076923 59.076923 0 1 0 118.153846 0 59.076923 59.076923 0 1 0-118.153846 0Z"></path></svg></span><ul class="talk-list">'+bberHtml+'</ul>')
+        //Lately({ 'target': '#bber-talk .datatime' });
+        });
+        function Roll (){
+        var list_li = $('.talk-list li'),cur_li = list_li.first(),last_li = list_li.last();
+        last_li.after(cur_li);
+        };
+        setInterval(Roll,3000);
+    }
+    }
+  //--------------------bber-onetalk加载👆--------------------------------
+</script>
+
+<script>
+    var ClicksideState = 1
+    var cur_readingmode = false
+    function readingmode(){
+        if (!cur_readingmode){
+            if(menupos == 'left'){
+                if(ClicksideState==1)
+                menu_openclose1()
+            }
+            $("#tab1").fadeOut(50)
+            $("#bg").fadeOut(50)
+            $(".navbar").fadeOut(50)
+            $(".markdownIt-TOC li a").css("color","black")
+            cur_readingmode = true
+        }else{
+            if(menupos == 'left'){
+                if(ClicksideState==0)
+                    menu_openclose1()
+            }
+            $("#tab1").fadeIn(50)
+            $("#bg").fadeIn(50)
+            $(".navbar").fadeIn(50)
+            $(".markdownIt-TOC li a").css("color","antiquewhite")
+            cur_readingmode = false  
+        }
+    }
+</script>
+
+
+<!----夜间模式👇-->
+<script>
+    var moonlightState = false
+    function moonlight(){
+        if(!moonlightState){
+            $("#bg").fadeOut(200)
+            $('body').css("background","rgba(0,0,0,0.8)")
+            $(".markdownIt-TOC li a").css("color","white")
+            $(".text p, .text ul").css("color","white")
+            $("#articlecontent").css("color","white")
+            $(".post-copyright").css("background","rgba(10,10,10,0.5)")
+            $('blockquote').css("background","rgba(10,10,10,0.6)")
+            $("#articlecontent").css("background","rgba(10,10,10,0.5)")
+            moonlightState = true
+            $(".moon").attr("src","https://xiaoyangst.github.io/media/images/sun.png")
+        }else{
+            $("#bg").show()
+            $(".markdownIt-TOC li a").css("color","antiquewhite")
+            $(".text p, .text ul").css("color","rgba(0, 0, 0, 0.7)")
+            $("#articlecontent").css("color","black")
+            $(".post-copyright").css("background","#f9f9f9")
+            $('blockquote').css("background","#eff8f0")
+            $("#articlecontent").css("background","white")
+            $(".moon").attr("src","https://xiaoyangst.github.io/media/images/moon.png")
+            $('body').css("background","white")
+            moonlightState = false
+        }
+    }
+</script>
+<!----夜间模式👆--></div>
+            <!--------------- pc端菜单栏👆 ---------------->
+
+            <!-- ----------------左侧菜单栏html 👇-------------------------------------->
+            
+            <div>
+                <div id="tab1" class="tab">
+                    <div class="bars">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="close"></div>
+                </div>
+                <div class="col-md-1 col-lg-3"></div>
+                <!-- main标签，pjax渲染时加载以下内容👇 -->
+                <div id="main" class="col-xs-12 col-sm-12 col-md-12 col-lg-7" style="padding:0;">
+                    <div class="readingmode" onclick="readingmode()">阅</div>
+                    <link rel="stylesheet" href="https://xiaoyangst.github.io/media/css/font-awesome.css">
+
+<body>
+    <div class="allcontent" id="postdetail">
+        <div class="postshow postpadding" style="padding-bottom: 0;">
+            
+            <div class="postdetailimg">
+                
+                <img src="https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/23/6677e23972e1b.png" class="postimage">
+                
+            </div>
+            <div class="postinfo-detail">
+                <div class="postdate"><i class="fa fa-calendar"></i>2024-04-20</div>
+            <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 11 min read</div>
+            <div class="posttag">
+                
+                <a data-pjax href="https://xiaoyangst.github.io/tag/li-xiang-guo/" class="postlink">
+                    <i class="fa fa-tag"></i> 理想国
+                </a>
+                
+            </div>
+        </div>
+        
+        <div id="articlecontent">
+            <div id="texttitle" style="text-align: center">
+                <h2 id="ptitle">理想国第一卷：苏格拉底与色拉叙马霍斯的对话</h2>
+                <!-- id 将作为查询条件 -->
+                <div id="pl" style="display:none">https://xiaoyangst.github.io/post/li-xiang-guo-di-yi-juan-su-ge-la-di-yu-se-la-xu-ma-huo-si-de-dui-hua/</div>
+                <div id="rootaddr" style="display:none">https://xiaoyangst.github.io</div>
+                
+                    
+                    <span id="hotnum">
+                        <h4><i class="fa fa-eye" aria-hidden="true" style="color: #FF8C00;"></i>&nbsp;&nbsp;热度</i>: <i
+                                class="hotnum">loading...</i></h4>
+                    </span>
+                    
+                
+            </div>
+            <div class="text ">
+                <blockquote>
+<p>色：苏格拉底，你们见了什么鬼，你吹我捧，搅的什么玩意儿？如果你真是要晓得什么是正义，就不该光是提问题，再以驳倒人家的回答来逞能。你才精哩！你知道提问题总比回答容易。你应该自己来回答，你认为什么是正义。别胡扯什么正义是一种责任、一种权宜之计，或者利益好处，或者什么报酬利润之类的话。你得直截了当地说，你到底指的是什么。</p>
+</blockquote>
+<p>还是不要看色拉叙马霍斯和苏格拉底之间的争论了，但色拉叙马霍斯的攻击性确实很强，好在苏格拉底轻松应对。现在我们可以确定的是，苏格拉底需要正面回答正义是什么。</p>
+<p>只是我不知道为什么色拉叙马霍斯把话头给到自己了，明明他要让苏格拉底不要再提问了，因为提问总比回答容易。我想色拉叙马霍斯还是太急于表达，就如文中介绍“当我们正谈话的时候，色拉叙马霍斯几次三番想插进来辩论，都让旁边的人给拦住了，因为他们急于要听出个究竟来。等我讲完了上面那些话稍一停顿的时候，他再也忍不住了，他抖擞精神，一个箭步冲上来，好像一只野兽要把我们一口吞掉似的，吓得我和玻勒马霍斯手足无措。”</p>
+<blockquote>
+<p>色：那么，听着！我说正义不是别的，就是强者的利益。——你干吗不拍手叫好？当然你是不愿意的啰</p>
+<p>苏：我先得明白你的意思，才能表态。可这会儿我还闹不明白。你说对强者有利就是正义。色拉叙马霍斯啊！你这到底说的是什么意思？总不是这个意思吧：因为浦吕达马斯是运动员，比我们大伙儿都强，顿顿吃牛肉对他的身体有好处，所以正义；而我们这些身体弱的人吃牛肉虽然也有好处，但是就不正义？</p>
+<p>色：你真坏！苏格拉底，你成心把水搅混，使这个辩论受到最大的损害。</p>
+<p>苏：绝没有这意思。我的先生，我不过请你把你的意思交代清楚些罢了。</p>
+<p>色：难道你不晓得统治各个国家的人有的是独裁者，有的是平民，有的是贵族吗？</p>
+<p>苏：怎么不知道？</p>
+<p>色：政府是每一城邦的统治者，是不是？</p>
+<p>苏：是的。</p>
+<p>色：难道不是谁强谁统治吗？每一种统治者都制定对自己有利的法律，平民政府制定民主法律，独裁政府制定独裁法律，依此类推。他们制定了法律明告大家：凡是对政府有利的对百姓就是正义的；谁不遵守，他就有违法之罪，又有不正义之名。因此，我的意思是，在任何国家里，所谓正义就是当时政府的利益。政府当然有权，所以唯一合理的结论应该说：不管在什么地方，正义就是强者的利益。</p>
+<p>苏：现在我明白你的意思了。这个意思对不对，我要来研究。色拉叙马霍斯，你自己刚才说，正义是利益，可是你又不准我这么说。固然，你在“利益”前面加上了“强者的”这么个条件。</p>
+<p>色：这恐怕是一个无足轻重的条件。</p>
+<p>苏：重要不重要现在还难说。但是明摆着我们应该考虑你说得对不对。须知，说正义是利益，我也赞成。不过，你给加上了“强者的”这个条件，我就不明白了，所以得好好想想。</p>
+<p>色：尽管想吧！</p>
+</blockquote>
+<p>色拉叙马霍斯说：“正义不是别的，就是强者的利益。”</p>
+<p>首先苏格拉底最初的举例来明确色拉叙马霍斯的含义是没说错的，只是色拉叙马霍斯依旧选择反驳。不管怎样，色拉叙马霍斯选择换个例子，但是含义却没有变化。后面苏格拉底就追问，这个追问是想探讨出正义的本质是什么，可是色拉叙马霍斯明显谈的是现实中的正义是什么样子。二人从此刻已经分道扬镳，完全不在一个语言环境下。</p>
+<p>你会觉得色拉叙马霍斯说的正确，但你听苏格拉底一番言论之后也觉得没错。色拉叙马霍斯讲的是现实中的正义，你眼中的世界就是这样，符合经验的事情总是容易轻易得到支持。但是你对这份正义并不满意。不单是现实中的正义是理想中的正义的偏离，更因为强者必然引出弱者，那就说明总有人没有从中受益。</p>
+<p>如果你觉得色拉叙马霍斯的观点正确，可你又不是其中的受益者，那你必然适合做奴隶，因为你连争取自己的利益的想法都没有。而你所谓的正确居然就是你眼中所看到的，看来还蠢得厉害。理想无法实现，现实又处处与我为难。要么就去成为强者，利益就偏向于我。要么臣服于现实的残酷，不去招惹强者即可，至少能让利益少被搜刮些。如果此刻我说“我们每个人心中都要心怀正义，对于弱者应该多加照顾，博爱才是世间大道，唯有真理永恒不变”，你却是要说我像个疯子了。可我不过是把现实中的话语体系和理想中的话语体系都说出来了而已。</p>
+<p>我们现在要能够区分讲话者究竟是在描述现实，还是在描述理想。追求理想是为了让心中常善，接受现实是不让理想被误解。如果法律不追求绝对的正义，那么法律就不再正义。如果男女不追求爱情，那么遍地是演员了。</p>
+<blockquote>
+<p>色：因为在你想象中牧羊或牧牛的人把牛羊喂得又肥又壮是为牛羊的利益，而不是为他们自己或者他们主人的利益。你更以为各国的统治者当他们真正是统治者的时候，并不把自己的人民当作上面所说的牛羊；你并不认为他们日夜操心，是专为他们自己的利益。你离了解正义不正义，正义的人和不正义的人简直还差十万八千里。因为你居然不了解：正义也好，正义的人也好，反正谁是强者，谁统治，它就为谁效劳，而不是为那些吃苦受罪的老百姓，和受使唤的人效劳。不正义正相反，专为管束那些老实正义的好人。老百姓给当官的效劳，用自己的效劳来使当官的快活，他们自己却一无所得。头脑简单的苏格拉底啊，难道你不该好好想想吗？正义的人跟不正义的人相比，总是处处吃亏。先拿做生意来说吧。正义者和不正义者合伙经营，到分红的时候，从来没见过正义的人多分到一点，他总是少分到一点。再看办公事吧。交税的时候，两个人收入相等，总是正义的人交得多，不正义的人交得少。等到有钱可拿，总是正义的人分文不得，不正义的人来个一扫而空。要是担任了公职，正义的人就算没有别的损失，他自己私人的事业也会因为无暇顾及，而弄得一团糟。他因为正义不肯损公肥私，也得罪亲朋好友，不肯为他们徇私情干坏事。而不正义的人恰好处处相反。我现在要讲的就是刚才所说的那种有本事捞大油水的人。你如愿弄明白，对于个人不正义比起正义来是多么的有利这一点，你就去想想这种人。如果举极端的例子，你就更容易明白了：最不正义的人就是最快乐的人；不愿意为非作歹的人也就是最吃亏苦恼的人。极端的不正义就是大窃国者的暴政，把别人的东西，不论是神圣的还是普通人的，是公家的还是私人的，肆无忌惮巧取豪夺。平常人犯了错误，查出来以后，不但要受罚，而且名誉扫地，被人家认为大逆不道，当作强盗、拐子、诈骗犯、扒手。但是那些不仅掠夺人民的钱财，而且剥夺人民的身体和自由的人，不但没有恶名，反而被认为有福。受他们统治的人是这么说，所有听到他们干那些不正义勾当的人也是这么说。一般人之所以谴责不正义，并不是怕做不正义的事，而是怕吃不正义的亏。所以，苏格拉底，不正义的事只要干得大，是比正义更有力、更如意、更气派。所以像我一上来就说的：正义是为强者的利益服务的，而不正义对一个人自己有好处、有利益。</p>
+</blockquote>
+<p>色拉叙马霍斯对现实的观察真是太精准。这么多年过去了，世界依旧如此，《理想国》不愧为理想二字。</p>
+<blockquote>
+<p>苏：我们因此可以说匠人之得到报酬，是从他们在运用了自己特有的技术以外又运用了一种挣钱之术而得来的。</p>
+<p>〔色拉叙马霍斯勉强同意。〕</p>
+<p>苏：既然得到报酬的这种利益，并不是来自他本职的技术，严格地讲，就是：医术产生健康，而挣钱之术产生了报酬，其他各行各业莫不如此，——每种技艺尽其本职，使受照管的对象得到利益。但是如果匠人得不到报酬，他能从自己的本职技术得到利益吗？</p>
+<p>色：看来不能。</p>
+<p>苏：那么工作而得不到报酬，那对他自己不是确实没有利益吗？</p>
+<p>色：的确没有利益。</p>
+</blockquote>
+<p>看得出苏格拉底是在探求本质，这是认识世界本源的方式，很多事物的本源在历史中掩盖。医生医治病人这个技艺本身并不会带来钱财，救人和钱财没有直接联系，只是救人得到钱财能够维持自身和家庭的生存，能激发更多人学习这份技艺。如果救人是善，那么善就在利益的绑定下得到扩张。我们从来不是不满于行善之后的适当利益，而是不满于医生心中为了利益而忘了救人才是本质。理想情况是行善而不求回报，但我们考虑到现实层面还是认可行善之后的适当利益已是善的彰显。而为了利益而忘了救人是不可能成立的，荒谬的事情必然会发生，但是必然不可能被允许存在。故而现实情况是救人依旧还在，但是利益的设定值存在相当大的泡沫，且不为外行所见。你要让我说关于医生最离谱的事情，那就是药房买药更多优惠更多的活动。以及救治病人只需一种药物，但为了利益却安排多种新药物来剥取病人的更多的钱财，因为新药物会给更多的广告费，药房的人自然优先给病人推送这种产品。</p>
+<p>关于他们的谈话就论述至此，后面还是一部分他们的讨论，但已无记录的必要。</p>
+<p>最后记录一下知乎某人的回答，其实和我前面所讲并无差别，只不过他的表述更为专业。</p>
+<blockquote>
+<p>因为两者对于真的定义是不一样。</p>
+<p>柏拉图那里指的是，事实符合概念。比如说牧羊人的概念要求所谓的真，就是牧羊，而不是别的什么东西。因此他是目的论，以及偏向于应然</p>
+<p>但是色拉叙马霍斯对于真的定义则是概念要符合事实。他是通过经验观察获得概念的内涵，偏向于实然。</p>
+<p>正因为两者的这种差异，所以两者弄不到一块</p>
+</blockquote>
+
+            </div>
+            <hr style="width: 80%;">
+            
+            <div class="postfooter">
+                <ul class="post-copyright">
+                    <li><strong>文章作者：</strong>小杨同学</li>
+            <li><strong>原文链接：</strong>https://xiaoyangst.github.io/post/li-xiang-guo-di-yi-juan-su-ge-la-di-yu-se-la-xu-ma-huo-si-de-dui-hua/</li>
+            <li><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用<i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA
+                许可协议。转载请注明出处！</li>
+            </ul>
+        </div>
+        
+            <div class="shareContainer">
+                <div class="share" style="height:30px;">
+                    <a class="qq" href=""><i><img class="shareicon"
+                                src="https://xiaoyangst.github.io/media/images/qqs.png" alt=""></i></a>
+                    <a class="wechat" href=""><i><img class="shareicon"
+                                src="https://xiaoyangst.github.io/media/images/wechats.png" alt=""></i></a>
+                    <a class="weibo" href=""><i><img class="shareicon"
+                                src="https://xiaoyangst.github.io/media/images/weibos.png" alt=""></i></a>
+                    <a class="qzone" href=""><i><img class="shareicon"
+                                src="https://xiaoyangst.github.io/media/images/qzones.png" alt=""></i></a>
+                    <a class="douban" href=""><i><img class="shareicon"
+                                src="https://xiaoyangst.github.io/media/images/doubans.png" alt=""></i></a>
+                    <a class="facebook" href=""><i><img class="shareicon"
+                                src="https://xiaoyangst.github.io/media/images/facebooks.png" alt=""></i></a>
+                    <a class="twitter" href=""><i><img class="shareicon"
+                                src="https://xiaoyangst.github.io/media/images/twitter.png" alt=""></i></a>
+                </div>
+            </div>
+            
+        <div id="otherpost">
+            
+            <a  data-pjax class="prev-post-pc" href="https://xiaoyangst.github.io/post/ju-xian/"  style="color: black;">
+                <div id="ppcontainer">
+                    
+                    
+                    <img src="https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/23/6677e23972e1b.png" style="width: 100%;" class="opimg">
+                    
+                    
+                    <h4 class="optitle">局限</h4>
+                </div>
+            </a>
+            <div class="prev-post">
+                上一篇 <a  data-pjax href="https://xiaoyangst.github.io/post/ju-xian/">局限</a>
+            </div>
+            
+            
+            <a data-pjax class="next-post-pc" href="https://xiaoyangst.github.io/post/li-xiang-guo-di-yi-juan-su-ge-la-di-yu-bo-le-ma-huo-si-de-dui-hua/"  style="color: black;">
+                <div id="npcontainer">
+                    
+                    
+                    <img src="https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/23/6677e23972e1b.png" style="width: 100%;" class="opimg">
+                    
+                    
+                    <h4 class="optitle">理想国第一卷：苏格拉底与玻勒马霍斯的对话</h4>
+                </div>
+            </a>
+            <div class="next-post">
+                下一篇 <a  data-pjax href="https://xiaoyangst.github.io/post/li-xiang-guo-di-yi-juan-su-ge-la-di-yu-bo-le-ma-huo-si-de-dui-hua/">理想国第一卷：苏格拉底与玻勒马霍斯的对话</a>
+            </div>
+            
+        </div>
+    </div>
+    </div>
+    </div>
+    <!-- 弹窗 -->
+    <div id="myModal" class="modal">
+        <img class="modal-content" id="img01">
+    </div>
+</body>
+<script>
+    //文章阅读热度
+    var pl = $("#pl").html();
+    var rootaddr = $("#rootaddr").html();
+    pl = pl.replace(rootaddr, "");
+    $("#hotnum").attr('id', pl);
+</script>
+                    <div class="toc-container">
+                        
+                    </div>
+                    <div class="tog">
+                        <div class="toggleContainer">
+                            <div class="toggle">
+                                <i class="fas fa-angle-double-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------- 评论系统👇 ------------------------->
+                    <div id="comment" class="comment">
+                        <div class="commentcontainer">
+                            
+                                
+                                    
+        <div id="vcomments">
+        </div>
+        <script>
+            var valine = new Valine();
+            var curpath = window.location.pathname;
+            if (curpath[curpath.length - 1] != '/')
+                curpath += '/'
+            valine.init({
+                el: '#vcomments',
+                appId: 'ExqEqsM2hOvhbUiXhLs2LhSz-gzGzoHsz',
+                appKey: 'glQIUzqpP9I8xH9kAjiq6Ioz',
+                avatar: 'retro',
+                pageSize: 10,
+                placeholder: '既然来了，何不畅所欲言呢？',
+                recordIP: true,
+                path: curpath //[重点] 记得添加path路径
+            });
+        </script>
+        <script type="text/javascript">
+            var jrsc = '既然来了，何不畅所欲言呢？';
+            jinrishici.load(function (result) {
+                // 自己的处理逻辑
+                jrsc = result.data.content + "\n「" + result.data.origin.title + "」" + result.data.origin
+                    .dynasty + " · " + result.data.origin.author;
+            });
+        </script>
+
+
+                                    <div class="clear"></div>
+                                
+                            
+                        </div>
+                    </div>
+                    <!---------------------------- 评论系统👆 ------------------------->
+                </div>
+                <!-- main标签，pjax渲染时加载以上内容👆 -->
+                <div class="col-md-1 col-lg-2"></div>
+                <div id="bg">
+                </div>
+            </div>
+            <!-- ----------------左侧菜单栏html 👆-------------------------------------->
+            
+        </div>
+        <!-- aplayer播放器加载👇 -->
+            
+        <!-- aplayer播放器加载👆 -->
+    </div>
+    <!-- 背景图加载方式👇 -->
+    <div id="bgchoice" style="display: none">link
+                </div>
+                
+                <div id="bgurl" style="display:none">https://tc-1303817403.cos.ap-chengdu.myqcloud.com/2024/06/23/6677e2ced6b96.jpg</div>
+                
+    <!-- 背景图加载方式👆 -->
+</body>
+
+<script>
+    //初始化
+    //更换twikoo头像
+    setTimeout(replaceAvatar,1000);
+    setTimeout(replaceAvatar,2000);
+    setTimeout(replaceAvatar,8000);
+    // --------为每张图片添加懒加载（lazyload）标签-->懒加载功能 👇------------
+    lazyload();
+    //为文章内所有代码块添加代码复制功能 👇
+    codeinit();
+    // ------代码高亮显示功能-------------
+    hljs.initHighlightingOnLoad();
+    if (shareChoice)
+        shareInit();
+    if (donateChoice)
+        donateInit();
+</script>
+
+<!------------------ 加载live2d模型功能（看板娘）👇 ---------------->
+
+<script type="text/javascript">
+    var message_Path = '/live2d/'
+    var home_Path = document.getElementById("domainname").innerHTML + "/"; //此处修改为你的域名，必须带斜杠
+</script>
+<script type="text/javascript" src="https://xiaoyangst.github.io/media/js/live2d.js"></script>
+<script type="text/javascript" src="https://xiaoyangst.github.io/media/live2d/js/message.js"></script>
+<script type="text/javascript">
+    loadlive2d("live2d", "https://xiaoyangst.github.io/media/live2d/assets/tororo.model.json");
+</script>
+
+<!------------------ 加载live2d模型功能（看板娘）👆 ---------------->
+
+
+<!----------------------- 返回顶部按钮功能👇 --------------------->
+<script>
+    $(function () {
+        $('.toggleContainer').click(function () {
+            $('html,body').animate({
+                scrollTop: '0px'
+            }, 800);
+        });
+        $(window).scroll(function () {
+            var st = $(window).scrollTop();
+            if (st > 30) {
+                $(".toggleContainer").fadeIn(400);
+            } else {
+                $(".toggleContainer").fadeOut(100);
+            }
+        });
+    });
+</script>
+<!----------------------- 返回顶部按钮功能👆 --------------------->
+
+
+<!------------ 加载全局背景图功能👇（开始时没有写好，这功能有点鸡肋/(ㄒoㄒ)/~~） -->
+<script>
+    var bgchoice = "link"
+    var bg = $('#bg');
+    var bgurl = document.getElementById("bgurl").innerHTML;
+    if (bgchoice == 'default')
+    {
+        for (var i = 0; i < 3; i++)
+            bgurl = bgurl.replace("\\", "/");
+        bgurl = "https://xiaoyangst.github.io/" + bgurl;
+    }
+    bg.css("background", "url('" + bgurl + "')");
+
+    window.onload = function () {
+        aplayerbtnInit();
+    }
+</script>
+<!------------ 加载全局背景图功能👆（开始时没有写好，这功能有点鸡肋/(ㄒoㄒ)/~~） -->
+
+
+
+
+<script src="https://xiaoyangst.github.io/media/js/index.js"></script>
+
+
+<script>
+    //加载后的事件同步（阅读量、移动端评论等
+    window.onload = function () {
+    //代码块高亮渲染
+    document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+            hljs.lineNumbersBlock(block);
+    });
+        getHotnum();
+        var sharepc = $(".share").eq(0).html();
+        $(".share").eq(1).html(sharepc);   //插件只会寻找一个分享标签渲染，所以需要手动添加到移动端
+        aplayerbtnInit();
+        $(".hljs").css({
+            "padding": "20px"
+        })
+    }
+</script>
+
+<!-- <script src="https://xiaoyangst.github.io/media/js/av-min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@3.13.0/dist/av-min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.6.1/dist/av-live-query-min.js"></script> -->

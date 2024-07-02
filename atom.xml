@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://xiaoyangst.github.io</id>
+    <title>小杨同学</title>
+    <updated>2024-07-02T15:15:35.753Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://xiaoyangst.github.io"/>
+    <link rel="self" href="https://xiaoyangst.github.io/atom.xml"/>
+    <subtitle>余虽不敏，然余诚也</subtitle>
+    <logo>https://xiaoyangst.github.io/images/avatar.png</logo>
+    <icon>https://xiaoyangst.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2024, 小杨同学</rights>
+    <entry>
+        <title type="html"><![CDATA[4-CMake添加第三方依赖库]]></title>
+        <id>https://xiaoyangst.github.io/post/4-cmake-tian-jia-di-san-fang-yi-lai-ku/</id>
+        <link href="https://xiaoyangst.github.io/post/4-cmake-tian-jia-di-san-fang-yi-lai-ku/">
+        </link>
+        <updated>2024-07-02T15:12:01.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[3-CMake 构建和链接静态库和动态库]]></title>
+        <id>https://xiaoyangst.github.io/post/3-cmake-gou-jian-he-lian-jie-jing-tai-ku-he-dong-tai-ku/</id>
+        <link href="https://xiaoyangst.github.io/post/3-cmake-gou-jian-he-lian-jie-jing-tai-ku-he-dong-tai-ku/">
+        </link>
+        <updated>2024-07-02T03:30:58.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[数组：1.两数之和]]></title>
+        <id>https://xiaoyangst.github.io/post/shu-zu-1liang-shu-zhi-he/</id>
+        <link href="https://xiaoyangst.github.io/post/shu-zu-1liang-shu-zhi-he/">
+        </link>
+        <updated>2024-06-30T11:05:55.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[如何选择数据类型]]></title>
+        <id>https://xiaoyangst.github.io/post/ru-he-xuan-ze-shu-ju-lei-xing/</id>
+        <link href="https://xiaoyangst.github.io/post/ru-he-xuan-ze-shu-ju-lei-xing/">
+        </link>
+        <updated>2024-06-30T01:45:12.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[函数重载二义性]]></title>
+        <id>https://xiaoyangst.github.io/post/han-shu-chong-zai-er-yi-xing/</id>
+        <link href="https://xiaoyangst.github.io/post/han-shu-chong-zai-er-yi-xing/">
+        </link>
+        <updated>2024-06-30T01:36:24.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[C++域运算符]]></title>
+        <id>https://xiaoyangst.github.io/post/cyu-yun-suan-fu/</id>
+        <link href="https://xiaoyangst.github.io/post/cyu-yun-suan-fu/">
+        </link>
+        <updated>2024-06-30T01:01:28.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[头文件的3种标准]]></title>
+        <id>https://xiaoyangst.github.io/post/tou-wen-jian-de-3-chong-biao-zhun/</id>
+        <link href="https://xiaoyangst.github.io/post/tou-wen-jian-de-3-chong-biao-zhun/">
+        </link>
+        <updated>2024-06-29T13:49:18.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[多线程中的虚假唤醒]]></title>
+        <id>https://xiaoyangst.github.io/post/duo-xian-cheng-zhong-de-xu-jia-huan-xing/</id>
+        <link href="https://xiaoyangst.github.io/post/duo-xian-cheng-zhong-de-xu-jia-huan-xing/">
+        </link>
+        <updated>2024-06-29T01:02:43.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2-生产者与消费者模型]]></title>
+        <id>https://xiaoyangst.github.io/post/2-jie-jue-sheng-chan-zhe-xiao-fei-zhe-wen-ti/</id>
+        <link href="https://xiaoyangst.github.io/post/2-jie-jue-sheng-chan-zhe-xiao-fei-zhe-wen-ti/">
+        </link>
+        <updated>2024-06-27T11:13:04.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1-封装Thread类和Task类]]></title>
+        <id>https://xiaoyangst.github.io/post/1-feng-zhuang-thread-lei-he-task-lei/</id>
+        <link href="https://xiaoyangst.github.io/post/1-feng-zhuang-thread-lei-he-task-lei/">
+        </link>
+        <updated>2024-06-27T10:52:29.000Z</updated>
+    </entry>
+</feed>
