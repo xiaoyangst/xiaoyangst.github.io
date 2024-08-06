@@ -172,8 +172,8 @@
   margin: auto;
 }
 .radio-skin,
-.radio-skin--technology,
-.radio-skin--app,
+.radio-skin--article,
+.radio-skin--apps,
 .radio-skin--event {
   height: 100%;
   width: 2px;
@@ -182,8 +182,8 @@
   transition: all 0.4s ease;
 }
 .radio-skin::after,
-.radio-skin--technology::after,
-.radio-skin--app::after,
+.radio-skin--article::after,
+.radio-skin--apps::after,
 .radio-skin--event::after {
   transition: all 0.4s ease;
   display: block;
@@ -199,22 +199,22 @@
   top: 22px;
   box-shadow: 1px 0 5px rgba(0,0,0,0.2);
 }
-.radio-skin--technology::after {
+.radio-skin--article::after {
   border-color: #ee936c;
 }
-#radio-technology:checked+.radio-skin--technology {
+#radio-article:checked+.radio-skin--article {
   background-color: #ee936c;
 }
-#radio-technology:checked+.radio-skin--technology::after {
+#radio-article:checked+.radio-skin--article::after {
   background-color: #ee936c;
   top: -2px;
 }
-.timeline-item-technology .line-anchor::after,
-.timeline-item-technology--hidden .line-anchor::after {
+.timeline-item-article .line-anchor::after,
+.timeline-item-article--hidden .line-anchor::after {
   background-color: #ee936c;
 }
-.timeline-item-technology .line-date-tag,
-.timeline-item-technology--hidden .line-date-tag {
+.timeline-item-article .line-date-tag,
+.timeline-item-article--hidden .line-date-tag {
   background-color: #ee936c;
 }
 /*
@@ -222,22 +222,22 @@
     font-weight: bold;
   }
   */
-.radio-skin--app::after {
+.radio-skin--apps::after {
   border-color: #60a465;
 }
-#radio-app:checked+.radio-skin--app {
+#radio-apps:checked+.radio-skin--apps {
   background-color: #60a465;
 }
-#radio-app:checked+.radio-skin--app::after {
+#radio-apps:checked+.radio-skin--apps::after {
   background-color: #60a465;
   top: -2px;
 }
-.timeline-item-app .line-anchor::after,
-.timeline-item-app--hidden .line-anchor::after {
+.timeline-item-apps .line-anchor::after,
+.timeline-item-apps--hidden .line-anchor::after {
   background-color: #60a465;
 }
-.timeline-item-app .line-date-tag,
-.timeline-item-app--hidden .line-date-tag {
+.timeline-item-apps .line-date-tag,
+.timeline-item-apps--hidden .line-date-tag {
   background-color: #60a465;
 }
 /*
