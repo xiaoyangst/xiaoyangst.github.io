@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        142.环形链表|| | 小杨同学
+        环形链表II | 小杨同学
       
     </title>
     <meta name="description" content="" />
@@ -152,7 +152,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">142.环形链表||</div>
+        <div class="post-title">环形链表II</div>
         <div class="post-info">
           
   <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
@@ -171,7 +171,7 @@
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;  <br><span class="hljs-keyword">public</span>:  <br>    <span class="hljs-function">ListNode* <span class="hljs-title">detectCycle</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;  <br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">NULL</span> || head-&gt;next == <span class="hljs-literal">NULL</span>) &#123;  <br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;  <br>        &#125;  <br>        <span class="hljs-comment">// 快慢指针，有环必相遇  </span><br>        ListNode* node = head;  <br>        ListNode* slow = head;  <br>        ListNode* fast = head;  <br>        <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;  <br>            slow = slow-&gt;next;  <br>            fast = fast-&gt;next-&gt;next;  <br>            <span class="hljs-keyword">if</span> (slow == fast) &#123; <span class="hljs-comment">// 有环  </span><br>                <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;  <br>                    <span class="hljs-keyword">if</span> (node == slow) &#123;  <br>                        <span class="hljs-keyword">return</span> slow;  <br>                    &#125;  <br>                    node = node-&gt;next;  <br>                    slow = slow-&gt;next;  <br>                &#125;  <br>            &#125;  <br>        &#125;  <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;  <br>    &#125;  <br>&#125;;  <br></code></pre></td></tr></table></figure>
 
 <p>此题建立在你已经完成 《141.环形链表》题目，我们重点就关注判断有环之后如果找到第一次相遇的节点。</p>
-<p><img src="/../images/%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8II.png" alt="环形链表II"></p>
+<p><img src="/images/2024/08/07/801c5920-5490-11ef-996a-6b29d9dcc7bf.png" alt="环形链表II.png"></p>
 <p>我们可以确定如下信息：</p>
 <ul>
 <li>慢指针必然不可能环绕圆形一圈，快指针至少环绕环形一圈</li>
