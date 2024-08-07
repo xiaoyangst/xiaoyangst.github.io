@@ -170,24 +170,22 @@
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">reverseList</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">nullptr</span> || head-&gt;next == <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">return</span> head;<br>        &#125;<br>        ListNode* left = head;<br>        ListNode* right = head-&gt;next;<br>        <span class="hljs-keyword">while</span> (right) &#123;<br>            ListNode* node = right-&gt;next;<br>            right-&gt;next = left;<br>            left = right;<br>            right = node;<br>        &#125;<br>        head-&gt;next = <span class="hljs-literal">nullptr</span>;<br>        <span class="hljs-keyword">return</span> left;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reorderList</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">nullptr</span> || head-&gt;next == <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-comment">// 找到中间节点进行切割，左半部分链表保持不变，反转右半部分链表</span><br>        ListNode* slow = head;<br>        ListNode* fast = head;<br>        <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;<br>            slow = slow-&gt;next;<br>            fast = fast-&gt;next-&gt;next;<br>        &#125;<br>        ListNode* left = head;<br>        ListNode* right = slow-&gt;next;<br>        slow-&gt;next = <span class="hljs-literal">nullptr</span>;<br>        right = <span class="hljs-built_in">reverseList</span>(right);<br><br>        <span class="hljs-comment">// 准备工作已做好，开始重排</span><br>        ListNode* virtualHead = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">-1</span>);<br>        ListNode* tmp = virtualHead;<br>        <span class="hljs-keyword">while</span> (left != <span class="hljs-literal">nullptr</span> &amp;&amp; right != <span class="hljs-literal">nullptr</span>) &#123;<br>            tmp-&gt;next = left;<br>            left = left-&gt;next;<br>            tmp-&gt;next-&gt;next = right;<br>            right = right-&gt;next;<br>            tmp = tmp-&gt;next-&gt;next;<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (left != <span class="hljs-literal">nullptr</span>) &#123;<br>            tmp-&gt;next = left;<br>        &#125;<br><br>        head = virtualHead-&gt;next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<p>这道题只要能够把题目看明白，就它究竟是如何重排，逻辑上理清楚并不难</p>
+<p>这道题只要能够把题目看明白，即它究竟是如何重排，逻辑上理清楚并不难</p>
 <ol>
 <li>先找到中间节点，将当前链表分割成两部分，即左链表和右链表</li>
 <li>左链表的尾节点要指向 nullptr，右链表需要反转</li>
-<li>创建一个虚拟头节点用来链接后续重排的节点，先链接左链表的第一个节点，接着链接右链表的第一个节点</li>
-<li>如果左链表当前节点和右链表当前节点有一个不满足不为空就退出循环。由于左链表的长度大于或等于右链表（如果大于，也只会比其多一个节点），退出循环之后，继续判断左链表当前节点是否为空，不为空就代表还有一个节点被遗漏，tmp 指向这个节点即可。</li>
+<li>创建一个虚拟头节点用来链接后续重排的节点，先链接左链表的第一个节点，接着链接右链表的第一个节点，如此循环</li>
+<li>如果左链表当前节点和右链表当前节点有一个不满足不为空就退出循环。由于左链表的长度大于或等于右链表（如果大于，也只会比其多一个节点），退出循环之后，继续判断左链表当前节点是否为空，不为空就代表还有一个节点被遗漏，tmp 指向这个节点即可</li>
 <li>最后，记得更换 head 节点为 virtualHead-&gt;next</li>
 </ol>
 <hr>
-<p>完成本题的工作中，犯下的错误是 tmp 节点的移动，错误的逻辑代码如下：</p>
+<p>完成本题的过程中，犯下的错误是 tmp 节点的移动，错误的逻辑代码如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">while</span> (left != <span class="hljs-literal">nullptr</span> &amp;&amp; right != <span class="hljs-literal">nullptr</span>) &#123;<br>  tmp-&gt;next = left;<br>  tmp = tmp-&gt;next;		<span class="hljs-comment">// 错误的逻辑代码，后续代码也没价值</span><br>  tmp-&gt;next = right;<br>  tmp = tmp-&gt;next;		<br>  left = left-&gt;next;<br>  right = right-&gt;next;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>因为我们的 left 和 right 节点后面也跟着很多的节点，如果你 tmp &#x3D; tmp-&gt;next，然后再 tmp-&gt;next &#x3D; right，就失去 left 链表的掌控了（left 链表被污染），从而出现错误。</p>
 <p><img src="/images/2024/08/07/802b1dd0-549e-11ef-996a-6b29d9dcc7bf.png" alt="重排链表.png"></p>
 <p>所以，只需要每次让 tmp 指向 left 或 right 的节点之后，及时更新 left 和 right 指针即可，保证不被污染</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">while</span> (left != <span class="hljs-literal">nullptr</span> &amp;&amp; right != <span class="hljs-literal">nullptr</span>) &#123;<br>     tmp-&gt;next = left;<br>     left = left-&gt;next;<br>     tmp-&gt;next-&gt;next = right;<br>     right = right-&gt;next;<br>     tmp = tmp-&gt;next-&gt;next;<br> &#125;<br></code></pre></td></tr></table></figure>
-
-
       </div>
     </div>
     
@@ -203,7 +201,19 @@
     
     <div class="post-nav">
   
-    <div class="post-nav-item-left"></div>
+    <a class="post-nav-item-left" href="/2024/08/07/2-%E4%B8%A4%E6%95%B0%E7%9B%B8%E5%8A%A0/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>2.两数相加</div>
+    </a>
   
   <div class="vhr"></div>
   
@@ -232,7 +242,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\2-两数相加\" title="2.两数相加" rel="bookmark">2.两数相加</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div></div>
     
   </div>
 </div>
