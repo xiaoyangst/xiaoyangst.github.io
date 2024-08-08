@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        力扣 | 小杨同学
+        26.删除有序数组中的重复项 | 小杨同学
       
     </title>
     <meta name="description" content="" />
@@ -58,7 +58,8 @@
           href='/css/layout.css' />
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -148,168 +149,94 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/leetcode.svg)"></div>
-        力扣
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">26.删除有序数组中的重复项</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
+
+
+          <span class="post-date">2024-08-08</span>
+        </div>
       </div>
-      <div class="wall-category-description">leetcode Writeup Record</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 1em;">数组</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1em;">链表</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(nums.<span class="hljs-built_in">size</span>() == <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>        <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>;       <span class="hljs-comment">// 用于比较是否重复</span><br>        <span class="hljs-type">int</span> right = <span class="hljs-number">1</span>;      <span class="hljs-comment">// 用于指定更新值的下标</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-keyword">while</span>(nums[left] != nums[i])&#123;<br>                nums[right] = nums[i];<br>                right++;<br>                left = i;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> right;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>双指针法，right 用于指向更新值的下标，left 用于比较是否重复。</p>
+<p>如果nums[left] 和 nums[i] 不相等，表明遇到不是重复的新值，然后把这个新值赋值给 nums[right]，继而把 right 和 left 的下标进行更新。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/08/66-%E5%8A%A0%E4%B8%80/" class="post-title hover-line">66.加一</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题容易让人误解，应该把题意讲得清楚些。有一个自然数，被拆分成个位数存储在数组中，对这个自然数进行加 1 操作。很明显，如果我们的自然是99，那么加 1 的结果就是 100，显然原数组是存储不下的，因为vector容器不支持头部插入元素</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
-
-</div>
-    </div>
-  </div>
-
+    <a class="post-nav-item-left" href="/2024/08/08/66-%E5%8A%A0%E4%B8%80/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>66.加一</div>
+    </a>
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/08/26-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9/" class="post-title hover-line">26.删除有序数组中的重复项</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">双指针法，right 用于指向更新值的下标，left 用于比较是否重复</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
-
-</div>
-    </div>
-  </div>
-
+  <div class="vhr"></div>
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/07/19-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%AC-N-%E4%B8%AA%E7%BB%93%E7%82%B9/" class="post-title hover-line">19.删除链表的倒数第 N 个结点</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">只要明白链表的特性，以及删除的特点就很容易想到该怎么处理这道题，不会想复杂</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
+    <a class="post-nav-item-right" href="/2024/08/07/%E5%85%B3%E5%BF%83%E7%BE%A4%E4%BC%97%E7%94%9F%E6%B4%BB%EF%BC%8C%E6%B3%A8%E6%84%8F%E5%B7%A5%E4%BD%9C%E6%96%B9%E6%B3%95/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      关心群众生活，注意工作方法
+    </a>
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/07/2-%E4%B8%A4%E6%95%B0%E7%9B%B8%E5%8A%A0/" class="post-title hover-line">2.两数相加</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">关于进位的处理，这并不难，只需要用一个标记位 note 来标识是否有进位，还有要记得正确更新 note 的情况</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/07/143-%E9%87%8D%E6%8E%92%E9%93%BE%E8%A1%A8/" class="post-title hover-line">143.重排链表</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题只要能够把题目看明白，即它究竟是如何重排，逻辑上理清楚并不难</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/07/142-%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8II/" class="post-title hover-line">142.环形链表II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我企图用之前的代码来套用到本题，却发现犯了一个大错误，那就是 slow 和 fast 不是同一个起点开始，导致上面的推导公式失效。所以，我们务必保证最初的快慢指针的起点是一致的，即指向头节点</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/07/141-%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/" class="post-title hover-line">141.环形链表</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果这是一条直线，快的车永远不可能遇到慢的车，如果遇到必然就是一个环</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/07/1-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/" class="post-title hover-line">1. 两数之和</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">个人遇到的问题是记不清 map 容器的 find 的方法究竟寻找的 key 还是 value？答案是 key！！！</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
-
-</div>
-    </div>
-  </div>
-
 
     
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\66-加一\" title="66.加一" rel="bookmark">66.加一</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
     
   </div>
 
@@ -402,6 +329,21 @@
       <script>searchInitialize("/search.json")</script>
     
     
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
   
 
   </body>
