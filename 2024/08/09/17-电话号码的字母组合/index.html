@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        77.组合 | 小杨同学
+        17.电话号码的字母组合 | 小杨同学
       
     </title>
     <meta name="description" content="" />
@@ -152,7 +152,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">77.组合</div>
+        <div class="post-title">17.电话号码的字母组合</div>
         <div class="post-info">
           
   <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
@@ -168,12 +168,9 @@
             
           </div>
         
-        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; result;<br>    vector&lt;<span class="hljs-type">int</span>&gt; path;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtrace</span><span class="hljs-params">(<span class="hljs-type">int</span> n, <span class="hljs-type">int</span> k, <span class="hljs-type">int</span> start, <span class="hljs-type">int</span> note)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (note == k) &#123; <span class="hljs-comment">// 终止条件</span><br>            result.<span class="hljs-built_in">push_back</span>(path);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = start; i &lt;= n; i++) &#123;<br>            path.<span class="hljs-built_in">push_back</span>(i);<br>            note++;<br>            <span class="hljs-built_in">backtrace</span>(n, k, i + <span class="hljs-number">1</span>, note);<br>            path.<span class="hljs-built_in">pop_back</span>();<br>            note--;<br>        &#125;<br>    &#125;<br><br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">combine</span>(<span class="hljs-type">int</span> n, <span class="hljs-type">int</span> k) &#123;<br>        <span class="hljs-built_in">backtrace</span>(n, k, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">const</span> string list[<span class="hljs-number">10</span>] = &#123;<span class="hljs-string">&quot;&quot;</span>,    <span class="hljs-string">&quot;&quot;</span>,    <span class="hljs-string">&quot;abc&quot;</span>,  <span class="hljs-string">&quot;def&quot;</span>, <span class="hljs-string">&quot;ghi&quot;</span>,<br>                             <span class="hljs-string">&quot;jkl&quot;</span>, <span class="hljs-string">&quot;mno&quot;</span>, <span class="hljs-string">&quot;pqrs&quot;</span>, <span class="hljs-string">&quot;tuv&quot;</span>, <span class="hljs-string">&quot;wxyz&quot;</span>&#125;;<br><br>    vector&lt;string&gt; result;<br>    string path;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtrace</span><span class="hljs-params">(string digits, <span class="hljs-type">int</span> size, <span class="hljs-type">int</span> note, <span class="hljs-type">int</span> start)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (note == size) &#123;<br>            result.<span class="hljs-built_in">push_back</span>(path);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = start; i &lt; size; i++) &#123;<br>            <span class="hljs-type">int</span> num = digits[i] - <span class="hljs-string">&#x27;0&#x27;</span>;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; list[num].<span class="hljs-built_in">size</span>(); j++) &#123;<br>                path.<span class="hljs-built_in">push_back</span>(list[num][j]);<br>                note++;<br>                <span class="hljs-built_in">backtrace</span>(digits, size, note, i + <span class="hljs-number">1</span>);<br>                path.<span class="hljs-built_in">pop_back</span>();<br>                note--;<br>            &#125;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function">vector&lt;string&gt; <span class="hljs-title">letterCombinations</span><span class="hljs-params">(string digits)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (!digits.<span class="hljs-built_in">empty</span>()) &#123;<br>            <span class="hljs-built_in">backtrace</span>(digits, digits.<span class="hljs-built_in">size</span>(), <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br>        &#125;<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<p>note 记录已存储路径的长度，用以终止回溯，终止条件是回溯当中不可获取的。</p>
-<p>组合不在意顺序，因此 [1,4] 和 [4,1] 属于同一个路径，不能同时加入到总路径中，只能取其一。为了方便，按照有序进行排布会容易做题，在代码中也是通过 i + 1 传递 到 backtrace 中作为 start 参数，表示遍历路径的起始位置。</p>
-<p>回溯的体现就在于，你添加的操作在从 backtrace 结束之后对应的删除操作，比方说 <code>path.push_back(i)</code> 对应 <code>path.pop_back()</code>，<code>note++</code> 对应 <code>note--</code>。</p>
-<p><img src="/images/2024/08/09/bc6fb5b0-55f9-11ef-9ecf-d962743c35c1.png" alt="组合.png"></p>
+<p>在完成《77.组合》基础上，这道题你要会两个技能，分别是建立映射关系（通常是数组）和单个数字字符转换为对应的整数（ch - ‘0’）。</p>
 
       </div>
     </div>
@@ -190,23 +187,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/08/09/218-%E7%BB%84%E5%90%88III/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>218.组合III</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/08/09/8-%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%95%B4%E6%95%B0-atoi/">
+    <a class="post-nav-item-right" href="/2024/08/09/218-%E7%BB%84%E5%90%88III/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -218,7 +203,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      8. 字符串转换整数 (atoi)
+      218.组合III
     </a>
   
 </div>
@@ -231,7 +216,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\09\218-组合III\" title="218.组合III" rel="bookmark">218.组合III</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\17-电话号码的字母组合\" title="17.电话号码的字母组合" rel="bookmark">17.电话号码的字母组合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\09\77-组合\" title="77.组合" rel="bookmark">77.组合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\218-组合III\" title="218.组合III" rel="bookmark">218.组合III</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
     
   </div>
 </div>
