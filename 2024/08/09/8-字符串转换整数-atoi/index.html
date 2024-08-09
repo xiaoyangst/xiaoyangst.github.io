@@ -183,21 +183,13 @@
 <p>按照这个顺序来，我们的字符串就必然是全部由数字组成，就可以真正的去做字符串转数字的工作了</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title">strToNum</span><span class="hljs-params">(string&amp; str, <span class="hljs-type">bool</span> note)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span>(str.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">10</span>)&#123;<br>        <span class="hljs-keyword">if</span>(note)&#123;<br>            <span class="hljs-keyword">return</span> INT32_MIN;<br>        &#125;<br>        <span class="hljs-keyword">return</span> INT32_MAX;<br>    &#125;<br>    <span class="hljs-built_in">reverse</span>(str.<span class="hljs-built_in">begin</span>(), str.<span class="hljs-built_in">end</span>());<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> chen = <span class="hljs-number">1</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> renum = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> s : str) &#123;<br>        <span class="hljs-type">int</span> num = s - <span class="hljs-string">&#x27;0&#x27;</span>;<br>        renum += chen * num;<br>        chen *= <span class="hljs-number">10</span>;<br>        <span class="hljs-keyword">if</span> (renum &gt;= INT32_MAX) &#123;<br>            <span class="hljs-keyword">if</span>(note)&#123;<br>                <span class="hljs-keyword">if</span>(renum != INT32_MAX)&#123;<br>                    <span class="hljs-keyword">return</span> INT32_MIN;<br>                &#125;<span class="hljs-keyword">else</span>&#123;<br>                    <span class="hljs-keyword">return</span> -renum;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">return</span> INT32_MAX;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(note)&#123;<br>        <span class="hljs-keyword">return</span> -renum;<br>    &#125;<br>    <span class="hljs-keyword">return</span> renum;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>按照题目要求，应该返回[INT32_MIN,INT32_MAX]区间内的数字</p>
+<p>按照题目要求，应该返回[INT32_MIN,INT32_MAX]区间内的数字，下面部分说明</p>
 <ol>
 <li>如果字符串的长度大于 10，表明必然已经越界。如果这个数为负数，那么返回INT32_MIN，否则返回INT32_MAX</li>
-<li>为了方便得到具体的数值，需要反转字符串</li>
 <li>在循环取值计算的过程中，如果 renum 有 大于等于 INT32_MAX情况就要进行处理，避免后续没有意义的计算</li>
-<li>如果 renum &gt;&#x3D; INT32_MAX 且 note 不为负数，返回INT32_MAX</li>
-<li>如果 renum &gt;&#x3D; INT32_MAX 且 note 为负数<ol>
-<li>renum !&#x3D; INT32_MAX，返回 INT32_MIN</li>
-<li>否则返回 -renum</li>
 </ol>
-</li>
-<li>如果上述判断都没有返回，表明这个数在(INT32_MIN,INT32_MAX)区间内。如果是负数添加负号返回，否则直接返回即可</li>
-</ol>
-<p>第五阶段容易让人不理解，但这实际是由 INT32_MIN（2147483648） 和 INT32_MAX（2147483647）不对称导致的。由于 INT32_MIN 绝对值 大于 INT32_MAX 绝对值，所以当 renum &gt;&#x3D; INT32_MAX 进入判断的时候，我们要考虑当这个数为负数情况下，如果 renum &#x3D; INT32_MAX，应该返回 -renum，而不能直接返回 INT32_MIN。</p>
-
+<p>下面这个地方容易让人不理解，但这实际是由 INT32_MIN（2147483648） 和 INT32_MAX（2147483647）不对称导致的。由于 INT32_MIN 绝对值 大于 INT32_MAX 绝对值，所以当 renum &gt;&#x3D; INT32_MAX 进入判断的时候，我们继续考虑当这个数为负数情况下，如果 renum &#x3D; INT32_MAX，应该返回 -renum，而不能直接返回 INT32_MIN。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (renum &gt;= INT32_MAX) &#123;<br>    <span class="hljs-keyword">if</span> (note) &#123;<br>        <span class="hljs-keyword">if</span> (renum != INT32_MAX) &#123;<br>            <span class="hljs-keyword">return</span> INT32_MIN;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">return</span> -renum;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> INT32_MAX;<br>&#125;<br></code></pre></td></tr></table></figure>
       </div>
     </div>
     
@@ -213,7 +205,19 @@
     
     <div class="post-nav">
   
-    <div class="post-nav-item-left"></div>
+    <a class="post-nav-item-left" href="/2024/08/09/77-%E7%BB%84%E5%90%88/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>77.组合</div>
+    </a>
   
   <div class="vhr"></div>
   
