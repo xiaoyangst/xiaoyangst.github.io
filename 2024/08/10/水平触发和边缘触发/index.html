@@ -150,7 +150,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner">
+    <div class="post-inner--toc">
       <div class="post-content__head">
         <div class="post-title">水平触发和边缘触发</div>
         <div class="post-info">
@@ -162,23 +162,27 @@
         </div>
       </div>
       
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%B0%B4%E5%B9%B3%E8%A7%A6%E5%8F%91"><span class="post-toc-text">水平触发</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%BE%B9%E7%BC%98%E8%A7%A6%E5%8F%91"><span class="post-toc-text">边缘触发</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%AE%9E%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="post-toc-text">实例说明</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <p>:leaves: 水平触发</p>
-<ul>
+        <h2 id="水平触发"><a href="#水平触发" class="headerlink" title="水平触发"></a>水平触发</h2><ul>
 <li>读事件：如果 epoll_wait 触发了读事件，表示有数据可读，如果程序没有把数据读完，再次调用 epoll_wait 的时候，将立即再次触发读事件。</li>
 <li>写事件：如果发生缓冲区没有满，表示可以写入数据，只要缓冲区没有被写满，再次调用epoll_wait的时候，将立即再次触发写事件。</li>
 </ul>
-<p>:leaves: 边缘触发</p>
-<ul>
+<h2 id="边缘触发"><a href="#边缘触发" class="headerlink" title="边缘触发"></a>边缘触发</h2><ul>
 <li>读事件：如果 epoll_wait 触发了读事件，不管程序有没有处理读事件，epoll_wait 都不会再触发读事件，只有当新的数据到达时，才再次触发读事件。</li>
 <li>写事件：epoll_wait 触发写事件之后，如果发送缓冲区任可以写（发送缓冲区没有满），epoll_wait 不会再次触发写事件，只有当发送缓冲区由 满 变成 不满 时，才再次触发写事件。</li>
 </ul>
-<p>这里就以读事件举例，客户端发生长度为 6 的字符串sssbbb，服务器这边一次读只能读取长度为 3 的字符串。下面看看水平触发和边缘触发的现象：</p>
+<h2 id="实例说明"><a href="#实例说明" class="headerlink" title="实例说明"></a>实例说明</h2><p>这里就以读事件举例，客户端发生长度为 6 的字符串sssbbb，服务器这边一次读只能读取长度为 3 的字符串。下面看看水平触发和边缘触发的现象：</p>
 <p>水平触发：epoll_wait触发读事件，读取字符串sss，epoll_wait再次触发读事件，读取字符串bbb</p>
 <p>边缘触发：epoll_wait触发读事件，读取字符串sss</p>
 <p>客户端再次发送长度为6的字符串sssbbb：</p>
