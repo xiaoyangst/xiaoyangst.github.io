@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        网络编程 | 小杨同学
+        不要低估 TCP 的性能 | 小杨同学
       
     </title>
     <meta name="description" content="" />
@@ -58,9 +58,8 @@
           href='/css/layout.css' />
     
     
-  <link rel="stylesheet"
-        type="text/css"
-        href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -150,191 +149,89 @@
     </div>
     <div class="body">
       
-  <div class="tag-page-title">#网络编程</div>
-  <div class="post-list">
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">不要低估 TCP 的性能</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
+
+
+          <span class="post-date">2024-08-10</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>TCP 是一个复杂的协议，在基本数据报服务的基础上添加了可靠性和流量控制功能，而 UDP 只添加了一个校验和,所以看起来 UDP 可能要比 TCP 快一个数量级或更多。基于这种假设很多应用程序的程序员都认为只有使用 UDP 才能获得可接受的性能。在某些情况下，UDP 运行的是比 TCP 快得多，但并不总是这样的。我们会看到，<strong>有时 TCP 比 UDP 运行的好得多</strong>。</p>
+<ol>
+<li>两种协议的 CPU 处理主要都是在进行数据复制和校验，因此，这部分看不出太大的差别</li>
+<li>为了提供可靠性，接收端 TCP 必须发送 ACK，这就增加了两端程序必须处理的内容，但是工作量可能不会有我们预想的那么多。首先，接受端可用通过它要发回给对等实体的数据来捎带给ACK。实际上，很多 TCP 实现都会将 ACK 延迟几个毫秒发送，以防止本端应用程序有对输入分段的应答要发送。第二，TCP 没必要为每个段产生一个 ACK。正常情况下，大部分 TCP 实现都是隔一段发送一次 ACK 的</li>
+<li>TCP 和 UDP 之间另一个主要区别在于 TCP 是个面向连接的协议，必须进行连接的建立和拆除，即三次握手和四次挥手。我们假设拆除连接（四次挥手）的时间基本上可用并入数据交换的时间之中，将注意力集中在连接建立阶段发生的事情上。如下图所示，分组从一台主机发送到其对等实体再发送回来所需的时间。正如我们看到的那样，连接建立要花费一右二分之一个往返时间。如果客户端和服务器之间的连接维持的时间足够长(比如,有大量数据在客户端和服务器之间传送)，这一个半 RTT会由所有的数据传输分摊，不会对性能产生很严重的影响。但如果有个简单事务，客户端发送一条请求，服务器对其进行应答，那么连接建立时间在整个事务所用时就会占据很大一部分</li>
+</ol>
+<p><img src="/images/2024/08/10/13151a80-5713-11ef-a7b6-1b323923df30.png" alt="TCP性能.png"></p>
+<p>我们预计，应用程序中仅包含简单的请求&#x2F;应答会话时，UDP 的性能会比 TCP 好，当连接持续的时间很长，并且传输了大量数据时，TCP 的性能会比 UDP 好得多。实际情况中，还需要各写一份代码进行测试。</p>
+<hr>
+<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
+
+      </div>
+    </div>
     
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E4%B8%8D%E8%A6%81%E4%BD%8E%E4%BC%B0-TCP-%E7%9A%84%E6%80%A7%E8%83%BD/" class="post-title hover-line">不要低估 TCP 的性能</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我们预计，应用程序中仅包含简单的请求/应答会话时，UDP 的性能会比 TCP 好，当连接持续的时间很长，并且传输了大量数据时，TCP 的性能会比 UDP 好得多。实际情况中，还需要各写一份代码进行测试</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/08/10/%E9%AB%98%E5%B9%B6%E5%8F%91%E3%80%81%E9%AB%98%E5%8F%AF%E7%94%A8%E5%92%8C%E9%AB%98%E6%80%A7%E8%83%BD/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      高并发、高可用和高性能
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
   <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\10\提防对等实体的不友好动作\" title="提防对等实体的不友好动作" rel="bookmark">提防对等实体的不友好动作</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\基本套接字-API-的回顾\" title="基本套接字 API 的回顾" rel="bookmark">基本套接字 API 的回顾</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\理解面向连接和无连接协议之间的区别\" title="理解面向连接和无连接协议之间的区别" rel="bookmark">理解面向连接和无连接协议之间的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\多线程中的虚假唤醒\" title="多线程中的虚假唤醒" rel="bookmark">多线程中的虚假唤醒</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\为什么在你的进程退出时没有内存泄露？\" title="为什么在你的进程退出时没有内存泄露？" rel="bookmark">为什么在你的进程退出时没有内存泄露？</a></div></div></div>
+    
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E9%AB%98%E5%B9%B6%E5%8F%91%E3%80%81%E9%AB%98%E5%8F%AF%E7%94%A8%E5%92%8C%E9%AB%98%E6%80%A7%E8%83%BD/" class="post-title hover-line">高并发、高可用和高性能</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">通过此文弄清楚网络中常见的高并发、高可用和高性能的概念</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
 </div>
-    </div>
-  </div>
 
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E6%B0%B4%E5%B9%B3%E8%A7%A6%E5%8F%91%E5%92%8C%E8%BE%B9%E7%BC%98%E8%A7%A6%E5%8F%91/" class="post-title hover-line">水平触发和边缘触发</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">很多时候你没有理解水平触发和边缘触发的区别，那是没有具体实践导致的，本文通过实际的现象和解释来讲清楚二者的区别</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%8C%BA%E5%88%86/" class="post-title hover-line">网络编程中结构体的区分</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">sockaddr 结构体是为了统一地址结构的表示方法，统一接口函数，但是这个结构体并不方便使用，因此定义了等价的 sockaddr_in 结构体，它的大小和 sockaddr 结构体相同，可以强制转换成 sockaddr。因此，在实际的网络编程中，先定义 sockaddr_in结构体把相关信息存储之后，再强制转换成 sockaddr，毕竟提供的API接受的类型是 sockaddr</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F/" class="post-title hover-line">主机字节序和网络字节序</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">在网络编程中，数据收发的过程中有自动转换机制，不需要程序员手动转换，只有向 sockadd_in 结构体成员变量填充数据时，才需要考虑字节序的问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BA%94%E8%AF%A5%E8%AE%BE%E7%BD%AESO-REUSEADDR%E9%80%89%E9%A1%B9/" class="post-title hover-line">服务器应该设置SO_REUSEADDR选项</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">有些人，而且包括很多写书的人，都认为设置SO_REUSEADDR是很危险的，因为这样就允许创建相同的TCP四元组了，会引发问题。这种看法是不对的。在写网络服务器的时候，我们务必设置SO_REUSEADDR选项，这对我们有益无害</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E7%90%86%E8%A7%A3TCP%E7%9A%84%E6%9C%89%E5%BA%8F%E9%87%8A%E6%94%BE%E6%93%8D%E4%BD%9C/" class="post-title hover-line">理解TCP的有序释放操作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">有序释放的目的是确保两端都能在连接拆除之前收到所有来自其对等实体的数据</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E7%90%86%E8%A7%A3TCP%E7%9A%84%E5%86%99%E6%93%8D%E4%BD%9C/" class="post-title hover-line">理解TCP的写操作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">对 TCP 连接使用写操作时，最好将写操作理解成将数据复制到发生队列，并通知 TCP 此队列中有新数据的一种操作。实际上，写操作返回时，写操作写出的部分或全部数据可能还在排队等待传输，所以，此时不管是主机还是对等应用程序崩溃了，数据都会丢失</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E8%A6%81%E8%AE%A4%E8%AF%86%E5%88%B0TCP%E6%98%AF%E4%B8%80%E4%B8%AA%E5%8F%AF%E9%9D%A0%E7%9A%84%EF%BC%8C%E4%BD%86%E5%B9%B6%E4%B8%8D%E7%BB%9D%E5%AF%B9%E5%8F%AF%E9%9D%A0%E7%9A%84%E5%8D%8F%E8%AE%AE/" class="post-title hover-line">要认识到TCP是一个可靠的，但并不绝对可靠的协议</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我们会误以为只要基于 TCP 编程，那么通信的数据必然能够到达对端主机，毕竟 TCP 是可靠的传输协议。然而， TCP 是处在传输层的协议，其可靠性只针对传输层，但是消息最终要达到应用层才算有价值。从传输层到应用层的消息会不会出现问题，可不由 TCP 来保证</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E8%AE%B0%E4%BD%8F%EF%BC%9ATCP%E6%98%AF%E4%B8%80%E7%A7%8D%E6%B5%81%E5%8D%8F%E8%AE%AE/" class="post-title hover-line">记住：TCP是一种流协议</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">TCP 是一种流协议，这就意味着数据是以字节流的形式传递给接收者的，没有固有的”报文”或”报文边界”的概念。从这方面来说，读取 TCP 数据就像从串行端口读取数据一样——无法预先得知在一次指定的读调用中会返回多少字节</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/page/2/">2</a></div>
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -426,6 +323,22 @@
       <script>searchInitialize("/search.json")</script>
     
     
-    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
+  
+
   </body>
 </html>
