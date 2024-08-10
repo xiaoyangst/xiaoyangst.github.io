@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 小杨同学
+        提防对等实体的不友好动作 | 小杨同学
       
     </title>
     <meta name="description" content="" />
@@ -58,7 +58,8 @@
           href='/css/layout.css' />
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -148,132 +149,96 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">提防对等实体的不友好动作</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
+
+
+          <span class="post-date">2024-08-10</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>亦如在程序中接受用户的输入前，要对用户的输入进行“安全检测”，以防止恶意输入破坏应用程序的正常运行。可见，防御性编程在编码中是必备的意识，网络编程中也要考虑各种概率看似很小的事件，做出相应的处理动作。</p>
+<h2 id="检测客户端的终止"><a href="#检测客户端的终止" class="headerlink" title="检测客户端的终止"></a>检测客户端的终止</h2><p><img src="/images/2024/08/10/ddfaa030-56af-11ef-9b76-6d6092cc6dd4.png" alt="检测客户端的终止.png"></p>
+<p>这段代码中，如果客户端发送字符串”quit”代表客户端要退出，服务器这边就可以正常和客户端断开连接。如果客户端发生故障或者异常导致没有发生字符串”quit”，那么服务器这边就会频繁执行最后一条分支语句。</p>
+<p>可以只在读操作上设置一个定时器，如果客户端在某段时间区间内没有发出请求，服务器就假定客户端已经不存在了。很多 FTP 服务器就是这么做的：如果客户端在某段时间区间内没有发送任何请求，服务器就放弃连接。用一个显式定时器或者像心跳实例那样使用 select 定时器，就可以很方便地解决这个问题。</p>
+<h2 id="检测无效输入"><a href="#检测无效输入" class="headerlink" title="检测无效输入"></a>检测无效输入</h2><p>即客户端恶意输入无效字符，服务器如果没有进行“拦截检测”，可能会造成程序崩溃。崩溃最常见的两种原因是缓冲器溢出和指针丢失。</p>
+<p><code>缓冲区溢出</code>是由于写入的数据超过了缓冲区的大小，从而覆盖了相邻的内存区域。为了防止缓冲区溢出，可以采取以下措施：</p>
+<ol>
+<li><strong>使用安全函数</strong>：使用库中提供的安全函数，例如 <code>strncpy</code> 代替 <code>strcpy</code>，<code>snprintf</code> 代替 <code>sprintf</code> 等</li>
+<li><strong>手动检查长度</strong>：在写入数据之前，手动检查输入数据的长度是否超过了缓冲区的大小</li>
+</ol>
+<p><code>指针丢失</code>通常是由于未正确初始化指针或错误释放内存导致的。为了防止指针丢失，可以采取以下措施：</p>
+<ol>
+<li><strong>初始化指针</strong>：确保所有指针在使用之前都被初始化</li>
+<li><strong>检查指针有效性</strong>：在使用指针之前，检查指针是否为空（<code>nullptr</code>）</li>
+<li><strong>正确管理内存</strong>：C++11 提供的智能指针</li>
+</ol>
+<hr>
+<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E6%8F%90%E9%98%B2%E5%AF%B9%E7%AD%89%E5%AE%9E%E4%BD%93%E7%9A%84%E4%B8%8D%E5%8F%8B%E5%A5%BD%E5%8A%A8%E4%BD%9C/" class="post-title hover-line">提防对等实体的不友好动作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">亦如在程序中接受用户的输入前，要对用户的输入进行“安全检测”，以防止恶意输入破坏应用程序的正常运行。可见，防御性编程在编码中是必备的意识，网络编程中也要考虑各种概率看似很小的事件，做出相应的处理动作</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/08/09/%E5%AE%9E%E8%B7%B5%E8%AE%BA/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      实践论
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
   <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\05\多线程中的虚假唤醒\" title="多线程中的虚假唤醒" rel="bookmark">多线程中的虚假唤醒</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\为什么在你的进程退出时没有内存泄露？\" title="为什么在你的进程退出时没有内存泄露？" rel="bookmark">为什么在你的进程退出时没有内存泄露？</a></div></div></div>
+    
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/08/CPP-%E4%B8%AD-cctype-%E5%BA%93%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95/" class="post-title hover-line">CPP 中 cctype 库的常用方法</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">通常用于处理字符串中字母、数字、特殊字符，还包括大小写转换</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B%E7%9A%84%E6%84%8F%E4%B9%89/" class="post-title hover-line">模板元编程的意义</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">模板元编程可以只需要设计一份代码，传入不同的类型并生成实际的代码，完美解决面向过程和面向对象的不足</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a><a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" class="post-tag">#模板元编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8%E4%BD%A0%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%80%E5%87%BA%E6%97%B6%E6%B2%A1%E6%9C%89%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%EF%BC%9F/" class="post-title hover-line">为什么在你的进程退出时没有内存泄露？</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">对于短时间运行的程序，泄露内存通常不会导致任何操作问题（尽管它可能被认为是不好的形式）。如果你编写一个长期运行的服务器（例如 Web 服务器或数据库管理系统，它永远不会退出），泄露内存就是很大的问题，最终会导致应用程序在内存不足时崩溃</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" class="post-tag">#技术摘录</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%99%9A%E5%81%87%E5%94%A4%E9%86%92/" class="post-title hover-line">多线程中的虚假唤醒</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">避免虚假唤醒，就不应该采用 if 条件判断，而应该采用 while 循环判断</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E7%9A%84%E5%9C%BA%E6%99%AF/" class="post-title hover-line">虚析构函数的场景</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？阅读此文，给你解惑</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
 
     
+    
+      <div id="gitalk-container"></div>
     
   </div>
 
@@ -366,6 +331,21 @@
       <script>searchInitialize("/search.json")</script>
     
     
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
   
 
   </body>
