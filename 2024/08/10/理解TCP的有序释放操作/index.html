@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        网络编程 | 小杨同学
+        理解TCP的有序释放操作 | 小杨同学
       
     </title>
     <meta name="description" content="" />
@@ -58,9 +58,8 @@
           href='/css/layout.css' />
     
     
-  <link rel="stylesheet"
-        type="text/css"
-        href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -150,154 +149,95 @@
     </div>
     <div class="body">
       
-  <div class="tag-page-title">#网络编程</div>
-  <div class="post-list">
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">理解TCP的有序释放操作</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
+
+
+          <span class="post-date">2024-08-10</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#shutdown%E8%B0%83%E7%94%A8"><span class="post-toc-text">shutdown调用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%9C%89%E5%BA%8F%E9%87%8A%E6%94%BE"><span class="post-toc-text">有序释放</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="shutdown调用"><a href="#shutdown调用" class="headerlink" title="shutdown调用"></a>shutdown调用</h2><p>close 函数会关闭读写，但如果你想控制关闭读端、关闭写端或者全部关闭，那么 shutdown 可以做到。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">shutdown</span><span class="hljs-params">(<span class="hljs-type">int</span> sockfd, <span class="hljs-type">int</span> how)</span></span>;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">sockfd: 套接字描述符，表示要操作的连接</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">how: 指定如何关闭连接，可以取以下三个值：</span><br><span class="hljs-comment">	SHUT_RD (0): 关闭读取功能。该套接字不再接收数据，任何到达的数据包将被丢弃。如果有未处理的接收数据，会继续保留，直到被读取完毕</span><br><span class="hljs-comment">	SHUT_WR (1): 关闭写入功能。该套接字不再允许发送数据。此时，TCP 会发送一个 FIN 包，告诉对端本地已完成数据发送，但仍可以接收数据</span><br><span class="hljs-comment">	SHUT_RDWR (2): 关闭读写功能。相当于同时执行 SHUT_RD 和 SHUT_WR，既不能发送数据，也不能接收数据</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+
+<p>关闭套接字和调用 shutdown 之间有很大的区别。首先，即使将 how 设置为 2 来调用 shutdown，实际上也并没有“关闭”套接字。也就是说，并没有释放套接字及其资源（how 被设置为 0 或 2 时可能会将接收缓冲区释放掉）。</p>
+<p>同时还要注意，调用 shutdow 时，会影响到所有打开了那个套接字的进程。比如，将 how 设置为 1 调用 shutdow 会使套接字的所有持有者都无法对其进行写操作。相反，如果调用 close 或 closesocket，套接字的其他持有者仍然能够像什么事情都没有发生一样使用它。</p>
+<p>最后这一点通常可以为我们提供一些便利。用 how &#x3D; 1 来调用shutdow 时，不管其他进程是否打开了这个套接字，都可以保证对等实体会收到一个EOF。调用 close 或 closesocket 就无法确保这一点，因为在套接字的引用计数减少到 0 之前，它都不会将 FIN 发送给对等实体。也就是说，所有进程关闭套接字后，它才将 FIN 发送给对等实体。</p>
+<h2 id="有序释放"><a href="#有序释放" class="headerlink" title="有序释放"></a>有序释放</h2><p>有序释放的目的是确保两端都能在连接拆除之前收到所有来自其对等实体的数据。</p>
+<p>在需要通知对端自己已经完成发送但仍希望接收对端的数据时，可以使用 <code>shutdown(sockfd, SHUT_WR)</code>，这种方式可以实现连接的有序释放，而不是突然中断连接。因为立即关闭连接是非常粗暴的，对于想要关闭连接的一方，可以选择仅关闭当前套接字的写入功能，读取功能依旧还在，这是为了防止对等实体发送的数据丢失。</p>
+<p>对等实体收到 EOF，会关闭连接。在知道我这边已经关闭写入功能，就明白我后续不会发送任何数据了，这是要断开连接的意思，而我这边读取功能还没有关闭，所以对等实体会把所有消息和一个FIN一起发给我。我这边把对等实体发送过来的数据处理之后，收到 EOF，就知道我已经收到对等实体所有的数据，也就关闭连接了。</p>
+<hr>
+<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
+
+      </div>
+    </div>
     
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E7%90%86%E8%A7%A3TCP%E7%9A%84%E6%9C%89%E5%BA%8F%E9%87%8A%E6%94%BE%E6%93%8D%E4%BD%9C/" class="post-title hover-line">理解TCP的有序释放操作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">有序释放的目的是确保两端都能在连接拆除之前收到所有来自其对等实体的数据</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/08/10/%E7%90%86%E8%A7%A3TCP%E7%9A%84%E5%86%99%E6%93%8D%E4%BD%9C/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      理解TCP的写操作
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
   <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\10\提防对等实体的不友好动作\" title="提防对等实体的不友好动作" rel="bookmark">提防对等实体的不友好动作</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\基本套接字-API-的回顾\" title="基本套接字 API 的回顾" rel="bookmark">基本套接字 API 的回顾</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\理解面向连接和无连接协议之间的区别\" title="理解面向连接和无连接协议之间的区别" rel="bookmark">理解面向连接和无连接协议之间的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\多线程中的虚假唤醒\" title="多线程中的虚假唤醒" rel="bookmark">多线程中的虚假唤醒</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\为什么在你的进程退出时没有内存泄露？\" title="为什么在你的进程退出时没有内存泄露？" rel="bookmark">为什么在你的进程退出时没有内存泄露？</a></div></div></div>
+    
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E7%90%86%E8%A7%A3TCP%E7%9A%84%E5%86%99%E6%93%8D%E4%BD%9C/" class="post-title hover-line">理解TCP的写操作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">对 TCP 连接使用写操作时，最好将写操作理解成将数据复制到发生队列，并通知 TCP 此队列中有新数据的一种操作。实际上，写操作返回时，写操作写出的部分或全部数据可能还在排队等待传输，所以，此时不管是主机还是对等应用程序崩溃了，数据都会丢失。</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
 </div>
-    </div>
-  </div>
 
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E8%A6%81%E8%AE%A4%E8%AF%86%E5%88%B0TCP%E6%98%AF%E4%B8%80%E4%B8%AA%E5%8F%AF%E9%9D%A0%E7%9A%84%EF%BC%8C%E4%BD%86%E5%B9%B6%E4%B8%8D%E7%BB%9D%E5%AF%B9%E5%8F%AF%E9%9D%A0%E7%9A%84%E5%8D%8F%E8%AE%AE/" class="post-title hover-line">要认识到TCP是一个可靠的，但并不绝对可靠的协议</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我们会误以为只要基于 TCP 编程，那么通信的数据必然能够到达对端主机，毕竟 TCP 是可靠的传输协议。然而， TCP 是处在传输层的协议，其可靠性只针对传输层，但是消息最终要达到应用层才算有价值。从传输层到应用层的消息会不会出现问题，可不由 TCP 来保证</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E8%AE%B0%E4%BD%8F%EF%BC%9ATCP%E6%98%AF%E4%B8%80%E7%A7%8D%E6%B5%81%E5%8D%8F%E8%AE%AE/" class="post-title hover-line">记住：TCP是一种流协议</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">TCP 是一种流协议，这就意味着数据是以字节流的形式传递给接收者的，没有固有的”报文”或”报文边界”的概念。从这方面来说，读取 TCP 数据就像从串行端口读取数据一样——无法预先得知在一次指定的读调用中会返回多少字节</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97-API-%E7%9A%84%E5%9B%9E%E9%A1%BE/" class="post-title hover-line">基本套接字 API 的回顾</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">网络编程必备的基础 API 应用知识</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E8%AE%B0%E4%BD%8F%EF%BC%9ATCP%E4%B8%8D%E6%98%AF%E8%BD%AE%E8%AF%A2%E7%9A%84/" class="post-title hover-line">记住：TCP不是轮询的</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">TCP 不提供连接丢失即时通知最重要的原因与其主要设计目标之一有关：出现网络故障时维护通信的能力。国防部赞助的一项研究要提供一种即使在发生战争或自然灾害这种严重网络损坏的情况下，也能维护可靠网络通信的网络协议，TCP就是这种研究的产物</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E7%90%86%E8%A7%A3%E9%9D%A2%E5%90%91%E8%BF%9E%E6%8E%A5%E5%92%8C%E6%97%A0%E8%BF%9E%E6%8E%A5%E5%8D%8F%E8%AE%AE%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title hover-line">理解面向连接和无连接协议之间的区别</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">它们的本质区别在于，对无连接协议来说，每个分组的处理都独立于所有其他分组，而对面向连接的协议来说，协议实现则维护了与后继分组有关的状态信息</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E6%8F%90%E9%98%B2%E5%AF%B9%E7%AD%89%E5%AE%9E%E4%BD%93%E7%9A%84%E4%B8%8D%E5%8F%8B%E5%A5%BD%E5%8A%A8%E4%BD%9C/" class="post-title hover-line">提防对等实体的不友好动作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">亦如在程序中接受用户的输入前，要对用户的输入进行“安全检测”，以防止恶意输入破坏应用程序的正常运行。可见，防御性编程在编码中是必备的意识，网络编程中也要考虑各种概率看似很小的事件，做出相应的处理动作</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-
+    
+    
+      <div id="gitalk-container"></div>
     
   </div>
 
@@ -390,6 +330,22 @@
       <script>searchInitialize("/search.json")</script>
     
     
-    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
+  
+
   </body>
 </html>
