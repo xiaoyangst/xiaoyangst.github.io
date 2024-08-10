@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 小杨同学
+        记住：TCP是一种流协议 | 小杨同学
       
     </title>
     <meta name="description" content="" />
@@ -58,7 +58,8 @@
           href='/css/layout.css' />
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -148,204 +149,103 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">记住：TCP是一种流协议</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
+
+
+          <span class="post-date">2024-08-10</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>TCP 是一种流协议，这就意味着数据是以字节流的形式传递给接收者的，<strong>没有固有的”报文”或”报文边界”的概念</strong>。从这方面来说，读取 TCP 数据就像从串行端口读取数据一样——无法预先得知在一次指定的读调用中会返回多少字节。</p>
+<h2 id="流协议存在的问题"><a href="#流协议存在的问题" class="headerlink" title="流协议存在的问题"></a>流协议存在的问题</h2><p>发送的数据没有边界，接收方可能对接收到的数据存在多读或少读的问题。为了说明这一点，我们假设在主机 A 和主机 B 的应用程序之间有一条 TCP 连接，主机 A 上的应用程序向主机 B 发送一条报文。进一步假设主机 A 有两条报文要发送，并两次调用 send 来发送，每条报文调用一次。很自然就会想到从主机 A 向主机 B 发送的两条报文是作为两个独立实体，在各自的分组中发送的。</p>
+<p><img src="/./images/%E4%B8%BB%E6%9C%BAA%E5%92%8C%E4%B8%BB%E6%9C%BAB%E9%80%9A%E4%BF%A1.png" alt="主机A和主机B通信"></p>
+<p>但不幸的是，实际的数据传输过程很可能不会遵循这个模型。</p>
+<p>主机A上的应用程序会调用send，我们假设这条写操作的数据被封装在一个分组中传送给B。<strong>实际上，send通常只是将数据复制到主机A的TCP&#x2F;IP栈中，就返回了。由TCP来决定（如果有的话）需要立即发送多少数据</strong>。做这种决定的过程很复杂，取决于很多因素，比如发送窗口（当时主机B能够接收的数据量），拥塞窗口（对网络拥塞的估计），路径上的最大传输单元（沿着主机A和B之间的网络路径一次可以传输的最大数据量），以及连接的输出队列中有多少数据。</p>
+<p>下图只显示了主机A的TCP封装数据时可能使用的诸多方法中的4种</p>
+<p><img src="/./images/%E6%95%B0%E6%8D%AE%E5%88%86%E5%89%B2.png" alt="数据分割"><img src="/./images/%E6%B3%A8%E8%A7%A3M1%E5%92%8CM2.png" alt="注解M1和M2"></p>
+<p>现在，我们从主机 B 应用程序的角度来看这种情形。总的来说，主机 B 应用程序任意一次调用 recv 时，都不会对 TCP 发送给它的数据量做任何假设。比如，当主机 B 应用程序读取第一条报文时，可能会出现下列 4 种结果：</p>
+<ol>
+<li>没有数据可读，应用程序阻塞，或者 recv 返回一条指示说明没有数据可读。到底会发生什么情况取决于套接字是否标识为阻塞，以及主机B的操作系统为系统调用 recv 指定了什么样的语义</li>
+<li>应用程序获取了报文 M1 中的部分而不是全部数据。比如，发送端TCP像上图 D 那样对数据进行分组就会发生这种情况</li>
+<li>用程序获取了报文 M1 中所有的数据，除此之外没有任何其他内容。如果像上图 A 那样对数据分组就会发生这种情况</li>
+<li>应用程序获取了报文M1的所有数据，以及报文M2的部分或全部数据。如果像上图 B 或上图 C 那样对数据进行分组就会发生这种情况</li>
+</ol>
+<p>注：实际可能的结果不止4种，但我们忽略了出错和EOF之类的结果。我们还假设应用程序读取了所有可读的数据。</p>
+<p>TCP 是一个流协议（stream protocol），<strong>尽管数据是以 IP 分组的形式传输的，但分组中的数据量与 send 调用中传送给 TCP 多少数据并没有直接关系</strong>。而且，接收程序也没有什么可靠的方法可以判断数据是如何分组的，因为在两次 recv 调用之间可能会有多个分组到来。</p>
+<p><strong>TCP会记录它发送了多少字节，以及确认的字节，但它不会记录这些字节是如何分组的</strong>。实际上，有些实现在重传丢失分组的时候传送的数据可能比原来的多一些或少一些。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ul>
+<li>固定报文长度</li>
+<li>记录结束标记来分割记录，要注意在数据中如果出现结束标记，需要转义以表明此为数据而非结束标记</li>
+<li>每条报文前面加一个首部，首部至少记录有实际数据的长度</li>
+</ul>
+<p><img src="/./images/%E8%87%AA%E5%AE%9E%E7%8E%B0%E5%8D%8F%E8%AE%AE.png" alt="自实现协议"></p>
+<hr>
+<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E8%AE%B0%E4%BD%8F%EF%BC%9ATCP%E6%98%AF%E4%B8%80%E7%A7%8D%E6%B5%81%E5%8D%8F%E8%AE%AE/" class="post-title hover-line">记住：TCP是一种流协议</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">TCP 是一种流协议，这就意味着数据是以字节流的形式传递给接收者的，没有固有的”报文”或”报文边界”的概念。从这方面来说，读取 TCP 数据就像从串行端口读取数据一样——无法预先得知在一次指定的读调用中会返回多少字节</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
+    <div class="post-nav-item-left"></div>
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97-API-%E7%9A%84%E5%9B%9E%E9%A1%BE/" class="post-title hover-line">基本套接字 API 的回顾</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">网络编程必备的基础 API 应用知识</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
+  <div class="vhr"></div>
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E8%AE%B0%E4%BD%8F%EF%BC%9ATCP%E4%B8%8D%E6%98%AF%E8%BD%AE%E8%AF%A2%E7%9A%84/" class="post-title hover-line">记住：TCP不是轮询的</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">TCP 不提供连接丢失即时通知最重要的原因与其主要设计目标之一有关：出现网络故障时维护通信的能力。国防部赞助的一项研究要提供一种即使在发生战争或自然灾害这种严重网络损坏的情况下，也能维护可靠网络通信的网络协议，TCP就是这种研究的产物</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
+    <a class="post-nav-item-right" href="/2024/08/10/%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97-API-%E7%9A%84%E5%9B%9E%E9%A1%BE/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      基本套接字 API 的回顾
+    </a>
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E7%90%86%E8%A7%A3%E9%9D%A2%E5%90%91%E8%BF%9E%E6%8E%A5%E5%92%8C%E6%97%A0%E8%BF%9E%E6%8E%A5%E5%8D%8F%E8%AE%AE%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title hover-line">理解面向连接和无连接协议之间的区别</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">它们的本质区别在于，对无连接协议来说，每个分组的处理都独立于所有其他分组，而对面向连接的协议来说，协议实现则维护了与后继分组有关的状态信息</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E6%8F%90%E9%98%B2%E5%AF%B9%E7%AD%89%E5%AE%9E%E4%BD%93%E7%9A%84%E4%B8%8D%E5%8F%8B%E5%A5%BD%E5%8A%A8%E4%BD%9C/" class="post-title hover-line">提防对等实体的不友好动作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">亦如在程序中接受用户的输入前，要对用户的输入进行“安全检测”，以防止恶意输入破坏应用程序的正常运行。可见，防御性编程在编码中是必备的意识，网络编程中也要考虑各种概率看似很小的事件，做出相应的处理动作</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/08/CPP-%E4%B8%AD-cctype-%E5%BA%93%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95/" class="post-title hover-line">CPP 中 cctype 库的常用方法</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">通常用于处理字符串中字母、数字、特殊字符，还包括大小写转换</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B%E7%9A%84%E6%84%8F%E4%B9%89/" class="post-title hover-line">模板元编程的意义</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">模板元编程可以只需要设计一份代码，传入不同的类型并生成实际的代码，完美解决面向过程和面向对象的不足</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a><a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" class="post-tag">#模板元编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8%E4%BD%A0%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%80%E5%87%BA%E6%97%B6%E6%B2%A1%E6%9C%89%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%EF%BC%9F/" class="post-title hover-line">为什么在你的进程退出时没有内存泄露？</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">对于短时间运行的程序，泄露内存通常不会导致任何操作问题（尽管它可能被认为是不好的形式）。如果你编写一个长期运行的服务器（例如 Web 服务器或数据库管理系统，它永远不会退出），泄露内存就是很大的问题，最终会导致应用程序在内存不足时崩溃</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" class="post-tag">#技术摘录</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%99%9A%E5%81%87%E5%94%A4%E9%86%92/" class="post-title hover-line">多线程中的虚假唤醒</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">避免虚假唤醒，就不应该采用 if 条件判断，而应该采用 while 循环判断</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E7%9A%84%E5%9C%BA%E6%99%AF/" class="post-title hover-line">虚析构函数的场景</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？阅读此文，给你解惑</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
 
     
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\10\提防对等实体的不友好动作\" title="提防对等实体的不友好动作" rel="bookmark">提防对等实体的不友好动作</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\基本套接字-API-的回顾\" title="基本套接字 API 的回顾" rel="bookmark">基本套接字 API 的回顾</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\理解面向连接和无连接协议之间的区别\" title="理解面向连接和无连接协议之间的区别" rel="bookmark">理解面向连接和无连接协议之间的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\多线程中的虚假唤醒\" title="多线程中的虚假唤醒" rel="bookmark">多线程中的虚假唤醒</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\为什么在你的进程退出时没有内存泄露？\" title="为什么在你的进程退出时没有内存泄露？" rel="bookmark">为什么在你的进程退出时没有内存泄露？</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
     
   </div>
 
@@ -438,6 +338,21 @@
       <script>searchInitialize("/search.json")</script>
     
     
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
   
 
   </body>
