@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        服务器应该设置SO_REUSEADDR选项 | 小杨同学
+        网络编程中结构体的区分 | 小杨同学
       
     </title>
     <meta name="description" content="" />
@@ -150,9 +150,9 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner">
+    <div class="post-inner--toc">
       <div class="post-content__head">
-        <div class="post-title">服务器应该设置SO_REUSEADDR选项</div>
+        <div class="post-title">网络编程中结构体的区分</div>
         <div class="post-info">
           
   <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
@@ -162,25 +162,42 @@
         </div>
       </div>
       
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sockaddr%E7%BB%93%E6%9E%84%E4%BD%93%E5%92%8Csockaddr-in%E7%BB%93%E6%9E%84%E4%BD%93"><span class="post-toc-text">sockaddr结构体和sockaddr_in结构体</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#gethostbyname%E5%87%BD%E6%95%B0"><span class="post-toc-text">gethostbyname函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2IP%E4%B8%8E%E5%A4%A7%E7%AB%AF%E5%BA%8FIP%E5%9C%B0%E5%9D%80%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="post-toc-text">字符串IP与大端序IP地址的转换</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <p>你可能看到过这个错误提示：Address already in use（地址已经被使用了）。往往要几分钟后才能重启，那我们如何立即重启服务器呢？在此之前，先理解如下两件事情：</p>
-<ol>
-<li>TCP 的 TIME-WAIT状态</li>
-<li>TCP 连接的四元组（本地地址、本地端口、远端地址、远端端口）</li>
-</ol>
-<p>TCP 连接中进行主动关闭（发送第一个FIN）的那一端会进入 TIME-WAIT 状态，并在此状态停留 2MSL，在此期间，该套接字的地址和端口仍然被占用，无法立即重新绑定到同样的地址和端口。这为我们在看到的行为提供了第一条线索：客户端主动关闭时，可以重启连接的任意一端，不会有什么问题，但当服务器主动关闭时，就无法重启，这是由于前一个连接仍然处于 TIME-WAIT 状态。</p>
-<p>如果服务器重启，并且有客户端连接上来，就会有一条新的连接，这条连接可能都不是连接到同一台远端主机上的。如前所述，一条 TCP 连接可以由本地和远程地址以及端口号完全指定，所以，即使来自同一台远程主机的客户端连接到服务器上，只要它使用的端口号和前一个连接不同，就不会有什么问题。这是因为 <code>TIME_WAIT</code> 状态仅影响特定的四元组（<code>&lt;源IP, 源端口, 目标IP, 目标端口&gt;</code>），而不是整个服务器或客户端。</p>
-<p>基于这些事实，重启服务器时 TCP 返回的错误就会让我们感到很疑惑。实际上问题并不在于 TCP，而是出在套接字API 上，TCP 只要求四元组是唯一的，而套接字 API 则需要两个调用才能完整地指定四元组。当 API 调用 bind 时，并不知道接下来是否会调用 connect，如果调用还需要在指定一个唯一的连接，还是尝试重用已经存在的那个连接之间作出选择。</p>
-<p>幸运的是，这个问题有一种很简单的解决方案。可以先设置套接字选项 SO_REUSEADDR，允许一个套接字在 TIME_WAIT 状态下立即重新绑定到相同的地址和端口。</p>
-<p>如果不设置 <code>SO_REUSEADDR</code>，当你尝试重新启动一个服务器程序（特别是在调试时），由于旧连接仍在 TIME_WAIT 状态，尝试绑定到相同的端口会导致 “Address already in use” 错误。这时服务器无法重新绑定到原有端口，可能会导致服务不可用。</p>
-<p>在某些情况下，多个进程可能希望绑定到相同的地址和端口进行监听。这种情况通常出现在使用 UDP 协议或多个服务进程间共享一个监听端口时。在这种情况下，<code>SO_REUSEADDR</code> 允许多个套接字绑定到相同的地址和端口（只要每个套接字的协议不同，或者每个套接字是加入了不同的多播组的 UDP 套接字）。</p>
-<hr>
-<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
+        <h2 id="sockaddr结构体和sockaddr-in结构体"><a href="#sockaddr结构体和sockaddr-in结构体" class="headerlink" title="sockaddr结构体和sockaddr_in结构体"></a>sockaddr结构体和sockaddr_in结构体</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr</span> &#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> sa_family;    <span class="hljs-comment">// 协议族 (AF_INET, AF_INET6, etc.)</span><br>    <span class="hljs-type">char</span> sa_data[<span class="hljs-number">14</span>];            <span class="hljs-comment">// 地址数据 (协议相关)</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>存放协议族、端口和地址信息。客户端的 connect 函数和服务端的 bind 函数需要这个结构体。</p>
+<p>sockaddr 结构体是为了统一地址结构的表示方法，统一接口函数，但是这个结构体并不方便使用，因此定义了等价的 sockaddr_in 结构体，它的大小和 sockaddr 结构体相同，可以强制转换成 sockaddr。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr_in</span> &#123;<br>    <span class="hljs-type">short</span> <span class="hljs-type">int</span> sin_family;         <span class="hljs-comment">// 协议族 (AF_INET)</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> <span class="hljs-type">int</span> sin_port;  <span class="hljs-comment">// 16位端口号 ，大端序。用htons(整数的端口)转换。</span><br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">in_addr</span> sin_addr;      <span class="hljs-comment">// IP地址</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> sin_zero[<span class="hljs-number">8</span>];    <span class="hljs-comment">// 填充，使得结构体大小与sockaddr一致（不用管）</span><br>&#125;;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">in_addr</span> &#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> s_addr;         <span class="hljs-comment">// 32位的IP地址，大端序 (使用网络字节序)</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>因此，在实际的网络编程中，先定义 sockaddr_in结构体把相关信息存储之后，再强制转换成 sockaddr，毕竟提供的API接受的类型是 sockaddr。</p>
+<h2 id="gethostbyname函数"><a href="#gethostbyname函数" class="headerlink" title="gethostbyname函数"></a>gethostbyname函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">hostent</span> *<span class="hljs-built_in">gethostbyname</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name);<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">hostent</span> &#123;<br>    <span class="hljs-type">char</span>  *h_name;       	   <span class="hljs-comment">// 主机的正式名称</span><br>    <span class="hljs-type">char</span> **h_aliases;   	 <span class="hljs-comment">// 主机的别名列表</span><br>    <span class="hljs-type">int</span>    h_addrtype;   	 <span class="hljs-comment">// 地址类型，通常为 AF_INET</span><br>    <span class="hljs-type">int</span>    h_length;     	   <span class="hljs-comment">// 地址长度，通常为 4（对于 IPv4）</span><br>    <span class="hljs-type">char</span> **h_addr_list;  	<span class="hljs-comment">//地址列表，可能包含多个 IP 地址（网络字节序）</span><br>&#125;;<br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> h_addr h_addr_list[0] <span class="hljs-comment">// For backward compatibility.</span></span><br></code></pre></td></tr></table></figure>
+
+<p>这个函数的优点就是不仅可以直接传递IP地址（字符串类型或字符数组类型），还支持传递域名。根据返回的hostent结构体中的成员，添加到所需的其它结构体中。</p>
+<p>如下是部分应用核心代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 定义主机名</span><br><span class="hljs-type">const</span> <span class="hljs-type">char</span>* hostname = <span class="hljs-string">&quot;www.example.com&quot;</span>;<br><br><span class="hljs-comment">// 获取主机信息</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">hostent</span>* host_info = <span class="hljs-built_in">gethostbyname</span>(hostname);<br><br><span class="hljs-comment">// 设置服务器地址结构</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr_in</span> server_addr;<br>std::<span class="hljs-built_in">memset</span>(&amp;server_addr, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(server_addr));<br>server_addr.sin_family = AF_INET;<br>server_addr.sin_port = <span class="hljs-built_in">htons</span>(<span class="hljs-number">80</span>); <span class="hljs-comment">// HTTP 端口号</span><br>std::<span class="hljs-built_in">memcpy</span>(&amp;server_addr.sin_addr, host_info-&gt;h_addr_list[<span class="hljs-number">0</span>], host_info-&gt;h_length);<br></code></pre></td></tr></table></figure>
+
+<h2 id="字符串IP与大端序IP地址的转换"><a href="#字符串IP与大端序IP地址的转换" class="headerlink" title="字符串IP与大端序IP地址的转换"></a>字符串IP与大端序IP地址的转换</h2><p>C语言提供几个库函数，用于字符串格式的IP和大端序IP的相互转换，用于网络通讯的服务端程序中。</p>
+<p><code>inet_addr</code>：将字符串形式的 IP 地址转换为 <code>in_addr_t</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">in_addr_t</span> <span class="hljs-title">inet_addr</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *cp)</span></span>;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    const char *ip = &quot;127.0.0.1&quot;;</span><br><span class="hljs-comment">    in_addr_t addr = inet_addr(ip);</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+
+<p><code>inet_aton</code>：将字符串形式的 IP 地址转换为 <code>in_addr</code> 结构体</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">inet_aton</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *cp, <span class="hljs-keyword">struct</span> in_addr *inp)</span></span>;<br><br>cp: 指向一个以点分十进制表示的IPv4地址的字符串<br>inp: 指向一个 in_addr 结构体，用于存储转换后的IP地址<br>    <br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    const char *ip = &quot;127.0.0.1&quot;;</span><br><span class="hljs-comment">    struct in_addr addr;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    if (inet_aton(ip, &amp;addr) == 0) &#123;</span><br><span class="hljs-comment">        std::cerr &lt;&lt; &quot;Invalid IP address&quot; &lt;&lt; std::endl;</span><br><span class="hljs-comment">    &#125; else &#123;</span><br><span class="hljs-comment">        std::cout &lt;&lt; &quot;inet_aton: &quot; &lt;&lt; addr.s_addr &lt;&lt; std::endl;</span><br><span class="hljs-comment">    &#125;</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+
+<p><code>inet_ntoa</code>：将 <code>in_addr</code> 结构体中的 IP 地址转换为字符串形式</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">char</span> *<span class="hljs-title">inet_ntoa</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> in_addr in)</span></span>;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    struct in_addr addr;</span><br><span class="hljs-comment">    addr.s_addr = inet_addr(&quot;127.0.0.1&quot;);</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    char *ip = inet_ntoa(addr);</span><br><span class="hljs-comment">    if (ip == nullptr) &#123;</span><br><span class="hljs-comment">        std::cerr &lt;&lt; &quot;Error converting address&quot; &lt;&lt; std::endl;</span><br><span class="hljs-comment">    &#125; else &#123;</span><br><span class="hljs-comment">        std::cout &lt;&lt; &quot;inet_ntoa: &quot; &lt;&lt; ip &lt;&lt; std::endl;</span><br><span class="hljs-comment">    &#125;</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+
+<p>注：typedef unsigned int in_addr_t	代表32位大端序的IP地址。</p>
 
       </div>
     </div>
@@ -197,7 +214,7 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/08/10/%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F/">
+    <a class="post-nav-item-left" href="/2024/08/10/%E6%B0%B4%E5%B9%B3%E8%A7%A6%E5%8F%91%E5%92%8C%E8%BE%B9%E7%BC%98%E8%A7%A6%E5%8F%91/">
       <div class="text-align">
         <svg t="1670570876164"
              class="icon"
@@ -208,12 +225,12 @@
         </svg>
         <span class="text-small">上一篇</span>
       </div>
-      <div>主机字节序和网络字节序</div>
+      <div>水平触发和边缘触发</div>
     </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/08/10/%E7%90%86%E8%A7%A3TCP%E7%9A%84%E6%9C%89%E5%BA%8F%E9%87%8A%E6%94%BE%E6%93%8D%E4%BD%9C/">
+    <a class="post-nav-item-right" href="/2024/08/10/%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -225,7 +242,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      理解TCP的有序释放操作
+      主机字节序和网络字节序
     </a>
   
 </div>
