@@ -92,8 +92,8 @@
   justify-content: space-between;
 }
 .about-photo {
-  width: 450px;
-  height: 450px;
+  width: 550px;
+  height: 400px;
   background: url("") center center/cover no-repeat;
   margin: 0 10px;
   transition: all 200ms ease-out;
