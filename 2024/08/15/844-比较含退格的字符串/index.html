@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        232.用栈实现队列 | 搁浅的羊先生
+        844.比较含退格的字符串 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="" />
@@ -152,7 +152,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">232.用栈实现队列</div>
+        <div class="post-title">844.比较含退格的字符串</div>
         <div class="post-info">
           
   <a href="/tags/%E6%A0%88/" class="post-tag">#栈</a>
@@ -168,13 +168,10 @@
             
           </div>
         
-        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyQueue</span> &#123;  <br><span class="hljs-keyword">public</span>:  <br>    <span class="hljs-built_in">MyQueue</span>() &#123;&#125;  <br>      <br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> </span>&#123;   <span class="hljs-comment">// 将元素 x 推到队列的末尾  </span><br>        dataSrc.<span class="hljs-built_in">push</span>(x);  <br>    &#125;  <br>      <br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 从队列的开头移除并返回元素  </span><br>        <span class="hljs-type">int</span> val = <span class="hljs-built_in">peek</span>();  <br>        dataTop.<span class="hljs-built_in">pop</span>();  <br>        <span class="hljs-keyword">return</span> val;  <br>    &#125;  <br>      <br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">peek</span><span class="hljs-params">()</span> </span>&#123;    <span class="hljs-comment">// 返回队首元素  </span><br>  <br>        <span class="hljs-keyword">if</span>(dataTop.<span class="hljs-built_in">empty</span>())&#123;  <br>            <span class="hljs-keyword">while</span>(!dataSrc.<span class="hljs-built_in">empty</span>())&#123;  <br>                dataTop.<span class="hljs-built_in">push</span>(dataSrc.<span class="hljs-built_in">top</span>());  <br>                dataSrc.<span class="hljs-built_in">pop</span>();  <br>            &#125;  <br>        &#125;  <br>  <br>        <span class="hljs-keyword">return</span> dataTop.<span class="hljs-built_in">top</span>();  <br>    &#125;  <br>      <br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> </span>&#123;  <br>        <span class="hljs-keyword">if</span>(dataTop.<span class="hljs-built_in">empty</span>() &amp;&amp; dataSrc.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;  <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;  <br>    &#125;  <br><span class="hljs-keyword">private</span>:  <br>    stack&lt;<span class="hljs-type">int</span>&gt; dataSrc;  <br>    stack&lt;<span class="hljs-type">int</span>&gt; dataTop;  <br>&#125;; <br></code></pre></td></tr></table></figure>
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">string <span class="hljs-title">clearBK</span><span class="hljs-params">(string &amp;str)</span></span>&#123;<br>        string data;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> s : str)&#123;<br>            <span class="hljs-keyword">if</span>(s != <span class="hljs-string">&#x27;#&#x27;</span>)&#123;<br>                data.<span class="hljs-built_in">push_back</span>(s);<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                <span class="hljs-keyword">if</span>(!data.<span class="hljs-built_in">empty</span>())&#123;<br>                    data.<span class="hljs-built_in">pop_back</span>();<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> data;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">backspaceCompare</span><span class="hljs-params">(string s, string t)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">clearBK</span>(s) == <span class="hljs-built_in">clearBK</span>(t);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<p>这里面巧妙的地方在于，返回队首元素时：</p>
-<ul>
-<li>如果 dataTop 不为空就返回对应的 top 即可</li>
-<li>如果 dataTop 为空，就把 dataSrc 全部转移到 dataTop  中即可，返回对应的 top 之后，并不需要把 dataTop 中的元素返回到 dataSrc 中（我记得第一次做这道题是这么搞的，其实可以被这样优化）</li>
-</ul>
+<p>这道题我要提及的点是，当我们企图利用栈的对称性解决问题，如果这个返回值为字符串，那我们可以直接利用字符串作为栈来使用，因为它支持向后插入和向后弹出，这样我们就处理完就可以直接返回结果，也是相当方便了。</p>
+<p>也许我不该强调这道题的对称性，而应该表述为 利用栈实现消消乐。</p>
 
       </div>
     </div>
@@ -191,7 +188,7 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/08/15/739-%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6/">
+    <a class="post-nav-item-left" href="/2024/08/15/946-%E9%AA%8C%E8%AF%81%E6%A0%88%E5%BA%8F%E5%88%97/">
       <div class="text-align">
         <svg t="1670570876164"
              class="icon"
@@ -202,12 +199,12 @@
         </svg>
         <span class="text-small">上一篇</span>
       </div>
-      <div>739.每日温度</div>
+      <div>946.验证栈序列</div>
     </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/08/15/225-%E7%94%A8%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E6%A0%88/">
+    <a class="post-nav-item-right" href="/2024/08/15/739-%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -219,7 +216,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      225.用队列实现栈
+      739.每日温度
     </a>
   
 </div>
@@ -232,7 +229,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\15\155-最小栈\" title="155.最小栈" rel="bookmark">155.最小栈</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\20-有效的括号\" title="20.有效的括号" rel="bookmark">20.有效的括号</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\739-每日温度\" title="739.每日温度" rel="bookmark">739.每日温度</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\15\155-最小栈\" title="155.最小栈" rel="bookmark">155.最小栈</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\20-有效的括号\" title="20.有效的括号" rel="bookmark">20.有效的括号</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\232-用栈实现队列\" title="232.用栈实现队列" rel="bookmark">232.用栈实现队列</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div></div>
     
   </div>
 </div>
