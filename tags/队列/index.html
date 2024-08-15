@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        使用前将结构sockaddr_in清零 | 搁浅的羊先生
+        队列 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="" />
@@ -58,8 +58,9 @@
           href='/css/layout.css' />
     
     
-  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+  <link rel="stylesheet"
+        type="text/css"
+        href="/css/category.css" />
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -149,95 +150,28 @@
     </div>
     <div class="body">
       
-  <article class="post-content">
-    <div class="post-inner">
-      <div class="post-content__head">
-        <div class="post-title">使用前将结构sockaddr_in清零</div>
-        <div class="post-info">
-          
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-
-          <span class="post-date">2024-08-10</span>
-        </div>
-      </div>
+  <div class="tag-page-title">#队列</div>
+  <div class="post-list">
+    
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/08/15/225-%E7%94%A8%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E6%A0%88/" class="post-title hover-line">225.用队列实现栈</a>
       
-      <div class="post-content__body">
-        
-          <div class="post-gallery">
-            
-          </div>
-        
-        <p>我们看到下面两种实现中确实都有另外一个字段 sin_zero。尽管很少用到这个字段（用于将sockaddr_in结构补足 16 字节长），但还是必须将其设置为 0。</p>
-<p>因为必须要将 sin_zero 清零，所以在使用之前，将整个地址结构清零就成了一种惯常的做法。通过这种方式，可以清除所有其它字段，而且还可以避免于未正式说明的字段及用法发送可能的冲突。</p>
-<p><img src="/images/2024/08/10/58b102a0-5715-11ef-a7b6-1b323923df30.png" alt="sockaddrin.png"></p>
-<hr>
-<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
-
-      </div>
     </div>
-    
-      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
-      <script>
-        if (window.mermaid) {
-          mermaid.initialize({"startOnload":true});
-        }
-      </script>
-    
-  </article>
-  <div class="post__foot">
-    
-    <div class="post-nav">
-  
-    <a class="post-nav-item-left" href="/2024/08/10/%E4%B8%8D%E8%A6%81%E7%94%A8-TIME-WAIT%E6%9A%97%E6%9D%80%E6%9D%A5%E5%85%B3%E9%97%AD%E4%B8%80%E6%9D%A1%E8%BF%9E%E6%8E%A5/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>不要用 TIME-WAIT暗杀来关闭一条连接</div>
-    </a>
-  
-  <div class="vhr"></div>
-  
-    <a class="post-nav-item-right" href="/2024/08/10/%E4%B8%8D%E8%A6%81%E4%BD%8E%E4%BC%B0-TCP-%E7%9A%84%E6%80%A7%E8%83%BD/">
-      <div class="text-align">
-        <span class="text-small">下一篇</span>
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             transform="scale(-1,-1)"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-      </div>
-      不要低估 TCP 的性能
-    </a>
-  
-</div>
-
-    
-      <div class="related-post">
-  <div class="related__head">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
+    <div class="post__body">
+      
+      <div class="post-excerpt">因为队列只能从队头移除元素，必然单个队列也就无法实现栈了，所以核心实现就在移除最后的元素</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E9%98%9F%E5%88%97/" class="post-tag">#队列</a>
 
 </div>
-  <div class="realated__body">
-    
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\不要低估-TCP-的性能\" title="不要低估 TCP 的性能" rel="bookmark">不要低估 TCP 的性能</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\不要用-TIME-WAIT暗杀来关闭一条连接\" title="不要用 TIME-WAIT暗杀来关闭一条连接" rel="bookmark">不要用 TIME-WAIT暗杀来关闭一条连接</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\为什么在你的进程退出时没有内存泄露？\" title="为什么在你的进程退出时没有内存泄露？" rel="bookmark">为什么在你的进程退出时没有内存泄露？</a></div></div></div>
-    
+    </div>
   </div>
-</div>
 
-    
-    
-      <div id="gitalk-container"></div>
+
     
   </div>
 
@@ -326,22 +260,6 @@
       <script>searchInitialize("/search.json")</script>
     
     
-  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
-<script src="https://priesttomb.github.io/js/md5.min.js"></script>
-<script type="text/javascript">
-    new Gitalk({
-        clientID: 'Ov23li5i2L2uV71Fu3Br',
-        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
-        repo: 'comment',
-        owner: 'xiaoyangst',
-        admin: 'xiaoyangst',
-        id: md5(location.pathname),
-        distractionFreeMode: true
-    }).render('gitalk-container')
-</script>
-
-  
-
+    
   </body>
 </html>
