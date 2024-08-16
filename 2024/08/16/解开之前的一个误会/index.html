@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        tuple元组 | 搁浅的羊先生
+        解开之前的一个误会 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="" />
@@ -150,23 +150,17 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">tuple元组</div>
+        <div class="post-title">解开之前的一个误会</div>
         <div class="post-info">
           
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
+  <a href="/tags/%E4%B8%80%E7%82%B9%E5%B0%8F%E4%BA%8B/" class="post-tag">#一点小事</a>
 
 
           <span class="post-date">2024-08-16</span>
         </div>
       </div>
-      
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%88%9B%E5%BB%BA%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="post-toc-text">创建和初始化</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%AE%BF%E9%97%AE%E5%85%83%E7%B4%A0"><span class="post-toc-text">访问元素</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#std-tuple-size-%E5%92%8C-std-tuple-element"><span class="post-toc-text">std::tuple_size 和 std::tuple_element</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="post-toc-text">应用场景</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
       
       <div class="post-content__body">
         
@@ -174,21 +168,10 @@
             
           </div>
         
-        <p>C++11 引入了 std::tuple，它是一种可以<strong>包含多个不同类型元素的容器</strong>（ 它是一个模板类，允许将多个不同类型的对象组合在一起。）。std::tuple 提供了一种方便的方法来将多个值组合在一起，而不需要定义一个结构体或类。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">std::tuple&lt;<span class="hljs-type">int</span>, <span class="hljs-type">double</span>, std::string&gt; <span class="hljs-title">myTuple</span><span class="hljs-params">(<span class="hljs-number">1</span>, <span class="hljs-number">2.5</span>, <span class="hljs-string">&quot;Hello&quot;</span>)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<h2 id="创建和初始化"><a href="#创建和初始化" class="headerlink" title="创建和初始化"></a>创建和初始化</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">std::tuple&lt;<span class="hljs-type">int</span>, <span class="hljs-type">double</span>, std::string&gt; t1;  <span class="hljs-comment">// 默认构造</span><br><span class="hljs-function">std::tuple&lt;<span class="hljs-type">int</span>, <span class="hljs-type">double</span>, std::string&gt; <span class="hljs-title">t2</span><span class="hljs-params">(<span class="hljs-number">10</span>, <span class="hljs-number">3.14</span>, <span class="hljs-string">&quot;C++&quot;</span>)</span></span>;  <span class="hljs-comment">// 值构造</span><br><span class="hljs-keyword">auto</span> t3 = std::<span class="hljs-built_in">make_tuple</span>(<span class="hljs-number">20</span>, <span class="hljs-number">6.28</span>, <span class="hljs-string">&quot;Programming&quot;</span>);  <span class="hljs-comment">// 使用 make_tuple 创建</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="访问元素"><a href="#访问元素" class="headerlink" title="访问元素"></a>访问元素</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">auto</span> t = std::<span class="hljs-built_in">make_tuple</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2.5</span>, <span class="hljs-string">&quot;Hello&quot;</span>);<br><span class="hljs-type">int</span> i = std::<span class="hljs-built_in">get</span>&lt;<span class="hljs-number">0</span>&gt;(t);           <span class="hljs-comment">// 获取第一个元素，类型为 int</span><br><span class="hljs-type">double</span> d = std::<span class="hljs-built_in">get</span>&lt;<span class="hljs-number">1</span>&gt;(t);        <span class="hljs-comment">// 获取第二个元素，类型为 double</span><br>std::string s = std::<span class="hljs-built_in">get</span>&lt;<span class="hljs-number">2</span>&gt;(t);   <span class="hljs-comment">// 获取第三个元素，类型为 std::string</span><br><br><span class="hljs-comment">// 通过类型访问元素</span><br><span class="hljs-keyword">auto</span> s1 = std::<span class="hljs-built_in">get</span>&lt;std::string&gt;(t);<br></code></pre></td></tr></table></figure>
-
-<h2 id="std-tuple-size-和-std-tuple-element"><a href="#std-tuple-size-和-std-tuple-element" class="headerlink" title="std::tuple_size 和 std::tuple_element"></a>std::tuple_size 和 std::tuple_element</h2><p><code>std::tuple_size&lt;tuple_type&gt;::value</code> 用于获取 <code>tuple</code> 中的元素数量。</p>
-<p><code>std::tuple_element&lt;N, tuple_type&gt;::type</code> 用于获取 <code>tuple</code> 中第 N 个元素的类型。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">auto</span> t = std::<span class="hljs-built_in">make_tuple</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2.5</span>, <span class="hljs-string">&quot;Hello&quot;</span>);<br><span class="hljs-keyword">constexpr</span> <span class="hljs-keyword">auto</span> size = std::tuple_size&lt;<span class="hljs-keyword">decltype</span>(t)&gt;::value;  <span class="hljs-comment">// size = 3</span><br><br><span class="hljs-keyword">using</span> ElementType = std::tuple_element&lt;<span class="hljs-number">1</span>, <span class="hljs-keyword">decltype</span>(t)&gt;::type;  <span class="hljs-comment">// ElementType = double</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p><strong>返回多个值</strong>：在函数需要返回多个值时，<code>std::tuple</code> 是一个很好的选择。</p>
-<p><strong>可变参数模板</strong>：在泛型编程中，可以使用 <code>std::tuple</code> 处理不同数量和类型的参数</p>
-<p><strong>组合复杂类型</strong>：将多个不同类型的数据组合在一起，避免定义专门的结构体</p>
-
+        <p>本来之前用的是 Gridea 把文章上传到博客，已经习惯使用，但是有天上传文章却出现问题，有些内容莫名其妙被加粗，让我相当不爽，我还以为是 Gridea 本身的问题，即 markdown 转到 HTML 出现的问题。直到今日问题才算解开，因为转到 hexo 这个问题还是出现了，询问 ChatGpt才算一目了然。</p>
+<p>原因是&lt;&gt;导致的错误识别，因为 Markdown 语法中的尖括号 <code>&lt;</code> 和 <code>&gt;</code> 被解释为 HTML 标签，导致内容被解析错误。等我删掉之后就解决了，如果非要保留，需要进行转移。这里就只介绍一种，即通过在尖括号前加上反斜杠 <code>\</code> 来转义它们，使 Markdown 解析器不会将它们当作 HTML 标签处理。</p>
+<p>本人解析错误的内容如下： shared_ptr&lt;A&gt; 和 shared_ptr&lt;B&gt; 导致，如果你不进行转移，你根本看不到这里的 A 和 B，但我这里转移了，你可以看到。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tex">创建 shared<span class="hljs-built_in">_</span>ptr&lt;A&gt;对象 a 管理类 A 对象，a 的引用计数加 1，当前引用计数为 1。创建 shared<span class="hljs-built_in">_</span>ptr&lt;B&gt; 对象 b 管理类 B 对象，b 的引用计数加 1，当前引用计数为 1。接下来将类对象 A 的 成员变量 b<span class="hljs-built_in">_</span>ptr 赋值为前面创建的 b，b 的引用计数加 1，当前引用计数为 2。接下来将类对象 B 的 成员变量 a<span class="hljs-built_in">_</span>ptr 赋值为前面创建的 a，a 的引用计数加 1，当前引用计数为 2。离开作用域之后，a 和 b 都被销毁，各自对应的引用计数减 1，且当前引用计数为 1。也就是说引用计数都没有归 0，这是没有析构的原因。<br></code></pre></td></tr></table></figure>
       </div>
     </div>
     
@@ -204,23 +187,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/08/16/%E8%A7%A3%E5%BC%80%E4%B9%8B%E5%89%8D%E7%9A%84%E4%B8%80%E4%B8%AA%E8%AF%AF%E4%BC%9A/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>解开之前的一个误会</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/08/16/auto-%E5%92%8C-decltype/">
+    <a class="post-nav-item-right" href="/2024/08/16/tuple%E5%85%83%E7%BB%84/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -232,7 +203,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      auto 和 decltype
+      tuple元组
     </a>
   
 </div>
@@ -240,12 +211,12 @@
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
+  <a href="/tags/%E4%B8%80%E7%82%B9%E5%B0%8F%E4%BA%8B/" class="post-tag">#一点小事</a>
 
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\16\Lambda-表达式\" title="Lambda 表达式" rel="bookmark">Lambda 表达式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\chrono库\" title="chrono库" rel="bookmark">chrono库</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\auto-和-decltype\" title="auto 和 decltype" rel="bookmark">auto 和 decltype</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\06\21\大学毕业\" title="大学毕业" rel="bookmark">大学毕业</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\06\常用网站\" title="常用网站" rel="bookmark">常用网站</a></div></div></div>
     
   </div>
 </div>
