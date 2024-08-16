@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        82.删除排序链表中的重复元素 II | 搁浅的羊先生
+        第三章：函数对象 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="" />
@@ -150,17 +150,23 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner">
+    <div class="post-inner--toc">
       <div class="post-content__head">
-        <div class="post-title">82.删除排序链表中的重复元素 II</div>
+        <div class="post-title">第三章：函数对象</div>
         <div class="post-info">
           
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
+  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
 
 
           <span class="post-date">2024-08-16</span>
         </div>
       </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%8C%85%E8%A3%85%E5%99%A8"><span class="post-toc-text">操作符包装器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#std-function%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="post-toc-text">std::function的性能问题和并发安全问题</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
       
       <div class="post-content__body">
         
@@ -168,9 +174,13 @@
             
           </div>
         
-        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">deleteDuplicates</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(head == <span class="hljs-literal">nullptr</span> || head-&gt;next == <span class="hljs-literal">nullptr</span>)&#123;<br>            <span class="hljs-keyword">return</span> head;<br>        &#125;<br>        ListNode* virtualHead = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">-101</span>);<br>        virtualHead-&gt;next = head;<br>        ListNode* slow = head;<br>        ListNode* fast = head-&gt;next;<br>        ListNode* delPre = virtualHead; <span class="hljs-comment">// 待删除节点的前一个节点</span><br><br>        <span class="hljs-keyword">while</span>(fast)&#123;<br>            <span class="hljs-keyword">if</span>(slow-&gt;val != fast-&gt;val)&#123; <span class="hljs-comment">// 如果不相等，三个指针集体前移</span><br>                delPre = delPre-&gt;next;<br>                slow = slow-&gt;next;<br>                fast = fast-&gt;next;<br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br>            <span class="hljs-keyword">while</span>(fast != <span class="hljs-literal">nullptr</span> &amp;&amp; slow-&gt;val == fast-&gt;val)&#123;   <span class="hljs-comment">// fast 最终指向 不重复节点的位置</span><br>                fast = fast-&gt;next;<br>            &#125;<br>            <span class="hljs-keyword">if</span>(fast != <span class="hljs-literal">nullptr</span>)&#123;    <span class="hljs-comment">// 删除重复节点</span><br>                delPre-&gt;next = fast;<br>                slow = fast;<br>                fast = fast-&gt;next;<br>            &#125;<span class="hljs-keyword">else</span>&#123;  <span class="hljs-comment">// 如果 fast 为空，表明slow 和 fast 之间都是重复值，delPre 指向 fast 就代表删除这些重复值</span><br>                delPre-&gt;next = fast;<br>            &#125;<br><br>        &#125;<br><br>        <span class="hljs-keyword">return</span> virtualHead-&gt;next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>当我们的链表中删除某个节点，如果这个节点可能包含头结点，那么务必使用虚拟头结点，因为删除节点需要拥有待删除节点的前一个节点才能进行删除。</p>
+        <p><strong>注意</strong>：此文介绍很多<a href="https://xiaoyangst.github.io/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/">C++11新特性</a>的知识（auto 关键字、Lambda 表达式、function 包装器），这不会在此读书笔记中记录，可以在我的其它地方找到相关的笔记，或者你可以自行去学习，毕竟，C++11 是现在 C++ 学习者必备的语法。</p>
+<h2 id="操作符包装器"><a href="#操作符包装器" class="headerlink" title="操作符包装器"></a>操作符包装器</h2><p><img src="/images/2024/08/16/d632a100-5bc2-11ef-a253-abb20d863bc2.png" alt="操作符包装器.png"></p>
+<p>C++11 使用操作符包装器需要指明类型，如greater&lt;int&gt;()。但是 C++14 之后就可以不用了，如greater&lt;&gt;()。</p>
+<h2 id="std-function的性能问题和并发安全问题"><a href="#std-function的性能问题和并发安全问题" class="headerlink" title="std::function的性能问题和并发安全问题"></a>std::function的性能问题和并发安全问题</h2><p>虽然前面的内容都证明 std::function 很有用，但不能滥用，因为它有明显的性能问题。为了隐藏包含的类型并提供一个对所有可调用类型的通用接口，std::function 使用类型擦除的技术。本书并不打算深入研究这个问题，只需要知道它是基于虚成员函数调用就足够了。因为虚调用是在运行时进行的，编译器不能在线调用，所以也就失去了优化的机会。</p>
+<p>std::function 另一个需要注意的是，虽然它的调用操作符限定为 const，但它可以调用非const对象。在多线程代码中，容易导致各种问题。</p>
+<hr>
+<p>⭐️内容取自译者程继洪、孙玉梅、娄山佑《函数式编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
 
       </div>
     </div>
@@ -187,7 +197,7 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/08/16/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/">
+    <a class="post-nav-item-left" href="/2024/08/16/%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E4%BB%A5%E6%97%A7%E5%87%BD%E6%95%B0%E5%88%9B%E5%BB%BA%E6%96%B0%E5%87%BD%E6%95%B0/">
       <div class="text-align">
         <svg t="1670570876164"
              class="icon"
@@ -198,12 +208,12 @@
         </svg>
         <span class="text-small">上一篇</span>
       </div>
-      <div>第三章：函数对象</div>
+      <div>第四章：以旧函数创建新函数</div>
     </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/08/16/83-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/">
+    <a class="post-nav-item-right" href="/2024/08/16/82-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-II/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -215,7 +225,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      83.删除排序链表中的重复元素
+      82.删除排序链表中的重复元素 II
     </a>
   
 </div>
@@ -223,12 +233,12 @@
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
+  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
 
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\17-电话号码的字母组合\" title="17.电话号码的字母组合" rel="bookmark">17.电话号码的字母组合</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\12\第一章：函数式编程简介\" title="第一章：函数式编程简介" rel="bookmark">第一章：函数式编程简介</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\第二章：函数式编程之旅\" title="第二章：函数式编程之旅" rel="bookmark">第二章：函数式编程之旅</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\第四章：以旧函数创建新函数\" title="第四章：以旧函数创建新函数" rel="bookmark">第四章：以旧函数创建新函数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
     
   </div>
 </div>
