@@ -167,16 +167,16 @@
   
   <div class="post-card">
     <div class="post__head">
-      <a href="/2024/08/16/tuple%E5%85%83%E7%BB%84/" class="post-title hover-line">tuple元组</a>
+      <a href="/2024/08/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%99%9A%E5%81%87%E5%94%A4%E9%86%92/" class="post-title hover-line">多线程中的虚假唤醒</a>
       
     </div>
     <div class="post__body">
       
-      <div class="post-excerpt">它是一种可以包含多个不同类型元素的容器（ 它是一个模板类，允许将多个不同类型的对象组合在一起）</div>
+      <div class="post-excerpt">避免虚假唤醒，就不应该采用 if 条件判断，而应该采用 while 循环判断</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
+  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
 
 </div>
     </div>
@@ -185,160 +185,16 @@
   
   <div class="post-card">
     <div class="post__head">
-      <a href="/2024/08/16/auto-%E5%92%8C-decltype/" class="post-title hover-line">auto 和 decltype</a>
+      <a href="/2024/08/05/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E7%9A%84%E5%9C%BA%E6%99%AF/" class="post-title hover-line">虚析构函数的场景</a>
       
     </div>
     <div class="post__body">
       
-      <div class="post-excerpt">用于类型推断，auto 和 decltype 属于互补关系。auto 虽然比 decltype 方便，但有些场景还是需要 decltype 来</div>
+      <div class="post-excerpt">如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？阅读此文，给你解惑</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/thread%E5%BA%93/" class="post-title hover-line">thread库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">强调并发编程中需要注意的问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/chrono%E5%BA%93/" class="post-title hover-line">chrono库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">C语言虽然也有时间处理方法，但是精度只到秒。Linux 和 Windows 都有提供相应的方法精确到微秒，但是用法不同，显然不支持跨平台。chrono 库精度更高，同时支持跨平台，因此C++11之后使用chrono 库处理时间和日期是有必要的，至于到后面的C++版本是否会继续加强，那是以后的事情</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" class="post-title hover-line">移动语义</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">移动语义就是从给定对象“窃取”资源而不是拷贝资源，源对象不再拥有资源，资源的所有权已经归属于新创建的对象</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-title hover-line">Lambda 表达式</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">一个普通函数不仅可以没有实参，也可以无需具体的返回值类型，但是必须要有函数体。lambda表达式又名匿名函数，即没有函数名的函数，形参和返回值也可以不必有，但是函数体不能丢。至于捕获也可以不进行任何捕获，但是却必须标识它的存在</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/function-%E5%92%8C-bind/" class="post-title hover-line">function 和 bind</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">function 和 bind 的结合，让回调函数的实现更加容易</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" class="post-title hover-line">智能指针</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">程序员可以自由分配堆内存，而栈内存由编译器申请和释放。内存管理针对的就是堆内存，在C++11的智能指针没有出现之前，为了保证内存合理的申请释放，需要配对操作，即new和delete，malloc和free，来避免内存泄漏</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%97%85/" class="post-title hover-line">第二章：函数式编程之旅</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">事实上，函数式编程并不神秘--它只是简单的概念，但作用很大。在前一章，第一个简单的，但还远没有理解的概念就是可以把一个函数作为参数传给STL中的算法。STL 算法可解决大多数问题，因为可以定制它们的行为</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/15/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E5%89%8D%E8%A8%80/" class="post-title hover-line">第一章：前言</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">软件系统由于分工带来的复杂问题，需要通过架构进行组合协调，架构就是为了解决这些复杂问题而生的</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/" class="post-tag">#架构设计入门</a>
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
 
 </div>
     </div>
@@ -346,7 +202,7 @@
 
 
     
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/technology/page/2/">2</a><a class="page-number" href="/technology/page/3/">3</a><a class="page-number" href="/technology/page/4/">4</a></div>
+    <div class="paginator"><a class="page-number" href="/technology/">1</a><a class="page-number" href="/technology/page/2/">2</a><a class="page-number" href="/technology/page/3/">3</a><span class="page-number current">4</span></div>
   </div>
 
     </div>
