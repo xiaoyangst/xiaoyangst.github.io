@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 搁浅的羊先生
+        搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -62,7 +62,10 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  
+  <link rel="stylesheet"
+        type="text/css"
+        href='/css/index.css'/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -152,206 +155,98 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <div class="wall wall-index">
+    <div class="wall-main" id="wall-main">
+      <div class="wall-title">搁浅的羊先生</div>
+      <div class="wall-subtitle">@@</div>
+      <div class="wall-description">我只能勇敢 学习 释然,把离别的苦 思念的酸 都看淡,人总要习惯,生命 就是一站一站,不断在转换</div>
+    </div>
+    <div class="wall-bg">
+      <div class="wall-bg-index">
+        <div class="hello-world">
+          <div>> Hello world</div>
+          <div class="cursor"></div>
+        </div>
+        <div class="normal-eqt">
+          <img alt="normal" width="300px" height="" src="/images/normal.svg"/>
+        </div>
+        <canvas width="400" height="400" id="heart-curve"></canvas>
+        <div class="motto">如果真相带来痛苦，谎言只会雪上加霜</div>
+        <div class="poem">
+          
+            举头望明月
+            <br/>
+          
+            低头心悲凉
+            <br/>
+          
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 1em;">C++11新特性</a> <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">C++性能优化</a> <a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">函数式编程</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" style="font-size: 1em;">操作系统导论</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/" style="font-size: 1em;">架构设计入门</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a></div>
+    </div>
+  </div>
+  <div class="about">
+    <div class="about-photo"
+         style="background-image: url(/images/about.jpg)"></div>
+    <div class="about-text">
+      <div class="about-title">
+        
+          <div class="matts">关</div>
+        
+          <div class="matts">于</div>
+        
+      </div>
+      <div class="about-detail">
+        <div class="about-text-p">
+          
+            
+              C++ 开发
+              <br/>
+            
+          
+        </div>
       </div>
     </div>
   </div>
-  <div class="post-list">
-    
-      
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="post-title hover-line">第五章：文件系统</a>
-      
+    <div class="timeline">
+      <div class="timeline-head">
+        <div class="title">时间线</div>
+        <div class="radio-wrapper">
+          
+            <div class="radio">
+              <input id="radio-article"
+                     type="checkbox"
+                     />
+              <label class="radio-skin--article" for="radio-article"></label>
+            </div>
+          
+            <div class="radio">
+              <input id="radio-apps"
+                     type="checkbox"
+                     />
+              <label class="radio-skin--apps" for="radio-apps"></label>
+            </div>
+          
+            <div class="radio">
+              <input id="radio-event"
+                     type="checkbox"
+                     checked/>
+              <label class="radio-skin--event" for="radio-event"></label>
+            </div>
+          
+        </div>
+      </div>
+      <div class="timeline-body">
+        <div class="timeline-item-first">
+          <div class="line-anchor line-anchor--now"></div>
+        </div>
+        <div class="timeline-list" id="timeline-list"></div>
+        <div class="timeline-item-last">
+          <div class="line-anchor line-anchor--end"></div>
+        </div>
+      </div>
     </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">文件系统这一章没有前面几章易读，个人在学习过程中没有感觉到乐趣，也不知道是不是文件系统本身无趣，还是作者的写作内容需要改进呢？</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
-
-</div>
-    </div>
-  </div>
-
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E5%B9%B6%E5%8F%91/" class="post-title hover-line">第四章：并发</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">同一进程下的多线程共享内存地址，对同一块内存地址的读不会引发数据竞争，但是修改会引发数据竞争。常用的办法是加锁保护临界区或保证修改的动作是原子的</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/" class="post-title hover-line">第三章：内存虚拟化</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">当我们描述地址空间时，所描述的是操作系统提供给运行程序的抽象。程序不在物理地址 0～16KB 的内存中，而是加载在任意的物理地址。当操作系统这样做时，我们说操作系统在虚拟化内存，因为运行的程序自认为它被加载到特定地址（例如 0）的内存中，并且具有非常大的地址空间</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9ACPU%E8%99%9A%E6%8B%9F%E5%8C%96/" class="post-title hover-line">第二章：CPU虚拟化</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">作者用分配桃子举例说明虚拟化，为了让这个例子更加合理，我们假定拿到桃子的人并不食用，仅是占有就心满意足了（当我后面谈食用或品尝也只是占有的意思，享用完之后就会归还）。每个小朋友（进程）都希望得到一个完整的桃子，可现实情况是篮筐中只有一个桃子，我需要为这个篮筐遮上一层布，“欺骗”小朋友这里面有很多很多的桃子（虚拟化），好让他们齐聚于此。我对每个伸手要桃子的小朋友说，你手里现在已经被分配一个完整的桃子，等你真正想要占有实体的时候我会具体的分配到你的手里。每个小朋友不可能一口吃掉这颗桃，等他需要品尝的时候，我就用小刀切割一块他所需的桃子交到他手里面（这是实际分配的，至于允诺的其它部分的桃子由于他暂时没有申请，视为我的可调用资源），给他慢慢享用。这样，其它小朋友来请求吃桃子的时候，我依旧能够满足他们的需求，因为我还有可调用资源。只要我不让他们看到这块布之后的桃子数量，他们永远都以为自己占有一个桃子</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0/" class="post-title hover-line">第一章：操作系统概述</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我们已经了解了操作系统实际上做了什么：它取得 CPU、内存或磁盘等物理资源，并对它们进行虚拟化。它处理与并发有关的麻烦且棘手的问题。它持久地存储文件，从而使它们长期安全</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/21/%E4%BC%98%E5%8C%96%E5%B9%B6%E5%8F%91/" class="post-title hover-line">优化并发</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">本章将会讨论几个用于改善基于线程的并发程序的性能的技巧。我们假设读者已经基本掌握了线程级别的并发和同步原语，并正在寻找优化多线程程序的方法。线程级别的并发的基础知识并不是本书的主题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#C++性能优化</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/20/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" class="post-title hover-line">面向对象的设计原则</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">设计的目标：低耦合、高内聚</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/19/%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E7%BA%AF%E6%B4%81%E6%80%A7-%E9%81%BF%E5%85%8D%E5%8F%AF%E5%8F%98%E7%8A%B6%E6%80%81/" class="post-title hover-line">第五章：纯洁性--避免可变状态</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我不认为这章节有什么可用于将来实践的地方，因为并不会让性能有多大的提高，反而会拖累程序。况且用 const 来表明不可变状态，事实是可变状态才是常态。</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E4%BB%A5%E6%97%A7%E5%87%BD%E6%95%B0%E5%88%9B%E5%BB%BA%E6%96%B0%E5%87%BD%E6%95%B0/" class="post-title hover-line">第四章：以旧函数创建新函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">偏函数、柯里化和函数提升的讲解</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" class="post-title hover-line">第三章：函数对象</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果你熟悉 C++11 新特性，此文并无太多需要学习的地方</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
-
-    
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/technology/page/2/">2</a><a class="page-number" href="/technology/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/5/">5</a></div>
-  </div>
 
     </div>
     <div class="foot">
@@ -438,6 +333,190 @@
       <script>searchInitialize("/search.json")</script>
     
     
+  <script type="text/javascript">
+  function HeartCurve(w, h) {
+    this.w = w;
+    this.h = h;
+    this.a = undefined;
+    this.ctx = undefined;
+    this.deg = 0;
+    this.speed = 0.4;
+    this.isPause = false;
+    this.init();
+  }
+  HeartCurve.prototype.init = function () {
+    const {
+      w,
+      h
+    } = this;
+    const canvas = document.querySelector('#heart-curve');
+    if (!canvas) throw Error('no canvas element!');
+
+    this.ctx = canvas.getContext('2d');
+    this.ctx.translate(2 * w / 3, h / 2);
+    this.ctx.lineJoin = 'round';
+    this.a = w / 6.2;
+    this.id = null;
+    return this;
+  };
+  HeartCurve.prototype._drawAxis = function () {
+    const {
+      ctx,
+      w,
+      h
+    } = this;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#999";
+    ctx.beginPath();
+    ctx.moveTo(-w * 2 / 3, 0);
+    ctx.lineTo(w / 3, 0);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, -h * 0.48);
+    ctx.lineTo(0, h * 0.48);
+    ctx.stroke();
+  };
+  HeartCurve.prototype._drawCure = function () {
+    const {
+      ctx,
+      a
+    } = this;
+    ctx.beginPath();
+    let x, y, deg = 0;
+    ctx.moveTo(0, 0);
+    ctx.strokeStyle = "#ff0000";
+    while (deg <= 360) {
+      const theta = deg / 180 * Math.PI;
+      r = 2 * a * (1 - Math.cos(theta));
+      x = r * Math.cos(theta);
+      y = r * Math.sin(theta);
+      ctx.lineTo(x, y);
+      deg++;
+    }
+    ctx.stroke();
+  };
+  HeartCurve.prototype.spin = function () {
+    let {
+      a,
+      w,
+      h,
+      deg,
+      ctx
+    } = this;
+    if (deg >= 360) deg = 0;
+
+    ctx.clearRect(-w / 3 * 2, -h / 2, w, h);
+    const theta = deg / 180 * Math.PI;
+    this._drawAxis();
+    ctx.lineWidth = 2;
+    this._drawCure();
+    ctx.strokeStyle = "#000";
+    ctx.beginPath();
+    ctx.arc(-a, 0, a, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(2 * a * Math.cos(theta) - a, 2 * a * Math.sin(theta), a, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.beginPath();
+    let r = 2 * a * (1 - Math.cos(theta));
+    let x = r * Math.cos(theta);
+    let y = r * Math.sin(theta);
+    ctx.arc(x, y, 3, 0, 2 * Math.PI);
+    ctx.fill();
+    if (this.isPause) return;
+
+    this.deg = deg + this.speed;
+    this.id = window.requestAnimationFrame(this.spin.bind(this));
+  };
+  HeartCurve.prototype.pause = function () {
+    this.isPause = true;
+    if (window.cancelAnimationFrame) {
+      window.cancelAnimationFrame(this.id);
+    }
+  };
+  HeartCurve.prototype.resume = function () {
+    this.isPause = false;
+    this.spin();
+  };
+
+  (function () {
+    const heartCurve = new HeartCurve(400, 400);
+    heartCurve.spin();
+    mobileAdjust(window.matchMedia("(hover:none"));
+    window.matchMedia("(hover:none)").addListener(mobileAdjust);
+
+    function mobileAdjust(media) {
+      const wallEl = document.querySelector('#wall-main')
+      if (!media.matches) {
+        heartCurve.pause();
+        wallEl.addEventListener('mouseenter', () => {
+          console.log('resume');
+          heartCurve.resume();
+        });
+        wallEl.addEventListener('mouseleave', () => {
+          console.log('pause');
+          heartCurve.pause();
+        });
+      }
+    }
+  })();
+</script>
+  
+  
+  <script type="text/javascript">
+    const timelineData = {"types":["article","apps","event"],"posts":[{"title":"大学毕业","path":"/2024/06/21/%E5%A4%A7%E5%AD%A6%E6%AF%95%E4%B8%9A/","icon":"/images/icon/icon-event.svg","type":"event","date":"2024-06-21"}]}
+    const {types, posts} = timelineData
+    listEl = document.querySelector("#timeline-list");
+
+    elRefs = getElRefs(types)
+    bindListener(types, elRefs)
+
+    setTimeout(init.bind(this, types, elRefs))
+
+    function getElRefs(types) {
+      return types.map(type => document.querySelector(`#radio-${type}`))
+    }
+
+    function bindListener(names, els) {
+      names.map((name, i) => els[i].addEventListener('change', e => updateList(name, e.target.checked)))
+    }
+
+    function updateList(type, value) {
+      listDom
+        .filter(line => line.type === type)
+        .forEach(line => {
+          line.el.className = line
+            .el
+            .className
+            .replace(
+              /(--hidden)?$/, value
+              ? ""
+              : "--hidden");
+        });
+    }
+
+    const listDom = posts.map(t => getLine(t));
+    listEl.append(...listDom.map(i => i.el));
+
+    function getLine(data) {
+      const item = document.createElement("DIV");
+      item.className = `timeline-item-${data.type} timeline-item--hidden`;
+      item.innerHTML = `
+                          <div class="line-date">
+                          <div class="line-date-tag">${data.date}</div></div>
+                          <div class="line-anchor"></div>
+                          <div class="line-title">
+                              <img class="text-icon" src="${data.icon}" /><a class="timeline-post" href="${data.path}">${data.title}</a>
+                          </div>
+                          `;
+      return {el: item, type: data.type};
+    };
+
+    function init(names, els) {
+      names.map((name, i) => updateList(name, els[i].checked))
+    }
+  </script>
+
   
 
   </body>
