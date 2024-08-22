@@ -324,7 +324,7 @@
 <li>规则4：一旦工作用完了其在某一层中的时间配额（无论中间主动放弃了多少次CPU），就降低其优先级（移入低一级队列）</li>
 <li>规则5：经过一段时间S，就将系统中所有工作重新加入最高优先级队列</li>
 </ul>
-<p>MLFQ 有趣的原因是：它不需要对工作的运行方式有先验知识，而是通过观察工作的运行来给出对应的优先级。通过这种方式，MLFQ 可以同时满足各种工作的需求：对于短时间运行的交互型工作，获得类似于 SJF&#x2F;STCF 的很好的全局性能，同时对长时间运行的CPU 密集型负载也可以公平地、不断地稳步向前。因此，许多系统使用某种类型的 <img src="/images/2024/08/22/d12275a0-6063-11ef-b5d8-395e250ad2a7.png" alt="进程的状态.png">MLFQ作为自己的基础调度程序。</p>
+<p>MLFQ 有趣的原因是：它不需要对工作的运行方式有先验知识，而是通过观察工作的运行来给出对应的优先级。通过这种方式，MLFQ 可以同时满足各种工作的需求：对于短时间运行的交互型工作，获得类似于 SJF&#x2F;STCF 的很好的全局性能，同时对长时间运行的CPU 密集型负载也可以公平地、不断地稳步向前。因此，许多系统使用某种类型的MLFQ作为自己的基础调度程序。</p>
 <h2 id="调度：比例份额"><a href="#调度：比例份额" class="headerlink" title="调度：比例份额"></a>调度：比例份额</h2><p>比例份额算法基于一个简单的想法：调度程序的最终目标，是确保每个工作获得一定比例的 CPU 时间。</p>
 <p>彩票调度背后是一个非常基本的概念：彩票数（ticket）代表了进程（或用户或其他）占有某个资源的份额。一个进程拥有的彩票数占总彩票数的百分比，就是它占有资源的份额。假设有两个进程 A 和 B，A 拥有 75 张彩票，B 拥有 25 张。因此我们希望 A 占用 75%的 CPU 时间，而 B 占用 25%。</p>
 <p>假定彩票 100 张，调度程序抽取中奖彩票，这是从 0 和 99 之间的一个数，拥有这个数对应的彩票的进程中奖。假设进程 A 拥有 0 到 74 共 75 张彩票，进程 B 拥有 75 到 99 的 25 张，中奖的彩票就决定了运行 A 或 B。调度程序然后加载中奖进程的状态，并运行它。</p>
@@ -412,7 +412,19 @@
     
     <div class="post-nav">
   
-    <div class="post-nav-item-left"></div>
+    <a class="post-nav-item-left" href="/2024/08/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>第三章：内存虚拟化</div>
+    </a>
   
   <div class="vhr"></div>
   
@@ -441,7 +453,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\22\第一章：操作系统概述\" title="第一章：操作系统概述" rel="bookmark">第一章：操作系统概述</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\22\第一章：操作系统概述\" title="第一章：操作系统概述" rel="bookmark">第一章：操作系统概述</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\22\第三章：内存虚拟化\" title="第三章：内存虚拟化" rel="bookmark">第三章：内存虚拟化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\22\第四章：并发\" title="第四章：并发" rel="bookmark">第四章：并发</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
     
   </div>
 </div>
