@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 搁浅的羊先生
+        宏定义和宏函数 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -152,205 +153,144 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">宏定义和宏函数</div>
+        <div class="post-info">
+          
+  <a href="/tags/C/" class="post-tag">#C</a>
+
+
+          <span class="post-date">2024-08-28</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/C/" style="font-size: 1em;">C</a> <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 1em;">C++11新特性</a> <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">C++性能优化</a> <a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">函数式编程</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" style="font-size: 1em;">操作系统导论</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/" style="font-size: 1em;">架构设计入门</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a>宏定义</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 5</span><br></code></pre></td></tr></table></figure>
+
+<p>切记，宏定义的后面没有<code>;</code></p>
+<p>实际上任何以 # 开头的预定义后面都不能有分号，毕竟文本替换会把这个分号一并带过去，那么必然照成错误。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 5;		<span class="hljs-comment">// 测试如果添加 分号 会造成什么错误</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num = N * N;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>测试结果：</p>
+<p><img src="/images/2024/08/28/6c504320-6516-11ef-b96b-3728f540b1e8.png" alt="宏定义.png"></p>
+<h2 id="宏函数"><a href="#宏函数" class="headerlink" title="宏函数"></a>宏函数</h2><p>宏函数要注意的地方就是，一定要学会添加括号<code>()</code></p>
+<ol>
+<li>参数要加括号</li>
+<li>整个表达式要加括号</li>
+<li>左括号要紧靠宏函数名称</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FUN(x) x * x</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br>	<span class="hljs-type">int</span> x = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> y = <span class="hljs-number">20</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;x * x = %d&quot;</span>, <span class="hljs-built_in">FUN</span>(x + y));<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>查看预编译情况：</p>
+<p><img src="/images/2024/08/28/67877070-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数1.png"></p>
+<p>预处理语句就是单纯的文本替换，所有对于宏函数务必严格添加合适的括号来保证语句逻辑的合理性。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> FUN(x) ((x) * (x))</span><br></code></pre></td></tr></table></figure>
+
+<p>再次查看预编译情况：</p>
+<p><img src="/images/2024/08/28/632cc8e0-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数2.png"></p>
+<p>如果左括号没有紧靠宏函数，会如何？这其实很容易被人忽视，还是先看看现象：</p>
+<p><img src="/images/2024/08/28/5ee7f340-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数3.png"></p>
+<p>没错，如果你左括号没有紧靠宏函数，那么这将是宏定义，而非一个宏函数了。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/28/%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F/" class="post-title hover-line">变量和常量</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">数据类型定义字节大小，变量名是内存地址的别名，存储实际数据。这个内存地址是存储实际数据的起始地址，而数据类型的字节大小就表明从这个起始地址开始读取的字节大小，这样就能够找到对应存储的实际数据，不会多读，也不会少读</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
+    <a class="post-nav-item-left" href="/2024/08/28/%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>变量和常量</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/08/27/131-%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      131.分割回文串
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
   <a href="/tags/C/" class="post-tag">#C</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\变量和常量\" title="变量和常量" rel="bookmark">变量和常量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
+    
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/28/%E5%AE%8F%E5%AE%9A%E4%B9%89%E5%92%8C%E5%AE%8F%E5%87%BD%E6%95%B0/" class="post-title hover-line">宏定义和宏函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">主要就是谈一谈宏定义和宏函数容易出错的地方，由于只是单纯的文本替换，且不支持和调试，导致在写代码期间是无法排查的，这就需要我们能够知道哪些地方容易出错，好在后续使用过程中不容易犯错</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" class="post-title hover-line">策略模式</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">在策略模式定义了一系列算法或策略，并将每个算法封装在独立的类中，使得它们可以互相替换。通过使用策略模式，可以在运行时根据需要选择不同的算法，而不需要修改客户端代码</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="post-title hover-line">第五章：文件系统</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">文件系统这一章没有前面几章易读，个人在学习过程中没有感觉到乐趣，也不知道是不是文件系统本身无趣，还是作者的写作内容需要改进呢？</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E5%B9%B6%E5%8F%91/" class="post-title hover-line">第四章：并发</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">同一进程下的多线程共享内存地址，对同一块内存地址的读不会引发数据竞争，但是修改会引发数据竞争。常用的办法是加锁保护临界区或保证修改的动作是原子的</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/" class="post-title hover-line">第三章：内存虚拟化</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">当我们描述地址空间时，所描述的是操作系统提供给运行程序的抽象。程序不在物理地址 0～16KB 的内存中，而是加载在任意的物理地址。当操作系统这样做时，我们说操作系统在虚拟化内存，因为运行的程序自认为它被加载到特定地址（例如 0）的内存中，并且具有非常大的地址空间</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9ACPU%E8%99%9A%E6%8B%9F%E5%8C%96/" class="post-title hover-line">第二章：CPU虚拟化</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">作者用分配桃子举例说明虚拟化，为了让这个例子更加合理，我们假定拿到桃子的人并不食用，仅是占有就心满意足了（当我后面谈食用或品尝也只是占有的意思，享用完之后就会归还）。每个小朋友（进程）都希望得到一个完整的桃子，可现实情况是篮筐中只有一个桃子，我需要为这个篮筐遮上一层布，“欺骗”小朋友这里面有很多很多的桃子（虚拟化），好让他们齐聚于此。我对每个伸手要桃子的小朋友说，你手里现在已经被分配一个完整的桃子，等你真正想要占有实体的时候我会具体的分配到你的手里。每个小朋友不可能一口吃掉这颗桃，等他需要品尝的时候，我就用小刀切割一块他所需的桃子交到他手里面（这是实际分配的，至于允诺的其它部分的桃子由于他暂时没有申请，视为我的可调用资源），给他慢慢享用。这样，其它小朋友来请求吃桃子的时候，我依旧能够满足他们的需求，因为我还有可调用资源。只要我不让他们看到这块布之后的桃子数量，他们永远都以为自己占有一个桃子</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0/" class="post-title hover-line">第一章：操作系统概述</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我们已经了解了操作系统实际上做了什么：它取得 CPU、内存或磁盘等物理资源，并对它们进行虚拟化。它处理与并发有关的麻烦且棘手的问题。它持久地存储文件，从而使它们长期安全</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/21/%E4%BC%98%E5%8C%96%E5%B9%B6%E5%8F%91/" class="post-title hover-line">优化并发</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">本章将会讨论几个用于改善基于线程的并发程序的性能的技巧。我们假设读者已经基本掌握了线程级别的并发和同步原语，并正在寻找优化多线程程序的方法。线程级别的并发的基础知识并不是本书的主题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#C++性能优化</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/20/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" class="post-title hover-line">面向对象的设计原则</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">设计的目标：低耦合、高内聚</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/technology/page/2/">2</a><a class="page-number" href="/technology/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/5/">5</a></div>
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -448,6 +388,21 @@
       <script>searchInitialize("/search.json")</script>
     
     
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
   
 
   </body>
