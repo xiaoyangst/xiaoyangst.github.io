@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        宏定义和宏函数 | 搁浅的羊先生
+        i++ 和 ++i 的区别 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -156,7 +156,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">宏定义和宏函数</div>
+        <div class="post-title">i++ 和 ++i 的区别</div>
         <div class="post-info">
           
   <a href="/tags/C/" class="post-tag">#C</a>
@@ -172,32 +172,20 @@
             
           </div>
         
-        <h2 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a>宏定义</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 5</span><br></code></pre></td></tr></table></figure>
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br>	<br>	<span class="hljs-type">int</span> i;<br><br>	i = <span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;i++ = %d\n&quot;</span>, i++);<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;i = %d\n&quot;</span>, i);<br><br>	i = <span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;++i = %d\n&quot;</span>, ++i);<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;i = %d\n&quot;</span>, i);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>切记，宏定义的后面没有<code>;</code></p>
-<p>实际上任何以 # 开头的预定义后面都不能有分号，毕竟文本替换会把这个分号一并带过去，那么必然照成错误。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 5;		<span class="hljs-comment">// 测试如果添加 分号 会造成什么错误</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num = N * N;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs tex">i++ = 0<br>i = 1<br>++i = 1<br>i = 1<br></code></pre></td></tr></table></figure>
 
-<p>测试结果：</p>
-<p><img src="/images/2024/08/28/6c504320-6516-11ef-b96b-3728f540b1e8.png" alt="宏定义.png"></p>
-<h2 id="宏函数"><a href="#宏函数" class="headerlink" title="宏函数"></a>宏函数</h2><p>宏函数要注意的地方就是，一定要学会添加括号<code>()</code></p>
-<ol>
-<li>参数要加括号</li>
-<li>整个表达式要加括号</li>
-<li>左括号要紧靠宏函数名称</li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FUN(x) x * x</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br>	<span class="hljs-type">int</span> x = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> y = <span class="hljs-number">20</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;x * x = %d&quot;</span>, <span class="hljs-built_in">FUN</span>(x + y));<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>不管是 i++ 还是 ++i 最终都会让 i 产生副作用，即都会使得 i 在原来的基础上 加 1。二者的区别在于 <code>++i</code> 的值 代表 i+1，而 <code>i++</code> 的值 代表 i。即 ++i 会立即产生自增的效果，而 i++ 不会立即产生自增的效果。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c">i++ 对应的汇编代码<br><br><span class="hljs-number">0042186</span>C  mov         eax,dword ptr [i]        		; 将变量 i 的值加载到 eax 寄存器中<br><span class="hljs-number">0042186F</span>  mov         dword ptr [ebp<span class="hljs-number">-0</span>D0h],eax    ; 将 eax 中的值（即 i 的当前值）存储到内存（临时变量）<br><span class="hljs-number">00421875</span>  mov         ecx,dword ptr [i]        		; 再次加载 i 的值到 ecx 寄存器<br><span class="hljs-number">00421878</span>  add          ecx,<span class="hljs-number">1</span>                    	       ; 对 ecx 中的 i 进行递增操作<br><span class="hljs-number">0042187B</span>  mov         dword ptr [i],ecx        		; 将递增后的值存储回 i<br><span class="hljs-number">0042187</span>E  mov         edx,dword ptr [ebp<span class="hljs-number">-0</span>D0h]   ; 将最初保存的 i 的值加载到 edx<br><span class="hljs-number">00421884</span>  push        edx                      		     ; 将最初的 i 值压入堆栈，用于 <span class="hljs-built_in">printf</span> 输出<br><span class="hljs-number">00421885</span>  push        offset <span class="hljs-built_in">string</span> <span class="hljs-string">&quot;%lld\n&quot;</span>   	     ; 压入字符串格式化参数<br><span class="hljs-number">0042188</span>A  call          _printf                  		; 调用 <span class="hljs-built_in">printf</span> 函数<br><span class="hljs-number">0042188F</span>  add          esp,<span class="hljs-number">8</span>                   	            ; 调整堆栈指针<br><br><br>++i 对应的汇编代码<br><br><span class="hljs-number">004218</span>AA  mov         eax,dword ptr [i]        			; 将变量 i 的值加载到 eax 寄存器中<br><span class="hljs-number">004218</span>AD  add         eax,<span class="hljs-number">1</span>                    			      ; 对 eax 中的 i 进行递增操作<br><span class="hljs-number">004218B</span>0  mov         dword ptr [i],eax       		       ; 将递增后的值存储回 i<br><span class="hljs-number">004218B</span>3  mov         ecx,dword ptr [i]        			; 再次加载递增后的 i 到 ecx 寄存器<br><span class="hljs-number">004218B</span>6  push        ecx                     			     ; 将递增后的 i 值压入堆栈，用于 <span class="hljs-built_in">printf</span> 输出<br><span class="hljs-number">004218B</span>7  push        offset <span class="hljs-built_in">string</span> <span class="hljs-string">&quot;++i = %d\n&quot;</span> 	   ; 压入字符串格式化参数<br><span class="hljs-number">004218B</span>C  call         _printf                  			; 调用 <span class="hljs-built_in">printf</span> 函数<br><span class="hljs-number">004218</span>C1  add         esp,<span class="hljs-number">8</span>                    			     ; 调整堆栈指针<br></code></pre></td></tr></table></figure>
 
-<p>查看预编译情况：</p>
-<p><img src="/images/2024/08/28/67877070-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数1.png"></p>
-<p>预处理语句就是单纯的文本替换，所有对于宏函数务必严格添加合适的括号来保证语句逻辑的合理性。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> FUN(x) ((x) * (x))</span><br></code></pre></td></tr></table></figure>
-
-<p>再次查看预编译情况：</p>
-<p><img src="/images/2024/08/28/632cc8e0-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数2.png"></p>
-<p>如果左括号没有紧靠宏函数，会如何？这其实很容易被人忽视，还是先看看现象：</p>
-<p><img src="/images/2024/08/28/5ee7f340-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数3.png"></p>
-<p>没错，如果你左括号没有紧靠宏函数，那么这将是宏定义，而非一个宏函数了。</p>
+<p>解读：</p>
+<p>从 ++i 的汇编代码可以看出是 先让 i 执行自增操作之后才打印 i 的值，所以打印结果为 1。</p>
+<p>i++ 的汇编代码是把 i 最初的值转存到其他临时地址，并读取原始 i 的值进行自加后放到其他寄存器，然后再把之前存储到临时地址的 i 的数据用于输出，所以打印结果为 0。</p>
+<p>总结：</p>
+<p><code>i++</code> 先使用 <code>i</code> 的原值，再递增。这就需要在递增之前保存 <code>i</code> 的原值，以便在后续操作中使用。</p>
+<p><code>++i</code> 先递增 <code>i</code>，然后使用递增后的值。这个过程更简单，不需要保存原值，因为递增操作已经完成。</p>
 
       </div>
     </div>
@@ -241,7 +229,7 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/08/28/%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F/">
+    <a class="post-nav-item-left" href="/2024/08/28/%E7%94%9F%E6%88%90%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E7%9A%84%E8%BF%87%E7%A8%8B/">
       <div class="text-align">
         <svg t="1670570876164"
              class="icon"
@@ -252,12 +240,12 @@
         </svg>
         <span class="text-small">上一篇</span>
       </div>
-      <div>变量和常量</div>
+      <div>生成可执行文件的过程</div>
     </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/08/27/131-%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/">
+    <a class="post-nav-item-right" href="/2024/08/28/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -269,7 +257,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      131.分割回文串
+      类型转换
     </a>
   
 </div>
@@ -282,7 +270,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\变量和常量\" title="变量和常量" rel="bookmark">变量和常量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\28\生成可执行文件的过程\" title="生成可执行文件的过程" rel="bookmark">生成可执行文件的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\变量和常量\" title="变量和常量" rel="bookmark">变量和常量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\28\宏定义和宏函数\" title="宏定义和宏函数" rel="bookmark">宏定义和宏函数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\28\生成可执行文件的过程\" title="生成可执行文件的过程" rel="bookmark">生成可执行文件的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
     
   </div>
 </div>

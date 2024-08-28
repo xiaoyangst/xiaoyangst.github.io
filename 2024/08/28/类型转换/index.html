@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        宏定义和宏函数 | 搁浅的羊先生
+        类型转换 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -154,9 +154,9 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner">
+    <div class="post-inner--toc">
       <div class="post-content__head">
-        <div class="post-title">宏定义和宏函数</div>
+        <div class="post-title">类型转换</div>
         <div class="post-info">
           
   <a href="/tags/C/" class="post-tag">#C</a>
@@ -166,38 +166,48 @@
         </div>
       </div>
       
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E9%9A%90%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="post-toc-text">隐式转换</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%98%BE%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="post-toc-text">显式转换</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a>宏定义</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 5</span><br></code></pre></td></tr></table></figure>
-
-<p>切记，宏定义的后面没有<code>;</code></p>
-<p>实际上任何以 # 开头的预定义后面都不能有分号，毕竟文本替换会把这个分号一并带过去，那么必然照成错误。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 5;		<span class="hljs-comment">// 测试如果添加 分号 会造成什么错误</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num = N * N;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>测试结果：</p>
-<p><img src="/images/2024/08/28/6c504320-6516-11ef-b96b-3728f540b1e8.png" alt="宏定义.png"></p>
-<h2 id="宏函数"><a href="#宏函数" class="headerlink" title="宏函数"></a>宏函数</h2><p>宏函数要注意的地方就是，一定要学会添加括号<code>()</code></p>
+        <h2 id="隐式转换"><a href="#隐式转换" class="headerlink" title="隐式转换"></a>隐式转换</h2><p>即不需要程序员手动添加转换规则，而是由编译器自动转换，为了避免隐式转换可能带来的安全隐患（不被程序员控制，可能导致数据溢出），需要列举出会发生隐式转换的情况。总的来说，当给定的类型与需要的类型不同时，就可能发生隐式转换。</p>
 <ol>
-<li>参数要加括号</li>
-<li>整个表达式要加括号</li>
-<li>左括号要紧靠宏函数名称</li>
+<li>如果操作数中有任何低于 int 和 unsigned int 的类型，会首先将该操作数转换为 int 类型或者 unsigned int 类型，这个过程我们称之为整数提升</li>
+<li>int –&gt; long –&gt; long long –&gt; float –&gt; double –&gt; long double（等级由低到高，低等级向高等级隐式转换）</li>
+<li><strong>同一转换等级</strong>的有符号整数和无符号整数一起参与运算时：有符号整数会转换成对应的无符号整数</li>
 </ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FUN(x) x * x</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br>	<span class="hljs-type">int</span> x = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> y = <span class="hljs-number">20</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;x * x = %d&quot;</span>, <span class="hljs-built_in">FUN</span>(x + y));<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>最好尽量避免使用无符号整数，特别是不要把它和有符号整数混合使用。（无符号整数一般用于底层开发中，在应用层面很少会使用）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> i = <span class="hljs-number">-10</span>;<br><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> u = <span class="hljs-number">10</span>;<br><span class="hljs-keyword">if</span>(i &lt; u)<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;i is less than u\n&quot;</span>);<br></code></pre></td></tr></table></figure>
 
-<p>查看预编译情况：</p>
-<p><img src="/images/2024/08/28/67877070-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数1.png"></p>
-<p>预处理语句就是单纯的文本替换，所有对于宏函数务必严格添加合适的括号来保证语句逻辑的合理性。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> FUN(x) ((x) * (x))</span><br></code></pre></td></tr></table></figure>
+<p>由于 int 会向 unsigned int 转换（因为你在 if 判断语句中 用 int 类型数据和 unsigned int 数据进行比较），导致 i 会变成一个非常大的数，所以出现不符合题意的判断了。</p>
+<h2 id="显式转换"><a href="#显式转换" class="headerlink" title="显式转换"></a>显式转换</h2><p>需要程序员手动给出需要强转的类型。比方说将 int 类型强制转换为 float 类型。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> x = <span class="hljs-number">10</span>;<br><br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot; x = %f\n&quot;</span>, (<span class="hljs-type">float</span>)x);<br></code></pre></td></tr></table></figure>
 
-<p>再次查看预编译情况：</p>
-<p><img src="/images/2024/08/28/632cc8e0-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数2.png"></p>
-<p>如果左括号没有紧靠宏函数，会如何？这其实很容易被人忽视，还是先看看现象：</p>
-<p><img src="/images/2024/08/28/5ee7f340-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数3.png"></p>
-<p>没错，如果你左括号没有紧靠宏函数，那么这将是宏定义，而非一个宏函数了。</p>
+<p>那为什么需要显示转换呢？</p>
+<ol>
+<li>使用强制类型转换显示表明肯定会发生的转换</li>
+<li>使用强制类型转换进行我们需要的类型转换</li>
+<li>可以用强制类型转换计算浮点数的小数部分</li>
+<li>可以使用强制类型转换来避免溢出</li>
+</ol>
+<p>示例：可以用强制类型转换计算浮点数的小数部分</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">fun</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-type">float</span> num2 = <span class="hljs-number">3.176</span>;<br>	<span class="hljs-type">float</span> num1 = num2 - (<span class="hljs-type">int</span>)num2;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%f&quot;</span>, num1);		<span class="hljs-comment">// 0.176000</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>示例：可以使用强制类型转换来避免溢出</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">fun</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-type">long</span> <span class="hljs-type">long</span> millisPerDay = <span class="hljs-number">24</span> * <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>;<br>	<span class="hljs-type">long</span> <span class="hljs-type">long</span> nanosPerDay = <span class="hljs-number">24</span> * <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span> * <span class="hljs-number">1000</span> * <span class="hljs-number">1000</span>;<br>       <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, nanosPerDay / millisPerDay);		<span class="hljs-comment">// 1000000</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>millisPerDay 和 nanosPerDay 变量没有溢出，但不代表 等号 右边的数据没有溢出。即哪怕是常量也是有数据类型的，那就意味着有一定的存储范围，<code> 24 * 60 * 60 * 1000 * 1000 * 1000</code> 这是 6 个 int 类型的数据相乘，完全超出 int 数据类型表示的范围了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">fun</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-type">long</span> <span class="hljs-type">long</span> millisPerDay = <span class="hljs-number">24</span> * <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>;<br>	<span class="hljs-type">long</span> <span class="hljs-type">long</span> nanosPerDay = (<span class="hljs-type">double</span>)<span class="hljs-number">24</span> * <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span> * <span class="hljs-number">1000</span> * <span class="hljs-number">1000</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%lld\n&quot;</span>, nanosPerDay / millisPerDay);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>注意：强制转换中，如果宽度长的转换到宽度低的会丢失精度。</p>
 
       </div>
     </div>
@@ -241,7 +251,7 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/08/28/%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F/">
+    <a class="post-nav-item-left" href="/2024/08/28/i-%E5%92%8C-i-%E7%9A%84%E5%8C%BA%E5%88%AB/">
       <div class="text-align">
         <svg t="1670570876164"
              class="icon"
@@ -252,12 +262,12 @@
         </svg>
         <span class="text-small">上一篇</span>
       </div>
-      <div>变量和常量</div>
+      <div>i++ 和 ++i 的区别</div>
     </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/08/27/131-%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/">
+    <a class="post-nav-item-right" href="/2024/08/28/%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -269,7 +279,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      131.分割回文串
+      变量和常量
     </a>
   
 </div>
@@ -282,7 +292,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\变量和常量\" title="变量和常量" rel="bookmark">变量和常量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\28\生成可执行文件的过程\" title="生成可执行文件的过程" rel="bookmark">生成可执行文件的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\变量和常量\" title="变量和常量" rel="bookmark">变量和常量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\28\宏定义和宏函数\" title="宏定义和宏函数" rel="bookmark">宏定义和宏函数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
     
   </div>
 </div>
