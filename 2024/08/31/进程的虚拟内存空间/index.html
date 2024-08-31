@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        C | 搁浅的羊先生
+        进程的虚拟内存空间 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -62,9 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet"
-        type="text/css"
-        href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -154,154 +153,129 @@
     </div>
     <div class="body">
       
-  <div class="tag-page-title">#C</div>
-  <div class="post-list">
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">进程的虚拟内存空间</div>
+        <div class="post-info">
+          
+  <a href="/tags/C/" class="post-tag">#C</a>
+
+
+          <span class="post-date">2024-08-31</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p><img src="/images/2024/08/31/b3adae00-6760-11ef-a26a-13be39d63a86.png" alt="进程的虚拟内存地址空间.png"></p>
+<p>操作系统给每个进程营造一种假象，即独占整个内存。在 x86 系统中，为每个进程虚拟出 4G 的内存空间，其中 3G 为用户空间，这块空间各进程相互独立；1G 为内核空间，这块空间进程间共享。</p>
+<p>进程在用户态时，只能访问用户空间内存；只有进入内核态后，才可以访问内核空间内存。虽然每个进程的地址空间都包含了内核空间，但这些内核空间，其实关联的都是相同的物理内存。这样，进程切换到内核态后，就可以很方便地访问内核空间内存。</p>
+<p><img src="/images/2024/08/31/b84118d0-6760-11ef-a26a-13be39d63a86.png" alt="进程的虚拟地址空间2.png"></p>
+<p>代码段：用来存放程序执行代码，也可能包含一些只读的常量。这块区域的大小在程序运行时就已经确定，并且为了防止代码和常量遭到修改，代码段被设置为只读</p>
+<p>数据段：用来存放程序中已初始化全局变量与静态变量</p>
+<p>BSS段：用来存放程序中未初始化全局变量与静态变量</p>
+<p>堆区：动态内存分配区域，用来存放动态分配的内存，堆内存由用户申请分配和释放，从低地址向高地址增长</p>
+<p>文件映射段：也叫共享区，主要包括共享内存、动态链接库等共享资源，从低地址向高地址增长</p>
+<p>栈区：存放程序中临时创建的局部变量，如函数的参数、内部变量等</p>
+<hr>
+<p>参考文章地址：<a target="_blank" rel="noopener" href="https://www.51cto.com/article/770253.html">进程的虚拟内存布局是怎样的？</a></p>
+
+      </div>
+    </div>
     
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/31/%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" class="post-title hover-line">标准输入输出</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">标准输入输出，即 scanf 和 printf，这两个函数有太多需要注意的地方</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
+    <a class="post-nav-item-left" href="/2024/08/31/%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>随机数生成</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/08/30/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9AAsio-%E5%BB%BA%E7%AB%8B%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E5%9F%BA%E6%9C%AC-API/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      第一章：Asio 建立网络连接基本 API
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
   <a href="/tags/C/" class="post-tag">#C</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\变量和常量\" title="变量和常量" rel="bookmark">变量和常量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\28\宏定义和宏函数\" title="宏定义和宏函数" rel="bookmark">宏定义和宏函数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
+    
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/31/%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90/" class="post-title hover-line">随机数生成</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">C语言提供两个随机数相关的函数，即 rand 和 srand。主要弄清楚它的伪随机，以及如何产生真正意义上的随机数</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
 </div>
-    </div>
-  </div>
 
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/31/%E8%BF%9B%E7%A8%8B%E7%9A%84%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4/" class="post-title hover-line">进程的虚拟内存空间</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">操作系统给每个进程营造一种假象，即独占整个内存。在 x86 系统中，为每个进程虚拟出 4G 的内存空间，其中 3G 为用户空间，这块空间各进程相互独立；1G 为内核空间，这块空间进程间共享</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/28/%E7%94%9F%E6%88%90%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E7%9A%84%E8%BF%87%E7%A8%8B/" class="post-title hover-line">生成可执行文件的过程</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">要想深刻理解从源代码到可执行文件的过程，那就去实现一个编译系统，实现一个简易版的即可。也许我后面有机会去做这个事情，但不知道会不会有这个空闲了</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/28/i-%E5%92%8C-i-%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title hover-line">i++ 和 ++i 的区别</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">i++ 本身并不立即自增，返回值为 i 本身的原始值。++i 本身立即自增，返回值为 i + 1</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/28/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="post-title hover-line">类型转换</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">防止隐式类型转换带来的不确定性，显示转换带来的精度丢失问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/28/%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F/" class="post-title hover-line">变量和常量</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">数据类型定义字节大小，变量名是内存地址的别名，存储实际数据。这个内存地址是存储实际数据的起始地址，而数据类型的字节大小就表明从这个起始地址开始读取的字节大小，这样就能够找到对应存储的实际数据，不会多读，也不会少读</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/28/%E5%AE%8F%E5%AE%9A%E4%B9%89%E5%92%8C%E5%AE%8F%E5%87%BD%E6%95%B0/" class="post-title hover-line">宏定义和宏函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">主要就是谈一谈宏定义和宏函数容易出错的地方，由于只是单纯的文本替换，且不支持和调试，导致在写代码期间是无法排查的，这就需要我们能够知道哪些地方容易出错，好在后续使用过程中不容易犯错</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-
+    
+    
+      <div id="gitalk-container"></div>
     
   </div>
 
@@ -400,6 +374,22 @@
       <script>searchInitialize("/search.json")</script>
     
     
-    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
+  
+
   </body>
 </html>

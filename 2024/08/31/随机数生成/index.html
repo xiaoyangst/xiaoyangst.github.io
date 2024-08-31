@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        生成可执行文件的过程 | 搁浅的羊先生
+        随机数生成 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -154,17 +154,23 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner">
+    <div class="post-inner--toc">
       <div class="post-content__head">
-        <div class="post-title">生成可执行文件的过程</div>
+        <div class="post-title">随机数生成</div>
         <div class="post-info">
           
   <a href="/tags/C/" class="post-tag">#C</a>
 
 
-          <span class="post-date">2024-08-28</span>
+          <span class="post-date">2024-08-31</span>
         </div>
       </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4%E5%AE%83%E6%98%AF%E4%BC%AA%E9%9A%8F%E6%9C%BA%EF%BC%9F"><span class="post-toc-text">为什么说它是伪随机？</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%A6%82%E4%BD%95%E5%BE%97%E5%88%B0%E7%9C%9F%E6%AD%A3%E6%84%8F%E4%B9%89%E4%B8%8A%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%EF%BC%9F"><span class="post-toc-text">如何得到真正意义上的随机数？</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88srand-%E5%BB%BA%E8%AE%AE%E5%8F%AA%E8%B0%83%E7%94%A8%E4%B8%80%E6%AC%A1%EF%BC%9F"><span class="post-toc-text">为什么srand()建议只调用一次？</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
       
       <div class="post-content__body">
         
@@ -172,19 +178,27 @@
             
           </div>
         
-        <p><img src="/images/2024/08/28/9e339a00-6547-11ef-822d-8d911ea6426b.png" alt="编译流程.png"></p>
-<ol>
-<li>预处理：执行预处理指令</li>
-<li>编译：将预处理后的文件翻译成汇编代码</li>
-<li>汇编：将汇编代码翻译成机器指令，生成目标文件</li>
-<li>链接：将目标文件和库文件链接起来，得到可执行文件</li>
-</ol>
-<p>目标文件一般分为三种：</p>
-<ul>
-<li>可重定位的目标文件：汇编器生成的目标文件是可重定位的目标文件，是不可执行的，需要链接器经过链接、重定位之后才能运行</li>
-<li>可执行的目标文件：即可直接执行的文件，由程序转换为进程</li>
-<li>可被共享的目标文件：可被共享的目标文件一般以共享库的形式存在，在程序运行时需要动态加载到内存，跟应用程序一起运行</li>
-</ul>
+        <p>C语言提供两个随机数相关的函数，即 rand 和 srand。主要弄清楚它的伪随机，以及如何产生真正意义上的随机数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">rand</span> <span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;		<span class="hljs-comment">// 返回值是一个伪随机数</span><br></code></pre></td></tr></table></figure>
+
+<p>此数字由一种算法生成，该算法在每次调用时都会返回一系列明显不相关的数字。此算法使用种子生成序列，应使用下面的 srand 函数 将其初始化为某个独特的值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">srand</span> <span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> seed)</span></span>;	<span class="hljs-comment">// 传递一个种子数</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="为什么说它是伪随机？"><a href="#为什么说它是伪随机？" class="headerlink" title="为什么说它是伪随机？"></a>为什么说它是伪随机？</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;first random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;second random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br></code></pre></td></tr></table></figure>
+
+<p>运行上面的函数你会得到两个随机数，但你再次运行你会发现还是之前得到的两个随机数，这就是说 rand() 得到的是伪随机的原因。但你确定种子的那一刻起，你后面生成的数字也就都被确定下来，这就是为什么伪随机的缘故。</p>
+<p>下面通过 srand() 创建种子，看看现象：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">srand</span>(<span class="hljs-number">10</span>);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;first random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br><span class="hljs-built_in">srand</span>(<span class="hljs-number">10</span>);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;second random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">first random number = 71</span><br><span class="hljs-comment">second random number = 71</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+
+<p>没错，但你种子确定的那一刻，那么底层算法就已经帮你规定好后面顺序的所有数字该多少了。但你第一次规定种子为 10，那么获取随机数为 71，如果这个时候你重新规定种子为 10，那么再次获取随机数也还是71。</p>
+<h2 id="如何得到真正意义上的随机数？"><a href="#如何得到真正意义上的随机数？" class="headerlink" title="如何得到真正意义上的随机数？"></a>如何得到真正意义上的随机数？</h2><p>既然，种子不同就会得到不同的随机数，那么时间是不断变化的，只要我们传入 每一刻的时间即可。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">srand</span>(<span class="hljs-built_in">time</span>(<span class="hljs-literal">NULL</span>));<br></code></pre></td></tr></table></figure>
+
+<p>往后，你调用 rand 得到的必然就是随机数了。</p>
+<p>注意：srand() 函数只需要在程序中调用一次即可，而 rand() 函数可以多吃调用生成随机数。</p>
+<h2 id="为什么srand-建议只调用一次？"><a href="#为什么srand-建议只调用一次？" class="headerlink" title="为什么srand()建议只调用一次？"></a>为什么srand()建议只调用一次？</h2><p><strong>频繁重置种子</strong>：如果你在短时间内多次调用 <code>srand(time(NULL))</code>，种子值可能不会发生变化（因为 <code>time(NULL)</code> 返回的是当前时间，单位是秒）。因此，随机数生成器会被重新初始化为相同的种子值，这会导致生成的随机数序列重复，从而降低随机性。</p>
+<p><strong>随机性降低</strong>：理想情况下，随机数序列应当尽可能不可预测。如果你不断地调用 srand 并使用几乎相同的种子，生成的随机数序列将会是相同的或高度相关的，这就违背了使用随机数的目的。</p>
+<p>因此，避免多次调用 <code>srand(time(NULL))</code>，这样可以保持随机数序列的随机性和不可预测性。</p>
 
       </div>
     </div>
@@ -228,7 +242,7 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/08/30/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9AAsio-%E5%BB%BA%E7%AB%8B%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E5%9F%BA%E6%9C%AC-API/">
+    <a class="post-nav-item-left" href="/2024/08/31/%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/">
       <div class="text-align">
         <svg t="1670570876164"
              class="icon"
@@ -239,12 +253,12 @@
         </svg>
         <span class="text-small">上一篇</span>
       </div>
-      <div>第一章：Asio 建立网络连接基本 API</div>
+      <div>标准输入输出</div>
     </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/08/28/i-%E5%92%8C-i-%E7%9A%84%E5%8C%BA%E5%88%AB/">
+    <a class="post-nav-item-right" href="/2024/08/31/%E8%BF%9B%E7%A8%8B%E7%9A%84%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -256,7 +270,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      i++ 和 ++i 的区别
+      进程的虚拟内存空间
     </a>
   
 </div>
