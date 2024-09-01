@@ -188,7 +188,7 @@
 <p>xor 就代表了整数 <code>a</code> 的二进制表示中最右边的 <code>1</code> 所在的位置（以二进制形式表示），其中对应的二进制中 1 所处的位置表示整数 a 最右侧的 1 的 位置，剩下的全部为 0。</p>
 <p><img src="/images/2024/09/01/067ff520-6856-11ef-bc89-e5593d4b1f18.png" alt="最右侧的1.png"></p>
 <p>注：补码即原码取反再加1，C语言中的负数就是用补码表示</p>
-<p>（二）建议奇偶性</p>
+<p>（二）分离奇偶数</p>
 <p>奇数和偶数的二进制特点就是，奇数必然在第一位为 1，而偶数必然在第一位为 0。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">bool</span> <span class="hljs-title function_">is_odd</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span> &#123;<br>	<span class="hljs-keyword">return</span> (num &amp; (-num)) == <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -245,7 +245,19 @@
     
     <div class="post-nav">
   
-    <div class="post-nav-item-left"></div>
+    <a class="post-nav-item-left" href="/2024/09/01/Base64-%E5%92%8C-MD5-%E7%9A%84%E4%BD%BF%E7%94%A8/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>Base64 和 MD5 的使用</div>
+    </a>
   
   <div class="vhr"></div>
   
@@ -329,6 +341,11 @@
                   <div class="text">
                     <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
                     <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
                   </div>
                 
                 <div class="text">

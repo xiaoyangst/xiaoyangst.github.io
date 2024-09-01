@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        杂文 | 搁浅的羊先生
+        Base64 和 MD5 的使用 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -152,96 +153,115 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/archive.svg)"></div>
-        杂文
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">Base64 和 MD5 的使用</div>
+        <div class="post-info">
+          
+  <a href="/tags/Qt/" class="post-tag">#Qt</a>
+
+
+          <span class="post-date">2024-09-01</span>
+        </div>
       </div>
-      <div class="wall-category-description">Temporarily unclassifiable repositories</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/%E4%B8%80%E7%82%B9%E5%B0%8F%E4%BA%8B/" style="font-size: 1em;">一点小事</a> <a href="/tags/%E5%8F%8D%E7%9C%81/" style="font-size: 1em;">反省</a> <a href="/tags/%E6%8E%A8%E8%8D%90/" style="font-size: 1em;">推荐</a> <a href="/tags/%E6%9D%82%E6%96%87/" style="font-size: 1em;">杂文</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="为什么要使用-Base64"><a href="#为什么要使用-Base64" class="headerlink" title="为什么要使用 Base64 ?"></a>为什么要使用 Base64 ?</h2><p>Base64 虽然可以用于简单的加密，但通常用于传输数据。</p>
+<p>在网络上交换数据时，比如说从 A 地传到 B 地，往往要经过多个路由设备，由于不同的设备对字符的处理方式有一些不同，这样那些不可见字符就有可能被处理错误，这是不利于传输的。把数据先做一个 Base64 编码，统统变成可见字符，这样出错的可能性就大降低了。很多场景下的数据传输要求数据只能由简单通用的字符组成，比如 HTTP 协议要求请求的首行和请求头都必须是 ASCII 编码。</p>
+<h2 id="为什么要使用-MD5"><a href="#为什么要使用-MD5" class="headerlink" title="为什么要使用 MD5 ?"></a>为什么要使用 MD5 ?</h2><p>MD5 就是用来加密数据（<strong>MD5 并不是一种加密算法，而是一种摘要算法</strong>，我们也可以叫它哈希函数），且不可逆，即只用暴力碰撞来解密，当时它已经不是一个安全的加密算法了。</p>
+<p>使用 MD5 加密数据的目的通常是为了验证数据的完整性。因为哈希算法具有一致性，所以如果数据没有被篡改，我们可以把它的哈希值与原来的哈希值进行比较，如果完全一致，则说明数据没有被篡改。但是，由于哈希算法是单向的，所以我们无法通过哈希值推出原来的数据。如果你需要获取原来的数据，你必须要拥有原来的数据本身。</p>
+<h2 id="Qt-中使用-Base64"><a href="#Qt-中使用-Base64" class="headerlink" title="Qt 中使用 Base64"></a>Qt 中使用 Base64</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 编码</span><br>    QByteArray base = <span class="hljs-string">&quot;你好, 世界&quot;</span>;<br>    base = base.<span class="hljs-built_in">toBase64</span>();<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; base;<br><br><span class="hljs-comment">// 解码</span><br>    base= QByteArray::<span class="hljs-built_in">fromBase64</span>(base);<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; base.<span class="hljs-built_in">data</span>();<br></code></pre></td></tr></table></figure>
+
+<h2 id="Qt-中使用-MD5"><a href="#Qt-中使用-MD5" class="headerlink" title="Qt 中使用 MD5"></a>Qt 中使用 MD5</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">    QString input = <span class="hljs-string">&quot;Hello, World!&quot;</span>;<br>    QByteArray byteArray = input.<span class="hljs-built_in">toUtf8</span>();<br>    <br><span class="hljs-comment">// 生成 MD5 哈希</span><br>    QByteArray md5Hash = QCryptographicHash::<span class="hljs-built_in">hash</span>(byteArray, QCryptographicHash::Md5);<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;MD5 Hash:&quot;</span> &lt;&lt; md5Hash.<span class="hljs-built_in">toHex</span>();<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://draveness.me/whys-the-design-password-with-md5/">MD5 既然不安全</a>，那么 Qt 中可以使用的加密算法还有很多，主要通过 <code>QCryptographicHash</code> 和 <code>QCA</code>（Qt Cryptographic Architecture）库来实现。在任何场景下，我们都应该避免 MD5 的使用，可以选择更好的摘要算法替代 MD5，例如 SHA256、SHA512。</p>
+<p>尽管摘要算法无论如何都不安全，因为会被碰撞出来。哈希加盐的方式确实能够增加攻击者的成本，但这远远不够，随着计算机算力的增强已经难以抵挡。使用 <code>bcrypt</code> 相比于直接使用哈希加盐是一种更加安全的方式，也是我们目前推荐使用的方法，为了增加攻击者的成本，<code>bcrypt</code> 引入了计算成本这一可以调节的参数，能够调节执行 <code>bcrypt</code> 函数的成本。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card--sticky">
-    <div class="post__head">
-      <a href="/2024/08/06/%E5%B8%B8%E7%94%A8%E7%BD%91%E7%AB%99/" class="post-title hover-line">常用网站</a>
-      <span class="post-title-pined">置顶</span>
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt"></div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%8E%A8%E8%8D%90/" class="post-tag">#推荐</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E8%A7%A3%E5%BC%80%E4%B9%8B%E5%89%8D%E7%9A%84%E4%B8%80%E4%B8%AA%E8%AF%AF%E4%BC%9A/" class="post-title hover-line">解开之前的一个误会</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt"></div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E4%B8%80%E7%82%B9%E5%B0%8F%E4%BA%8B/" class="post-tag">#一点小事</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/09/%E6%8E%A5%E5%8F%97%E6%AF%9B%E6%B3%BD%E4%B8%9C%E7%9A%84%E6%80%9D%E6%83%B3%E6%89%B9%E8%AF%84%E4%B9%8B%E6%B2%A1%E6%9C%89%E6%8A%8A%E6%8F%A1%E6%98%AF%E7%BC%BA%E4%B9%8F%E8%AE%A4%E8%AF%86%E5%92%8C%E5%AE%9E%E8%B7%B5/" class="post-title hover-line">接受毛泽东的思想批评之没有把握是缺乏认识和实践</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">常常听到一些同志在不能勇敢接受工作任务时说出来的一句话：没有把握。为什么没有把握呢？因为他对于这项工作的内容和环境没有规律性的了解，或者他从来就没有接触过这类工作，或者接触得不多，因而无从谈到这类工作的规律性</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%8F%8D%E7%9C%81/" class="post-tag">#反省</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/06/21/%E5%A4%A7%E5%AD%A6%E6%AF%95%E4%B8%9A/" class="post-title hover-line">大学毕业</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt"></div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%9D%82%E6%96%87/" class="post-tag">#杂文</a>
-
-</div>
-    </div>
-  </div>
-
 
     
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/09/01/%E4%BD%8D%E8%BF%90%E7%AE%97/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      位运算
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/Qt/" class="post-tag">#Qt</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\10\主机字节序和网络字节序\" title="主机字节序和网络字节序" rel="bookmark">主机字节序和网络字节序</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
     
   </div>
 
@@ -345,6 +365,21 @@
       <script>searchInitialize("/search.json")</script>
     
     
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
   
 
   </body>
