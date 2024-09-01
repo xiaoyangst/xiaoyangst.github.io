@@ -186,11 +186,11 @@
 
 <h2 id="为什么说它是伪随机？"><a href="#为什么说它是伪随机？" class="headerlink" title="为什么说它是伪随机？"></a>为什么说它是伪随机？</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;first random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;second random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br></code></pre></td></tr></table></figure>
 
-<p>运行上面的函数你会得到两个随机数，但你再次运行你会发现还是之前得到的两个随机数，这就是说 rand() 得到的是伪随机的原因。但你确定种子的那一刻起，你后面生成的数字也就都被确定下来，这就是为什么伪随机的缘故。</p>
+<p>运行上面的函数你会得到两个随机数，但你再次运行你会发现还是之前得到的两个随机数，这就是说 rand() 得到的是伪随机的原因。当你确定种子的那一刻起，你后面生成的数字也就都被确定下来，这就是为什么伪随机的缘故。</p>
 <p>下面通过 srand() 创建种子，看看现象：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">srand</span>(<span class="hljs-number">10</span>);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;first random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br><span class="hljs-built_in">srand</span>(<span class="hljs-number">10</span>);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;second random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">first random number = 71</span><br><span class="hljs-comment">second random number = 71</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
 
-<p>没错，但你种子确定的那一刻，那么底层算法就已经帮你规定好后面顺序的所有数字该多少了。但你第一次规定种子为 10，那么获取随机数为 71，如果这个时候你重新规定种子为 10，那么再次获取随机数也还是71。</p>
+<p>没错，当你种子确定的那一刻，那么底层算法就已经帮你规定好后面顺序的所有数字该多少了。当你第一次规定种子为 10，那么获取随机数为 71，如果这个时候你重新规定种子为 10，那么再次获取随机数也还是71。</p>
 <h2 id="如何得到真正意义上的随机数？"><a href="#如何得到真正意义上的随机数？" class="headerlink" title="如何得到真正意义上的随机数？"></a>如何得到真正意义上的随机数？</h2><p>既然，种子不同就会得到不同的随机数，那么时间是不断变化的，只要我们传入 每一刻的时间即可。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">srand</span>(<span class="hljs-built_in">time</span>(<span class="hljs-literal">NULL</span>));<br></code></pre></td></tr></table></figure>
 
