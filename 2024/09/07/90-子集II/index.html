@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        力扣 | 搁浅的羊先生
+        90.子集II | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -152,205 +153,123 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/leetcode.svg)"></div>
-        力扣
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">90.子集II</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
+
+
+          <span class="post-date">2024-09-07</span>
+        </div>
       </div>
-      <div class="wall-category-description">leetcode Writeup Record</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" style="font-size: 1em;">单调栈</a> <a href="/tags/%E5%9B%9E%E6%BA%AF/" style="font-size: 1em;">回溯</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 1em;">字符串</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 1em;">数组</a> <a href="/tags/%E6%A0%88/" style="font-size: 1em;">栈</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1em;">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 1em;">队列</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; result;<br>    vector&lt;<span class="hljs-type">int</span>&gt; path;<br><span class="hljs-keyword">public</span>:<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtrace</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> cur,<span class="hljs-type">bool</span> used)</span></span>&#123;<br>        result.<span class="hljs-built_in">push_back</span>(path);<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = cur; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-keyword">if</span>(i &gt; <span class="hljs-number">0</span> &amp;&amp; nums[i] == nums[i - <span class="hljs-number">1</span>] &amp;&amp; used == <span class="hljs-literal">false</span>)&#123; 	<span class="hljs-comment">// 判断是否同一层</span><br>                <span class="hljs-keyword">continue</span>;<br>            &#125;            <br>            path.<span class="hljs-built_in">push_back</span>(nums[i]);<br>            used = <span class="hljs-literal">true</span>;<br>            <span class="hljs-built_in">backtrace</span>(nums,i + <span class="hljs-number">1</span>,used);<br>            used = <span class="hljs-literal">false</span>;<br>            path.<span class="hljs-built_in">pop_back</span>();<br>        &#125;<br>    &#125;<br><br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">subsetsWithDup</span>(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums) &#123;<br>        <span class="hljs-built_in">sort</span>(nums.<span class="hljs-built_in">begin</span>(),nums.<span class="hljs-built_in">end</span>());	<span class="hljs-comment">// 记得排序</span><br>        <span class="hljs-function">vector&lt;<span class="hljs-type">bool</span>&gt; <span class="hljs-title">used</span><span class="hljs-params">(nums.size(),<span class="hljs-literal">false</span>)</span></span>;<br>        <span class="hljs-built_in">backtrace</span>(nums,<span class="hljs-number">0</span>,used);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>这道题确实再刷没能做出来，但我清楚要去重的是同一层的节点。结合前面已经做的几道题，按理这道就是一个组合题，但可能长时间思考导致思路混乱。这道题卡住我的是 去重，但去重已经在 <a href="https://xiaoyangst.github.io/2024/08/09/40-%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8C-II/">40.组合总和 II</a> 完成，应该是隔离刷题时间有点久。</p>
+<p>有一点你要注意，记得排序，不然我们的去重判断会失败。</p>
+<p><img src="/images/2024/09/07/cbcabfb0-6cb4-11ef-aab5-778ee711175d.png" alt="90.子集.png"></p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/07/90-%E5%AD%90%E9%9B%86II/" class="post-title hover-line">90.子集II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题确实再刷没能做出来，但我清楚要去重的是同一层的节点。结合前面已经做的几道题，按理这道就是一个组合题，但可能长时间思考导致思路混乱。这道题卡住我的是 去重，但去重已经在 40.组合总和 II完成，应该是隔离刷题时间有点久</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/06/78-%E5%AD%90%E9%9B%86/" class="post-title hover-line">78.子集</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">在脑子中思考，草稿纸上简单草图就写出来了，因此没有什么好记录的，就简单取用《代码随想录》的图和几句说明吧</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/27/131-%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/" class="post-title hover-line">131.分割回文串</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题没有能够做出来，尽管对于切割有些思路了，但是对于 substr 方法有些误解（后面详细谈一谈它的用法），导致实际返回的容器中有很多重复项</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/82-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-II/" class="post-title hover-line">82.删除排序链表中的重复元素 II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">当我们的链表中删除某个节点，如果这个节点可能包含头结点，那么务必使用虚拟头结点，因为删除节点需要拥有待删除节点的前一个节点才能进行删除</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/83-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/" class="post-title hover-line">83.删除排序链表中的重复元素</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题主要强调 while 循环，由于 fast 检测是否为空在最外层 while 中检测，但它只能保证当前这次循环不为空，所以 fast 如果进入下一个 while 循环（代码中内存 while 循环），记得要继续检测是否为空，不然出现未定义错误</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/206-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/" class="post-title hover-line">206.反转链表</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">反转链表需要用到三个指针，left 和 right 指针用于反转链表，而 node 指针用来保存还未进行反转的链表</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/933-%E6%9C%80%E8%BF%91%E7%9A%84%E8%AF%B7%E6%B1%82%E6%AC%A1%E6%95%B0/" class="post-title hover-line">933.最近的请求次数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题只要想明白一件事情，即由于题目保证每次对 ping 调用所使用的 t 值都 严格递增，而我们只关心传递进来的 t 在 [t-3000,t] 范围内 ping 的总数，那就表明之前加入的所有数据并不是都有必要一直存在</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%98%9F%E5%88%97/" class="post-tag">#队列</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/15/946-%E9%AA%8C%E8%AF%81%E6%A0%88%E5%BA%8F%E5%88%97/" class="post-title hover-line">946.验证栈序列</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">多看别人的题解，能获得更好的优化代码，但凡是按照常规逻辑去写，代码往往有优化的余地</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%A0%88/" class="post-tag">#栈</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/15/844-%E6%AF%94%E8%BE%83%E5%90%AB%E9%80%80%E6%A0%BC%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-title hover-line">844.比较含退格的字符串</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">也许我不该强调这道题的对称性，而应该表述为 利用栈实现消消乐</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%A0%88/" class="post-tag">#栈</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/15/739-%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6/" class="post-title hover-line">739.每日温度</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我们要寻找数组中每个数右边第一个比它大的数，使用单调递减栈</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%A0%88/" class="post-tag">#栈</a><a href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" class="post-tag">#单调栈</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/leetcode/page/2/">2</a><a class="page-number" href="/leetcode/page/3/">3</a></div>
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/09/07/%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%90%8C%E6%AD%A5%E5%92%8C%E5%BC%82%E6%AD%A5/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>第二章：同步和异步</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/09/06/78-%E5%AD%90%E9%9B%86/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      78.子集
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\09\17-电话号码的字母组合\" title="17.电话号码的字母组合" rel="bookmark">17.电话号码的字母组合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\218-组合III\" title="218.组合III" rel="bookmark">218.组合III</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\39-组合总和\" title="39.组合总和" rel="bookmark">39.组合总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -458,6 +377,21 @@
       <script>searchInitialize("/search.json")</script>
     
     
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
   
 
   </body>

@@ -154,7 +154,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">function 和 bind</div>
         <div class="post-info">
@@ -165,12 +165,6 @@
           <span class="post-date">2024-08-16</span>
         </div>
       </div>
-      
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%8F%AF%E8%B0%83%E7%94%A8%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%B0%83%E7%94%A8%E5%BD%A2%E5%BC%8F"><span class="post-toc-text">可调用对象的类型和调用形式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#function%E7%9A%84%E7%94%A8%E6%B3%95"><span class="post-toc-text">function的用法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#bind%E7%9A%84%E7%94%A8%E6%B3%95"><span class="post-toc-text">bind的用法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%9B%9E%E8%B0%83%E6%9C%BA%E5%88%B6%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">回调机制的实现</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
       
       <div class="post-content__body">
         
@@ -199,6 +193,7 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Test</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-built_in">Test</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Test</span>() = <span class="hljs-keyword">default</span>;<br>  <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">AddC</span><span class="hljs-params">(<span class="hljs-type">int</span> num1,<span class="hljs-type">int</span> num2)</span></span>&#123;<br>    <span class="hljs-keyword">return</span> num1 + num2;<br>  &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>  <span class="hljs-keyword">using</span>  funCallback = function&lt;<span class="hljs-built_in">int</span>(<span class="hljs-type">int</span>,<span class="hljs-type">int</span>)&gt;;<br>  funCallback f1 = &amp;Test::AddC;	<span class="hljs-comment">// 报错，这是不允许的</span><br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id="bind的用法"><a href="#bind的用法" class="headerlink" title="bind的用法"></a>bind的用法</h2><p>接受一个可调用对象，生成一个新的可调用对象来适应原对象的参数列表。即用来将可调用对象与其参数一起进行绑定，绑定后的结果可以使用 function 进行保存。</p>
+<p>使用 std::bind 绑定对象时，<strong>会拷贝新对象，作为内部调用成员函数的对象</strong>（非常关键，因为如果绑定的是共享智能指针就会让计数加 1 ，意识到这点可以应用到网络库中来延长连接的生命周期）。那么在回调前，如果删除了指针，会引发崩溃，这是非常需要注意的地方。</p>
 <p>bind 必须把函数所需的参数进行绑定，如果不填写默认参数进行绑定，就用占位符placeholders::_N（1、2、3…N）填充，等后续调用时再自行填写。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 绑定非类成员函数/变量</span><br><span class="hljs-keyword">auto</span> f = std::<span class="hljs-built_in">bind</span>(可调用对象地址, 绑定的参数/占位符);<br><span class="hljs-comment">// 绑定类成员函/变量</span><br><span class="hljs-keyword">auto</span> f = std::<span class="hljs-built_in">bind</span>(类函数/成员地址, 类实例对象地址, 绑定的参数/占位符);<br></code></pre></td></tr></table></figure>
 
@@ -215,8 +210,6 @@
 
 <p>这个系统可以注册回调函数（即存储回调函数），还支持执行回调函数。作为用户如果想要系统执行某个功能，你只需要把功能函数（可调用对象）传递给系统即可，系统会自行安排调用时机（即调用 triggerEvent 方法）。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">myCallbackFunction</span><span class="hljs-params">(<span class="hljs-type">int</span> value)</span> </span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Callback function called with value: &quot;</span> &lt;&lt; value &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    EventSystem eventSystem;<br><br>    <span class="hljs-comment">// 注册普通函数回调</span><br>    eventSystem.<span class="hljs-built_in">registerCallback</span>(myCallbackFunction);<br><br>    <span class="hljs-comment">// 触发事件（系统执行回调）</span><br>    eventSystem.<span class="hljs-built_in">triggerEvent</span>(<span class="hljs-number">42</span>);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
       </div>
     </div>
     
