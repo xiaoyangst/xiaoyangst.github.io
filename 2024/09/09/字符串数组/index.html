@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        指针基础 | 搁浅的羊先生
+        字符串数组 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -156,7 +156,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">指针基础</div>
+        <div class="post-title">字符串数组</div>
         <div class="post-info">
           
   <a href="/tags/C/" class="post-tag">#C</a>
@@ -172,22 +172,17 @@
             
           </div>
         
-        <h2 id="指针和指针变量"><a href="#指针和指针变量" class="headerlink" title="指针和指针变量"></a>指针和指针变量</h2><p>指针是地址，指针变量是存储地址的变量。</p>
-<p>如下图为，指针变量 p 指向 变量 i 的地址。</p>
-<p><img src="/images/2024/09/09/9c5b2df0-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针1.png"></p>
-<h2 id="取地址运算符和间接寻址运算符"><a href="#取地址运算符和间接寻址运算符" class="headerlink" title="取地址运算符和间接寻址运算符"></a>取地址运算符和间接寻址运算符</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num = <span class="hljs-number">10</span>;<br><br>	<span class="hljs-type">int</span>* p;	<span class="hljs-comment">// 声明一个指针变量</span><br><br>	p = &amp;num;	<span class="hljs-comment">// 指向变量 num 的地址</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d&quot;</span>, *p);	<span class="hljs-comment">// 对指针变量 p 解引用，即获取 指针变量 p 指向地址的数据</span><br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+        <p>字符串数组即存储字符串的数组，我们可能会想到用二维数组来存储字符串。就像下面这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> planets[][<span class="hljs-number">8</span>] = &#123;<span class="hljs-string">&quot;Mercury&quot;</span>, <span class="hljs-string">&quot;Venus&quot;</span>, <span class="hljs-string">&quot;Earth&quot;</span>, <br>                     	<span class="hljs-string">&quot;Mars&quot;</span>, <span class="hljs-string">&quot;Jupiter&quot;</span>, <span class="hljs-string">&quot;Saturn&quot;</span>, <br>                     	<span class="hljs-string">&quot;Uranus&quot;</span>, <span class="hljs-string">&quot;Neptune&quot;</span>, <span class="hljs-string">&quot;Pluto&quot;</span>&#125;;<br></code></pre></td></tr></table></figure>
 
-<p>&amp; 获取变量的地址，* 对指针变量解引用。</p>
-<p>你可以看到 &amp; 和 * 是互相抵消的关系，如上述代码中<code>*p = *&amp;num = num</code>。</p>
-<p>只要 p 指向 num，p 就是 num 的别名。p 不仅拥有和 num 相同的值，而且对 p 的改变也会改变 num 的值。（p 是左值，所以对它赋值是合法的。）</p>
-<h2 id="指针赋值"><a href="#指针赋值" class="headerlink" title="指针赋值"></a>指针赋值</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num1 = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> num2 = <span class="hljs-number">20</span>;<br><br>	<span class="hljs-type">int</span>* p = &amp;num1;<br>	<span class="hljs-type">int</span>* m = &amp;num2;<br><br>	p = m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);	<br><br>	*p = *m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>那么对于没有占用字符的位置会填充为0，但这本就属于多余申请的空间。</p>
+<p><img src="/images/2024/09/09/87506c40-6eb7-11ef-8b20-af503e99b33d.png" alt="字符串数组二维.png"></p>
+<p>如果我们该用一维数组来存储字符串指针，不但可以存储字符串，还可以节约空间。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">char* planets[] = &#123;&quot;Mercury&quot;, &quot;Venus&quot;, &quot;Earth&quot;, <br>                     	&quot;Mars&quot;, &quot;Jupiter&quot;, &quot;Saturn&quot;, <br>                     	&quot;Uranus&quot;, &quot;Neptune&quot;, &quot;Pluto&quot;&#125;;<br></code></pre></td></tr></table></figure>
 
-<p>两个指针，对于不同的赋值方式含义也是不同的。</p>
-<p><code>p = m</code> 是指针赋值，即 指针变量p 原来指向变量 num1的地址，现在和 指针变量m 一起指向 变量 num2。</p>
-<p><img src="/images/2024/09/09/94b21eb0-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针2.png"></p>
-<p><code>*p = *m</code> 是把 m 指向的值（num2 的值）复制到 p 指向的对象（变量num1）中。</p>
-<p><img src="/images/2024/09/09/90731570-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针3.png"></p>
-<p>至此，我们可以说改变 变量的值有两种方式，一个是修改所指向的对象，一个是修改所指向的对象存储的值。切记弄清楚两种赋值方式的区别。</p>
+<p>就像下面这样：</p>
+<p><img src="/images/2024/09/09/7e4b4f70-6eb7-11ef-8b20-af503e99b33d.png" alt="字符串数组一维.png"></p>
+<p>因此，我们存储字符串用一维数组，即指向字符串的指针的数组。</p>
 
       </div>
     </div>
@@ -231,23 +226,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/09/09/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>字符串数组</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/09/09/%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/">
+    <a class="post-nav-item-right" href="/2024/09/09/%E6%8C%87%E9%92%88%E5%9F%BA%E7%A1%80/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -259,7 +242,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      二级指针和函数指针
+      指针基础
     </a>
   
 </div>
