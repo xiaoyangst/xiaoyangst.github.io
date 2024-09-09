@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 搁浅的羊先生
+        指针基础 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -152,205 +153,122 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">指针基础</div>
+        <div class="post-info">
+          
+  <a href="/tags/C/" class="post-tag">#C</a>
+
+
+          <span class="post-date">2024-09-09</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/Asio/" style="font-size: 1em;">Asio</a> <a href="/tags/C/" style="font-size: 1em;">C</a> <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 1em;">C++11新特性</a> <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">C++性能优化</a> <a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/Qt/" style="font-size: 1em;">Qt</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">函数式编程</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" style="font-size: 1em;">操作系统导论</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/" style="font-size: 1em;">架构设计入门</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="指针和指针变量"><a href="#指针和指针变量" class="headerlink" title="指针和指针变量"></a>指针和指针变量</h2><p>指针是地址，指针变量是存储地址的变量。</p>
+<p>如下图为，指针变量 p 指向 变量 i 的地址。</p>
+<p><img src="/images/2024/09/09/9c5b2df0-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针1.png"></p>
+<h2 id="取地址运算符和间接寻址运算符"><a href="#取地址运算符和间接寻址运算符" class="headerlink" title="取地址运算符和间接寻址运算符"></a>取地址运算符和间接寻址运算符</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num = <span class="hljs-number">10</span>;<br><br>	<span class="hljs-type">int</span>* p;	<span class="hljs-comment">// 声明一个指针变量</span><br><br>	p = &amp;num;	<span class="hljs-comment">// 指向变量 num 的地址</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d&quot;</span>, *p);	<span class="hljs-comment">// 对指针变量 p 解引用，即获取 指针变量 p 指向地址的数据</span><br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>&amp; 获取变量的地址，* 对指针变量解引用。</p>
+<p>你可以看到 &amp; 和 * 是互相抵消的关系，如上述代码中<code>*p = *&amp;num = num</code>。</p>
+<p>只要 p 指向 num，p 就是 num 的别名。p 不仅拥有和 num 相同的值，而且对 p 的改变也会改变 num 的值。（p 是左值，所以对它赋值是合法的。）</p>
+<h2 id="指针赋值"><a href="#指针赋值" class="headerlink" title="指针赋值"></a>指针赋值</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num1 = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> num2 = <span class="hljs-number">20</span>;<br><br>	<span class="hljs-type">int</span>* p = &amp;num1;<br>	<span class="hljs-type">int</span>* m = &amp;num2;<br><br>	p = m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);	<br><br>	*p = *m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>两个指针，对于不同的赋值方式含义也是不同的。</p>
+<p><code>p = m</code> 是指针赋值，即 指针变量p 原来指向变量 num1的地址，现在和 指针变量m 一起指向 变量 num2。</p>
+<p><img src="/images/2024/09/09/94b21eb0-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针2.png"></p>
+<p><code>*p = *m</code> 是把 m 指向的值（num2 的值）复制到 p 指向的对象（变量num1）中。</p>
+<p><img src="/images/2024/09/09/90731570-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针3.png"></p>
+<p>至此，我们可以说改变 变量的值有两种方式，一个是修改所指向的对象，一个是修改所指向的对象存储的值。切记弄清楚两种赋值方式的区别。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/20/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" class="post-title hover-line">面向对象的设计原则</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">设计的目标：低耦合、高内聚</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/19/%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E7%BA%AF%E6%B4%81%E6%80%A7-%E9%81%BF%E5%85%8D%E5%8F%AF%E5%8F%98%E7%8A%B6%E6%80%81/" class="post-title hover-line">第五章：纯洁性--避免可变状态</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我不认为这章节有什么可用于将来实践的地方，因为并不会让性能有多大的提高，反而会拖累程序。况且用 const 来表明不可变状态，事实是可变状态才是常态。</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E4%BB%A5%E6%97%A7%E5%87%BD%E6%95%B0%E5%88%9B%E5%BB%BA%E6%96%B0%E5%87%BD%E6%95%B0/" class="post-title hover-line">第四章：以旧函数创建新函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">偏函数、柯里化和函数提升的讲解</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" class="post-title hover-line">第三章：函数对象</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果你熟悉 C++11 新特性，此文并无太多需要学习的地方</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/tuple%E5%85%83%E7%BB%84/" class="post-title hover-line">tuple元组</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">它是一种可以包含多个不同类型元素的容器（ 它是一个模板类，允许将多个不同类型的对象组合在一起）</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/auto-%E5%92%8C-decltype/" class="post-title hover-line">auto 和 decltype</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">用于类型推断，auto 和 decltype 属于互补关系。auto 虽然比 decltype 方便，但有些场景还是需要 decltype 来</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/thread%E5%BA%93/" class="post-title hover-line">thread库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">强调并发编程中需要注意的问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/chrono%E5%BA%93/" class="post-title hover-line">chrono库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">C语言虽然也有时间处理方法，但是精度只到秒。Linux 和 Windows 都有提供相应的方法精确到微秒，但是用法不同，显然不支持跨平台。chrono 库精度更高，同时支持跨平台，因此C++11之后使用chrono 库处理时间和日期是有必要的，至于到后面的C++版本是否会继续加强，那是以后的事情</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" class="post-title hover-line">移动语义</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">移动语义就是从给定对象“窃取”资源而不是拷贝资源，源对象不再拥有资源，资源的所有权已经归属于新创建的对象</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-title hover-line">Lambda 表达式</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">一个普通函数不仅可以没有实参，也可以无需具体的返回值类型，但是必须要有函数体。lambda表达式又名匿名函数，即没有函数名的函数，形参和返回值也可以不必有，但是函数体不能丢。至于捕获也可以不进行任何捕获，但是却必须标识它的存在</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/technology/">1</a><a class="page-number" href="/technology/page/2/">2</a><a class="page-number" href="/technology/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/technology/page/5/">5</a><a class="page-number" href="/technology/page/6/">6</a><a class="page-number" href="/technology/page/7/">7</a></div>
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/09/09/%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      二级指针和函数指针
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/C/" class="post-tag">#C</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\03\传入参数和传出参数\" title="传入参数和传出参数" rel="bookmark">传入参数和传出参数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -478,6 +396,21 @@
       <script>searchInitialize("/search.json")</script>
     
     
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
   
 
   </body>

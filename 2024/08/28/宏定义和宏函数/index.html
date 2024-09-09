@@ -198,6 +198,10 @@
 <p>如果左括号没有紧靠宏函数，会如何？这其实很容易被人忽视，还是先看看现象：</p>
 <p><img src="/images/2024/08/28/5ee7f340-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数3.png"></p>
 <p>没错，如果你左括号没有紧靠宏函数，那么这将是宏定义，而非一个宏函数了。</p>
+<p>当然，前面写的宏函数都是一行代码，如果是多行的那种代码，注意分行。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> MAX(a, b) \</span><br><span class="hljs-meta">    (&#123; \</span><br><span class="hljs-meta">        typeof(a) _a = (a); \</span><br><span class="hljs-meta">        typeof(b) _b = (b); \</span><br><span class="hljs-meta">        _a &gt; _b ? _a : _b; \</span><br><span class="hljs-meta">    &#125;)</span><br></code></pre></td></tr></table></figure>
+
+<p>除了最后一行不用添加 <code>\</code>，其余行都要添加。宏的每一行都以反斜杠（<code>\</code>）结尾，以指示宏定义的行继续到下一行。在宏定义的最后一行，反斜杠并不需要，因为没有更多的行继续定义宏。如果在最后一行添加反斜杠，它实际上是多余的，因为宏定义已经结束。</p>
 
       </div>
     </div>
