@@ -171,178 +171,16 @@
   
   <div class="post-card">
     <div class="post__head">
-      <a href="/2024/09/04/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/" class="post-title hover-line">命令模式</a>
+      <a href="/2024/08/05/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E7%9A%84%E5%9C%BA%E6%99%AF/" class="post-title hover-line">虚析构函数的场景</a>
       
     </div>
     <div class="post__body">
       
-      <div class="post-excerpt">命令模式是一种行为设计模式， 它可将请求转换为一个包含与请求相关的所有信息的独立对象。 该转换让你能根据不同的请求将方法参数化、 延迟请求执行或将其放入队列中， 且能实现可撤销操作</div>
+      <div class="post-excerpt">如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？阅读此文，给你解惑</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
-  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C%E7%9A%84%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/" class="post-title hover-line">字符串操作的相关函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">主要是介绍一些惯用法，尽管不一定常用</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E9%87%8F%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E9%87%8F/" class="post-title hover-line">字符串字面量和字符串变量</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">字符串字面量又名字符串常量，即可访问不可修改。字符串变量可访问可修改</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E4%BC%A0%E5%85%A5%E5%8F%82%E6%95%B0%E5%92%8C%E4%BC%A0%E5%87%BA%E5%8F%82%E6%95%B0/" class="post-title hover-line">传入参数和传出参数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">只是让表达更专业</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%E5%92%8C%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F/" class="post-title hover-line">常量指针和指针常量</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">最容易混淆的常量指针和指针常量，但如果你经常写代码，那么常量指针最为常见，即 const 类型* 变量名，对于该变量的数据不能做任何修改。基于此，你就能区分常量指针和指针常量的区别，即常量指针可以修改所指对象，但不能修改所指对象的数据；指针常量可以修改所指对象的数据，但是不能修改所指对象</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/01/Base64-%E5%92%8C-MD5-%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title hover-line">Base64 和 MD5 的使用</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">Base64 虽然可以用于简单的加密，但通常用于传输数据。MD5用于加密数据，尽管它已经不安全</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Qt/" class="post-tag">#Qt</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/01/%E4%BD%8D%E8%BF%90%E7%AE%97/" class="post-title hover-line">位运算</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">位运算在 嵌入式开发中可能常用</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/01/if-%E5%92%8C-switch/" class="post-title hover-line">if 和 switch</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">先谈 if 和 switch 需要注意的问题，然后说一说二者的性能问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/31/%E5%85%B3%E4%BA%8E%E6%95%B0%E7%BB%84/" class="post-title hover-line">关于数组</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">数组就是一片连续的内存空间，并且被划分成大小相等的小空间</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/31/%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" class="post-title hover-line">标准输入输出</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">标准输入输出，即 scanf 和 printf，这两个函数有太多需要注意的地方</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
 
 </div>
     </div>
@@ -350,7 +188,7 @@
 
 
     
-    <div class="paginator"><a class="page-number" href="/technology/">1</a><span class="page-number current">2</span><a class="page-number" href="/technology/page/3/">3</a><a class="page-number" href="/technology/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/8/">8</a></div>
+    <div class="paginator"><a class="page-number" href="/technology/">1</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/6/">6</a><a class="page-number" href="/technology/page/7/">7</a><span class="page-number current">8</span></div>
   </div>
 
     </div>
