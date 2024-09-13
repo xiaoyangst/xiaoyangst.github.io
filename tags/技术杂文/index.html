@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        CPP 中 cctype 库的常用方法 | 搁浅的羊先生
+        技术杂文 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -62,8 +62,9 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+  <link rel="stylesheet"
+        type="text/css"
+        href="/css/category.css" />
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -153,133 +154,46 @@
     </div>
     <div class="body">
       
-  <article class="post-content">
-    <div class="post-inner">
-      <div class="post-content__head">
-        <div class="post-title">CPP 中 cctype 库的常用方法</div>
-        <div class="post-info">
-          
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-
-          <span class="post-date">2024-08-08</span>
-        </div>
-      </div>
+  <div class="tag-page-title">#技术杂文</div>
+  <div class="post-list">
+    
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/09/11/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AD%90%E7%B1%BB%E9%9C%80%E8%A6%81%E8%B0%83%E7%94%A8%E7%88%B6%E7%B1%BB%E7%9A%84%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0-%EF%BC%9F/" class="post-title hover-line">为什么子类需要调用父类的构造函数 ？</a>
       
-      <div class="post-content__body">
-        
-          <div class="post-gallery">
-            
-          </div>
-        
-        <p><code>std::isalpha</code>: 判断是否为字母</p>
-<p><code>std::isdigit</code>: 判断是否为数字</p>
-<p><code>std::isalnum</code>: 判断是否为字母或数字</p>
-<p><code>std::iscntrl</code>: 判断是否为控制字符</p>
-<p><code>std::isgraph</code>: 判断是否为除空格外的可打印字符</p>
-<p><code>std::islower</code>: 判断是否为小写字母</p>
-<p><code>std::isupper</code>: 判断是否为大写字母</p>
-<p><code>std::isprint</code>: 判断是否为可打印字符（包括空格）</p>
-<p><code>std::ispunct</code>: 判断是否为标点符号</p>
-<p><code>std::isspace</code>: 判断是否为空白字符（如空格、换行、制表符等）</p>
-<p><code>std::isxdigit</code>: 判断是否为十六进制数字</p>
-<p>如上这些方法是用来判断是否为某种字符的，如果是返回true，如果不是返回false</p>
-<p>通常我们在处理哪种需要判断给定的字符串中有多少数字、多少字母等会非常好用</p>
-<p>下面再介绍此头文件中的另外两个方法，即大小写字母转换</p>
-<p><code>std::tolower</code>：转换为小写</p>
-<p><code>std::toupper</code>：转换为大写</p>
-
-      </div>
     </div>
-    
-      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
-      <script>
-        if (window.mermaid) {
-          mermaid.initialize({"startOnload":true});
-        }
-      </script>
-    
-  </article>
-  <div class="post__foot">
-    
-      <div class="like-author">
-  <input type="checkbox" id="likeCode" />
-  <div class="author-face">
-    <img height="100px"
-         width="100px"
-         id="front-face"
-         alt="author face"
-         src="/images/logo.png" />
-    <img height="100px"
-         width="100px"
-         id="back-face"
-         alt="like code"
-         src="/images/pay.jpg" />
+    <div class="post__body">
+      
+      <div class="post-excerpt">因为长时间没有写过继承相关的代码，竟然忘记子类需要给父类初始化成员，即调用父类的构造函数初始化继承过来的成员变量</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a>
+
+</div>
+    </div>
   </div>
-  <div class="like-text">“给作者倒杯卡布奇诺”</div>
-  <label for="likeCode" class="like-btn">
-    <svg viewBox="0 0 1024 1024"
-         width="20px"
-         style="margin-right: 10px"
-         height="20px">
-      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
-    </svg>
-    喜欢作者
-  </label>
-</div>
 
-    
-    <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/08/09/8-%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%95%B4%E6%95%B0-atoi/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>8. 字符串转换整数 (atoi)</div>
-    </a>
-  
-  <div class="vhr"></div>
-  
-    <a class="post-nav-item-right" href="/2024/08/08/66-%E5%8A%A0%E4%B8%80/">
-      <div class="text-align">
-        <span class="text-small">下一篇</span>
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             transform="scale(-1,-1)"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-      </div>
-      66.加一
-    </a>
-  
-</div>
-
-    
-      <div class="related-post">
-  <div class="related__head">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/09/11/call-once-%E5%92%8C-once-flag/" class="post-title hover-line">call_once 和 once_flag</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">std::call_once 和 std::once_flag 是 C++11 中引入的线程安全的函数和类型，用于确保某个函数只被调用一次</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a>
 
 </div>
-  <div class="realated__body">
-    
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\05\模板元编程的意义\" title="模板元编程的意义" rel="bookmark">模板元编程的意义</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\虚析构函数的场景\" title="虚析构函数的场景" rel="bookmark">虚析构函数的场景</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\Lambda-表达式\" title="Lambda 表达式" rel="bookmark">Lambda 表达式</a></div></div></div>
-    
+    </div>
   </div>
-</div>
 
-    
-    
-      <div id="gitalk-container"></div>
+
     
   </div>
 
@@ -408,22 +322,6 @@
       <script>searchInitialize("/search.json")</script>
     
     
-  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
-<script src="https://priesttomb.github.io/js/md5.min.js"></script>
-<script type="text/javascript">
-    new Gitalk({
-        clientID: 'Ov23li5i2L2uV71Fu3Br',
-        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
-        repo: 'comment',
-        owner: 'xiaoyangst',
-        admin: 'xiaoyangst',
-        id: md5(location.pathname),
-        distractionFreeMode: true
-    }).render('gitalk-container')
-</script>
-
-  
-
+    
   </body>
 </html>

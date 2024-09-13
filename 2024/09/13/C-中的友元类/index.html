@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        CPP 中 cctype 库的常用方法 | 搁浅的羊先生
+        C++中的友元类 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -156,13 +156,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">CPP 中 cctype 库的常用方法</div>
+        <div class="post-title">C++中的友元类</div>
         <div class="post-info">
           
   <a href="/tags/CPP/" class="post-tag">#CPP</a>
 
 
-          <span class="post-date">2024-08-08</span>
+          <span class="post-date">2024-09-13</span>
         </div>
       </div>
       
@@ -172,22 +172,29 @@
             
           </div>
         
-        <p><code>std::isalpha</code>: 判断是否为字母</p>
-<p><code>std::isdigit</code>: 判断是否为数字</p>
-<p><code>std::isalnum</code>: 判断是否为字母或数字</p>
-<p><code>std::iscntrl</code>: 判断是否为控制字符</p>
-<p><code>std::isgraph</code>: 判断是否为除空格外的可打印字符</p>
-<p><code>std::islower</code>: 判断是否为小写字母</p>
-<p><code>std::isupper</code>: 判断是否为大写字母</p>
-<p><code>std::isprint</code>: 判断是否为可打印字符（包括空格）</p>
-<p><code>std::ispunct</code>: 判断是否为标点符号</p>
-<p><code>std::isspace</code>: 判断是否为空白字符（如空格、换行、制表符等）</p>
-<p><code>std::isxdigit</code>: 判断是否为十六进制数字</p>
-<p>如上这些方法是用来判断是否为某种字符的，如果是返回true，如果不是返回false</p>
-<p>通常我们在处理哪种需要判断给定的字符串中有多少数字、多少字母等会非常好用</p>
-<p>下面再介绍此头文件中的另外两个方法，即大小写字母转换</p>
-<p><code>std::tolower</code>：转换为小写</p>
-<p><code>std::toupper</code>：转换为大写</p>
+        <p>早之前很少用友元类，直到最近跟某个博主写 Asio 网络库，跟着用到友元类，但是今天却遇到一个问题，通过查询得到解决，特记录于此。不过，在此之前，还是把友元类的基础知识做个记录。</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>友元可以是一个函数，该函数被称为友元函数。</p>
+<p>类的友元函数是定义在类外部，但有权访问类的所有私有（private）成员和保护（protected）成员。尽管友元函数的原型有在类的定义中出现过，但是友元函数并不是成员函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Box</span><br>&#123;<br>   <span class="hljs-type">double</span> width;<br><span class="hljs-keyword">public</span>:<br>   <span class="hljs-type">double</span> length;<br>   <span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-type">void</span> <span class="hljs-title">printWidth</span><span class="hljs-params">( Box box )</span></span>;	<span class="hljs-comment">// 友元函数</span><br>   <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setWidth</span><span class="hljs-params">( <span class="hljs-type">double</span> wid )</span></span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>友元也可以是一个类，该类被称为友元类，在这种情况下，整个类及其所有成员都是友元。</p>
+<p>下面声明 Session 类 是 MsgNode 类的友元类，意味着 Session 类可以访问 MsgNode 类 中所有的成员变量和成员函数（public、protected、private）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MsgNode</span><br>&#123;<br>	<span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Session</span>;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">MsgNode</span>(<span class="hljs-type">short</span> max_len);	<br>	~<span class="hljs-built_in">MsgNode</span>();<br><span class="hljs-keyword">protected</span>:<br>	<span class="hljs-type">char</span>* data_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><p>友元并不属于这个类本身，无论是友元函数还是友元类。都不能使用类内的this指针，同时也不可以被继承，如同父亲的朋友不一定是儿子的朋友这个道理。</p>
+<ul>
+<li>友元关系不能被继承</li>
+<li>友元关系是单向的，不具有交换性。若类B是类A的友元，类A不一定是类B的友元，要看在类中是否有相应的声明</li>
+<li>友元关系不具有传递性。若类B是类A的友元，类C是B的友元，类C不一定是类A的友元，同样要看类中是否有相应的申明</li>
+</ul>
+<h2 id="遇到的问题：不可访问友元类的继承的私有成员"><a href="#遇到的问题：不可访问友元类的继承的私有成员" class="headerlink" title="遇到的问题：不可访问友元类的继承的私有成员"></a>遇到的问题：不可访问友元类的继承的私有成员</h2><p>我要先把类的继承关系罗列出来，才能讲这里的问题：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MsgNode</span><br>&#123;<br>	<span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LogicNode</span>;<br>	<span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LogicSystem</span>;<br>	<span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RecvNode</span>;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">MsgNode</span>(<span class="hljs-type">short</span> max_len);	<br>	~<span class="hljs-built_in">MsgNode</span>();<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>;	<span class="hljs-comment">// 清空数据，避免多次构造节点带来的开销</span><br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-type">char</span>* data_;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">RecvNode</span> : <span class="hljs-keyword">public</span> MsgNode &#123;	<span class="hljs-comment">// 接收节点</span><br>	<span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LogicNode</span>;<br>	<span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LogicSystem</span>;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">RecvNode</span>(<span class="hljs-type">short</span> max_len, <span class="hljs-type">short</span> msgID);<br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-type">short</span> msgID_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>RecvNode 类 基础自 MsgNode 类，即有部分成员变量来源于它。我在 LogicSystem 类中要去访问 RecvNode 类 中的成员函数，就在 RecvNode 类中把 LogicSystem 声明为 友元，成功访问到 msgID_ 成员函数，但是却不能访问 data_ 成员。</p>
+<p>截止，我们提出这个问题：子类从父类继承的成员变量，是属于子类呢还是属于父类呢？</p>
+<p>因此可以看出，<strong>父类中的所有变量都被子类给继承了下来，都属于子类的一部分。</strong>虽然父类中 <code>private</code> 访问权限的成员不能被子类访问，但是仍然属于子类的一部分。同理，在子类继承父类时，除了继承父类中所有的成员变量，也同时继承了除了父类构造函数外的所有成员函数，这样便可以有效节省代码量，提高代码复用效率。</p>
+<p>哦，我们知道了！！！父类中 private 访问权限下的成员不能被子类访问，哪怕它属于子类的一部分。那么子类 RecvNode  都不能访问到父类 MsgNode，凭什么你 友元类 LogicSystem 就可以呢？显然 LogicSystem 类也不可以访问。</p>
+<p>该怎么做 ？让子类 RecvNode  能访问到父类 MsgNode即可，所以修改父类 MsgNode 的 private 下的成员变量为 protected 即可。你当然也可以修改为 public，那我设置友元类干什么？</p>
 
       </div>
     </div>
@@ -231,23 +238,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/08/09/8-%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%95%B4%E6%95%B0-atoi/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>8. 字符串转换整数 (atoi)</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/08/08/66-%E5%8A%A0%E4%B8%80/">
+    <a class="post-nav-item-right" href="/2024/09/11/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AD%90%E7%B1%BB%E9%9C%80%E8%A6%81%E8%B0%83%E7%94%A8%E7%88%B6%E7%B1%BB%E7%9A%84%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0-%EF%BC%9F/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -259,7 +254,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      66.加一
+      为什么子类需要调用父类的构造函数 ？
     </a>
   
 </div>
@@ -272,7 +267,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\05\模板元编程的意义\" title="模板元编程的意义" rel="bookmark">模板元编程的意义</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\虚析构函数的场景\" title="虚析构函数的场景" rel="bookmark">虚析构函数的场景</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\Lambda-表达式\" title="Lambda 表达式" rel="bookmark">Lambda 表达式</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\模板元编程的意义\" title="模板元编程的意义" rel="bookmark">模板元编程的意义</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\虚析构函数的场景\" title="虚析构函数的场景" rel="bookmark">虚析构函数的场景</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\Lambda-表达式\" title="Lambda 表达式" rel="bookmark">Lambda 表达式</a></div></div></div>
     
   </div>
 </div>
