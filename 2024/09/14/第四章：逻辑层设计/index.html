@@ -194,6 +194,8 @@
 <p>LgicSystem 类就是和网络库进行分离的，即网络和计算工作进行分离。在网络阶段解析到 用户数据包中的 ID字段之后，就加入到 LgicSystem 提供的队列中，LgicSystem 这边会自动唤醒工作线程来执行任务函数（ID 和 回调函数以 key-value 存在 map 容器中，查找方便）。也就是说，之前我们是让网络库来执行和用户交互的工作，但是现在网络库就是来处理客户端的连接和客户端发来的消息，至于后续执行客户端需求和回复客户端状态的事情将交给工作线程来做（LgicSystem 中的 dealMsg成员函数），实现网络和计算工作的解耦合。</p>
 <p><img src="/images/2024/09/14/062c6d30-7236-11ef-95c5-9b77976d41aa.png" alt="逻辑层设计完成.png"></p>
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/9-%E9%80%BB%E8%BE%91%E5%B1%82%E8%AE%BE%E8%AE%A1%E5%AE%8C%E6%88%90">逻辑层设计完成</a></p>
+<hr>
+<p>⭐️内容取自 B 站 UP 恋恋风辰和 mmoaay 的《Boost.Asio C++ 网络编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议看原视频或者读原书。</p>
 
       </div>
     </div>
