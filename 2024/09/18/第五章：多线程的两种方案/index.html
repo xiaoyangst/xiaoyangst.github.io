@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        第四章：逻辑层设计 | 搁浅的羊先生
+        第五章：多线程的两种方案 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -156,13 +156,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">第四章：逻辑层设计</div>
+        <div class="post-title">第五章：多线程的两种方案</div>
         <div class="post-info">
           
   <a href="/tags/Asio/" class="post-tag">#Asio</a>
 
 
-          <span class="post-date">2024-09-14</span>
+          <span class="post-date">2024-09-18</span>
         </div>
       </div>
       
@@ -172,28 +172,48 @@
             
           </div>
         
-        <h2 id="消息头完善"><a href="#消息头完善" class="headerlink" title="消息头完善"></a>消息头完善</h2><p>早前我们的数据包设计为 头部+数据，但是要进行逻辑处理，就需要传递一个 id 字段表示要处理的消息 id，当然可以不在包头传 id 字段，将 id 序列化到消息体也是可以的，但是我们为了便于处理也便于回调逻辑层对应的函数，最好是将 id 写入包头。</p>
-<p><img src="/images/2024/09/14/19a4b5c0-7236-11ef-95c5-9b77976d41aa.png" alt="新的消息体.png"></p>
-<p>基于之前的 MsgNode 再设计两个节点类，即 RecvNode 和 SendNode，前者表示接收消息的节点，后者表示发送消息的节点。就不新建类来定义，直接再 MsgNode 类文件中一起实现了。随之，我们的 Session 类也要有所改动。</p>
-<p>上一章的末尾讲到把传递的实体数据序列化，那就在这节把传递数据序列化的代码完成。同时，本次代码还进行一收一发的过程，如果你要测试是否存在粘包，只需要把客户端代码中的收数据过程注释掉进行测试即可，如果你想测试客户端和服务端通信的收发过程没有问题，再将注释关闭即可。</p>
-<p><img src="/images/2024/09/14/16324b50-7236-11ef-95c5-9b77976d41aa.png" alt="加入序列化和完善MsgNode.png"></p>
-<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/8-%E5%8A%A0%E5%85%A5%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%AE%8C%E5%96%84MsgNode">加入序列化和完善MsgNode</a></p>
-<h2 id="优雅退出"><a href="#优雅退出" class="headerlink" title="优雅退出"></a>优雅退出</h2><p>让服务器优化退出可以采用信号的方式，如果你是在 Linux 系统中，你可以在主线程设置监听某个信号，如果有对应的信号产生，就执行事先设置好的回调函数。</p>
-<p>asio 也提供有这样的方式，在主函数中添加如下代码即可：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        boost::asio::io_context  io_context;<br>        boost::<span class="hljs-function">asio::signal_set <span class="hljs-title">signals</span><span class="hljs-params">(io_context, SIGINT, SIGTERM)</span></span>;<br>        signals.<span class="hljs-built_in">async_wait</span>([&amp;io_context](<span class="hljs-keyword">auto</span>, <span class="hljs-keyword">auto</span>) &#123;<br>            io_context.<span class="hljs-built_in">stop</span>();<br>            &#125;);<br>        <span class="hljs-function">CServer <span class="hljs-title">s</span><span class="hljs-params">(io_context, <span class="hljs-number">10086</span>)</span></span>;<br>        io_context.<span class="hljs-built_in">run</span>();<br>    &#125;<br>    <span class="hljs-built_in">catch</span> (std::exception&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+        <h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>我们将介绍两种模式：</p>
+<ul>
+<li>IOServicePool –&gt; 启动多个线程，每个线程管理一个 io_context</li>
+<li>IOThreadPool –&gt; 只启动一个 io_context，被多个线程共享</li>
+</ul>
+<h3 id="IOServicePool"><a href="#IOServicePool" class="headerlink" title="IOServicePool"></a>IOServicePool</h3><p>早前的单线程模式中，我们的主线程不仅要监听客户端的连接，同时还要继续监听该客户端后续的读写事件。尽管我们已经把客户端需要的服务交互给工作线程，达到网络和计算工作的解耦，但是在接下来的多线程中，还可以继续解耦。即让主线程继续监听客户端的连接，但是后续这些连接的读写事件讲交给其他的线程处理。</p>
+<p><img src="/images/2024/09/18/274f5ec0-75b8-11ef-9cea-e757e7343ac6.png" alt="IOServicePool.png"></p>
+<ol>
+<li>每一个 io_context 跑在不同的线程里，所以同一个 socket 会被注册在同一个 io_context 里，它的回调函数也会被单独的一个线程回调，那么对于同一个 socket，他的回调函数每次触发都是在同一个线程里，就不会有线程安全问题，网络 IO 层面上的并发是线程安全的</li>
+<li>对于不同的 socket，回调函数的触发可能是同一个线程（两个 socket 被分配到同一个 io_context），也可能不是同一个线程（两个socket被分配到不同的io_context里）。所以如果两个 socket 对应的上层逻辑处理，如果有交互或者访问共享区，会存在线程安全问题。比如 socket1 代表玩家 1，socket2 代表玩家 2，玩家 1 和玩家 2 在逻辑层存在交互，比如两个玩家都在做工会任务，他们属于同一个工会，工会积分的增加就是共享区的数据，需要保证线程安全。可以通过加锁或者逻辑队列的方式解决安全问题，我们目前采取了后者</li>
+</ol>
+<p>这里面有个内容值得一提，即 <code>boost::asio::io_context::work</code> 。我们调用 <code>boost::asio::io_context</code> 的 run 方法之后进入 事件循环。根据官方文档, 在已经启动 <code>io_context::run()</code> 的情况下, 如果此时没有了 IO 操作, 那么 <code>io_context</code> 会自动取消事件循环, 那么此时如果再有异步 IO 回调, 也不会发生作用了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">boost::asio::io_context::<span class="hljs-built_in">work</span>(boost::asio::io_context &amp; io_context);<br></code></pre></td></tr></table></figure>
 
-<p>从代码中可以看出， boost::asio::signal_set 定义一个变量，第一个参数是 io_context，表示由它监听接下来要设置的信号。后面的参数就是要监听的信号，然后 async_wait 异步等待信号的发送，如果有等待的信号产生，就执行 回调函数。这里的回调函数是匿名函数，这样方便传递外部的变量，至于这里为什么是(auto, auto)，是因为这里的 async_wait 里面的回调函数本身是要两个参数的。这两个参数见下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">signals.<span class="hljs-built_in">async_wait</span>([&amp;io_context](<span class="hljs-keyword">auto</span> error, <span class="hljs-keyword">auto</span> signal_number) &#123;<br>    io_context.<span class="hljs-built_in">stop</span>();<br>&#125;);<br></code></pre></td></tr></table></figure>
+<p>但是有些情况下, 我们希望 <code>run()</code> 函数的事件循环在没有 IO 事件的情况下, 也不会退出事件循环, 而是一直等待, 当有了新的异步 IO 调用的时候, 还可以继续使用该循环。<code>io_context::work</code> 就可以办到，就是防止 <code>io_context</code> 在没有 IO 的情况下依旧能够运行。直到你调用 它的 reset 方法销毁 work 对象才会停止发挥作用。</p>
+<p>用法也相当简单，只需要把对应 io_context 传递给 work 作为参数，就代表让 该 work 管理了。</p>
+<p>比方说我们的核心代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">for</span> (std::<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; size; i++) &#123;<br>	workVec_[i] = std::<span class="hljs-built_in">unique_ptr</span>&lt;Work&gt;(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Work</span>(ioServiceVec_[i]));<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>但由于我们暂时不用这两个变量，也就没有写明（反正《恋恋风尘》是这么写的，我只是说清楚）。</p>
-<p>下面是一些其他的 API，可以了解看看。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">signal_set</span>(io_context): 构造函数，接受一个 io_context 对象来处理异步操作<br>    <br><span class="hljs-built_in">add</span>(<span class="hljs-type">int</span> signal_number): 向信号集添加要监听的信号<br>    <br><span class="hljs-built_in">remove</span>(<span class="hljs-type">int</span> signal_number): 从信号集中移除指定信号<br>    <br><span class="hljs-built_in">clear</span>(): 清除所有已注册的信号<br>    <br><span class="hljs-built_in">async_wait</span>(handler): 异步等待信号的触发，当信号被捕获时调用指定的处理程序<br></code></pre></td></tr></table></figure>
+<p>有新连接到来就会轮询分配 IOService。</p>
+<p><img src="/images/2024/09/18/1ed80300-75b8-11ef-9cea-e757e7343ac6.png" alt="IOSerTest.png"></p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/10-%E5%A2%9E%E5%8A%A0IOServicePool">增加IOServicePool</a></p>
+<h3 id="IOThreadPool"><a href="#IOThreadPool" class="headerlink" title="IOThreadPool"></a>IOThreadPool</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++">AsioIOServicePool::<span class="hljs-built_in">AsioIOServicePool</span>(std::<span class="hljs-type">size_t</span> size)<br>	:<span class="hljs-built_in">threadVec_</span>(size),<span class="hljs-built_in">nextIOService_</span>(<span class="hljs-number">0</span>),<span class="hljs-built_in">size_</span>(size)<br>	,<span class="hljs-built_in">work_</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Work</span>(ioService_))<br>&#123;<br>	<span class="hljs-comment">// 一个 线程上 启动同一个 ioService</span><br>	<span class="hljs-keyword">for</span> (std::<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; size; i++) &#123;<br>		threadVec_.<span class="hljs-built_in">emplace_back</span>([<span class="hljs-keyword">this</span>]() &#123;<br>			ioService_.<span class="hljs-built_in">run</span>();<br>			&#125;);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="LogicSystem单例类"><a href="#LogicSystem单例类" class="headerlink" title="LogicSystem单例类"></a>LogicSystem单例类</h2><p>单例类的实现可见此文：<a href="https://xiaoyangst.github.io/2024/09/11/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">单例模式</a></p>
-<p>我们的消息格式已经重新设计，这个新增的 ID 字段究竟代表着什么？客户端通过 ID 来表明自己需要的服务。简单举例，服务器现在是一个聊天服务器，客户端就谈过 ID 来表达自己的功能需求。传递 ID &#x3D; 1 表明需要注册用户，其账号和密码就包含在消息体中，服务器通过解析 JSON 数据就可以拿出并把数据存储注册信息的数据库中，同时返回 ID &#x3D; 10，表示注册成功。客户端接收到这个信息之后，也就知道自己已经注册成功了。</p>
-<p>LgicSystem 类就是和网络库进行分离的，即网络和计算工作进行分离。在网络阶段解析到 用户数据包中的 ID字段之后，就加入到 LgicSystem 提供的队列中，LgicSystem 这边会自动唤醒工作线程来执行任务函数（ID 和 回调函数以 key-value 存在 map 容器中，查找方便）。也就是说，之前我们是让网络库来执行和用户交互的工作，但是现在网络库就是来处理客户端的连接和客户端发来的消息，至于后续执行客户端需求和回复客户端状态的事情将交给工作线程来做（LgicSystem 中的 dealMsg成员函数），实现网络和计算工作的解耦合。</p>
-<p><img src="/images/2024/09/14/062c6d30-7236-11ef-95c5-9b77976d41aa.png" alt="逻辑层设计完成.png"></p>
-<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/9-%E9%80%BB%E8%BE%91%E5%B1%82%E8%AE%BE%E8%AE%A1%E5%AE%8C%E6%88%90">逻辑层设计完成</a></p>
+<p>我们的代码不是基于前一个多线程代码来修改的，而是基于上一章的 LogicalDesign。</p>
+<p>我首先疑惑的是为什么多个线程可以多次启动 io_context，这当然是不了解 Asio 底层原理所致，也打算在第七章或者终章记录任何有关 Asio 库的相关问题。</p>
+<p><code>boost::asio::io_context</code> 是设计为线程安全的，并支持多个线程并发调用其 <code>run()</code> 方法。这是通过内部同步机制实现的，确保同一时刻只有一个线程处理某个具体任务，但多个线程可以同时调度任务。</p>
+<p>如下图所示，每个线程内部已经调用 run 方法，它是一个阻塞调用，直到所有挂起的异步操作都完成或被显式地停止。在处理完所有操作后，它会返回。但是我没已经用 work 帮我们让它始终不会停止，除非我们手动 reset。run 之后会开始处理所有已注册的异步操作，那么多线程都等待者异步事件到来，即等待被分配任务队列，然后去执行回调函数。</p>
+<p><img src="/images/2024/09/18/10f700b0-75b8-11ef-9cea-e757e7343ac6.png" alt="IOThreadPool1.png"></p>
+<p>即便如此，还是存在一个隐患，即同一个 Socket 的多个事件被分配到多个线程中（每个线程只得到一个事件，即回调函数），那么同一个 Socket 是共享数据区域的，那么多个线程同时对这块区域进行操作就会有问题了。比如第一次是在线程 A，第二次是在线程 C，如果这两次触发间隔时间不大，那么很可能出现不同线程并发访问数据的情况，比如在处理读事件时，第一次回调触发后我们从 Socket 的接收缓冲区读数据出来，第二次回调触发,还是从 Socket 的接收缓冲区读数据，就会造成两个线程同时从 Socket 中读数据的情况，会造成数据混乱。</p>
+<p><img src="/images/2024/09/18/0d855990-75b8-11ef-9cea-e757e7343ac6.png" alt="IOThreadPool2.png"></p>
+<p>如果需要多个线程访问共享资源，你可以使用 <code>boost::asio::strand</code> 来串行化这些任务，确保某些任务只能由一个线程排他性地处理。<code>strand</code> 的目的是保证一系列操作是按照顺序执行的，即使它们分布在不同的线程中。</p>
+<p><img src="/images/2024/09/18/09a5d570-75b8-11ef-9cea-e757e7343ac6.png" alt="IOThreadPool3.png"></p>
+<p><strong>创建 strand 对象</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++">boost::asio::io_context io_context;<br>boost::<span class="hljs-function">asio::strand&lt;boost::asio::io_context::executor_type&gt; <span class="hljs-title">strand</span><span class="hljs-params">(io_context.get_executor())</span></span>;<br><br><span class="hljs-comment">//这里 strand 是一个串行化的执行器，它绑定到 io_context 的执行器上</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>boost::asio::bind_executor：将执行器与回调函数完全绑定在一起</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 没有绑定 strand 之前</span><br>	<span class="hljs-keyword">auto</span>&amp; msgnode = sendQue_.<span class="hljs-built_in">front</span>();<br>	socket_.<span class="hljs-built_in">async_write_some</span>(boost::asio::<span class="hljs-built_in">buffer</span>(msgnode-&gt;data_, msgnode-&gt;total_len_),<br>		std::<span class="hljs-built_in">bind</span>(&amp;Session::handle_write, <span class="hljs-built_in">shared_from_this</span>(), std::placeholders::_1));<br><br><span class="hljs-comment">// 绑定 strand 之后</span><br>	<span class="hljs-keyword">auto</span>&amp; msgnode = sendQue_.<span class="hljs-built_in">front</span>();<br>	socket_.<span class="hljs-built_in">async_write_some</span>(boost::asio::<span class="hljs-built_in">buffer</span>(msgnode-&gt;data_, msgnode-&gt;total_len_),<br>		boost::asio::<span class="hljs-built_in">bind_executor</span>(strand_,std::<span class="hljs-built_in">bind</span>(&amp;Session::handle_write, <span class="hljs-built_in">shared_from_this</span>(), std::placeholders::_1)));<br></code></pre></td></tr></table></figure>
+
+<p>绑定 strand 之后，绑定的函数就会有 strand 来调用，就不会有前面讲的并发安全问题。我们需要在所有收发的地方，都将调度器绑定为<code>strand_</code>，这边是集中在 Session类 中。Server类 中尽管也有，但是它是工作在单线程的，不存在并发问题。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/11-%E5%A2%9E%E5%8A%A0IOThreadPool">增加IOThreadPool</a></p>
+<h3 id="性能比较"><a href="#性能比较" class="headerlink" title="性能比较"></a>性能比较</h3><p>把两端的输入全部移除，压力测试不要有任何输出。我这边 10万并发量 需要 15s （IOThreadPool 和 IOSerivcePool都是一样），这当然取决于你的机器。</p>
 <hr>
 <p>⭐️内容取自 B 站 UP 恋恋风辰和 mmoaay 的《Boost.Asio C++ 网络编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议看原视频或者读原书。</p>
 
@@ -239,23 +259,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/09/14/Vim%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>Vim基础教程</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/09/13/C-%E4%B8%AD%E7%9A%84%E5%8F%8B%E5%85%83%E7%B1%BB/">
+    <a class="post-nav-item-right" href="/2024/09/14/Vim%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -267,7 +275,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      C++中的友元类
+      Vim基础教程
     </a>
   
 </div>
