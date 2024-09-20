@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        C | 搁浅的羊先生
+        命令行参数 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -62,9 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet"
-        type="text/css"
-        href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -154,191 +153,120 @@
     </div>
     <div class="body">
       
-  <div class="tag-page-title">#C</div>
-  <div class="post-list">
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">命令行参数</div>
+        <div class="post-info">
+          
+  <a href="/tags/C/" class="post-tag">#C</a>
+
+
+          <span class="post-date">2024-09-20</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc,<span class="hljs-type">char</span>* argv[])</span>;<br></code></pre></td></tr></table></figure>
+
+<p>argc 代表参数的个数。</p>
+<p>argv 是个字符串数组，用以存储用户的输入的参数（默认第一个参数是程序本身的名称）。</p>
+<p>我重点要讲的是如何把获取的参数转换为实际的类型，哪怕你写的是整数参数，也会是字符串类型。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sscanf</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *str, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *format, ...)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>从字符串中读取数据，并将其转换为指定的格式。常见转换格式：</p>
+<ul>
+<li><code>%d</code>：将字符串转换为整数（<code>int</code>）。</li>
+<li><code>%f</code>：将字符串转换为浮点数（<code>float</code>）。</li>
+<li><code>%lf</code>：将字符串转换为双精度浮点数（<code>double</code>）。</li>
+<li><code>%c</code>：将字符串的第一个字符转换为 <code>char</code>。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> num;<br><span class="hljs-comment">// 将命令行参数 argv[1] 转换为整数</span><br><span class="hljs-keyword">if</span> (<span class="hljs-built_in">sscanf</span>(argv[<span class="hljs-number">1</span>], <span class="hljs-string">&quot;%d&quot;</span>, &amp;num) == <span class="hljs-number">1</span>) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;You entered the number: %d\n&quot;</span>, num);<br>&#125;<br></code></pre></td></tr></table></figure>
+      </div>
+    </div>
     
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0/" class="post-title hover-line">命令行参数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">重点是把命令行参数转换为实际的类型</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/09/20/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      文件操作
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
   <a href="/tags/C/" class="post-tag">#C</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\03\传入参数和传出参数\" title="传入参数和传出参数" rel="bookmark">传入参数和传出参数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div></div>
+    
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" class="post-title hover-line">文件操作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">C 语言的文件操作，提供的示例都是常用的操作，以便查询</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
 </div>
-    </div>
-  </div>
 
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/09/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84/" class="post-title hover-line">字符串数组</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果解决空间来存储字符串，通过存储字符串的指针</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/09/%E6%8C%87%E9%92%88%E5%9F%BA%E7%A1%80/" class="post-title hover-line">指针基础</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">讲清楚指针的一些概念，避免影响后续对指针的应用</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/09/%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88%E5%92%8C%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/" class="post-title hover-line">二级指针和函数指针</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这里值得一提的是二级指针，如果你是第一次接触，一定会被绕晕。我们究竟什么时候传递一级指针，什么时候传递二级指针，这是一个非常重要的问题。修改指向对象的值传递一级指针，修改指向对象传递二级指针</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/05/%E7%BB%93%E6%9E%84%E4%BD%93/" class="post-title hover-line">结构体</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">没必要去搞清楚哪里花里胡哨的声明方式，用那些常用的即可</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C%E7%9A%84%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/" class="post-title hover-line">字符串操作的相关函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">主要是介绍一些惯用法，尽管不一定常用</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E9%87%8F%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E9%87%8F/" class="post-title hover-line">字符串字面量和字符串变量</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">字符串字面量又名字符串常量，即可访问不可修改。字符串变量可访问可修改</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E4%BC%A0%E5%85%A5%E5%8F%82%E6%95%B0%E5%92%8C%E4%BC%A0%E5%87%BA%E5%8F%82%E6%95%B0/" class="post-title hover-line">传入参数和传出参数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">只是让表达更专业</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%E5%92%8C%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F/" class="post-title hover-line">常量指针和指针常量</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">最容易混淆的常量指针和指针常量，但如果你经常写代码，那么常量指针最为常见，即 const 类型* 变量名，对于该变量的数据不能做任何修改。基于此，你就能区分常量指针和指针常量的区别，即常量指针可以修改所指对象，但不能修改所指对象的数据；指针常量可以修改所指对象的数据，但是不能修改所指对象</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/tags/C/page/2/">2</a><a class="page-number" href="/tags/C/page/3/">3</a></div>
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -466,6 +394,22 @@
       <script>searchInitialize("/search.json")</script>
     
     
-    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
+  
+
   </body>
 </html>
