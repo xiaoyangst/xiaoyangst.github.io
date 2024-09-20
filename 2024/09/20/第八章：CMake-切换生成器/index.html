@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        第五章：CMake 添加第三方依赖库 | 搁浅的羊先生
+        第八章：CMake 切换生成器 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -156,7 +156,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">第五章：CMake 添加第三方依赖库</div>
+        <div class="post-title">第八章：CMake 切换生成器</div>
         <div class="post-info">
           
   <a href="/tags/CMake/" class="post-tag">#CMake</a>
@@ -172,50 +172,15 @@
             
           </div>
         
-        <p>为什么要单独讲这个？我在导入第三方依赖库时遇到很多曲折，且不说那些没有被 CMake 管理的第三方库。综合考虑选择编译安装 OpenCV，因为它本身还依赖其它第三方库，特别适合做为本节内容演示。</p>
-<p>现在你已经下载并解压 OpenCV 的源码，进入文件夹之后你会看到根 CMakeLists.txt 文件。</p>
-<p>打开你的 cmake-gui 程序：</p>
-<ol>
-<li>点击右侧 Browse Source 指定源文件路径，即根CMakeLists.txt文件存在的路径</li>
-<li>点击右侧 Browse Build 指定 build 输出路径，可以自行创建或者 cmake-gui 帮我们自动创建</li>
-<li>点击左下角 Configure，会让你选择编译的环境</li>
-</ol>
-<p><img src="/images/2024/09/20/cfc0f780-7725-11ef-bb33-ad22fef3cf2e.png" alt="cmakegui.png"></p>
-<p>接下来就关注图中的红色区域的内容，这些都是参数，通常我们需要配置的参数是安装路径 CMAKE_INSTALL_PREFIX。</p>
-<p><img src="/images/2024/09/20/d35a23d0-7725-11ef-bb33-ad22fef3cf2e.png" alt="安装路径.png"></p>
-<p>设置好对应的参数之后，再次点击 Configure 对设置的参数进行更新，没有出错之后（会出错，这个后面单独拎出来谈）点击 Generate 即可。</p>
-<p>退出 cmake-gui 程序，我们来到终端（ OpenCV 源码的 build 目录下，这个 build 文件夹前面我们就创建的，即 Browse Build 指定 build 输出路径），通过命令继续编译。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">mingw32-make -j6<br>    <br>mingw32-make install<br></code></pre></td></tr></table></figure>
+        <p>如果你在 Windows 系统上，默认采用 Visual Studio 中的某个版本作为生成器。</p>
+<p>如果你希望指定 其它生成器，我们先来看看CMake支持哪些编译器？</p>
+<p>你输入 <code>cmake --help</code>命令，会有如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><code class="hljs bash">Generators<br><br>The following generators are available on this platform (* marks default):<br>* Visual Studio 17 2022        = Generates Visual Studio 2022 project files.<br>                                 Use -A option to specify architecture.<br>  Visual Studio 16 2019        = Generates Visual Studio 2019 project files.<br>                                 Use -A option to specify architecture.<br>  Visual Studio 15 2017 [<span class="hljs-built_in">arch</span>] = Generates Visual Studio 2017 project files.<br>                                 Optional [<span class="hljs-built_in">arch</span>] can be <span class="hljs-string">&quot;Win64&quot;</span> or <span class="hljs-string">&quot;ARM&quot;</span>.<br>  Visual Studio 14 2015 [<span class="hljs-built_in">arch</span>] = Generates Visual Studio 2015 project files.<br>                                 Optional [<span class="hljs-built_in">arch</span>] can be <span class="hljs-string">&quot;Win64&quot;</span> or <span class="hljs-string">&quot;ARM&quot;</span>.<br>  Visual Studio 12 2013 [<span class="hljs-built_in">arch</span>] = Deprecated.  Generates Visual Studio 2013<br>                                 project files.  Optional [<span class="hljs-built_in">arch</span>] can be<br>                                 <span class="hljs-string">&quot;Win64&quot;</span> or <span class="hljs-string">&quot;ARM&quot;</span>.<br>  Visual Studio 9 2008 [<span class="hljs-built_in">arch</span>]  = Deprecated.  Generates Visual Studio 2008<br>                                 project files.  Optional [<span class="hljs-built_in">arch</span>] can be<br>                                 <span class="hljs-string">&quot;Win64&quot;</span> or <span class="hljs-string">&quot;IA64&quot;</span>.<br>  Borland Makefiles            = Generates Borland makefiles.<br>  NMake Makefiles              = Generates NMake makefiles.<br>  NMake Makefiles JOM          = Generates JOM makefiles.<br>  MSYS Makefiles               = Generates MSYS makefiles.<br>  MinGW Makefiles              = Generates a make file <span class="hljs-keyword">for</span> use with<br>                                 mingw32-make.<br>  Green Hills MULTI            = Generates Green Hills MULTI files<br>                                 (experimental, work-in-progress).<br>  Unix Makefiles               = Generates standard UNIX makefiles.<br>  Ninja                        = Generates build.ninja files.<br>  Ninja Multi-Config           = Generates build-&lt;Config&gt;.ninja files.<br>  Watcom WMake                 = Generates Watcom WMake makefiles.<br>  CodeBlocks - MinGW Makefiles = Generates CodeBlocks project files<br>                                 (deprecated).<br>  CodeBlocks - NMake Makefiles = Generates CodeBlocks project files<br>                                 (deprecated).<br>  CodeBlocks - NMake Makefiles JOM<br>                               = Generates CodeBlocks project files<br>                                 (deprecated).<br>  CodeBlocks - Ninja           = Generates CodeBlocks project files<br>                                 (deprecated).<br>  CodeBlocks - Unix Makefiles  = Generates CodeBlocks project files<br>                                 (deprecated).<br>  CodeLite - MinGW Makefiles   = Generates CodeLite project files<br>                                 (deprecated).<br>  CodeLite - NMake Makefiles   = Generates CodeLite project files<br>                                 (deprecated).<br>  CodeLite - Ninja             = Generates CodeLite project files<br>                                 (deprecated).<br>  CodeLite - Unix Makefiles    = Generates CodeLite project files<br>                                 (deprecated).<br>  Eclipse CDT4 - NMake Makefiles<br>                               = Generates Eclipse CDT 4.0 project files<br>                                 (deprecated).<br>  Eclipse CDT4 - MinGW Makefiles<br>                               = Generates Eclipse CDT 4.0 project files<br>                                 (deprecated).<br>  Eclipse CDT4 - Ninja         = Generates Eclipse CDT 4.0 project files<br>                                 (deprecated).<br>  Eclipse CDT4 - Unix Makefiles= Generates Eclipse CDT 4.0 project files<br>                                 (deprecated).<br>  Kate - MinGW Makefiles       = Generates Kate project files (deprecated).<br>  Kate - NMake Makefiles       = Generates Kate project files (deprecated).<br>  Kate - Ninja                 = Generates Kate project files (deprecated).<br>  Kate - Ninja Multi-Config    = Generates Kate project files (deprecated).<br>  Kate - Unix Makefiles        = Generates Kate project files (deprecated).<br>  Sublime Text 2 - MinGW Makefiles<br>                               = Generates Sublime Text 2 project files<br>                                 (deprecated).<br>  Sublime Text 2 - NMake Makefiles<br>                               = Generates Sublime Text 2 project files<br>                                 (deprecated).<br>  Sublime Text 2 - Ninja       = Generates Sublime Text 2 project files<br>                                 (deprecated).<br>  Sublime Text 2 - Unix Makefiles<br>                               = Generates Sublime Text 2 project files<br>                                 (deprecated).<br></code></pre></td></tr></table></figure>
 
-<p>然后把我们编译成功之后 OpenCV 的 bin 文件目录加入到环境变量中，重启电脑即可。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">D:\opencv<span class="hljs-number">-4.10</span><span class="hljs-number">.0</span>\opencv_x64\x64\mingw\bin<br></code></pre></td></tr></table></figure>
+<p>然后通过 -G 参数来指定你需要用到的编译器即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cmake -S . -B build -G Ninja<br></code></pre></td></tr></table></figure>
 
-<hr>
-<p>前面有个地方说明，即点击 Configure 对设置的参数进行更新会出错，这是因为 OpenCV 需要去远端下载文件，往往下载失败。</p>
-<p>当然，这不是我要讲的主题，我要说的是 OpenCV 依赖 ffmpeg，不在编译 OpenCV 指定 ffmpeg 第三方库，OpenCV 将无法处理视频。</p>
-<p>现在我假定你已经编译安装 ffmpeg 了，你如何为 OpenCV  指定 ffmpeg 的安装路径 ？点击 Configure 对设置的参数进行更新会出错，这里面的出错信息就包含让你如何通过设置参数指定 ffmpeg 的安装路径。</p>
-<p>在系统环境变量中配置之后，记得重启电脑才能生效。</p>
-<p><img src="/images/2024/09/20/d8548dd0-7725-11ef-bb33-ad22fef3cf2e.png" alt="ffmpeg.png"></p>
-<p>往后，如果你想要在你的项目中使用 OpenCV ，只需要把之前配置的安装路径下的文件拷贝过去即可。</p>
-<p>但这通常还不够，因为需要配置我们项目的 CMakeLists.txt 文件来找到第三方库。</p>
-<p>关于如何找到第三方库，学习上节内容之后，各位不会陌生，但是我们上节的文件结构相当简单，如果面对那种文件结构层级很多的怎么办？尽管用上节的内容也可以解决，但非常的麻烦。</p>
-<p>我想一个好的库文件（用 CMake 管理）应该只需要几个语法就能找到并导入，这通常也是存在的。</p>
-<p><img src="/images/2024/09/20/dc8ae480-7725-11ef-bb33-ad22fef3cf2e.png" alt="findpackage.png"></p>
-<p>在我们的安装路径中找到 .cmake 配置文件（通常命名为<strong>库名称+Config.cmake</strong>），里面就会有如何帮我们导入第三方库的方式，打开看看里面前面注释的部分的核心内容。</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">FIND_PACKAGE</span>(OpenCV REQUIRED)	<span class="hljs-comment">#找到库文件</span><br><span class="hljs-keyword">TARGET_LINK_LIBRARIES</span>(MY_TARGET_NAME <span class="hljs-variable">$&#123;OpenCV_LIBS&#125;</span>)	<span class="hljs-comment">#链接到库文件</span><br></code></pre></td></tr></table></figure>
-
-<p>还有一个参数 OpenCV_INCLUDE_DIRS 提供给我们，这里包含所有头文件，我们只需要通过 include_directories 将其导入即可，这样就找到所有头文件了。</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)<br></code></pre></td></tr></table></figure>
-
-<p>为了让如上内容都生效，我们就需要设置这个 .cmake 文件的路径。</p>
-<p>而且你会发现OpenCV_DIR这个参数好像在 .cmake 文件中没有说明，我猜想它的构成应该是FIND_PACKAGE中的库名称，然后加上下划线和DIR构成，即<strong>库名称_DIR</strong>（官网有说明，也就不是猜想了）。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">set</span>(OpenCV_DIR <span class="hljs-string">&quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/thirdpart/opencv_x64&quot;</span>)<br></code></pre></td></tr></table></figure>
-
-<p>下面，就看看完整版的 CMakeLists.txt 文件：</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.17</span>)<br><span class="hljs-keyword">project</span>(YourProjectName)<br><br><span class="hljs-keyword">set</span>(CMAKE_CXX_STANDARD <span class="hljs-number">14</span>)<br><br><span class="hljs-comment"># 设置 OpenCV 的路径</span><br><span class="hljs-keyword">set</span>(OpenCV_DIR <span class="hljs-string">&quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/thirdpart/opencv_x64&quot;</span>)<br><br><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED)<br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)<br><br><span class="hljs-keyword">add_executable</span>(YourProjectName main.cpp)<br><span class="hljs-keyword">target_link_libraries</span>(YourProjectName <span class="hljs-variable">$&#123;OpenCV_LIBS&#125;</span>)<br></code></pre></td></tr></table></figure>
-
-<p>这里面有个新语法 FIND_PACKAGE，会在下节介绍，如何把我们的库文件也能像这样让用户轻松找到呢？下节就要见分晓。</p>
-<p>注：<strong>库名称+Config.cmake</strong>文件在build目录下也存在，而且也更详细，建议参考。</p>
+<p>但我个人建议使用 cmake-gui 来做这个工作，当你第一次点击Configure的时候，会让你选择生成器。</p>
 
       </div>
     </div>
@@ -259,7 +224,7 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/09/20/%E7%AC%AC%E5%85%AD%E7%AB%A0%EF%BC%9ACMake-%E6%89%BE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/">
+    <a class="post-nav-item-left" href="/2024/09/20/%E7%AC%AC%E4%B9%9D%E7%AB%A0%EF%BC%9ACMake-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/">
       <div class="text-align">
         <svg t="1670570876164"
              class="icon"
@@ -270,12 +235,12 @@
         </svg>
         <span class="text-small">上一篇</span>
       </div>
-      <div>第六章：CMake 找库文件的两种方式</div>
+      <div>第九章：CMake 交叉编译</div>
     </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/09/20/%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9ACMake-%E6%9E%84%E5%BB%BA%E5%92%8C%E9%93%BE%E6%8E%A5%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%8A%A8%E6%80%81%E5%BA%93/">
+    <a class="post-nav-item-right" href="/2024/09/20/%E7%BB%88%E7%AB%A0%EF%BC%9A%E7%BB%93%E5%B1%80%E5%8F%AA%E6%98%AF%E4%B8%80%E7%A7%8D%E8%99%9A%E6%9E%84/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -287,7 +252,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      第四章：CMake 构建和链接静态库与动态库
+      终章：结局只是一种虚构
     </a>
   
 </div>

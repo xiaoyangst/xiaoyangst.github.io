@@ -171,6 +171,96 @@
   
   <div class="post-card">
     <div class="post__head">
+      <a href="/2024/08/22/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/" class="post-title hover-line">第三章：内存虚拟化</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">当我们描述地址空间时，所描述的是操作系统提供给运行程序的抽象。程序不在物理地址 0～16KB 的内存中，而是加载在任意的物理地址。当操作系统这样做时，我们说操作系统在虚拟化内存，因为运行的程序自认为它被加载到特定地址（例如 0）的内存中，并且具有非常大的地址空间</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/08/22/%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9ACPU%E8%99%9A%E6%8B%9F%E5%8C%96/" class="post-title hover-line">第二章：CPU虚拟化</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">作者用分配桃子举例说明虚拟化，为了让这个例子更加合理，我们假定拿到桃子的人并不食用，仅是占有就心满意足了（当我后面谈食用或品尝也只是占有的意思，享用完之后就会归还）。每个小朋友（进程）都希望得到一个完整的桃子，可现实情况是篮筐中只有一个桃子，我需要为这个篮筐遮上一层布，“欺骗”小朋友这里面有很多很多的桃子（虚拟化），好让他们齐聚于此。我对每个伸手要桃子的小朋友说，你手里现在已经被分配一个完整的桃子，等你真正想要占有实体的时候我会具体的分配到你的手里。每个小朋友不可能一口吃掉这颗桃，等他需要品尝的时候，我就用小刀切割一块他所需的桃子交到他手里面（这是实际分配的，至于允诺的其它部分的桃子由于他暂时没有申请，视为我的可调用资源），给他慢慢享用。这样，其它小朋友来请求吃桃子的时候，我依旧能够满足他们的需求，因为我还有可调用资源。只要我不让他们看到这块布之后的桃子数量，他们永远都以为自己占有一个桃子</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/08/22/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0/" class="post-title hover-line">第一章：操作系统概述</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">我们已经了解了操作系统实际上做了什么：它取得 CPU、内存或磁盘等物理资源，并对它们进行虚拟化。它处理与并发有关的麻烦且棘手的问题。它持久地存储文件，从而使它们长期安全</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/08/21/%E4%BC%98%E5%8C%96%E5%B9%B6%E5%8F%91/" class="post-title hover-line">优化并发</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">本章将会讨论几个用于改善基于线程的并发程序的性能的技巧。我们假设读者已经基本掌握了线程级别的并发和同步原语，并正在寻找优化多线程程序的方法。线程级别的并发的基础知识并不是本书的主题</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#C++性能优化</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/08/20/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" class="post-title hover-line">面向对象的设计原则</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">设计的目标：低耦合、高内聚</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
       <a href="/2024/08/19/%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E7%BA%AF%E6%B4%81%E6%80%A7-%E9%81%BF%E5%85%8D%E5%8F%AF%E5%8F%98%E7%8A%B6%E6%80%81/" class="post-title hover-line">第五章：纯洁性--避免可变状态</a>
       
     </div>
@@ -249,96 +339,6 @@
     <div class="post__body">
       
       <div class="post-excerpt">用于类型推断，auto 和 decltype 属于互补关系。auto 虽然比 decltype 方便，但有些场景还是需要 decltype 来</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/thread%E5%BA%93/" class="post-title hover-line">thread库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">强调并发编程中需要注意的问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/chrono%E5%BA%93/" class="post-title hover-line">chrono库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">C语言虽然也有时间处理方法，但是精度只到秒。Linux 和 Windows 都有提供相应的方法精确到微秒，但是用法不同，显然不支持跨平台。chrono 库精度更高，同时支持跨平台，因此C++11之后使用chrono 库处理时间和日期是有必要的，至于到后面的C++版本是否会继续加强，那是以后的事情</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" class="post-title hover-line">移动语义</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">移动语义就是从给定对象“窃取”资源而不是拷贝资源，源对象不再拥有资源，资源的所有权已经归属于新创建的对象</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-title hover-line">Lambda 表达式</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">一个普通函数不仅可以没有实参，也可以无需具体的返回值类型，但是必须要有函数体。lambda表达式又名匿名函数，即没有函数名的函数，形参和返回值也可以不必有，但是函数体不能丢。至于捕获也可以不进行任何捕获，但是却必须标识它的存在</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/function-%E5%92%8C-bind/" class="post-title hover-line">function 和 bind</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">function 和 bind 的结合，让回调函数的实现更加容易</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">

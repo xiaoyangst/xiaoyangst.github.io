@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        第五章：CMake 添加第三方依赖库 | 搁浅的羊先生
+        第六章：CMake 找库文件的两种方式 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -156,7 +156,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">第五章：CMake 添加第三方依赖库</div>
+        <div class="post-title">第六章：CMake 找库文件的两种方式</div>
         <div class="post-info">
           
   <a href="/tags/CMake/" class="post-tag">#CMake</a>
@@ -172,50 +172,69 @@
             
           </div>
         
-        <p>为什么要单独讲这个？我在导入第三方依赖库时遇到很多曲折，且不说那些没有被 CMake 管理的第三方库。综合考虑选择编译安装 OpenCV，因为它本身还依赖其它第三方库，特别适合做为本节内容演示。</p>
-<p>现在你已经下载并解压 OpenCV 的源码，进入文件夹之后你会看到根 CMakeLists.txt 文件。</p>
-<p>打开你的 cmake-gui 程序：</p>
-<ol>
-<li>点击右侧 Browse Source 指定源文件路径，即根CMakeLists.txt文件存在的路径</li>
-<li>点击右侧 Browse Build 指定 build 输出路径，可以自行创建或者 cmake-gui 帮我们自动创建</li>
-<li>点击左下角 Configure，会让你选择编译的环境</li>
-</ol>
-<p><img src="/images/2024/09/20/cfc0f780-7725-11ef-bb33-ad22fef3cf2e.png" alt="cmakegui.png"></p>
-<p>接下来就关注图中的红色区域的内容，这些都是参数，通常我们需要配置的参数是安装路径 CMAKE_INSTALL_PREFIX。</p>
-<p><img src="/images/2024/09/20/d35a23d0-7725-11ef-bb33-ad22fef3cf2e.png" alt="安装路径.png"></p>
-<p>设置好对应的参数之后，再次点击 Configure 对设置的参数进行更新，没有出错之后（会出错，这个后面单独拎出来谈）点击 Generate 即可。</p>
-<p>退出 cmake-gui 程序，我们来到终端（ OpenCV 源码的 build 目录下，这个 build 文件夹前面我们就创建的，即 Browse Build 指定 build 输出路径），通过命令继续编译。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">mingw32-make -j6<br>    <br>mingw32-make install<br></code></pre></td></tr></table></figure>
+        <p>在上一小节当中，查找第三方库用到一个新语法 find_package，这个语法往往被人误解，以为只要是找第三方库就可以用，但如果你看我第三章的那种方式构建库文件，你就无法用 find_package。</p>
+<p>我们是官方的第三方库，我们可以用 find_package，因为人家已经整理好相关的文件到一个变量中，我们才可以非常方便简单设置几个参数值快速找到库文件。但如果说我们自己的或不规范的第三方库，即没提过规范的语法设置快速寻找，就只能先添加库文件的寻找路径，再一个一个寻找，这就是 find_library 命令。</p>
+<p>总之，find_package 和 find_library 都可以用于在 CMake 中查找和链接库，但 find_package 更适用于具有CMake 配置文件的库，而 find_library 则适用于没有 CMake 配置文件的库。</p>
+<h2 id="find-package"><a href="#find-package" class="headerlink" title="find_package"></a>find_package</h2><h3 id="典型用法"><a href="#典型用法" class="headerlink" title="典型用法"></a>典型用法</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">find_package</span>(&lt;PackageName&gt; [&lt;version&gt;] [REQUIRED] [COMPONENTS &lt;components&gt;...])<br></code></pre></td></tr></table></figure>
 
-<p>然后把我们编译成功之后 OpenCV 的 bin 文件目录加入到环境变量中，重启电脑即可。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">D:\opencv<span class="hljs-number">-4.10</span><span class="hljs-number">.0</span>\opencv_x64\x64\mingw\bin<br></code></pre></td></tr></table></figure>
+<p>&lt;PackageName&gt; 是唯一的必选参数。</p>
+<p>&lt;version&gt; 通常会被省略，如果没有软件包就无法成功配置项目，则应给出 REQUIRED。</p>
+<p>一些更复杂的软件包支持组件，可以使用 COMPONENTS 关键字来选择组件，但大多数软件包都没有这种复杂程度。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment">#查找名为 OpenCV 的包，找不到不报错，事后可以通过 $&#123;OpenCV_FOUND&#125; 查询是否找到</span><br><span class="hljs-keyword">find_package</span>(OpenCV)	<br><br><span class="hljs-comment">#查找名为 OpenCV 的包，找不到不报错，也不打印任何信息</span><br><span class="hljs-keyword">find_package</span>(OpenCV QUIET)	<br><br><span class="hljs-comment">#查找名为 OpenCV 的包，找不到就报错（并终止 cmake 进程，不再继续往下执行）</span><br><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED) <span class="hljs-comment"># 最常见用法</span><br><br><span class="hljs-comment">#查找名为 OpenCV 的包，找不到就报错，且必须具有 OpenCV::core 和 OpenCV::videoio 这两个组件，如果没有这两个组件也会报错</span><br><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED COMPONENTS core videoio)<br><br><span class="hljs-comment">#查找名为 OpenCV 的包，找不到就报错，可具有 OpenCV::core 和 OpenCV::videoio 这两个组件，没有这两组件不会报错，通过 $&#123;OpenCV_core_FOUND&#125; 查询是否找到 core 组件</span><br><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED OPTIONAL_COMPONENTS core videoio)<br></code></pre></td></tr></table></figure>
 
-<hr>
-<p>前面有个地方说明，即点击 Configure 对设置的参数进行更新会出错，这是因为 OpenCV 需要去远端下载文件，往往下载失败。</p>
-<p>当然，这不是我要讲的主题，我要说的是 OpenCV 依赖 ffmpeg，不在编译 OpenCV 指定 ffmpeg 第三方库，OpenCV 将无法处理视频。</p>
-<p>现在我假定你已经编译安装 ffmpeg 了，你如何为 OpenCV  指定 ffmpeg 的安装路径 ？点击 Configure 对设置的参数进行更新会出错，这里面的出错信息就包含让你如何通过设置参数指定 ffmpeg 的安装路径。</p>
-<p>在系统环境变量中配置之后，记得重启电脑才能生效。</p>
-<p><img src="/images/2024/09/20/d8548dd0-7725-11ef-bb33-ad22fef3cf2e.png" alt="ffmpeg.png"></p>
-<p>往后，如果你想要在你的项目中使用 OpenCV ，只需要把之前配置的安装路径下的文件拷贝过去即可。</p>
-<p>但这通常还不够，因为需要配置我们项目的 CMakeLists.txt 文件来找到第三方库。</p>
-<p>关于如何找到第三方库，学习上节内容之后，各位不会陌生，但是我们上节的文件结构相当简单，如果面对那种文件结构层级很多的怎么办？尽管用上节的内容也可以解决，但非常的麻烦。</p>
-<p>我想一个好的库文件（用 CMake 管理）应该只需要几个语法就能找到并导入，这通常也是存在的。</p>
-<p><img src="/images/2024/09/20/dc8ae480-7725-11ef-bb33-ad22fef3cf2e.png" alt="findpackage.png"></p>
-<p>在我们的安装路径中找到 .cmake 配置文件（通常命名为<strong>库名称+Config.cmake</strong>），里面就会有如何帮我们导入第三方库的方式，打开看看里面前面注释的部分的核心内容。</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">FIND_PACKAGE</span>(OpenCV REQUIRED)	<span class="hljs-comment">#找到库文件</span><br><span class="hljs-keyword">TARGET_LINK_LIBRARIES</span>(MY_TARGET_NAME <span class="hljs-variable">$&#123;OpenCV_LIBS&#125;</span>)	<span class="hljs-comment">#链接到库文件</span><br></code></pre></td></tr></table></figure>
+<h3 id="搜索包的模式"><a href="#搜索包的模式" class="headerlink" title="搜索包的模式"></a>搜索包的模式</h3><p><strong>Module 模式</strong>：在这种模式下，CMake 会搜索名为 <code>Find&lt;PackageName&gt;.cmake</code> 的文件，首先在 <code>CMAKE_MODULE_PATH</code> 指定的路径中查找，则在CMake安装目录（即<strong>CMAKE_ROOT</strong>变量）下的<strong>Modules</strong>目录下查找。找到文件后，CMake 会读取并处理它，负责查找包、检查版本，并生成任何必要的消息。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment">#查找顺序</span><br>CMAKE_MODULE_PATH<br>CMAKE_ROOT<br></code></pre></td></tr></table></figure>
 
-<p>还有一个参数 OpenCV_INCLUDE_DIRS 提供给我们，这里包含所有头文件，我们只需要通过 include_directories 将其导入即可，这样就找到所有头文件了。</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)<br></code></pre></td></tr></table></figure>
+<p><strong>Config 模式</strong>：在这种模式下，CMake 会搜索名为 <code>&lt;lowercasePackageName&gt;-config.cmake</code> 或 <code>&lt;PackageName&gt;Config.cmake</code> 的文件。如果指定了版本信息，还会查找 <code>&lt;lowercasePackageName&gt;-config-version.cmake</code> 或 <code>&lt;PackageName&gt;ConfigVersion.cmake</code>。Config 模式下，可以指定一个包名列表来搜索。CMake 搜索配置和版本文件的位置比 Module 模式复杂得多。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment">#查找文件</span><br>&lt;lowercasePackageName&gt;-config.cmake 或 &lt;PackageName&gt;Config.cmake<br><span class="hljs-comment">#如果指定版本</span><br>&lt;lowercasePackageName&gt;-config-version.cmake` 或 `&lt;PackageName&gt;ConfigVersion.cmake<br></code></pre></td></tr></table></figure>
 
-<p>为了让如上内容都生效，我们就需要设置这个 .cmake 文件的路径。</p>
-<p>而且你会发现OpenCV_DIR这个参数好像在 .cmake 文件中没有说明，我猜想它的构成应该是FIND_PACKAGE中的库名称，然后加上下划线和DIR构成，即<strong>库名称_DIR</strong>（官网有说明，也就不是猜想了）。</p>
+<p>默认情况下是先 Module 模式，如果查找失败就采用 Config 模式。</p>
+<p>OpenCV 是 Config 模式，见下：</p>
+<p><img src="/images/2024/09/20/d47086c0-772e-11ef-bb33-ad22fef3cf2e.png" alt="findpackage.png"></p>
+<p>如果想让CMake找到&lt;PackageName&gt;Config.cmake文件，需要在CMakeLists.txt中设置参数&lt;PackageName&gt;_DIR来设置路径。</p>
+<p>比方说OpenCV的设置情况：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">set</span>(OpenCV_DIR <span class="hljs-string">&quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/thirdpart/opencv_x64&quot;</span>)<br></code></pre></td></tr></table></figure>
 
-<p>下面，就看看完整版的 CMakeLists.txt 文件：</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.17</span>)<br><span class="hljs-keyword">project</span>(YourProjectName)<br><br><span class="hljs-keyword">set</span>(CMAKE_CXX_STANDARD <span class="hljs-number">14</span>)<br><br><span class="hljs-comment"># 设置 OpenCV 的路径</span><br><span class="hljs-keyword">set</span>(OpenCV_DIR <span class="hljs-string">&quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/thirdpart/opencv_x64&quot;</span>)<br><br><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED)<br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)<br><br><span class="hljs-keyword">add_executable</span>(YourProjectName main.cpp)<br><span class="hljs-keyword">target_link_libraries</span>(YourProjectName <span class="hljs-variable">$&#123;OpenCV_LIBS&#125;</span>)<br></code></pre></td></tr></table></figure>
+<p>然后你接着去设置头文件路径、库文件路径，最后把库文件链接到可执行程序中</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED)<br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)<br> <br><span class="hljs-keyword">add_executable</span>(YourProjectName main.cpp)<br><span class="hljs-keyword">target_link_libraries</span>(YourProjectName <span class="hljs-variable">$&#123;OpenCV_LIBS&#125;</span>)<br></code></pre></td></tr></table></figure>
 
-<p>这里面有个新语法 FIND_PACKAGE，会在下节介绍，如何把我们的库文件也能像这样让用户轻松找到呢？下节就要见分晓。</p>
-<p>注：<strong>库名称+Config.cmake</strong>文件在build目录下也存在，而且也更详细，建议参考。</p>
+<p>因此 <code>find_package</code> 并<strong>不是直接去找具体的动态库文件和头文件</strong>。而是去找<strong>包配置文件</strong>，这个<strong>配置文件里包含了包的具体信息</strong>，包括<strong>动态库文件的位置</strong>，<strong>头文件的目录</strong>，<strong>链接时需要开启的编译选项</strong>等等。</p>
+<p>再者，不同的操作系统平台，CMake 都会有默认的搜索路径，再结合官方提供的CMake信息，以及你的 CMakeLists.txt 文件就能找到库文件。那如果你没有把这些库文件安装到 CMake 默认搜索路径呢？</p>
+<h3 id="默认的搜索路径"><a href="#默认的搜索路径" class="headerlink" title="默认的搜索路径"></a>默认的搜索路径</h3><p>Windows 和 Linux 都有自己的标准路径，这里就以 Linux 作为探讨对象。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs tex">&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/cmake/&lt;name&gt;*/<br>&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/<br>&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/cmake/<br>&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/cmake/&lt;name&gt;*/<br>&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/<br>&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/cmake/<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&lt;prefix&gt;</code> 是变量 <code>$&#123;CMAKE_PREFIX_PATH&#125;</code>，Unix 平台默认为 <code>/usr</code>。</li>
+<li><code>&lt;name&gt;</code> 是你在 <code>find_package(&lt;name&gt; REQUIRED)</code> 命令中指定的包名。</li>
+<li><code>&lt;arch&gt;</code> 是系统的架构，例如 <code>x86_64-linux-gnu</code> 或 <code>i386-linux-gnu</code>。<ul>
+<li>（ Ubuntu 喜欢把库文件套娃在 <code>/usr/lib/x86_64-linux-gnu</code> 目录下）</li>
+</ul>
+</li>
+</ul>
+<p>例如你是 64 位的 Linux 系统，<code>find_package(Qt5 REQUIRED)</code> 会依次搜索：</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs tex">/usr/lib/cmake/Qt5/Qt5Config.cmake<br>/usr/lib/x86<span class="hljs-built_in">_</span>64-linux-gnu/cmake/Qt5/Qt5Config.cmake<br>/usr/share/cmake/Qt5/Qt5Config.cmake<br>/usr/lib/Qt5/Qt5Config.cmake<br>/usr/lib/x86<span class="hljs-built_in">_</span>64-linux-gnu/Qt5/Qt5Config.cmake<br>/usr/share/Qt5/Qt5Config.cmake<br>/usr/Qt5/lib/cmake/Qt5/Qt5Config.cmake<br>/usr/Qt5/lib/x86<span class="hljs-built_in">_</span>64-linux-gnu/cmake/Qt5/Qt5Config.cmake<br>/usr/Qt5/share/cmake/Qt5/Qt5Config.cmake<br>/usr/Qt5/lib/Qt5/Qt5Config.cmake<br>/usr/Qt5/lib/x86<span class="hljs-built_in">_</span>64-linux-gnu/Qt5/Qt5Config.cmake<br>/usr/Qt5/share/Qt5/Qt5Config.cmake<br></code></pre></td></tr></table></figure>
+
+<h3 id="非标准路径下的搜索"><a href="#非标准路径下的搜索" class="headerlink" title="非标准路径下的搜索"></a>非标准路径下的搜索</h3><p>如果你没有在前面介绍的标准路径下，你在其他地方下载并编译安装了，也没有把库文件和头文件移动到标准路径中，那该怎么办？这时你<strong>需要手动指定一个变量</strong>告诉它在哪儿。我们依旧还是以 Linux 举例。</p>
+<p>例如Qt5 安装到了<code>/opt/Qt5.12.1</code>。 首先找到它里面的 <code>Qt5Config.cmake</code> 文件所在位置。假如你找到该文件的位置是 <code>/opt/Qt5.12.1/lib/cmake/Qt5/Qt5Config.cmake</code>，那么请你设置变量 Qt5_DIR 为 <code>/opt/Qt5.12.1/lib/cmake/Qt5</code>。有三种设置方法：</p>
+<ol>
+<li>单次有效：在 configure 阶段，可以从命令行设置： <code>cmake -B build -DQt5_DIR=&quot;/opt/Qt5.12.1/lib/cmake/Qt5&quot;</code></li>
+<li>全局启用：修改你的 <code>~/.bashrc</code> 文件添加环境变量： <code>export Qt5_DIR=&quot;/opt/Qt5.12.1/lib/cmake/Qt5&quot;</code>，然后重启终端。这样以后你每次构建任何项目，find_package 都能自动找到这个路径的 Qt5 包了。</li>
+<li>单项目有效：直接在你自己项目的 CMakeLists.txt 最开头写一行： <code>set(Qt5_DIR &quot;&quot;/opt/Qt5.12.1/lib/cmake/Qt5&quot;)</code>。但是一定要写在最前面。</li>
+</ol>
+<p><img src="/images/2024/09/20/c712be30-772e-11ef-bb33-ad22fef3cf2e.png" alt="利弊.png"></p>
+<p>只要不删除 build ,单次有效的方式就会一直存在，因为 CMake 会有缓存，但如果你删除 build 了，下次你还得再设置一次。</p>
+<h2 id="find-library"><a href="#find-library" class="headerlink" title="find_library"></a>find_library</h2><p>在 CMake 中，<code>find_library</code> 用于查找特定的库文件（如 <code>.lib</code>、<code>.a</code>、<code>.so</code> 等），并将该库的路径存储到变量中。它的功能类似于手动指定库文件路径，但通过 <code>find_library</code> 可以让 CMake 自动在系统的标准库路径或用户指定的路径中查找库。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">find_library</span>(&lt;VAR&gt; name [PATHS paths...])<br></code></pre></td></tr></table></figure>
+
+<p><strong><code>&lt;VAR&gt;</code></strong>: 将找到的库的完整路径存储到这个变量中。</p>
+<p><strong><code>name</code></strong>: 要查找的库的名称，不需要后缀（如 <code>.a</code> 或 <code>.so</code>）。</p>
+<p><strong><code>PATHS</code></strong>: 可选，指定额外的搜索路径，CMake 会在这些路径中查找库。</p>
+<p>如果库文件已经在标准路径中，无需指定。否则，需要通过 PATH 参数指定。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">find_library</span>(MYLIB_LIB NAMES mylib PATHS /usr/local/lib /opt/libs)<br><br><span class="hljs-keyword">if</span>(MYLIB_LIB)<br>    <span class="hljs-built_in">message</span>(STATUS <span class="hljs-string">&quot;Found mylib: $&#123;MYLIB_LIB&#125;&quot;</span>)<br>    <span class="hljs-built_in">target_link_libraries</span>(MyExecutable $&#123;MYLIB_LIB&#125;)<br><span class="hljs-keyword">else</span>()<br>    <span class="hljs-built_in">message</span>(FATAL_ERROR <span class="hljs-string">&quot;Could not find mylib!&quot;</span>)<br><span class="hljs-built_in">endif</span>()<br></code></pre></td></tr></table></figure>
+
+<p><strong><code>find_library(MYLIB_LIB NAMES mylib)</code></strong>: 这是查找名为 <code>mylib</code> 的库文件，查找到的路径会存储在 <code>MYLIB_LIB</code> 变量中。</p>
+<p><strong><code>PATHS /usr/local/lib /opt/libs</code></strong>: 在这些路径下查找库文件。如果没有指定 <code>PATHS</code>，CMake 会默认查找系统标准的库路径，例如 <code>/usr/lib</code>、<code>/lib</code> 等。</p>
+<p><strong><code>target_link_libraries(MyExecutable $&#123;MYLIB_LIB&#125;)</code></strong>: 如果找到了库文件，将其链接到目标 <code>MyExecutable</code>。</p>
 
       </div>
     </div>
@@ -259,7 +278,7 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/09/20/%E7%AC%AC%E5%85%AD%E7%AB%A0%EF%BC%9ACMake-%E6%89%BE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/">
+    <a class="post-nav-item-left" href="/2024/09/20/%E7%AC%AC%E4%B8%83%E7%AB%A0%EF%BC%9ACMake-%E6%9E%84%E5%BB%BA-Qt-%E9%A1%B9%E7%9B%AE/">
       <div class="text-align">
         <svg t="1670570876164"
              class="icon"
@@ -270,12 +289,12 @@
         </svg>
         <span class="text-small">上一篇</span>
       </div>
-      <div>第六章：CMake 找库文件的两种方式</div>
+      <div>第七章：CMake 构建 Qt 项目</div>
     </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/09/20/%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9ACMake-%E6%9E%84%E5%BB%BA%E5%92%8C%E9%93%BE%E6%8E%A5%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%8A%A8%E6%80%81%E5%BA%93/">
+    <a class="post-nav-item-right" href="/2024/09/20/%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9ACMake-%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E4%BE%9D%E8%B5%96%E5%BA%93/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -287,7 +306,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      第四章：CMake 构建和链接静态库与动态库
+      第五章：CMake 添加第三方依赖库
     </a>
   
 </div>
