@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        第四章：CMake 构建和链接静态库与动态库 | 搁浅的羊先生
+      
+    </title>
+    <meta name="description" content="！！" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/xyst.ttf);
+        font-weight: xyst;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?595fde0e4ae7bbb900f020823258c38a";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    <div class="head">
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/article">文章</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/various">杂文</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">第四章：CMake 构建和链接静态库与动态库</div>
+        <div class="post-info">
+          
+  <a href="/tags/CMake/" class="post-tag">#CMake</a>
+
+
+          <span class="post-date">2024-09-20</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>我最近在尝试手写线程池，尽管还有很多改进的地方，但用来学习本节内容足够了。</p>
+<p><img src="/images/2024/09/20/ddcf40d0-7724-11ef-bb33-ad22fef3cf2e.png" alt="线程池.png"></p>
+<h2 id="构建静态库和动态库"><a href="#构建静态库和动态库" class="headerlink" title="构建静态库和动态库"></a>构建静态库和动态库</h2><p>光是构建静态库和动态库还不够， 还需要指定生成路径，这样别人使用你的库文件将相当方便（后面你就知道了）。</p>
+<p>先看看如何构建静态库和动态库。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">add_library</span>(静态库名称 STATIC 源文件) <br><span class="hljs-keyword">add_library</span>(动态库名称 SHARED 源文件) <br></code></pre></td></tr></table></figure>
+
+<p>对于安装路径、头文件安装路径、静态库安装路径、动态库安装路径已在上节介绍。</p>
+<p>这里重点讲 install 的配置，即用户在终端使用 install 命令就能生成提前配置好的安装路径。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">install</span>(TARGETS &lt;<span class="hljs-keyword">target</span>&gt;... [...])              <span class="hljs-comment"># 安装指定的目标（可执行文件、库等）</span><br><span class="hljs-keyword">install</span>(DIRECTORY &lt;dir&gt;... [...])                <span class="hljs-comment"># 安装指定的目录及其内容</span><br><br><span class="hljs-comment">#本节尚未应用</span><br><span class="hljs-keyword">install</span>(IMPORTED_RUNTIME_ARTIFACTS &lt;<span class="hljs-keyword">target</span>&gt;... [...])  <span class="hljs-comment"># 安装导入的运行时文件（通常由外部构建导入）</span><br><span class="hljs-keyword">install</span>(&#123;FILES | PROGRAMS&#125; &lt;<span class="hljs-keyword">file</span>&gt;... [...])      <span class="hljs-comment"># 安装指定的文件或程序</span><br><span class="hljs-keyword">install</span>(SCRIPT &lt;<span class="hljs-keyword">file</span>&gt; [...])                     <span class="hljs-comment"># 执行指定的安装脚本</span><br><span class="hljs-keyword">install</span>(CODE &lt;code&gt; [...])                       <span class="hljs-comment"># 执行指定的 CMake 代码段</span><br><span class="hljs-keyword">install</span>(<span class="hljs-keyword">EXPORT</span> &lt;<span class="hljs-keyword">export</span>-name&gt; [...])              <span class="hljs-comment"># 导出指定的目标到一个 CMake 导出文件</span><br><span class="hljs-keyword">install</span>(RUNTIME_DEPENDENCY_SET &lt;<span class="hljs-keyword">set</span>-name&gt; [...]) <span class="hljs-comment"># 安装运行时依赖项集合</span><br></code></pre></td></tr></table></figure>
+
+<p>因此，我们的重点关注静态库和动态库以及头文件的安装路径，那我们先设置路径和配置生成库文件的命令。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.26</span>)<br><span class="hljs-keyword">project</span>(YThreadPool)<br><span class="hljs-keyword">set</span>(CMAKE_CXX_STANDARD <span class="hljs-number">17</span>)<br><br><span class="hljs-keyword">include_directories</span>((<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/<span class="hljs-keyword">include</span>))<br><br><span class="hljs-keyword">aux_source_directory</span>(src SRC_LIST)<br><br><span class="hljs-keyword">set</span>(CMAKE_INSTALL_PREFIX YThreadPool_x86)   <span class="hljs-comment"># 指定安装路径的前缀</span><br><br><span class="hljs-keyword">set</span>(CMAKE_INSTALL_INCLUDEDIR <span class="hljs-keyword">include</span>)       <span class="hljs-comment"># 设置基于安装路径的前缀的头文件生成路径</span><br><br><span class="hljs-keyword">set</span>(CMAKE_INSTALL_LIBDIR lib)       <span class="hljs-comment"># 设置基于安装路径的前缀的静态库生成路径 lib</span><br><span class="hljs-keyword">add_library</span>(YThreadPoolLIB STATIC <span class="hljs-variable">$&#123;SRC_LIST&#125;</span>)     <span class="hljs-comment"># 生成静态库</span><br><br><span class="hljs-keyword">set</span>(CMAKE_INSTALL_BINDIR bin)       <span class="hljs-comment"># 设置基于安装路径的前缀的动态库生成路径 bin</span><br><span class="hljs-keyword">add_library</span>(YThreadPoolBIN SHARED <span class="hljs-variable">$&#123;SRC_LIST&#125;</span>)     <span class="hljs-comment"># 生成动态库</span><br></code></pre></td></tr></table></figure>
+
+<p>但如果我们希望用户应用 install 命令来把这些文件全部放在安装路径下，就还需要继续往下配置。</p>
+<p>下面的配置中有些新参数在前面没有介绍，比如：DESTINATION、ARCHIVE、RUNTIME、LIBRARY。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment">#安装 include 目录中的文件到指定安装的头文件目录</span><br><span class="hljs-keyword">install</span>(DIRECTORY  <span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/<span class="hljs-keyword">include</span>/   <br>        DESTINATION <span class="hljs-variable">$&#123;CMAKE_INSTALL_INCLUDEDIR&#125;</span>)<br><br> <span class="hljs-comment">#安装静态库 YThreadPoolLIB 到指定安装的库文件目录</span><br><span class="hljs-keyword">install</span>(TARGETS YThreadPoolLIB                 	<br>        ARCHIVE DESTINATION <span class="hljs-variable">$&#123;CMAKE_INSTALL_LIBDIR&#125;</span>)<br>        <br> <span class="hljs-comment"># 安装动态库 YThreadPoolBIN 到指定安装的可执行文件和库文件目录</span><br><span class="hljs-keyword">install</span>(TARGETS YThreadPoolBIN                     <br>        RUNTIME DESTINATION <span class="hljs-variable">$&#123;CMAKE_INSTALL_BINDIR&#125;</span><br>        LIBRARY DESTINATION <span class="hljs-variable">$&#123;CMAKE_INSTALL_LIBDIR&#125;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>对出现的新参数，下面用列表来展示：</p>
+<table>
+<thead>
+<tr>
+<th>目标文件</th>
+<th>内容</th>
+<th>安装目录变量</th>
+<th>默认安装文件夹</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ARCHIVE</td>
+<td>静态库</td>
+<td>${CMAKE_INSTALL_LIBDIR})</td>
+<td>lib</td>
+</tr>
+<tr>
+<td>LIBRARY</td>
+<td>动态库</td>
+<td>${CMAKE_INSTALL_LIBDIR})</td>
+<td>lib</td>
+</tr>
+<tr>
+<td>RUNTIME</td>
+<td>可执行二进制文件</td>
+<td>${CMAKE_INSTALL_BINDIR}</td>
+<td>bin</td>
+</tr>
+</tbody></table>
+<p>还有非常关键的指令：DESTINATION &lt;dir&gt;</p>
+<p>即指定磁盘上要安装文件的目录。<code>&lt;dir&gt;</code> 应为相对路径。 绝对路径是允许的，但不建议使用。</p>
+<p>下面开始整个静态库和动态库的构建和安装过程，最后再看看安装情况。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmake">cmake -S . -B build<br>cmake --build build<br>cmake --<span class="hljs-keyword">install</span> build --config Debug 	<span class="hljs-comment">#指定生成 Debug版</span><br></code></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<p><img src="/images/2024/09/20/e4d0ec80-7724-11ef-bb33-ad22fef3cf2e.png" alt="install.png"></p>
+<p>以后用户想要使用这个库，就只需要把 YThreadPool_x86 拷贝到自己的项目文件中。</p>
+<p>然后在 CMakeLists.txt 中找到所需库文件和头文件即可，这也是下面要演示的内容，即如何使用链接静态库和动态库。</p>
+<h2 id="链接静态库和动态库"><a href="#链接静态库和动态库" class="headerlink" title="链接静态库和动态库"></a>链接静态库和动态库</h2><p>link_directories 用来指定库的路径，那么后续使用 link_libraries 或 target_link_libraries 搜索库文件的时候，也就只需要传入库文件名称即可。</p>
+<p>link_directories 不会进行层级搜索。它只会将指定的目录添加到链接器的搜索路径中，而不会自动搜索该目录下的子目录。也就是说，如果你使用 <code>link_directories($&#123;CMAKE_SOURCE_DIR&#125;/lib)</code>，链接器只会查找 <code>$&#123;CMAKE_SOURCE_DIR&#125;/lib</code> 目录中的库文件，不会查找 <code>lib</code> 目录中的子目录。</p>
+<p>如果你需要链接某个子目录中的库，必须显式地使用 <code>link_directories</code> 指定那个子目录，或者使用 <code>target_link_libraries</code> 直接指定库的完整路径。</p>
+<p>（一）链接静态库</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">link_libraries</span>(&lt;<span class="hljs-type">static</span> lib&gt; [&lt;<span class="hljs-type">static</span> lib&gt;...])<br><br>参数<span class="hljs-number">1</span>：指定出要链接的静态库的名字<br><br>		<span class="hljs-number">1.</span>可以是全名 libxxx.a<br>  <br>		<span class="hljs-number">2.</span>也可以是掐头（lib）去尾（.a）之后的名字 xxx<br>  <br>参数<span class="hljs-number">2</span>-N：要链接的其它静态库的名字，用空格隔开即可<br></code></pre></td></tr></table></figure>
+
+<p>如果是系统提供的静态库，填写静态库名称即可。</p>
+<p>如果是第三方静态库，需要给出具体路径才行（但我们一般选择 link_directories 方法找到库文件的位置）。</p>
+<p><strong>注意</strong>：因为静态库是在编译可执行程序之前要存在的一个文件，因此我们的<code>link_libraries</code>语法 务必 在 <code>add_executable</code> 语法之前。</p>
+<p>（二）链接动态库</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">target_link_libraries</span>(<br>    &lt;<span class="hljs-keyword">target</span>&gt; <br>    &lt;PRIVATE|PUBLIC|INTERFACE&gt; &lt;item&gt;... <br>    [&lt;PRIVATE|PUBLIC|INTERFACE&gt; &lt;item&gt;...]...)<br></code></pre></td></tr></table></figure>
+
+<p>我们需要指定链接的目标，因为我们是要动态加载的，因此必须指定加载到哪个应用程序中，因此target参数是可执行程序的名称。</p>
+<p><strong>注意</strong>：因为动态库是在编译可执行程序之后要存在的一个文件，因此我们的<code>target_link_libraries</code>语法 务必 在 <code>add_executable</code> 语法之后。</p>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>说明</th>
+<th>传递方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PRIVATE</td>
+<td>目标链接到库，但不会传递给依赖此目标的其他目标</td>
+<td>链接库仅对当前目标可见</td>
+</tr>
+<tr>
+<td>PUBLIC</td>
+<td>目标链接到库，并且依赖此目标的其他目标也会链接到该库</td>
+<td>链接库对当前目标和依赖此目标的所有目标都可见</td>
+</tr>
+<tr>
+<td>INTERFACE</td>
+<td>目标本身不会链接到库，但任何依赖此目标的目标会链接到该库。适用于仅在接口需要的库</td>
+<td>链接库对依赖此目标的所有目标可见，但对当前目标不可见</td>
+</tr>
+</tbody></table>
+<p>如上这种讲法还是不太好理解，下面用实例说明：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment"># target A depends on libA</span><br><span class="hljs-keyword">target_link_libraries</span>(A PRIVATE libA)<br><br><span class="hljs-comment"># target B depends on target A</span><br><span class="hljs-keyword">target_link_libraries</span>(B PUBLIC A)<br><br><span class="hljs-comment"># target C depends on target B</span><br><span class="hljs-keyword">target_link_libraries</span>(C INTERFACE B)<br></code></pre></td></tr></table></figure>
+
+<p><code>A</code> 链接到 <code>libA</code>，但只有 <code>A</code> 自己能看到 <code>libA</code>，所以 <code>libA</code> 不会传递给 <code>B</code> 或 <code>C</code>。</p>
+<p><code>B</code> 链接到 <code>A</code>，并且这个链接关系是 <code>PUBLIC</code>，所以 <code>B</code> 和 <code>C</code> 都能看到 <code>A</code>。</p>
+<p><code>C</code> 链接到 <code>B</code>，但这种链接关系是 <code>INTERFACE</code>，所以 <code>C</code> 能看到 <code>B</code> 的接口，但 <code>B</code> 实际上没有链接到其他库。</p>
+<hr>
+<p>下面我就具体演示，把静态库和动态库一并引入，实际情景中你可能只需要静态库或动态库即可。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.16</span>)<br><span class="hljs-keyword">project</span>(YThreadPool)<br><span class="hljs-keyword">set</span>(CMAKE_CXX_STANDARD <span class="hljs-number">17</span>)<br><br><span class="hljs-comment"># 设置库文件的头文件路径</span><br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/YThreadPool_x86/<span class="hljs-keyword">include</span>)<br><br><span class="hljs-comment"># 设置静态库和动态库的搜索路径</span><br><span class="hljs-keyword">link_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/YThreadPool_x86/lib)<br><span class="hljs-keyword">link_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/YThreadPool_x86/bin)<br><br><span class="hljs-keyword">link_libraries</span>(YThreadPoolLIB)  <span class="hljs-comment"># 添加静态库</span><br><br><span class="hljs-keyword">add_executable</span>(Demo main.cpp)<br><br><span class="hljs-comment"># 添加动态库 和 添加 pthread 库链接（因为我们用到线程了）</span><br><span class="hljs-keyword">target_link_libraries</span>(Demo PUBLIC YThreadPoolBIN pthread)<br></code></pre></td></tr></table></figure>
+
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/09/20/%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9ACMake-%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E4%BE%9D%E8%B5%96%E5%BA%93/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>第五章：CMake 添加第三方依赖库</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/09/20/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9ACMake-%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%8F%98%E9%87%8F/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      第三章：CMake 常用内置变量
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/CMake/" class="post-tag">#CMake</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第二章：CMake-管理多个目录和多个文件\" title="第二章：CMake 管理多个目录和多个文件" rel="bookmark">第二章：CMake 管理多个目录和多个文件</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://paugram.com/">保罗的小宇宙</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg" />
+                  <a class="foot-link"
+                     href="mailto:ydfox@foxmail.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg" />
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg" />
+                <a class="foot-link" href="mailto:ydfox@foxmail.com">ydfox@foxmail.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="https://xiaoyangst.github.io">搁浅的羊先生</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
