@@ -252,6 +252,8 @@
 <p><strong>确保异步操作正确调度</strong>: 当你通过 <code>co_await this_coro::executor</code> 获取执行器时，实际上是在告诉编译器，当前协程的所有异步操作都需要通过这个执行器调度。这使得协程中的 <code>co_await</code> 异步操作能够正确使用 <code>executor</code> 来调度执行。</p>
 <p>那为什么我们主函数中没有使用呢？</p>
 <p>在主函数中，执行器并没有直接在协程中运行，因此不需要使用 <code>this_coro::executor</code>。<code>io_context</code> 是在主函数中直接创建的，并且作为参数传递给 <code>co_spawn</code>。当 <code>co_spawn</code> 启动协程时，它会自动将 <code>io_context</code> 作为执行器传递给协程内部使用的 <code>this_coro::executor</code>。</p>
+<hr>
+<p>⭐️内容取自 B 站 UP 恋恋风辰和 mmoaay 的《Boost.Asio C++ 网络编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议看原视频或者读原书。</p>
 
       </div>
     </div>
