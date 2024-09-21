@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        力扣 | 搁浅的羊先生
+        46.全排列 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -152,205 +153,123 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/leetcode.svg)"></div>
-        力扣
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">46.全排列</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
+
+
+          <span class="post-date">2024-09-20</span>
+        </div>
       </div>
-      <div class="wall-category-description">leetcode Writeup Record</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" style="font-size: 1em;">单调栈</a> <a href="/tags/%E5%9B%9E%E6%BA%AF/" style="font-size: 1em;">回溯</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 1em;">字符串</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 1em;">数组</a> <a href="/tags/%E6%A0%88/" style="font-size: 1em;">栈</a> <a href="/tags/%E6%A0%91/" style="font-size: 1em;">树</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1em;">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 1em;">队列</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    set&lt;<span class="hljs-type">int</span>&gt; recordFirst;<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; result;<br>    vector&lt;<span class="hljs-type">int</span>&gt; path;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtrace</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(path.<span class="hljs-built_in">size</span>() == nums.<span class="hljs-built_in">size</span>())&#123;<br>            result.<span class="hljs-built_in">push_back</span>(path);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-keyword">if</span>(recordFirst.<span class="hljs-built_in">find</span>(nums[i]) != recordFirst.<span class="hljs-built_in">end</span>())&#123;<br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br><br>            path.<span class="hljs-built_in">push_back</span>(nums[i]);<br>            recordFirst.<span class="hljs-built_in">insert</span>(nums[i]);<br>            <span class="hljs-built_in">backtrace</span>(nums);<br>            recordFirst.<span class="hljs-built_in">erase</span>(nums[i]);<br>            path.<span class="hljs-built_in">pop_back</span>();<br>        &#125;<br>    &#125;<br><br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">permute</span>(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums) &#123;<br>        <span class="hljs-built_in">backtrace</span>(nums);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>我们简单捋一下思路，这道题相当简单。</p>
+<p>从此题的题意可以看出，我们每次必须从数组的开头遍历，那我们就不需要像前面的组合题那样需要一个参数来记录当前位置，以方便下一个栈能够找到从哪里继续开始。</p>
+<p>也正因为这个缘故，我们必须判断已加入到路径中的元素不可再重复。用一个全局的记录项 recordFirst，借此来去重。我们不是同一栈的去重，而是和前面所有被加入路径的元素进行去重，那就得有之前的信息，全局记录项就是恰当的。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/21/47-%E5%85%A8%E6%8E%92%E5%88%97II/" class="post-title hover-line">47.全排列II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题很好体现 树层和树枝的去重，树层去重需要创建一个局部记录项，树枝去重需要创建一个全局记录项。因为树枝在不同的栈中，树层在同一个栈中</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/46-%E5%85%A8%E6%8E%92%E5%88%97/" class="post-title hover-line">46.全排列</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">有上一道题的节奏，这道题就轻松许多</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/491-%E9%9D%9E%E9%80%92%E5%87%8F%E5%AD%90%E5%BA%8F%E5%88%97/" class="post-title hover-line">491. 非递减子序列</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">回溯题，画图是至关重要的，可以不被绕晕</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/09/98-%E9%AA%8C%E8%AF%81%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" class="post-title hover-line">98.验证二叉搜索树</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">中序遍历二叉搜索树得到递增的有序数据</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%A0%91/" class="post-tag">#树</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/07/90-%E5%AD%90%E9%9B%86II/" class="post-title hover-line">90.子集II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题确实再刷没能做出来，但我清楚要去重的是同一层的节点。结合前面已经做的几道题，按理这道就是一个组合题，但可能长时间思考导致思路混乱。这道题卡住我的是 去重，但去重已经在 40.组合总和 II完成，应该是隔离刷题时间有点久</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/06/78-%E5%AD%90%E9%9B%86/" class="post-title hover-line">78.子集</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">在脑子中思考，草稿纸上简单草图就写出来了，因此没有什么好记录的，就简单取用《代码随想录》的图和几句说明吧</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/27/131-%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/" class="post-title hover-line">131.分割回文串</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题没有能够做出来，尽管对于切割有些思路了，但是对于 substr 方法有些误解（后面详细谈一谈它的用法），导致实际返回的容器中有很多重复项</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/82-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-II/" class="post-title hover-line">82.删除排序链表中的重复元素 II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">当我们的链表中删除某个节点，如果这个节点可能包含头结点，那么务必使用虚拟头结点，因为删除节点需要拥有待删除节点的前一个节点才能进行删除</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/83-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/" class="post-title hover-line">83.删除排序链表中的重复元素</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题主要强调 while 循环，由于 fast 检测是否为空在最外层 while 中检测，但它只能保证当前这次循环不为空，所以 fast 如果进入下一个 while 循环（代码中内存 while 循环），记得要继续检测是否为空，不然出现未定义错误</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/206-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/" class="post-title hover-line">206.反转链表</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">反转链表需要用到三个指针，left 和 right 指针用于反转链表，而 node 指针用来保存还未进行反转的链表</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/leetcode/page/2/">2</a><a class="page-number" href="/leetcode/page/3/">3</a><a class="page-number" href="/leetcode/page/4/">4</a></div>
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/09/21/47-%E5%85%A8%E6%8E%92%E5%88%97II/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>47.全排列II</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/09/20/491-%E9%9D%9E%E9%80%92%E5%87%8F%E5%AD%90%E5%BA%8F%E5%88%97/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      491. 非递减子序列
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\27\131-分割回文串\" title="131.分割回文串" rel="bookmark">131.分割回文串</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\17-电话号码的字母组合\" title="17.电话号码的字母组合" rel="bookmark">17.电话号码的字母组合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\218-组合III\" title="218.组合III" rel="bookmark">218.组合III</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -478,6 +397,21 @@
       <script>searchInitialize("/search.json")</script>
     
     
+  <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="https://priesttomb.github.io/js/md5.min.js"></script>
+<script type="text/javascript">
+    new Gitalk({
+        clientID: 'Ov23li5i2L2uV71Fu3Br',
+        clientSecret: 'be91b4eccfd7c53c6414c6f81f8466849cd1f65a',
+        repo: 'comment',
+        owner: 'xiaoyangst',
+        admin: 'xiaoyangst',
+        id: md5(location.pathname),
+        distractionFreeMode: true
+    }).render('gitalk-container')
+</script>
+
   
 
   </body>

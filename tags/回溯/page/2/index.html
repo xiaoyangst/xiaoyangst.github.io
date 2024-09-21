@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        力扣 | 搁浅的羊先生
+        回溯 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -62,7 +62,9 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="/css/category.css" />
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -152,31 +154,18 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/leetcode.svg)"></div>
-        力扣
-      </div>
-      <div class="wall-category-description">leetcode Writeup Record</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" style="font-size: 1em;">单调栈</a> <a href="/tags/%E5%9B%9E%E6%BA%AF/" style="font-size: 1em;">回溯</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 1em;">字符串</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 1em;">数组</a> <a href="/tags/%E6%A0%88/" style="font-size: 1em;">栈</a> <a href="/tags/%E6%A0%91/" style="font-size: 1em;">树</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1em;">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 1em;">队列</a></div>
-      </div>
-    </div>
-  </div>
+  <div class="tag-page-title">#回溯</div>
   <div class="post-list">
     
-      
   
   <div class="post-card">
     <div class="post__head">
-      <a href="/2024/09/21/47-%E5%85%A8%E6%8E%92%E5%88%97II/" class="post-title hover-line">47.全排列II</a>
+      <a href="/2024/08/09/77-%E7%BB%84%E5%90%88/" class="post-title hover-line">77.组合</a>
       
     </div>
     <div class="post__body">
       
-      <div class="post-excerpt">这道题很好体现 树层和树枝的去重，树层去重需要创建一个局部记录项，树枝去重需要创建一个全局记录项。因为树枝在不同的栈中，树层在同一个栈中</div>
+      <div class="post-excerpt">组合不在意顺序，因此 [1,4] 和 [4,1] 属于同一个路径，不能同时加入到总路径中，只能取其一。为了方便，按照有序进行排布会容易做题，在代码中也是通过 i + 1 传递 到 backtrace 中作为 start 参数，表示遍历路径的起始位置</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
@@ -186,171 +175,8 @@
     </div>
   </div>
 
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/46-%E5%85%A8%E6%8E%92%E5%88%97/" class="post-title hover-line">46.全排列</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">有上一道题的节奏，这道题就轻松许多</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
 
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/491-%E9%9D%9E%E9%80%92%E5%87%8F%E5%AD%90%E5%BA%8F%E5%88%97/" class="post-title hover-line">491. 非递减子序列</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">回溯题，画图是至关重要的，可以不被绕晕</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/09/98-%E9%AA%8C%E8%AF%81%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" class="post-title hover-line">98.验证二叉搜索树</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">中序遍历二叉搜索树得到递增的有序数据</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%A0%91/" class="post-tag">#树</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/07/90-%E5%AD%90%E9%9B%86II/" class="post-title hover-line">90.子集II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题确实再刷没能做出来，但我清楚要去重的是同一层的节点。结合前面已经做的几道题，按理这道就是一个组合题，但可能长时间思考导致思路混乱。这道题卡住我的是 去重，但去重已经在 40.组合总和 II完成，应该是隔离刷题时间有点久</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/06/78-%E5%AD%90%E9%9B%86/" class="post-title hover-line">78.子集</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">在脑子中思考，草稿纸上简单草图就写出来了，因此没有什么好记录的，就简单取用《代码随想录》的图和几句说明吧</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/27/131-%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/" class="post-title hover-line">131.分割回文串</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题没有能够做出来，尽管对于切割有些思路了，但是对于 substr 方法有些误解（后面详细谈一谈它的用法），导致实际返回的容器中有很多重复项</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/82-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-II/" class="post-title hover-line">82.删除排序链表中的重复元素 II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">当我们的链表中删除某个节点，如果这个节点可能包含头结点，那么务必使用虚拟头结点，因为删除节点需要拥有待删除节点的前一个节点才能进行删除</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/83-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/" class="post-title hover-line">83.删除排序链表中的重复元素</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题主要强调 while 循环，由于 fast 检测是否为空在最外层 while 中检测，但它只能保证当前这次循环不为空，所以 fast 如果进入下一个 while 循环（代码中内存 while 循环），记得要继续检测是否为空，不然出现未定义错误</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/206-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/" class="post-title hover-line">206.反转链表</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">反转链表需要用到三个指针，left 和 right 指针用于反转链表，而 node 指针用来保存还未进行反转的链表</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-
-    
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/leetcode/page/2/">2</a><a class="page-number" href="/leetcode/page/3/">3</a><a class="page-number" href="/leetcode/page/4/">4</a></div>
+    <div class="paginator"><a class="page-number" href="/tags/%E5%9B%9E%E6%BA%AF/">1</a><span class="page-number current">2</span></div>
   </div>
 
     </div>
@@ -478,7 +304,6 @@
       <script>searchInitialize("/search.json")</script>
     
     
-  
-
+    
   </body>
 </html>
