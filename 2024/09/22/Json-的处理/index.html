@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        Base64 和 MD5 的使用 | 搁浅的羊先生
+        Json 的处理 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -156,13 +156,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">Base64 和 MD5 的使用</div>
+        <div class="post-title">Json 的处理</div>
         <div class="post-info">
           
   <a href="/tags/Qt/" class="post-tag">#Qt</a>
 
 
-          <span class="post-date">2024-09-01</span>
+          <span class="post-date">2024-09-22</span>
         </div>
       </div>
       
@@ -172,19 +172,20 @@
             
           </div>
         
-        <h2 id="为什么要使用-Base64"><a href="#为什么要使用-Base64" class="headerlink" title="为什么要使用 Base64 ?"></a>为什么要使用 Base64 ?</h2><p>Base64 虽然可以用于简单的加密，但通常用于传输数据。</p>
-<p>在网络上交换数据时，比如说从 A 地传到 B 地，往往要经过多个路由设备，由于不同的设备对字符的处理方式有一些不同，这样那些不可见字符就有可能被处理错误，这是不利于传输的。把数据先做一个 Base64 编码，统统变成可见字符，这样出错的可能性就大降低了。很多场景下的数据传输要求数据只能由简单通用的字符组成，比如 HTTP 协议要求请求的首行和请求头都必须是 ASCII 编码。</p>
-<h2 id="为什么要使用-MD5"><a href="#为什么要使用-MD5" class="headerlink" title="为什么要使用 MD5 ?"></a>为什么要使用 MD5 ?</h2><p>MD5 就是用来加密数据（<strong>MD5 并不是一种加密算法，而是一种摘要算法</strong>，我们也可以叫它哈希函数），且不可逆，即只用暴力碰撞来解密，当时它已经不是一个安全的加密算法了。</p>
-<p>使用 MD5 加密数据的目的通常是为了验证数据的完整性。因为哈希算法具有一致性，所以如果数据没有被篡改，我们可以把它的哈希值与原来的哈希值进行比较，如果完全一致，则说明数据没有被篡改。但是，由于哈希算法是单向的，所以我们无法通过哈希值推出原来的数据。如果你需要获取原来的数据，你必须要拥有原来的数据本身。</p>
-<h2 id="Qt-中使用-Base64"><a href="#Qt-中使用-Base64" class="headerlink" title="Qt 中使用 Base64"></a>Qt 中使用 Base64</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 编码</span><br>    QByteArray base = <span class="hljs-string">&quot;你好, 世界&quot;</span>;<br>    base = base.<span class="hljs-built_in">toBase64</span>();<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; base;<br><br><span class="hljs-comment">// 解码</span><br>    base= QByteArray::<span class="hljs-built_in">fromBase64</span>(base);<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; base.<span class="hljs-built_in">data</span>();<br></code></pre></td></tr></table></figure>
+        <p>在 Qt 中处理 JSON 数据时，通常会使用以下头文件：</p>
+<ol>
+<li>**<code>QJsonDocument</code>**：用于封装 JSON 文档（可以是 JSON 对象或 JSON 数组）</li>
+<li>**<code>QJsonObject</code>**：用于表示 JSON 对象（key-value 形式的 JSON 数据）</li>
+<li>**<code>QJsonArray</code>**：用于表示 JSON 数组</li>
+<li>**<code>QJsonValue</code>**：用于表示 JSON 对象或数组中的值（可以是字符串、数字、布尔值等）</li>
+<li>**<code>QJsonParseError</code>**：用于捕捉 JSON 解析中的错误</li>
+</ol>
+<p>序列化和反序列化 JSON 用 QJsonDocument，创建 JSON 用 QJsonObject。</p>
+<p>想要在网络中进行传输，需要把 QJsonObject 转换为 QByteArray。</p>
+<p><img src="/images/2024/09/22/3aee0120-7883-11ef-9d1d-2119386dba73.png" alt="Json.png"></p>
+<h2 id="创建JSON"><a href="#创建JSON" class="headerlink" title="创建JSON"></a>创建JSON</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonDocument&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonObject&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonArray&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonValue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QDebug&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">createJson</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 创建 JSON 对象</span><br>    QJsonObject jsonObj;<br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;John Doe&quot;</span>);	<span class="hljs-comment">// 添加 JSON 数据</span><br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;age&quot;</span>, <span class="hljs-number">30</span>);<br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;isStudent&quot;</span>, <span class="hljs-literal">false</span>);<br><br>    QJsonArray jsonArray;<br>    jsonArray.<span class="hljs-built_in">append</span>(<span class="hljs-string">&quot;Reading&quot;</span>);<br>    jsonArray.<span class="hljs-built_in">append</span>(<span class="hljs-string">&quot;Traveling&quot;</span>);<br>    jsonArray.<span class="hljs-built_in">append</span>(<span class="hljs-string">&quot;Swimming&quot;</span>);<br><br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;hobbies&quot;</span>, jsonArray);<br><br>    <span class="hljs-comment">// 把 JSON 转换为可在网络传输的 QByteArray</span><br>    <span class="hljs-function">QJsonDocument <span class="hljs-title">jsonDoc</span><span class="hljs-params">(jsonObj)</span></span>;<br>    QByteArray jsonData = jsonDoc.<span class="hljs-built_in">toJson</span>();	<br>    <br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Created JSON:&quot;</span> &lt;&lt; jsonData;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="Qt-中使用-MD5"><a href="#Qt-中使用-MD5" class="headerlink" title="Qt 中使用 MD5"></a>Qt 中使用 MD5</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">    QString input = <span class="hljs-string">&quot;Hello, World!&quot;</span>;<br>    QByteArray byteArray = input.<span class="hljs-built_in">toUtf8</span>();<br>    <br><span class="hljs-comment">// 生成 MD5 哈希</span><br>    QByteArray md5Hash = QCryptographicHash::<span class="hljs-built_in">hash</span>(byteArray, QCryptographicHash::Md5);<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;MD5 Hash:&quot;</span> &lt;&lt; md5Hash.<span class="hljs-built_in">toHex</span>();<br></code></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://draveness.me/whys-the-design-password-with-md5/">MD5 既然不安全</a>，那么 Qt 中可以使用的加密算法还有很多，主要通过 <code>QCryptographicHash</code> 和 <code>QCA</code>（Qt Cryptographic Architecture）库来实现。在任何场景下，我们都应该避免 MD5 的使用，可以选择更好的摘要算法替代 MD5，例如 SHA256、SHA512。</p>
-<p>尽管摘要算法无论如何都不安全，因为会被碰撞出来。哈希加盐的方式确实能够增加攻击者的成本，但这远远不够，随着计算机算力的增强已经难以抵挡。使用 <code>bcrypt</code> 相比于直接使用哈希加盐是一种更加安全的方式，也是我们目前推荐使用的方法，为了增加攻击者的成本，<code>bcrypt</code> 引入了计算成本这一可以调节的参数，能够调节执行 <code>bcrypt</code> 函数的成本。</p>
-<hr>
-<p>参考链接：<br><a href="https://xiaoyangst.github.io/2024/09/01/Base64-%E5%92%8C-MD5-%E7%9A%84%E4%BD%BF%E7%94%A8/">https://xiaoyangst.github.io/2024/09/01/Base64-%E5%92%8C-MD5-%E7%9A%84%E4%BD%BF%E7%94%A8/</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_35749545/article/details/129072384">https://blog.csdn.net/weixin_35749545/article/details/129072384</a><br><a target="_blank" rel="noopener" href="https://blog.51cto.com/yang/2894100">https://blog.51cto.com/yang/2894100</a></p>
-
+<h2 id="解析JSON"><a href="#解析JSON" class="headerlink" title="解析JSON"></a>解析JSON</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonDocument&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonObject&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonArray&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonValue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QDebug&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">parseJson</span><span class="hljs-params">(<span class="hljs-type">const</span> QByteArray &amp;jsonData)</span> </span>&#123;<br>    QJsonParseError jsonError;<br>    QJsonDocument jsonDoc = QJsonDocument::<span class="hljs-built_in">fromJson</span>(jsonData, &amp;jsonError);	 <span class="hljs-comment">// 将 JSON 解析为 UTF-8 编码的 JSON 文档，并从中创建 QJsonDocument</span><br><br>    <span class="hljs-keyword">if</span> (jsonError.error != QJsonParseError::NoError) &#123;	<span class="hljs-comment">// 如果 解析有误，退出</span><br>        <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;JSON parse error:&quot;</span> &lt;&lt; jsonError.<span class="hljs-built_in">errorString</span>();<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (jsonDoc.<span class="hljs-built_in">isObject</span>()) &#123;	<span class="hljs-comment">// 确保是一个对象</span><br>        QJsonObject jsonObj = jsonDoc.<span class="hljs-built_in">object</span>();	<span class="hljs-comment">// 得到 JSON 对象</span><br>        <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Parsed JSON object:&quot;</span> &lt;&lt; jsonObj;<br><br>        <span class="hljs-keyword">if</span> (jsonObj.<span class="hljs-built_in">contains</span>(<span class="hljs-string">&quot;name&quot;</span>)) &#123;	<span class="hljs-comment">// 确保 key 是合法的</span><br>            <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Name:&quot;</span> &lt;&lt; jsonObj.<span class="hljs-built_in">value</span>(<span class="hljs-string">&quot;name&quot;</span>).<span class="hljs-built_in">toString</span>();	<span class="hljs-comment">//获取 key 对应的  v</span><br>        &#125;<br>        <span class="hljs-keyword">if</span> (jsonObj.<span class="hljs-built_in">contains</span>(<span class="hljs-string">&quot;age&quot;</span>)) &#123;<br>            <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Age:&quot;</span> &lt;&lt; jsonObj.<span class="hljs-built_in">value</span>(<span class="hljs-string">&quot;age&quot;</span>).<span class="hljs-built_in">toInt</span>();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
       </div>
     </div>
     
@@ -227,23 +228,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/09/03/%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%E5%92%8C%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>常量指针和指针常量</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/09/01/%E4%BD%8D%E8%BF%90%E7%AE%97/">
+    <a class="post-nav-item-right" href="/2024/09/21/%E7%AC%AC%E5%85%AB%E7%AB%A0%EF%BC%9A%E5%8D%8F%E7%A8%8B/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -255,7 +244,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      位运算
+      第八章：协程
     </a>
   
 </div>
@@ -268,7 +257,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\22\Json-的处理\" title="Json 的处理" rel="bookmark">Json 的处理</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\Lambda-表达式\" title="Lambda 表达式" rel="bookmark">Lambda 表达式</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\Lambda-表达式\" title="Lambda 表达式" rel="bookmark">Lambda 表达式</a></div></div></div>
     
   </div>
 </div>
