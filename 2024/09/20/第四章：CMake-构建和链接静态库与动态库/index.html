@@ -181,7 +181,8 @@
             
           </div>
         
-        <p>我最近在尝试手写线程池，尽管还有很多改进的地方，但用来学习本节内容足够了。</p>
+        <p>@[TOC]</p>
+<p>我最近在尝试手写线程池，尽管还有很多改进的地方，但用来学习本节内容足够了。</p>
 <p><img src="/images/2024/09/20/ddcf40d0-7724-11ef-bb33-ad22fef3cf2e.png" alt="线程池.png"></p>
 <h2 id="构建静态库和动态库"><a href="#构建静态库和动态库" class="headerlink" title="构建静态库和动态库"></a>构建静态库和动态库</h2><p>光是构建静态库和动态库还不够， 还需要指定生成路径，这样别人使用你的库文件将相当方便（后面你就知道了）。</p>
 <p>先看看如何构建静态库和动态库。</p>
@@ -283,8 +284,6 @@
 <hr>
 <p>下面我就具体演示，把静态库和动态库一并引入，实际情景中你可能只需要静态库或动态库即可。</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.16</span>)<br><span class="hljs-keyword">project</span>(YThreadPool)<br><span class="hljs-keyword">set</span>(CMAKE_CXX_STANDARD <span class="hljs-number">17</span>)<br><br><span class="hljs-comment"># 设置库文件的头文件路径</span><br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/YThreadPool_x86/<span class="hljs-keyword">include</span>)<br><br><span class="hljs-comment"># 设置静态库和动态库的搜索路径</span><br><span class="hljs-keyword">link_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/YThreadPool_x86/lib)<br><span class="hljs-keyword">link_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/YThreadPool_x86/bin)<br><br><span class="hljs-keyword">link_libraries</span>(YThreadPoolLIB)  <span class="hljs-comment"># 添加静态库</span><br><br><span class="hljs-keyword">add_executable</span>(Demo main.cpp)<br><br><span class="hljs-comment"># 添加动态库 和 添加 pthread 库链接（因为我们用到线程了）</span><br><span class="hljs-keyword">target_link_libraries</span>(Demo PUBLIC YThreadPoolBIN pthread)<br></code></pre></td></tr></table></figure>
-
-
       </div>
     </div>
     
@@ -596,12 +595,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

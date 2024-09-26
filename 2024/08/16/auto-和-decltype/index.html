@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">auto 和 decltype</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#auto"><span class="post-toc-text">auto</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="post-toc-text">注意点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#auto-%E4%B8%8E-const-%E7%BB%93%E5%90%88"><span class="post-toc-text">auto 与 const 结合</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#decltype"><span class="post-toc-text">decltype</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#auto%E5%92%8Cdecltype%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="post-toc-text">auto和decltype的区别</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC%E7%9A%84%E6%97%B6%E6%9C%BA%E5%92%8C%E6%96%B9%E5%BC%8F"><span class="post-toc-text">类型推导的时机和方式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%94%A8%E9%80%94"><span class="post-toc-text">用途</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%88%B0%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="post-toc-text">类型推到的结果</span></a></li></ol></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="auto"><a href="#auto" class="headerlink" title="auto"></a>auto</h2><p>使用了 auto 关键字以后，编译器会在编译期间自动推导出变量的类型，这样我们就不用手动指明变量的数据类型了。auto 仅仅是一个占位符，在编译器期间它会被真正的类型所替代。</p>
+        <p>@[TOC]</p>
+<h2 id="auto"><a href="#auto" class="headerlink" title="auto"></a>auto</h2><p>使用了 auto 关键字以后，编译器会在编译期间自动推导出变量的类型，这样我们就不用手动指明变量的数据类型了。auto 仅仅是一个占位符，在编译器期间它会被真正的类型所替代。</p>
 <h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><ol>
 <li>auto 变量<strong>必须在定义时初始化</strong>，因为编译器需要根据初始化表达式来推导类型</li>
 <li>auto 不能在函数的参数中使用，因为 auto 后面的变量需要初始化，当时函数的参数还只是声明（哪怕你是给这个函数参数填上默认参数也不行）</li>
@@ -574,12 +569,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

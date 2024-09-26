@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">智能指针</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%8F%8AC-RAII%E6%89%8B%E6%B3%95"><span class="post-toc-text">内存管理及C++ RAII手法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%85%B1%E4%BA%AB%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88-shared-ptr"><span class="post-toc-text">共享智能指针 shared_ptr</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%9A%84%E5%A4%A7%E5%B0%8F"><span class="post-toc-text">智能指针的大小</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%81%BF%E5%85%8D%E9%80%9A%E8%BF%87%E5%90%8C%E4%B8%80%E4%B8%AA%E8%A3%B8%E6%8C%87%E9%92%88%E5%88%9B%E5%BB%BA%E5%A4%9A%E4%B8%AA-shared-ptr-%E5%AF%B9%E8%B1%A1"><span class="post-toc-text">避免通过同一个裸指针创建多个 shared_ptr 对象</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%81%BF%E5%85%8D%E9%80%9A%E8%BF%87-this-%E6%8C%87%E9%92%88%E5%88%9B%E5%BB%BA-shared-ptr-%E5%AF%B9%E8%B1%A1"><span class="post-toc-text">避免通过 this 指针创建 shared_ptr 对象</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8-make-shared-%E5%88%9B%E5%BB%BA-shared-ptr-%E5%AF%B9%E8%B1%A1"><span class="post-toc-text">优先使用 make_shared 创建 shared_ptr 对象</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%BC%B1%E5%BC%95%E7%94%A8%E6%8C%87%E9%92%88-weak-ptr"><span class="post-toc-text">弱引用指针 weak_ptr</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#expired-%E5%92%8C-lock"><span class="post-toc-text">expired 和 lock</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#weak-ptr-%E4%B8%8E-shared-ptr-%E9%81%BF%E5%85%8D%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8"><span class="post-toc-text">weak_ptr 与 shared_ptr 避免循环引用</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%8B%AC%E5%8D%A0%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88-unique-ptr"><span class="post-toc-text">独占智能指针 unique_ptr</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#move-%E8%BD%AC%E7%A7%BB%E6%89%80%E6%9C%89%E6%9D%83"><span class="post-toc-text">move 转移所有权</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#release-%E5%92%8C-get-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="post-toc-text">release 和 get 的区别</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#unique-%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="post-toc-text">unique 的实际应用</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#shared-ptr-%E4%B8%8E-uinque-ptr-%E7%9A%84%E5%88%A0%E9%99%A4%E5%99%A8"><span class="post-toc-text">shared_ptr 与 uinque_ptr 的删除器</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <p>程序员可以自由分配堆内存，而栈内存由编译器申请和释放。内存管理针对的就是堆内存，在C++11的智能指针没有出现之前，为了保证内存合理的申请释放，需要配对操作，即new和delete，malloc和free，来避免内存泄漏。</p>
+        <p>@[TOC]</p>
+<p>程序员可以自由分配堆内存，而栈内存由编译器申请和释放。内存管理针对的就是堆内存，在C++11的智能指针没有出现之前，为了保证内存合理的申请释放，需要配对操作，即new和delete，malloc和free，来避免内存泄漏。</p>
 <p><img src="/images/2024/08/16/996afb20-5b93-11ef-922f-4335b82b6d11.png" alt="智能指针所有权.png"></p>
 <h2 id="内存管理及C-RAII手法"><a href="#内存管理及C-RAII手法" class="headerlink" title="内存管理及C++ RAII手法"></a>内存管理及C++ RAII手法</h2><p>RAII 是 C++ 所特有的资源管理方式，它<strong>依托栈和析构函数</strong>，来对所有的资源(包括堆内存在内)进行管理。它提供了一种<strong>异常安全的资源管理方式</strong>，对RAII的使用，使C++不需要类似于 Java 那样的垃圾收集方法，也能有效的内存进行管理。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">manageMemory</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">manageMemory</span><span class="hljs-params">(T *data)</span>:data_(data)&#123;</span><br>    std::cout&lt;&lt;<span class="hljs-string">&quot; manageMemory &quot;</span>&lt;&lt;std::endl;<br>  &#125;<br>  ~<span class="hljs-built_in">manageMemory</span>()&#123;<br>    std::cout&lt;&lt;<span class="hljs-string">&quot; ~manageMemory &quot;</span>&lt;&lt;std::endl;<br>    <span class="hljs-keyword">delete</span> data_;<br>    data_ = <span class="hljs-literal">nullptr</span>;<br>  &#125;<br> <span class="hljs-keyword">private</span>:<br>  T* data_;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Test</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Test</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span>:num_(num)&#123;</span><br>    std::cout&lt;&lt;<span class="hljs-string">&quot; Test &quot;</span>&lt;&lt;std::endl;<br>  &#125;<br>  ~<span class="hljs-built_in">Test</span>()&#123;<br>    std::cout&lt;&lt;<span class="hljs-string">&quot; ~Test &quot;</span>&lt;&lt;std::endl;<br>  &#125;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">int</span> num_ = <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>  &#123;<br>    Test* t = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Test</span>(<span class="hljs-number">10</span>);<br>    <span class="hljs-function">manageMemory&lt;Test&gt; <span class="hljs-title">mt</span><span class="hljs-params">(t)</span></span>;<br>  &#125;<br><br>  <span class="hljs-built_in">system</span>(<span class="hljs-string">&quot;pause&quot;</span>);<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -760,12 +755,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

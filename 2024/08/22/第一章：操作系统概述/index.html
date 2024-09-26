@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">第一章：操作系统概述</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%99%9A%E6%8B%9F%E5%8C%96CPU"><span class="post-toc-text">虚拟化CPU</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%99%9A%E6%8B%9F%E5%8C%96%E5%86%85%E5%AD%98"><span class="post-toc-text">虚拟化内存</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%B9%B6%E5%8F%91"><span class="post-toc-text">并发</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%8C%81%E4%B9%85%E6%80%A7"><span class="post-toc-text">持久性</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%80%BB%E7%BB%93"><span class="post-toc-text">总结</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>一个正在运行的程序称之为进程，运行的动作发生就是不断从内存中取指令并执行指令，直到程序最终完成。</p>
+        <p>@[TOC]</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>一个正在运行的程序称之为进程，运行的动作发生就是不断从内存中取指令并执行指令，直到程序最终完成。</p>
 <p>实际上，有一类软件负责让程序运行变得容易（甚至允许你同时允许多个程序），允许程序共享内容，让程序能够与设备交互，以及其它类型的有趣的工作。这些软件称为<strong>操作系统</strong>，因为他们负责确保系统既易于使用又正确高效地运行。</p>
 <p>操作系统作为硬件和应用程序的中间人，负责把硬件资源更加方便地提供给应用程序使用。如果要实现这点，操作系统主要利用一种通用的技术，称为<strong>虚拟化</strong>。即操作系统将物理资源（如处理器、内存或磁盘）转换为更通用、更强大且更易于使用的虚拟形式。应用程序通过操作系统提供的一些接口（API），间接使用硬件资源。每个 CPU、内存和磁盘都是系统的资源（resource），因此操作系统扮演的主要角色就是管理这些资源，以做到高效或公平，或者实际上考虑其他许多可能的目标。</p>
 <p><img src="/images/2024/08/22/31942a70-6062-11ef-b5d8-395e250ad2a7.png" alt="OS.png"></p>
@@ -540,12 +535,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

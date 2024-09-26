@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">第三章：函数对象</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%8C%85%E8%A3%85%E5%99%A8"><span class="post-toc-text">操作符包装器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#std-function%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="post-toc-text">std::function的性能问题和并发安全问题</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <p><strong>注意</strong>：此文介绍很多<a href="https://xiaoyangst.github.io/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/">C++11新特性</a>的知识（auto 关键字、Lambda 表达式、function 包装器），这不会在此读书笔记中记录，可以在我的其它地方找到相关的笔记，或者你可以自行去学习，毕竟，C++11 是现在 C++ 学习者必备的语法。</p>
+        <p>@[TOC]</p>
+<p><strong>注意</strong>：此文介绍很多<a href="https://xiaoyangst.github.io/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/">C++11新特性</a>的知识（auto 关键字、Lambda 表达式、function 包装器），这不会在此读书笔记中记录，可以在我的其它地方找到相关的笔记，或者你可以自行去学习，毕竟，C++11 是现在 C++ 学习者必备的语法。</p>
 <h2 id="操作符包装器"><a href="#操作符包装器" class="headerlink" title="操作符包装器"></a>操作符包装器</h2><p><img src="/images/2024/08/16/d632a100-5bc2-11ef-a253-abb20d863bc2.png" alt="操作符包装器.png"></p>
 <p>C++11 使用操作符包装器需要指明类型，如greater&lt;int&gt;()。但是 C++14 之后就可以不用了，如greater&lt;&gt;()。</p>
 <h2 id="std-function的性能问题和并发安全问题"><a href="#std-function的性能问题和并发安全问题" class="headerlink" title="std::function的性能问题和并发安全问题"></a>std::function的性能问题和并发安全问题</h2><p>虽然前面的内容都证明 std::function 很有用，但不能滥用，因为它有明显的性能问题。为了隐藏包含的类型并提供一个对所有可调用类型的通用接口，std::function 使用类型擦除的技术。本书并不打算深入研究这个问题，只需要知道它是基于虚成员函数调用就足够了。因为虚调用是在运行时进行的，编译器不能在线调用，所以也就失去了优化的机会。</p>
@@ -506,12 +501,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

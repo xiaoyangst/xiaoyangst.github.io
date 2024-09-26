@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">理解TCP的有序释放操作</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#shutdown%E8%B0%83%E7%94%A8"><span class="post-toc-text">shutdown调用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%9C%89%E5%BA%8F%E9%87%8A%E6%94%BE"><span class="post-toc-text">有序释放</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="shutdown调用"><a href="#shutdown调用" class="headerlink" title="shutdown调用"></a>shutdown调用</h2><p>close 函数会关闭读写，但如果你想控制关闭读端、关闭写端或者全部关闭，那么 shutdown 可以做到。</p>
+        <p>@[TOC]</p>
+<h2 id="shutdown调用"><a href="#shutdown调用" class="headerlink" title="shutdown调用"></a>shutdown调用</h2><p>close 函数会关闭读写，但如果你想控制关闭读端、关闭写端或者全部关闭，那么 shutdown 可以做到。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">shutdown</span><span class="hljs-params">(<span class="hljs-type">int</span> sockfd, <span class="hljs-type">int</span> how)</span></span>;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">sockfd: 套接字描述符，表示要操作的连接</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">how: 指定如何关闭连接，可以取以下三个值：</span><br><span class="hljs-comment">	SHUT_RD (0): 关闭读取功能。该套接字不再接收数据，任何到达的数据包将被丢弃。如果有未处理的接收数据，会继续保留，直到被读取完毕</span><br><span class="hljs-comment">	SHUT_WR (1): 关闭写入功能。该套接字不再允许发送数据。此时，TCP 会发送一个 FIN 包，告诉对端本地已完成数据发送，但仍可以接收数据</span><br><span class="hljs-comment">	SHUT_RDWR (2): 关闭读写功能。相当于同时执行 SHUT_RD 和 SHUT_WR，既不能发送数据，也不能接收数据</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
 
 <p>关闭套接字和调用 shutdown 之间有很大的区别。首先，即使将 how 设置为 2 来调用 shutdown，实际上也并没有“关闭”套接字。也就是说，并没有释放套接字及其资源（how 被设置为 0 或 2 时可能会将接收缓冲区释放掉）。</p>
@@ -510,12 +505,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

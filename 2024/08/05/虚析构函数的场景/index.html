@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">虚析构函数的场景</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%BC%9A%E8%A2%AB%E7%BB%A7%E6%89%BF%E4%BD%86%E4%B8%8D%E9%9C%80%E8%A6%81%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0"><span class="post-toc-text">会被继承但不需要虚析构函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%BC%9A%E8%A2%AB%E7%BB%A7%E6%89%BF%E4%B8%94%E9%9C%80%E8%A6%81%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0"><span class="post-toc-text">会被继承且需要虚析构函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E9%A1%BA%E5%BA%8F"><span class="post-toc-text">析构函数的调用顺序</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%9C%80%E5%90%8E%E7%9A%84%E8%AF%9D"><span class="post-toc-text">最后的话</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <p>如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？</p>
+        <p>@[TOC]</p>
+<p>如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？</p>
 <p><strong>通过基类的指针来删除派生类的对象时，基类的析构函数应该是虚函数</strong>。</p>
 <h2 id="会被继承但不需要虚析构函数"><a href="#会被继承但不需要虚析构函数" class="headerlink" title="会被继承但不需要虚析构函数"></a>会被继承但不需要虚析构函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">NonCopyable</span> &#123;<br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-built_in">NonCopyable</span>(<span class="hljs-type">const</span> NonCopyable &amp;) = <span class="hljs-keyword">delete</span>; <span class="hljs-comment">// 阻止拷贝</span><br>  NonCopyable &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> NonCopyable &amp;) = <span class="hljs-keyword">delete</span>;  <span class="hljs-comment">// 阻止赋值</span><br>  <span class="hljs-built_in">NonCopyable</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">NonCopyable</span>() = <span class="hljs-keyword">default</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
@@ -514,12 +509,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

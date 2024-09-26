@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">网络编程中结构体的区分</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sockaddr%E7%BB%93%E6%9E%84%E4%BD%93%E5%92%8Csockaddr-in%E7%BB%93%E6%9E%84%E4%BD%93"><span class="post-toc-text">sockaddr结构体和sockaddr_in结构体</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#gethostbyname%E5%87%BD%E6%95%B0"><span class="post-toc-text">gethostbyname函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2IP%E4%B8%8E%E5%A4%A7%E7%AB%AF%E5%BA%8FIP%E5%9C%B0%E5%9D%80%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="post-toc-text">字符串IP与大端序IP地址的转换</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="sockaddr结构体和sockaddr-in结构体"><a href="#sockaddr结构体和sockaddr-in结构体" class="headerlink" title="sockaddr结构体和sockaddr_in结构体"></a>sockaddr结构体和sockaddr_in结构体</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr</span> &#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> sa_family;    <span class="hljs-comment">// 协议族 (AF_INET, AF_INET6, etc.)</span><br>    <span class="hljs-type">char</span> sa_data[<span class="hljs-number">14</span>];            <span class="hljs-comment">// 地址数据 (协议相关)</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+        <p>@[TOC]</p>
+<h2 id="sockaddr结构体和sockaddr-in结构体"><a href="#sockaddr结构体和sockaddr-in结构体" class="headerlink" title="sockaddr结构体和sockaddr_in结构体"></a>sockaddr结构体和sockaddr_in结构体</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr</span> &#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> sa_family;    <span class="hljs-comment">// 协议族 (AF_INET, AF_INET6, etc.)</span><br>    <span class="hljs-type">char</span> sa_data[<span class="hljs-number">14</span>];            <span class="hljs-comment">// 地址数据 (协议相关)</span><br>&#125;;<br></code></pre></td></tr></table></figure>
 
 <p>存放协议族、端口和地址信息。客户端的 connect 函数和服务端的 bind 函数需要这个结构体。</p>
 <p>sockaddr 结构体是为了统一地址结构的表示方法，统一接口函数，但是这个结构体并不方便使用，因此定义了等价的 sockaddr_in 结构体，它的大小和 sockaddr 结构体相同，可以强制转换成 sockaddr。</p>
@@ -523,12 +518,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

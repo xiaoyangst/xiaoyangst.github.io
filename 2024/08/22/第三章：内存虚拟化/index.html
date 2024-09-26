@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">第三章：内存虚拟化</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%8A%BD%E8%B1%A1%EF%BC%9A%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="post-toc-text">抽象：地址空间</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%9C%BA%E5%88%B6%EF%BC%9A%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2"><span class="post-toc-text">机制：地址转换</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%88%86%E6%AE%B5"><span class="post-toc-text">分段</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%88%86%E9%A1%B5"><span class="post-toc-text">分页</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%88%86%E9%A1%B5%EF%BC%9A%E5%BF%AB%E9%80%9F%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%EF%BC%88TLB%EF%BC%89"><span class="post-toc-text">分页：快速地址转换（TLB）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%88%86%E9%A1%B5%EF%BC%9A%E8%BE%83%E5%B0%8F%E7%9A%84%E8%A1%A8"><span class="post-toc-text">分页：较小的表</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%B6%85%E8%B6%8A%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%EF%BC%9A%E6%9C%BA%E5%88%B6"><span class="post-toc-text">超越物理内存：机制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%B6%85%E8%B6%8A%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%EF%BC%9A%E7%AD%96%E7%95%A5"><span class="post-toc-text">超越物理内存：策略</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="抽象：地址空间"><a href="#抽象：地址空间" class="headerlink" title="抽象：地址空间"></a>抽象：地址空间</h2><p>当我们描述地址空间时，所描述的是操作系统<strong>提供给运行程序的抽象</strong>。程序不在物理地址 0～16KB 的内存中，而是加载在任意的物理地址。当操作系统这样做时，我们说操作系统在虚拟化内存，因为运行的程序<strong>自认为</strong>它被加载到特定地址（例如 0）的内存中，并且具有非常大的地址空间。</p>
+        <p>@[TOC]</p>
+<h2 id="抽象：地址空间"><a href="#抽象：地址空间" class="headerlink" title="抽象：地址空间"></a>抽象：地址空间</h2><p>当我们描述地址空间时，所描述的是操作系统<strong>提供给运行程序的抽象</strong>。程序不在物理地址 0～16KB 的内存中，而是加载在任意的物理地址。当操作系统这样做时，我们说操作系统在虚拟化内存，因为运行的程序<strong>自认为</strong>它被加载到特定地址（例如 0）的内存中，并且具有非常大的地址空间。</p>
 <p>比方说下图中进程 A 尝试在地址 0（我们将称其为虚拟地址）执行加载操作时，然而操作系统在硬件的支持下，出于某种原因，必须确保不是加载到物理地址 0，而是物理地址 320KB（这是 A 载入内存的地址）。</p>
 <p><img src="/images/2024/08/22/7f264150-606d-11ef-b5d8-395e250ad2a7.png" alt="地址空间.png"></p>
 <p>虚拟系统内存的目标：</p>
@@ -652,12 +647,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

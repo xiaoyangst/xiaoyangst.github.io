@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">第二章：函数式编程之旅</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0"><span class="post-toc-text">函数使用函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#STL%E5%AE%9E%E4%BE%8B"><span class="post-toc-text">STL实例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%B1%82%E5%B9%B3%E5%9D%87%E5%80%BC"><span class="post-toc-text">求平均值</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%8A%98%E5%8F%A0"><span class="post-toc-text">折叠</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%88%A0%E9%99%A4%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%A9%BA%E7%99%BD%E7%AC%A6"><span class="post-toc-text">删除字符串空白符</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%B0%93%E8%AF%8D%E5%88%86%E5%89%B2%E9%9B%86%E5%90%88"><span class="post-toc-text">基于谓词分割集合</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%BF%87%E6%BB%A4%E5%92%8C%E8%BD%AC%E6%8D%A2"><span class="post-toc-text">过滤和转换</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#STL%E7%AE%97%E6%B3%95%E7%9A%84%E5%8F%AF%E7%BB%84%E5%90%88%E6%80%A7"><span class="post-toc-text">STL算法的可组合性</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%BC%96%E5%86%99%E8%87%AA%E5%B7%B1%E7%9A%84%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0"><span class="post-toc-text">编写自己的高阶函数</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%8E%A5%E6%94%B6%E5%87%BD%E6%95%B0%E4%BD%9C%E4%B8%BA%E5%8F%82%E6%95%B0"><span class="post-toc-text">接收函数作为参数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%94%A8%E5%BE%AA%E7%8E%AF%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">用循环实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%80%92%E5%BD%92%E5%92%8C%E5%B0%BE%E8%B0%83%E7%94%A8%E4%BC%98%E5%8C%96"><span class="post-toc-text">递归和尾调用优化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%BD%BF%E7%94%A8%E6%8A%98%E5%8F%A0%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">使用折叠实现</span></a></li></ol></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="函数使用函数"><a href="#函数使用函数" class="headerlink" title="函数使用函数"></a>函数使用函数</h2><p>所有函数式编程语言的主要特色就是函数可被看作一个普通的值。它们可被存储于变量中，放到集合或结构中，作为参数传递给其他函数，并可以作为其他函数的返回结果中。能够接收函数作为参数或返回函数作为结果的函数称为<strong>高阶函数</strong>。</p>
+        <p>@[TOC]</p>
+<h2 id="函数使用函数"><a href="#函数使用函数" class="headerlink" title="函数使用函数"></a>函数使用函数</h2><p>所有函数式编程语言的主要特色就是函数可被看作一个普通的值。它们可被存储于变量中，放到集合或结构中，作为参数传递给其他函数，并可以作为其他函数的返回结果中。能够接收函数作为参数或返回函数作为结果的函数称为<strong>高阶函数</strong>。</p>
 <p>我们来看一个实例：假设有一组人，需要写出组内所有女性的名字。如下图所示。</p>
 <p><img src="/images/2024/08/16/0b7c66c0-5b78-11ef-ad1f-31ad8bab6002.png" alt="一个实例.png"></p>
 <p>也就是说组内由男性和女性组成，先要把男性过滤掉而剩下女性（过滤），然后获取这些女生的名字（转换）。</p>
@@ -578,12 +573,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

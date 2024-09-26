@@ -181,7 +181,8 @@
             
           </div>
         
-        <p>在上一小节当中，查找第三方库用到一个新语法 find_package，这个语法往往被人误解，以为只要是找第三方库就可以用，但如果你看我第三章的那种方式构建库文件，你就无法用 find_package。</p>
+        <p>@[TOC]</p>
+<p>在上一小节当中，查找第三方库用到一个新语法 find_package，这个语法往往被人误解，以为只要是找第三方库就可以用，但如果你看我第三章的那种方式构建库文件，你就无法用 find_package。</p>
 <p>我们是官方的第三方库，我们可以用 find_package，因为人家已经整理好相关的文件到一个变量中，我们才可以非常方便简单设置几个参数值快速找到库文件。但如果说我们自己的或不规范的第三方库，即没提过规范的语法设置快速寻找，就只能先添加库文件的寻找路径，再一个一个寻找，这就是 find_library 命令。</p>
 <p>总之，find_package 和 find_library 都可以用于在 CMake 中查找和链接库，但 find_package 更适用于具有CMake 配置文件的库，而 find_library 则适用于没有 CMake 配置文件的库。</p>
 <h2 id="find-package"><a href="#find-package" class="headerlink" title="find_package"></a>find_package</h2><h3 id="典型用法"><a href="#典型用法" class="headerlink" title="典型用法"></a>典型用法</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">find_package</span>(&lt;PackageName&gt; [&lt;version&gt;] [REQUIRED] [COMPONENTS &lt;components&gt;...])<br></code></pre></td></tr></table></figure>
@@ -556,12 +557,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

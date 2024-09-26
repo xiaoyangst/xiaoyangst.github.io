@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">移动语义</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%A4%8D%E5%88%B6%E8%AF%AD%E4%B9%89%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89"><span class="post-toc-text">复制语义和移动语义</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%A4%8D%E5%88%B6%E8%AF%AD%E4%B9%89%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89"><span class="post-toc-text">代码实现复制语义和移动语义</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#move%E5%87%BD%E6%95%B0"><span class="post-toc-text">move函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E7%9A%84%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8"><span class="post-toc-text">移动语义的合理使用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9A%E7%BC%96%E8%AF%91%E5%99%A8%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E7%A7%BB%E5%8A%A8%E6%93%8D%E4%BD%9C%E7%9A%84%E8%A6%81%E6%B1%82"><span class="post-toc-text">补充：编译器自动生成移动操作的要求</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%AE%9E%E7%8E%B0%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8%EF%BC%9F"><span class="post-toc-text">补充：为什么用右值引用实现移动语义，而不是左值引用？</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="复制语义和移动语义"><a href="#复制语义和移动语义" class="headerlink" title="复制语义和移动语义"></a>复制语义和移动语义</h2><p>C++11 之前只有复制（拷贝）语义，定义了<strong>析构函数，复制构造函数，赋值函数</strong>就称为有了拷贝控制。对对象的非指针，非引用的行为都会使用复制语义。在拥有内存资源对象中，都会定义这三个函数以实现<strong>深拷贝</strong>。</p>
+        <p>@[TOC]</p>
+<h2 id="复制语义和移动语义"><a href="#复制语义和移动语义" class="headerlink" title="复制语义和移动语义"></a>复制语义和移动语义</h2><p>C++11 之前只有复制（拷贝）语义，定义了<strong>析构函数，复制构造函数，赋值函数</strong>就称为有了拷贝控制。对对象的非指针，非引用的行为都会使用复制语义。在拥有内存资源对象中，都会定义这三个函数以实现<strong>深拷贝</strong>。</p>
 <p>复制语义不会销毁用来复制的对象，同时还得到一个和其一模一样的对象。但是在某些场景中，我们希望对象拷贝后立即被销毁，这种情况我们就是移动语义，即只是移动而非拷贝对象以大幅度提升性能。</p>
 <p><img src="/images/2024/08/16/94175820-5b94-11ef-922f-4335b82b6d11.png" alt="copymove.png"></p>
 <p>我们的重点还是集中在移动语义上，谈及复制语义是为了更清楚地知道移动语义出现的意义。移动语义就是从给定对象“窃取”资源而不是拷贝资源，源对象不再拥有资源，资源的所有权已经归属于新创建的对象。那么实现移动语义有哪些要求呢？</p>
@@ -551,12 +546,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

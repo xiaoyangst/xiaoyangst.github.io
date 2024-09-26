@@ -181,7 +181,8 @@
             
           </div>
         
-        <h2 id="可调用对象的类型和调用形式"><a href="#可调用对象的类型和调用形式" class="headerlink" title="可调用对象的类型和调用形式"></a>可调用对象的类型和调用形式</h2><p>在 C++ 中函数、函数指针、指向类的成员函数指针、函数对象（重载了调用运算符的类）、lambda 表达式都属于<strong>可调用对象</strong>。可调用对象都是有类型的，比方说函数对象，它本质就是一个重载了调用运算符的类，不同的类当然类型也不相同。还有函数和函数指针，它们的类型是有其返回值类型和实参类型决定，<code>int func(int a,int b)</code> 和 <code>void func()</code> 就不是同一个类型。它们对应的指针也是不同的类型，不能相互赋值。</p>
+        <p>@[TOC]</p>
+<h2 id="可调用对象的类型和调用形式"><a href="#可调用对象的类型和调用形式" class="headerlink" title="可调用对象的类型和调用形式"></a>可调用对象的类型和调用形式</h2><p>在 C++ 中函数、函数指针、指向类的成员函数指针、函数对象（重载了调用运算符的类）、lambda 表达式都属于<strong>可调用对象</strong>。可调用对象都是有类型的，比方说函数对象，它本质就是一个重载了调用运算符的类，不同的类当然类型也不相同。还有函数和函数指针，它们的类型是有其返回值类型和实参类型决定，<code>int func(int a,int b)</code> 和 <code>void func()</code> 就不是同一个类型。它们对应的指针也是不同的类型，不能相互赋值。</p>
 <p>虽然它们的类型不尽相同，但是它们的调用形式却有相同之处。调用形式指明了调用返回的类型和传递给调用的实参类型。如下面的代码所示，尽管 函数 和 lambda表达式 类型不同（不能相互赋值），但是调用形式一样。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">addA</span><span class="hljs-params">(<span class="hljs-type">int</span> num1,<span class="hljs-type">int</span> num2)</span></span>&#123;  <span class="hljs-comment">// 函数</span><br>  <span class="hljs-keyword">return</span> num1 + num2;<br>&#125;<br><br><span class="hljs-keyword">auto</span> addB = [](<span class="hljs-type">int</span> num1,<span class="hljs-type">int</span> num2)-&gt;<span class="hljs-type">int</span> &#123;  <span class="hljs-comment">// lambda表达式</span><br>  <span class="hljs-keyword">return</span> num1 + num2;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>  <br>  <span class="hljs-comment">// 调用形式一样</span><br>  <span class="hljs-built_in">addA</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);<br>  <span class="hljs-built_in">addB</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -530,12 +531,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

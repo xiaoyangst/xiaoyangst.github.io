@@ -181,7 +181,8 @@
             
           </div>
         
-        <h2 id="悬空-‘else’-的问题"><a href="#悬空-‘else’-的问题" class="headerlink" title="悬空 ‘else’ 的问题"></a>悬空 ‘else’ 的问题</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">if</span> (y != <span class="hljs-number">0</span>)  <br>	<span class="hljs-keyword">if</span> (x != <span class="hljs-number">0</span>)    <br>		result = x / y;<br><span class="hljs-keyword">else</span>  <br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Error: y is equal to 0\n&quot;</span>);<br></code></pre></td></tr></table></figure>
+        <p>@[TOC]</p>
+<h2 id="悬空-‘else’-的问题"><a href="#悬空-‘else’-的问题" class="headerlink" title="悬空 ‘else’ 的问题"></a>悬空 ‘else’ 的问题</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">if</span> (y != <span class="hljs-number">0</span>)  <br>	<span class="hljs-keyword">if</span> (x != <span class="hljs-number">0</span>)    <br>		result = x / y;<br><span class="hljs-keyword">else</span>  <br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Error: y is equal to 0\n&quot;</span>);<br></code></pre></td></tr></table></figure>
 
 <p>上面的 else 子句究竟属于哪一个 if 语句呢？</p>
 <p>缩进格式暗示它属于最外层的if语句。然而，C语言遵循的规则是 else子句 应该属于离它最近的且还未和其他 else 匹配的 if 语句。</p>
@@ -529,12 +530,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

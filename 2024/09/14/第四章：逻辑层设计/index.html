@@ -181,7 +181,8 @@
             
           </div>
         
-        <h2 id="消息头完善"><a href="#消息头完善" class="headerlink" title="消息头完善"></a>消息头完善</h2><p>早前我们的数据包设计为 头部+数据，但是要进行逻辑处理，就需要传递一个 id 字段表示要处理的消息 id，当然可以不在包头传 id 字段，将 id 序列化到消息体也是可以的，但是我们为了便于处理也便于回调逻辑层对应的函数，最好是将 id 写入包头。</p>
+        <p>@[TOC]</p>
+<h2 id="消息头完善"><a href="#消息头完善" class="headerlink" title="消息头完善"></a>消息头完善</h2><p>早前我们的数据包设计为 头部+数据，但是要进行逻辑处理，就需要传递一个 id 字段表示要处理的消息 id，当然可以不在包头传 id 字段，将 id 序列化到消息体也是可以的，但是我们为了便于处理也便于回调逻辑层对应的函数，最好是将 id 写入包头。</p>
 <p><img src="/images/2024/09/14/19a4b5c0-7236-11ef-95c5-9b77976d41aa.png" alt="新的消息体.png"></p>
 <p>基于之前的 MsgNode 再设计两个节点类，即 RecvNode 和 SendNode，前者表示接收消息的节点，后者表示发送消息的节点。就不新建类来定义，直接再 MsgNode 类文件中一起实现了。随之，我们的 Session 类也要有所改动。</p>
 <p>上一章的末尾讲到把传递的实体数据序列化，那就在这节把传递数据序列化的代码完成。同时，本次代码还进行一收一发的过程，如果你要测试是否存在粘包，只需要把客户端代码中的收数据过程注释掉进行测试即可，如果你想测试客户端和服务端通信的收发过程没有问题，再将注释关闭即可。</p>
@@ -517,12 +518,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

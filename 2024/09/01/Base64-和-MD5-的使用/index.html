@@ -181,7 +181,8 @@
             
           </div>
         
-        <h2 id="为什么要使用-Base64"><a href="#为什么要使用-Base64" class="headerlink" title="为什么要使用 Base64 ?"></a>为什么要使用 Base64 ?</h2><p>Base64 虽然可以用于简单的加密，但通常用于传输数据。</p>
+        <p>@[TOC]</p>
+<h2 id="为什么要使用-Base64"><a href="#为什么要使用-Base64" class="headerlink" title="为什么要使用 Base64 ?"></a>为什么要使用 Base64 ?</h2><p>Base64 虽然可以用于简单的加密，但通常用于传输数据。</p>
 <p>在网络上交换数据时，比如说从 A 地传到 B 地，往往要经过多个路由设备，由于不同的设备对字符的处理方式有一些不同，这样那些不可见字符就有可能被处理错误，这是不利于传输的。把数据先做一个 Base64 编码，统统变成可见字符，这样出错的可能性就大降低了。很多场景下的数据传输要求数据只能由简单通用的字符组成，比如 HTTP 协议要求请求的首行和请求头都必须是 ASCII 编码。</p>
 <h2 id="为什么要使用-MD5"><a href="#为什么要使用-MD5" class="headerlink" title="为什么要使用 MD5 ?"></a>为什么要使用 MD5 ?</h2><p>MD5 就是用来加密数据（<strong>MD5 并不是一种加密算法，而是一种摘要算法</strong>，我们也可以叫它哈希函数），且不可逆，即只用暴力碰撞来解密，当时它已经不是一个安全的加密算法了。</p>
 <p>使用 MD5 加密数据的目的通常是为了验证数据的完整性。因为哈希算法具有一致性，所以如果数据没有被篡改，我们可以把它的哈希值与原来的哈希值进行比较，如果完全一致，则说明数据没有被篡改。但是，由于哈希算法是单向的，所以我们无法通过哈希值推出原来的数据。如果你需要获取原来的数据，你必须要拥有原来的数据本身。</p>
@@ -505,12 +506,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

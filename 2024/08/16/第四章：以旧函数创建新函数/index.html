@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">第四章：以旧函数创建新函数</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%81%8F%E5%87%BD%E6%95%B0%E7%9A%84%E5%BA%94%E7%94%A8"><span class="post-toc-text">偏函数的应用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%9F%AF%E9%87%8C%E5%8C%96"><span class="post-toc-text">柯里化</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%81%8F%E5%87%BD%E6%95%B0%E4%B8%8E%E6%9F%AF%E9%87%8C%E5%8C%96"><span class="post-toc-text">偏函数与柯里化</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%87%BD%E6%95%B0%E7%BB%84%E5%90%88"><span class="post-toc-text">函数组合</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%87%BD%E6%95%B0%E6%8F%90%E5%8D%87"><span class="post-toc-text">函数提升</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <p><strong>注意</strong>：此文介绍很多<a href="https://xiaoyangst.github.io/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/">C++11新特性</a>的知识（bind绑定器），这不会在此读书笔记中记录，可以在我的其它地方找到相关的笔记，或者你可以自行去学习，毕竟，C++11 是现在 C++ 学习者必备的语法。</p>
+        <p>@[TOC]</p>
+<p><strong>注意</strong>：此文介绍很多<a href="https://xiaoyangst.github.io/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/">C++11新特性</a>的知识（bind绑定器），这不会在此读书笔记中记录，可以在我的其它地方找到相关的笔记，或者你可以自行去学习，毕竟，C++11 是现在 C++ 学习者必备的语法。</p>
 <h2 id="偏函数的应用"><a href="#偏函数的应用" class="headerlink" title="偏函数的应用"></a>偏函数的应用</h2><p>这种通过把已知函数的一个或多个参数设定为特定值的方法创建新函数的概念称为偏函数应用。偏的意思是在计算函数结果时，只需传递部分参数，而不需要传递所有参数。</p>
 <p>函数 std::bind1st 和 std::bind2nd 在 C++17中已经删除，C++11也不推荐使用，因为它们可以被更加通用的 std::bind 取代。std::bind 不再局限于二元函数，而是可用于任意数目参数的函数。也不限制用户指定绑定哪些参数，可以以任意顺序绑定任意数目的参数，而留下不需绑定的参数。</p>
 <p>还有提及的地方是 如何把 bind 绑定的函数 转化成用 Lambda 表示，示意图如下：</p>
@@ -519,12 +514,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

@@ -181,7 +181,8 @@
             
           </div>
         
-        <p>我们会误以为只要基于 TCP 编程，那么通信的数据必然能够到达对端主机，毕竟 TCP 是可靠的传输协议。然而， TCP 是处在传输层的协议，其可靠性只针对传输层，但是消息最终要达到应用层才算有价值。从传输层到应用层的消息会不会出现问题，可不由 TCP 来保证。</p>
+        <p>@[TOC]</p>
+<p>我们会误以为只要基于 TCP 编程，那么通信的数据必然能够到达对端主机，毕竟 TCP 是可靠的传输协议。然而， TCP 是处在传输层的协议，其可靠性只针对传输层，但是消息最终要达到应用层才算有价值。从传输层到应用层的消息会不会出现问题，可不由 TCP 来保证。</p>
 <p>数据流从应用程序 A 通过它所在主机的 TCP&#x2F;IP 栈向下传输，经过几台中间路由器，通过应用程序 B 所在主机的TCP&#x2F;IP 栈向上传输，最后抵达应用程序 B。一个 TCP 段离开应用程序 A 所在主机的 TCP 层时，会被封装到一个数据报中，传送给其对等实体主机。它所走的路由可能要经过很多路由器，但如下图所示，这些路由器都没有TCP层，它们只是转发了IP数据报。</p>
 <p><img src="/images/2024/08/10/ba1a28b0-56c4-11ef-a3e6-51327ae276c7.png" alt="TCP可靠之处.png"></p>
 <p>当一个段抵达应用程序 B 所在主机的 TCP 层时，唯一可以确定的就是这个段已经到达了，但它可能损坏了，可能是重复的数据，可能是错序的，或者是由于其他一些原因无法接受的。注意，发送端 TCP 无法对这些抵达接收端 TCP的段做出任何保证。但接收端 TCP 要向发送端 TCP 确认，也就是说它 ACK 的数据以及在此数据之前到达的所有数据在 TCP 层都已经正确收到了，发送端 TCP 可以安全地删除这些数据的副本了。这并不意味着已经将数据传送，或者总是可以将数据传送给应用程序。比如，接收端主机可能在刚刚对数据进行了 ACK，但应用程序还没有将其读走之前，就崩溃了。</p>
@@ -515,12 +516,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

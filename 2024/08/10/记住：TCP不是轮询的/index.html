@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">记住：TCP不是轮询的</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%AE%BE%E8%AE%A1%E8%BF%9E%E6%8E%A5%E4%B8%A2%E5%A4%B1%E5%8D%B3%E6%97%B6%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6"><span class="post-toc-text">为什么不设计连接丢失即时通知机制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E5%BA%94%E7%94%A8%E5%B1%82%E5%AE%9E%E7%8E%B0%E8%BF%9E%E6%8E%A5%E4%B8%A2%E5%A4%B1%E5%8D%B3%E6%97%B6%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6"><span class="post-toc-text">如何在应用层实现连接丢失即时通知机制</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <p>TCP 无法将连接的丢失立即通知应用程序，我们下面就探讨为什么 TCP 不提供这种通知机制，不这么做的优点和缺点，以及应用程序程序员必须完成哪些工作以检测连接的丢失。</p>
+        <p>@[TOC]</p>
+<p>TCP 无法将连接的丢失立即通知应用程序，我们下面就探讨为什么 TCP 不提供这种通知机制，不这么做的优点和缺点，以及应用程序程序员必须完成哪些工作以检测连接的丢失。</p>
 <h2 id="为什么不设计连接丢失即时通知机制"><a href="#为什么不设计连接丢失即时通知机制" class="headerlink" title="为什么不设计连接丢失即时通知机制"></a>为什么不设计连接丢失即时通知机制</h2><p>显然，对可用网络带宽的耗费是 TCP 不提供连接丢失即时通知的原因之一。大部分应用程序都不需要即时通知，因此<strong>不应该为之付出降低带宽的代价</strong>。如果应用程序确实需要及时获得对等实体不可达的信息，可以像稍后讨论的那样，实现自己的丢失发现机制。比方说 HTTP 只支持客户端向服务端主动通信，服务端却不可以主动给客户端推送消息。如果非要服务端主动和客户端通信，就可以利用轮询机制，即让客户端定时发送消息给服务端，服务端再给客户端回消息来营造服务端主动和客户端通信的假象。尽管轮询机制是常见的思想，但是非常容易被替代，因为对资源有太多不必要的消耗，这就是为什么 WebSocket 有出现的必要。</p>
 <p>但 TCP 不提供连接丢失即时通知最重要的原因与其主要设计目标之一有关：出现网络故障时维护通信的能力。国防部赞助的一项研究要提供一种即使在发生战争或自然灾害这种严重网络损坏的情况下，也能维护可靠网络通信的网络协议，TCP就是这种研究的产物。<strong>通常，网络故障只是暂时的，有时路由器会为连接找到另一条路径。TCP允许临时的连接丢失，但通常可以在终端应用程序还没意识到的情况下处理好这些网络中断</strong>。</p>
 <p>强制应用程序去监视网络的缺点在于必须将代码构建到每个（需要它的）应用程序中去，如果实现上考虑不周，就会浪费带宽，还可能产生一些对网络及其他用户有不利影响的行为。但也有人持不同的意见，认为应该在应用程序去监视网络，就可以对其进行精细调整以适应应用程序的需要，并尽可能地与应用程序协议无缝结合。</p>
@@ -520,12 +515,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

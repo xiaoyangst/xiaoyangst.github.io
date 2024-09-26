@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">tuple元组</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%88%9B%E5%BB%BA%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="post-toc-text">创建和初始化</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%AE%BF%E9%97%AE%E5%85%83%E7%B4%A0"><span class="post-toc-text">访问元素</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#std-tuple-size-%E5%92%8C-std-tuple-element"><span class="post-toc-text">std::tuple_size 和 std::tuple_element</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="post-toc-text">应用场景</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <p>C++11 引入了 std::tuple，它是一种可以<strong>包含多个不同类型元素的容器</strong>（ 它是一个模板类，允许将多个不同类型的对象组合在一起。）。std::tuple 提供了一种方便的方法来将多个值组合在一起，而不需要定义一个结构体或类。</p>
+        <p>@[TOC]</p>
+<p>C++11 引入了 std::tuple，它是一种可以<strong>包含多个不同类型元素的容器</strong>（ 它是一个模板类，允许将多个不同类型的对象组合在一起。）。std::tuple 提供了一种方便的方法来将多个值组合在一起，而不需要定义一个结构体或类。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">std::tuple&lt;<span class="hljs-type">int</span>, <span class="hljs-type">double</span>, std::string&gt; <span class="hljs-title">myTuple</span><span class="hljs-params">(<span class="hljs-number">1</span>, <span class="hljs-number">2.5</span>, <span class="hljs-string">&quot;Hello&quot;</span>)</span></span>;<br></code></pre></td></tr></table></figure>
 
 <h2 id="创建和初始化"><a href="#创建和初始化" class="headerlink" title="创建和初始化"></a>创建和初始化</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">std::tuple&lt;<span class="hljs-type">int</span>, <span class="hljs-type">double</span>, std::string&gt; t1;  <span class="hljs-comment">// 默认构造</span><br><span class="hljs-function">std::tuple&lt;<span class="hljs-type">int</span>, <span class="hljs-type">double</span>, std::string&gt; <span class="hljs-title">t2</span><span class="hljs-params">(<span class="hljs-number">10</span>, <span class="hljs-number">3.14</span>, <span class="hljs-string">&quot;C++&quot;</span>)</span></span>;  <span class="hljs-comment">// 值构造</span><br><span class="hljs-keyword">auto</span> t3 = std::<span class="hljs-built_in">make_tuple</span>(<span class="hljs-number">20</span>, <span class="hljs-number">6.28</span>, <span class="hljs-string">&quot;Programming&quot;</span>);  <span class="hljs-comment">// 使用 make_tuple 创建</span><br></code></pre></td></tr></table></figure>
@@ -513,12 +508,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

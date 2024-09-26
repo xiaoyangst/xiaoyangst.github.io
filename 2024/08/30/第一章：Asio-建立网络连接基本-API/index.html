@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">第一章：Asio 建立网络连接基本 API</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#IP%E5%9C%B0%E5%9D%80%E7%9A%84%E5%A4%84%E7%90%86"><span class="post-toc-text">IP地址的处理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%BB%88%E7%AB%AF%E7%AB%AF%E7%82%B9"><span class="post-toc-text">终端端点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%88%9B%E5%BB%BAsocket"><span class="post-toc-text">创建socket</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%BB%91%E5%AE%9Aacceptor"><span class="post-toc-text">绑定acceptor</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%BF%9E%E6%8E%A5%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AB%AF%E7%82%B9"><span class="post-toc-text">连接指定的端点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8E%A5%E6%94%B6%E8%BF%9E%E6%8E%A5"><span class="post-toc-text">服务器接收连接</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <ul>
+        <p>@[TOC]</p>
+<ul>
 <li><em>boost::asio</em>：这是核心类和函数所在的地方。重要的类有 <em>io_service</em> 和 <em>streambuf</em>。类似<em>read, read_at, read_until</em>方法，它们的异步方法，它们的写方法和异步写方法等自由函数也在这里</li>
 <li><em>boost::asio::ip</em>：这是网络通信部分所在的地方。重要的类有 <em>address, endpoint, tcp, udp和 icmp</em>，重要的自由函数有 <em>connect</em> 和 <em>async_connect</em>。要注意的是在 <em>boost::asio::ip::tcp::socket</em>中间，<em>socket</em>只是 <em>boost::asio::ip::tcp</em> 类中间的一个<em>typedef</em>关键字</li>
 <li><em>boost::asio::error</em>：这个命名空间包含了调用 I&#x2F;O 例程时返回的错误码</li>
@@ -560,12 +555,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

@@ -181,7 +181,8 @@
             
           </div>
         
-        <h2 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h2><h3 id="同步写"><a href="#同步写" class="headerlink" title="同步写"></a>同步写</h3><p>write_some 可以每次向指定的空间写入固定的字节数，如果写缓冲区满了，就只写一部分，返回写入的字节数。但是使用起来比较麻烦，需要多次调用，就不多介绍了。重点讲一讲 send 和 write。</p>
+        <p>@[TOC]</p>
+<h2 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h2><h3 id="同步写"><a href="#同步写" class="headerlink" title="同步写"></a>同步写</h3><p>write_some 可以每次向指定的空间写入固定的字节数，如果写缓冲区满了，就只写一部分，返回写入的字节数。但是使用起来比较麻烦，需要多次调用，就不多介绍了。重点讲一讲 send 和 write。</p>
 <p>（一）send</p>
 <p>send函数会一次性将buffer中的内容发送给对端，如果有部分字节因为发送缓冲区满无法发送，则阻塞等待，直到发送缓冲区可用，则继续发送完成。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"> <span class="hljs-comment">// 连接到服务器，后续就可以通过 socket 进行通信</span><br><br><span class="hljs-comment">// 通过 send 发送数据，传递数据和数据的长度即可</span><br><br><span class="hljs-keyword">try</span> &#123;<br>    std::string buf = <span class="hljs-string">&quot;My name is ClientA&quot;</span>;<br>    <span class="hljs-type">int</span> send_length = sock.<span class="hljs-built_in">send</span>(<span class="hljs-built_in">buffer</span>(buf.<span class="hljs-built_in">c_str</span>(), buf.<span class="hljs-built_in">length</span>()));<br>    <span class="hljs-keyword">if</span> (send_length != buf.<span class="hljs-built_in">length</span>())<br>    &#123;<br>        cout &lt;&lt; <span class="hljs-string">&quot;Warning: Not all data sent, only &quot;</span> &lt;&lt; send_length &lt;&lt; <span class="hljs-string">&quot; bytes sent.&quot;</span> &lt;&lt; endl;<br>    &#125;<br>&#125; <span class="hljs-built_in">catch</span> (<span class="hljs-type">const</span> boost::system::system_error&amp; e) &#123;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Exception during send: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; endl;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -542,12 +543,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

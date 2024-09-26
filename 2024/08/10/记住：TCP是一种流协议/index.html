@@ -181,7 +181,8 @@
             
           </div>
         
-        <p>TCP 是一种流协议，这就意味着数据是以字节流的形式传递给接收者的，<strong>没有固有的”报文”或”报文边界”的概念</strong>。从这方面来说，读取 TCP 数据就像从串行端口读取数据一样——无法预先得知在一次指定的读调用中会返回多少字节。</p>
+        <p>@[TOC]</p>
+<p>TCP 是一种流协议，这就意味着数据是以字节流的形式传递给接收者的，<strong>没有固有的”报文”或”报文边界”的概念</strong>。从这方面来说，读取 TCP 数据就像从串行端口读取数据一样——无法预先得知在一次指定的读调用中会返回多少字节。</p>
 <h2 id="流协议存在的问题"><a href="#流协议存在的问题" class="headerlink" title="流协议存在的问题"></a>流协议存在的问题</h2><p>发送的数据没有边界，接收方可能对接收到的数据存在多读或少读的问题。为了说明这一点，我们假设在主机 A 和主机 B 的应用程序之间有一条 TCP 连接，主机 A 上的应用程序向主机 B 发送一条报文。进一步假设主机 A 有两条报文要发送，并两次调用 send 来发送，每条报文调用一次。很自然就会想到从主机 A 向主机 B 发送的两条报文是作为两个独立实体，在各自的分组中发送的。</p>
 <p><img src="/images/2024/08/10/b584bcb0-56b1-11ef-9b76-6d6092cc6dd4.png" alt="主机A和主机B通信.png"></p>
 <p>但不幸的是，实际的数据传输过程很可能不会遵循这个模型。</p>
@@ -518,12 +519,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

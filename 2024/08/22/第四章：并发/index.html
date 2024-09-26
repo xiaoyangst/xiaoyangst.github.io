@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">第四章：并发</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%B9%B6%E5%8F%91%EF%BC%9A%E4%BB%8B%E7%BB%8D"><span class="post-toc-text">并发：介绍</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E9%94%81"><span class="post-toc-text">锁</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="post-toc-text">条件变量</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="post-toc-text">信号量</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%B8%B8%E8%A7%81%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98"><span class="post-toc-text">常见并发问题</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="并发：介绍"><a href="#并发：介绍" class="headerlink" title="并发：介绍"></a>并发：介绍</h2><p>同一进程下的多线程共享内存地址，对同一块内存地址的读不会引发数据竞争，但是修改会引发数据竞争。常用的办法是加锁保护临界区或保证修改的动作是原子的。</p>
+        <p>@[TOC]</p>
+<h2 id="并发：介绍"><a href="#并发：介绍" class="headerlink" title="并发：介绍"></a>并发：介绍</h2><p>同一进程下的多线程共享内存地址，对同一块内存地址的读不会引发数据竞争，但是修改会引发数据竞争。常用的办法是加锁保护临界区或保证修改的动作是原子的。</p>
 <p>原子性是指当指令执行时，它会像期望那样执行更新。它不能在指令中间中断，因为这正是我们从硬件获得的保证：发生中断时，指令根本没有运行，或者运行完成，没有中间状态。</p>
 <p><img src="/images/2024/08/22/d02433f0-606d-11ef-b5d8-395e250ad2a7.png" alt="多线程.png"></p>
 <h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++">没有加锁<br>    balance = balance + <span class="hljs-number">1</span>;<br><br>加锁<br>    <span class="hljs-type">lock_t</span> mutex; <br>    ...<br>    <span class="hljs-built_in">lock</span>(&amp;mutex); <br>    balance = balance + <span class="hljs-number">1</span>; 	<br>    <span class="hljs-built_in">unlock</span>(&amp;mutex);<br></code></pre></td></tr></table></figure>
@@ -571,12 +566,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

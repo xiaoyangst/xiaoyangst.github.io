@@ -181,7 +181,8 @@
             
           </div>
         
-        <p>在上一章中，但我们编写基于官方代码的 全双工通信，发现由于 Session 管理不当，导致多次析构。我们要解决 Session 的生命周期问题，以及网络传输必然存在的粘包问题。</p>
+        <p>@[TOC]</p>
+<p>在上一章中，但我们编写基于官方代码的 全双工通信，发现由于 Session 管理不当，导致多次析构。我们要解决 Session 的生命周期问题，以及网络传输必然存在的粘包问题。</p>
 <h2 id="伪闭包延长连接生命周期"><a href="#伪闭包延长连接生命周期" class="headerlink" title="伪闭包延长连接生命周期"></a>伪闭包延长连接生命周期</h2><h3 id="Server类"><a href="#Server类" class="headerlink" title="Server类"></a>Server类</h3><p>我们可以通过 <a href="https://xiaoyangst.github.io/2024/08/16/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">shared_ptr 智能指针</a>对这些 Session 进行管理，shared_ptr 智能指针管理的对象会在引用技术为 0 的时候自动析构。</p>
 <p>那用什么来存储这些 Session 呢？unordered_map容器，key 为 Session 的 uuid，value 为该 Session 的智能指针。由于存储到 unordered_map 容器中的对象是拷贝一份进来的，那么引用计数会 加 1，至少可以保证说如果我们不在容器中移除 这些存储的 Session，就能保证它必然不会被析构。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">unordered_map&lt;std::string, std::shared_ptr&lt;Session&gt;&gt; sessionMap_;<br></code></pre></td></tr></table></figure>
@@ -572,12 +573,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

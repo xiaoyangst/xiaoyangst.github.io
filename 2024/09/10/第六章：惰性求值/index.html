@@ -181,7 +181,8 @@
             
           </div>
         
-        <p>假定现在需要对 A 和 B 进行求值，但问题是后面可能未必需要用到，这就白白浪费 CPU 时间去计算它了。也许可以用 Lambda 表达式，等需要的时候调用函数 P 来获取乘积结果。</p>
+        <p>@[TOC]</p>
+<p>假定现在需要对 A 和 B 进行求值，但问题是后面可能未必需要用到，这就白白浪费 CPU 时间去计算它了。也许可以用 Lambda 表达式，等需要的时候调用函数 P 来获取乘积结果。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">auto</span> P = [A,B] &#123;<br>  <span class="hljs-keyword">return</span> A * B;  <br>&#125;;<br></code></pre></td></tr></table></figure>
 
 <p>对于一个可能不需要结果的复杂的计算，这样做就是对代码的优化。但也带来了新的问题：如果这个值不止一次被使用怎么办？使用这种方法，每次调用都要计算这个值。更好的做法是在第一次计算该值时，将它保存起来。</p>
@@ -529,12 +530,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

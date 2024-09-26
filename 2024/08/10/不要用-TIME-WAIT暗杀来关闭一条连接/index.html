@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">不要用 TIME-WAIT暗杀来关闭一条连接</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%AE%A4%E8%AF%86-TIME-WAIT"><span class="post-toc-text">认识 TIME-WAIT</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%AE%83"><span class="post-toc-text">为什么要使用它</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#TIME-WAIT-%E6%9A%97%E6%9D%80"><span class="post-toc-text">TIME-WAIT 暗杀</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%A2%B0%E5%B7%A7%E5%8F%91%E7%94%9F%E7%9A%84%E6%83%85%E5%86%B5"><span class="post-toc-text">碰巧发生的情况</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%95%85%E6%84%8F%E9%80%A0%E6%88%90%E7%9A%84"><span class="post-toc-text">故意造成的</span></a></li></ol></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="认识-TIME-WAIT"><a href="#认识-TIME-WAIT" class="headerlink" title="认识 TIME-WAIT"></a>认识 TIME-WAIT</h2><p>主机 2 关闭连接并释放资源。从主机 2 的角度来看，连接不再存在了。但主机 1 还没有关闭连接，而是会进入 TIME_WAIT状态，并在这个状态停留 2MSL，等待 2MSL智慧，主机 1 也将连接关闭，并释放其资源。</p>
+        <p>@[TOC]</p>
+<h2 id="认识-TIME-WAIT"><a href="#认识-TIME-WAIT" class="headerlink" title="认识 TIME-WAIT"></a>认识 TIME-WAIT</h2><p>主机 2 关闭连接并释放资源。从主机 2 的角度来看，连接不再存在了。但主机 1 还没有关闭连接，而是会进入 TIME_WAIT状态，并在这个状态停留 2MSL，等待 2MSL智慧，主机 1 也将连接关闭，并释放其资源。</p>
 <p><img src="/images/2024/08/10/1f7d2ce0-571d-11ef-a7b6-1b323923df30.png" alt="time_wait.png"></p>
 <p>关于 TIME-WAIT 状态，还要弄清楚三点：</p>
 <ol>
@@ -517,12 +512,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

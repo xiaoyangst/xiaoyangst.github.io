@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">优化并发</div>
         <div class="post-info">
@@ -175,19 +175,14 @@
         </div>
       </div>
       
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%BC%98%E5%8C%96%E5%A4%9A%E7%BA%BF%E7%A8%8BC-%E7%A8%8B%E5%BA%8F"><span class="post-toc-text">优化多线程C++程序</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%94%A8-std-async-%E6%9B%BF%E4%BB%A3-std-thread"><span class="post-toc-text">用 std::async 替代 std::thread</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%95%B0%E9%87%8F%E4%B8%80%E6%A0%B7%E5%A4%9A%E7%9A%84%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">创建与核心数量一样多的可执行线程</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="post-toc-text">实现任务队列和线程池</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%9C%A8%E5%8D%95%E7%8B%AC%E7%9A%84%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%89%A7%E8%A1%8CI-O"><span class="post-toc-text">在单独的线程中执行I&#x2F;O</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%B2%A1%E6%9C%89%E5%90%8C%E6%AD%A5%E7%9A%84%E7%A8%8B%E5%BA%8F"><span class="post-toc-text">没有同步的程序</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%A7%BB%E9%99%A4%E5%90%AF%E5%8A%A8%E5%92%8C%E5%81%9C%E6%AD%A2%E4%BB%A3%E7%A0%81"><span class="post-toc-text">移除启动和停止代码</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%AE%A9%E5%90%8C%E6%AD%A5%E6%9B%B4%E5%8A%A0%E9%AB%98%E6%95%88"><span class="post-toc-text">让同步更加高效</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%87%8F%E5%B0%8F%E4%B8%B4%E7%95%8C%E5%8C%BA%E7%9A%84%E8%8C%83%E5%9B%B4"><span class="post-toc-text">减小临界区的范围</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%99%90%E5%88%B6%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%95%B0%E9%87%8F"><span class="post-toc-text">限制并发线程的数量</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%81%BF%E5%85%8D%E6%83%8A%E7%BE%A4"><span class="post-toc-text">避免惊群</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%81%BF%E5%85%8D%E9%94%81%E6%8A%A4%E9%80%81"><span class="post-toc-text">避免锁护送</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%87%8F%E5%B0%91%E7%AB%9E%E4%BA%89"><span class="post-toc-text">减少竞争</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%B8%8D%E8%A6%81%E5%9C%A8%E5%8D%95%E6%A0%B8%E7%B3%BB%E7%BB%9F%E4%B8%8A%E7%B9%81%E5%BF%99%E7%AD%89%E5%BE%85"><span class="post-toc-text">不要在单核系统上繁忙等待</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%B8%8D%E8%A6%81%E6%B0%B8%E8%BF%9C%E7%AD%89%E5%BE%85"><span class="post-toc-text">不要永远等待</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%87%AA%E5%B7%B1%E8%AE%BE%E8%AE%A1%E4%BA%92%E6%96%A5%E9%87%8F%E5%8F%AF%E8%83%BD%E4%BC%9A%E4%BD%8E%E6%95%88"><span class="post-toc-text">自己设计互斥量可能会低效</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%99%90%E5%88%B6%E7%94%9F%E4%BA%A7%E8%80%85%E8%BE%93%E5%87%BA%E9%98%9F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6"><span class="post-toc-text">限制生产者输出队列的长度</span></a></li></ol></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
-      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <h2 id="优化多线程C-程序"><a href="#优化多线程C-程序" class="headerlink" title="优化多线程C++程序"></a>优化多线程C++程序</h2><h3 id="用-std-async-替代-std-thread"><a href="#用-std-async-替代-std-thread" class="headerlink" title="用 std::async 替代 std::thread"></a>用 std::async 替代 std::thread</h3><p>如果你是启动一个线程去执行任务，那么应该用 std::async 替代 std::thread，因为你不用关心线程的关闭问题，它本身是异步的。</p>
+        <p>@[TOC]</p>
+<h2 id="优化多线程C-程序"><a href="#优化多线程C-程序" class="headerlink" title="优化多线程C++程序"></a>优化多线程C++程序</h2><h3 id="用-std-async-替代-std-thread"><a href="#用-std-async-替代-std-thread" class="headerlink" title="用 std::async 替代 std::thread"></a>用 std::async 替代 std::thread</h3><p>如果你是启动一个线程去执行任务，那么应该用 std::async 替代 std::thread，因为你不用关心线程的关闭问题，它本身是异步的。</p>
 <h3 id="创建与核心数量一样多的可执行线程"><a href="#创建与核心数量一样多的可执行线程" class="headerlink" title="创建与核心数量一样多的可执行线程"></a>创建与核心数量一样多的可执行线程</h3><p>C++ 提供了一个 <code>std::thread::hardware_concurrency()</code> 函数，它可以返回可用核心的数量。这个函数会计算由 hypervisor 分配给其他虚拟机的核心，以及因多线程同步而表现为两个或多个逻辑核心的核心的数量。通过这个函数，以后我们可以方便地将程序部署到包含更多（或少）核心的硬件上运行。</p>
 <h3 id="实现任务队列和线程池"><a href="#实现任务队列和线程池" class="headerlink" title="实现任务队列和线程池"></a>实现任务队列和线程池</h3><p>解决不知道有多少个线程正在运行这个问题的方法是让线程更加明显：使用线程池（一种保持固定数量的永久线程的数据结构）和任务队列（一种存储待执行的计算的列表的数据结构），这些计算将由线程池中的线程负责执行。</p>
 <h3 id="在单独的线程中执行I-O"><a href="#在单独的线程中执行I-O" class="headerlink" title="在单独的线程中执行I&#x2F;O"></a>在单独的线程中执行I&#x2F;O</h3><p>磁盘转速和网络连接距离等物理现实问题造成在程序请求数据和数据变为可用状态之间存在着延迟。因此， I&#x2F;O 是适用并发的绝佳位置。另外一个典型的 I&#x2F;O 问题是，程序在写数据之前或是读数据之后必须对它进行转换。例如，我们先从互联网上读取一个 XML 文件，接着解析它，从中提取程序所需信息。由于在对数据进行转换之前是无法直接使用它的，我们可以考虑将整个处理（包括读数据和解析数据）移动到一个单独的线程中。我们完全可以把这种I&#x2F;O的计算工作也丢给线程池，我们称其为工作线程。</p>
@@ -560,12 +555,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         
