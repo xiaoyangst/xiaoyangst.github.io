@@ -181,36 +181,60 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="无处不在的分工"><a href="#无处不在的分工" class="headerlink" title="无处不在的分工"></a>无处不在的分工</h2><h3 id="分工"><a href="#分工" class="headerlink" title="分工"></a>分工</h3><p>如果他们各自独立工作，不专习一种特殊业务，那么他们不论是谁，绝对不能一日制造二十枚针，说不定一天连一枚也制造不出来。</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%97%A0%E5%A4%84%E4%B8%8D%E5%9C%A8%E7%9A%84%E5%88%86%E5%B7%A5">无处不在的分工</a><ul>
+<li><a href="#%E5%88%86%E5%B7%A5">分工</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%86%E5%B7%A5">为什么分工</a></li>
+<li><a href="#%E5%88%86%E5%B7%A5%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98">分工带来的问题</a></li>
+<li><a href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E5%BC%8F">解决方式</a></li>
+</ul>
+</li>
+<li><a href="#%E8%BD%AF%E4%BB%B6%E8%A1%8C%E4%B8%9A%E9%87%8C%E9%9D%A2%E7%9A%84%E5%88%86%E5%B7%A5">软件行业里面的分工</a><ul>
+<li><a href="#%E8%BD%AF%E4%BB%B6%E7%9A%84%E5%88%86%E5%B7%A5">软件的分工</a></li>
+<li><a href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E7%9A%84%E7%9B%AE%E7%9A%84">架构设计的目的</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%B6%E6%9E%84">什么是架构</a></li>
+<li><a href="#%E6%9E%B6%E6%9E%84%E5%B8%88%E7%9A%84%E8%81%8C%E8%B4%A3">架构师的职责</a><ul>
+<li><a href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1">架构设计</a></li>
+<li><a href="#%E8%90%BD%E5%9C%B0%E6%8E%A8%E5%8A%A8">落地推动</a></li>
+<li><a href="#%E7%AE%A1%E7%90%86">管理</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="无处不在的分工">无处不在的分工</span></h2><h3><span id="分工">分工</span></h3><p>如果他们各自独立工作，不专习一种特殊业务，那么他们不论是谁，绝对不能一日制造二十枚针，说不定一天连一枚也制造不出来。</p>
 <p>社会的发展需要分工，专门的人干专门的事，才能提高社会的生成效率，有了分工就必须要有合作，分工越是精细，那么合作的方式就越复杂，合作的这种模式就是我们说的架构。而计算机和互联网的发展，也出现了分工的现象。</p>
-<h3 id="为什么分工"><a href="#为什么分工" class="headerlink" title="为什么分工"></a>为什么分工</h3><p>首先是人的精力有限，不可能把所有需要的知识学完再去制作，效率极低。再者就是分工和分工可以组合，比方说电脑由多个组件构成，可以根据用户的需求进行定制。有些人用电脑只是办公，也就不需要性能很强的CPU；有些人用电脑需要打3A游戏大作，就需要性能很强的CPU，可以说越强越好。我们只要把电脑拆分成一个一个组件，才会有组合的可能，同样的商品却可以有极大的区别。况且独立出来，如果出问题也不至于导致整体失效，比方说键盘坏掉，可以单独修理键盘（希望你不是把水倒进电脑里面了，那就不只是键盘了）。</p>
-<h3 id="分工带来的问题"><a href="#分工带来的问题" class="headerlink" title="分工带来的问题"></a>分工带来的问题</h3><p>分工越细，各组件的关系可能会越复杂，协调成本也逐渐增高，而且由于建立联系了，彼此之间还会相互影响，如果某个组件损坏，可能导致整个系统不可用，尽管这也是架构师应该未雨绸缪的地方。</p>
+<h3><span id="为什么分工">为什么分工</span></h3><p>首先是人的精力有限，不可能把所有需要的知识学完再去制作，效率极低。再者就是分工和分工可以组合，比方说电脑由多个组件构成，可以根据用户的需求进行定制。有些人用电脑只是办公，也就不需要性能很强的CPU；有些人用电脑需要打3A游戏大作，就需要性能很强的CPU，可以说越强越好。我们只要把电脑拆分成一个一个组件，才会有组合的可能，同样的商品却可以有极大的区别。况且独立出来，如果出问题也不至于导致整体失效，比方说键盘坏掉，可以单独修理键盘（希望你不是把水倒进电脑里面了，那就不只是键盘了）。</p>
+<h3><span id="分工带来的问题">分工带来的问题</span></h3><p>分工越细，各组件的关系可能会越复杂，协调成本也逐渐增高，而且由于建立联系了，彼此之间还会相互影响，如果某个组件损坏，可能导致整个系统不可用，尽管这也是架构师应该未雨绸缪的地方。</p>
 <ol>
 <li>关系复杂</li>
 <li>协调成本</li>
 <li>相互影响</li>
 </ol>
-<h3 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h3><p>设计规则和协议用以协调各个分工的组件，让整个系统按照逻辑正常运行。</p>
+<h3><span id="解决方式">解决方式</span></h3><p>设计规则和协议用以协调各个分工的组件，让整个系统按照逻辑正常运行。</p>
 <ol>
 <li>制定规则</li>
 <li>遵守协议</li>
 <li>协调关系</li>
 </ol>
-<h2 id="软件行业里面的分工"><a href="#软件行业里面的分工" class="headerlink" title="软件行业里面的分工"></a>软件行业里面的分工</h2><h3 id="软件的分工"><a href="#软件的分工" class="headerlink" title="软件的分工"></a>软件的分工</h3><p>就简单用通信协议举例，TCP适用于尽可能保证信息不丢失的场景，UDP适用于快速响应且允许丢失小部分数据的场景。各有各的应用场景，确定场景选择合适的组合。</p>
+<h2><span id="软件行业里面的分工">软件行业里面的分工</span></h2><h3><span id="软件的分工">软件的分工</span></h3><p>就简单用通信协议举例，TCP适用于尽可能保证信息不丢失的场景，UDP适用于快速响应且允许丢失小部分数据的场景。各有各的应用场景，确定场景选择合适的组合。</p>
 <p>存储特性：MYSQL、HBase、TiDB、Elastic、Redis、ETCD、Zookeeper、Druid</p>
 <p>语言特性：C、C++、Java、Python、Go、JavaScript</p>
 <p>通信特性：TCP、UDP、HTTP、HTTPS、MQTT</p>
 <p>协议特性：protobuffer、brpc、dubbo、RMI、Hessian、Thrift</p>
 <p>场景特性：To C、物联网、金融、电商、网游、社交、门户、AI</p>
-<h3 id="架构设计的目的"><a href="#架构设计的目的" class="headerlink" title="架构设计的目的"></a>架构设计的目的</h3><p>软件系统由于分工带来的复杂问题，需要通过架构进行组合协调，架构就是为了解决这些复杂问题而生的。</p>
-<h2 id="什么是架构"><a href="#什么是架构" class="headerlink" title="什么是架构"></a>什么是架构</h2><p>为了满足特定需求，根据各个部件的特性进行组合一种方式，就是架构。</p>
+<h3><span id="架构设计的目的">架构设计的目的</span></h3><p>软件系统由于分工带来的复杂问题，需要通过架构进行组合协调，架构就是为了解决这些复杂问题而生的。</p>
+<h2><span id="什么是架构">什么是架构</span></h2><p>为了满足特定需求，根据各个部件的特性进行组合一种方式，就是架构。</p>
 <p>建房子需要架构，钢筋混凝土如何搭配、承重墙放在哪、圈梁怎么设计、顶梁柱放到哪？</p>
 <p>一个企业需要架构，部门划分、职责划分、决策组成、协调规则。</p>
 <p>一个国家需要结构，是联邦政府、还是中央集权（《盐铁论》，桑弘羊，析骨而炊）、分封制（商周，石器）。</p>
-<h2 id="架构师的职责"><a href="#架构师的职责" class="headerlink" title="架构师的职责"></a>架构师的职责</h2><h3 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h3><p>需求挖掘（发现问题）、整理方案（技术选型、演进方向、权衡取舍）、多方评审。</p>
-<h3 id="落地推动"><a href="#落地推动" class="headerlink" title="落地推动"></a>落地推动</h3><p>制定计划、安排人力、协调资源、处理意外、质量保证、按期交付、汇报结果。</p>
-<h3 id="管理"><a href="#管理" class="headerlink" title="管理"></a>管理</h3><p>这恐怕要单独出一个教程。</p>
+<h2><span id="架构师的职责">架构师的职责</span></h2><h3><span id="架构设计">架构设计</span></h3><p>需求挖掘（发现问题）、整理方案（技术选型、演进方向、权衡取舍）、多方评审。</p>
+<h3><span id="落地推动">落地推动</span></h3><p>制定计划、安排人力、协调资源、处理意外、质量保证、按期交付、汇报结果。</p>
+<h3><span id="管理">管理</span></h3><p>这恐怕要单独出一个教程。</p>
 
       </div>
     </div>
@@ -384,10 +408,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -421,6 +441,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -440,21 +464,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -502,10 +511,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -524,9 +529,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -537,6 +546,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -572,6 +596,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

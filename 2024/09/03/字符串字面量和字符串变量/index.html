@@ -181,14 +181,22 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E9%87%8F">字符串字面量</a></li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E9%87%8F">字符串变量</a></li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E5%92%8C%E5%AD%97%E7%AC%A6%E6%8C%87%E9%92%88">字符数组和字符指针</a></li>
+</ul>
+<!-- tocstop -->
+
 <p>字符串字面量（又名字符串常量）是不能被修改的，但可以被读取。字符串变量是可以被修改的，还可以被访问。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br><br>	<span class="hljs-comment">// 字符串变量</span><br>	<span class="hljs-type">char</span> str1[] = <span class="hljs-string">&quot;hello&quot;</span>;<br>	str1[<span class="hljs-number">0</span>] = <span class="hljs-string">&#x27;A&#x27;</span>;	<br><br>	<span class="hljs-comment">// 字符串字面量</span><br>	<span class="hljs-type">char</span>* str2 = <span class="hljs-string">&quot;hello&quot;</span>;<br>	str2[<span class="hljs-number">0</span>] = <span class="hljs-string">&#x27;A&#x27;</span>;	<span class="hljs-comment">// 报错</span><br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="字符串字面量"><a href="#字符串字面量" class="headerlink" title="字符串字面量"></a>字符串字面量</h2><p>字符串字面量是用一对双引号括起来的字符序列。通常存储在只读数据区（只读内存区域），它的内容是不可修改的。尝试修改字符串字面量会导致未定义行为。编译器自动计算并在编译时确定其长度，通常包括末尾的 <code>\0</code> 终止符。</p>
+<h2><span id="字符串字面量">字符串字面量</span></h2><p>字符串字面量是用一对双引号括起来的字符序列。通常存储在只读数据区（只读内存区域），它的内容是不可修改的。尝试修改字符串字面量会导致未定义行为。编译器自动计算并在编译时确定其长度，通常包括末尾的 <code>\0</code> 终止符。</p>
 <p>从本质而言，C语言把字符串字面量作为字符数组来处理。当C语言编译器在程序中遇到长度为的字符串字面量时，它会为字符串字面量分配长度为的内存空间。这块内存空间将用来存储字符串字面量中的字符，以及一个用来标志字符串末尾的额外字符（空字符）。空字符是一个所有位都为0的字节，因此用转义序列<code>\0</code>来表示</p>
 <p><img src="/images/2024/09/03/fdf62a40-69ff-11ef-b30d-bbd8f07aedd3.png" alt="字符串字面值.png"></p>
-<h2 id="字符串变量"><a href="#字符串变量" class="headerlink" title="字符串变量"></a>字符串变量</h2><p>存储在栈（或堆）内存中，可以被修改。字符串变量通常是一个字符数组或指向字符数组的指针。可以存储不同长度的字符串，长度由你在定义数组时指定，或者在运行时动态确定。</p>
+<h2><span id="字符串变量">字符串变量</span></h2><p>存储在栈（或堆）内存中，可以被修改。字符串变量通常是一个字符数组或指向字符数组的指针。可以存储不同长度的字符串，长度由你在定义数组时指定，或者在运行时动态确定。</p>
 <p>一些编程语言为声明字符串变量提供了专门的 string 类型。C 语言采取了不同的方式：只要保证字符串是以空字符结尾的，任何一维的字符数组都可以用来存储字符串。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> str1[] = <span class="hljs-string">&quot;hello&quot;</span>;<br></code></pre></td></tr></table></figure>
 
@@ -196,7 +204,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> str[] = &#123;<span class="hljs-string">&#x27;h&#x27;</span>,<span class="hljs-string">&#x27;e&#x27;</span>,<span class="hljs-string">&#x27;l&#x27;</span>,<span class="hljs-string">&#x27;l&#x27;</span>,<span class="hljs-string">&#x27;o&#x27;</span>,<span class="hljs-string">&#x27;\0&#x27;</span>&#125;;<br></code></pre></td></tr></table></figure>
 
 <p>如果指定数组大小没有被填充满，会自动补0。如果指定数组大小务必要能有一个位置给其添加<code>\0</code>，否则这不是一个合法的字符变量。</p>
-<h2 id="字符数组和字符指针"><a href="#字符数组和字符指针" class="headerlink" title="字符数组和字符指针"></a>字符数组和字符指针</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> date[] = <span class="hljs-string">&quot;June 14&quot;</span>;<br><span class="hljs-type">char</span> *date = <span class="hljs-string">&quot;June 14&quot;</span>;<br></code></pre></td></tr></table></figure>
+<h2><span id="字符数组和字符指针">字符数组和字符指针</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> date[] = <span class="hljs-string">&quot;June 14&quot;</span>;<br><span class="hljs-type">char</span> *date = <span class="hljs-string">&quot;June 14&quot;</span>;<br></code></pre></td></tr></table></figure>
 
 <p>前者声明 date 是一个数组，后者声明 date 是一个指针。正因为有了数组和指针之间的紧密关系，才使上面这两个声明中的 date 都可以用作字符串。尤其是，任何期望传递字符数组或字符指针的函数都能够接收这两种声明的 date 作为参数。</p>
 <p>然而，需要注意，不能错误地认为上面这两种date可以互换。两者之间有很大的差异：</p>
@@ -387,10 +395,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -424,6 +428,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -443,21 +451,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -505,10 +498,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -527,9 +516,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -540,6 +533,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -575,6 +583,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

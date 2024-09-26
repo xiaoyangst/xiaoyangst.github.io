@@ -181,13 +181,22 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="网络数据帧是什么？"><a href="#网络数据帧是什么？" class="headerlink" title="网络数据帧是什么？"></a>网络数据帧是什么？</h2><p>应用层要传输的数据需要封装成网络数据帧，才可以在物理介质上传输。我们先看网络帧的模样，再谈它是如何一步一步形成这般。下图就是网络数据帧。</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E5%B8%A7%E6%98%AF%E4%BB%80%E4%B9%88">网络数据帧是什么？</a></li>
+<li><a href="#dma-%E6%8A%80%E6%9C%AF">DMA 技术</a></li>
+<li><a href="#dma-%E5%92%8C-cpu%E4%B8%BB%E5%AF%BC%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8B%B7%E8%B4%9D%E5%88%B0%E5%8C%BA%E5%88%AB">DMA 和 CPU主导的数据拷贝到区别</a></li>
+<li><a href="#%E6%8E%A5%E6%94%B6%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E5%8C%85">接收网络数据包</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="网络数据帧是什么">网络数据帧是什么？</span></h2><p>应用层要传输的数据需要封装成网络数据帧，才可以在物理介质上传输。我们先看网络帧的模样，再谈它是如何一步一步形成这般。下图就是网络数据帧。</p>
 <p><img src="/images/2024/09/25/1fc41f00-7b0e-11ef-b257-21ef1724fa3f.png" alt="网络帧.png"></p>
 <p>用户在应用层把数据传递给其他主机，肯定不可能直接把这个数据发过去，网络传输介质都不认识这个，故对其进行封装，这个任务由网络协议栈来做，下图就是封装用户数据到网络数据帧的流程。如果网卡接收到网络数据帧，交给协议栈处理之时，协议栈会由下往上来进行拆解，从而留下应用层能够处理的用户数据。</p>
 <p><img src="/images/2024/09/25/1ccefae0-7b0e-11ef-b257-21ef1724fa3f.png" alt="封装数据为网络帧的过程.png"></p>
 <p>注：网络接口层 &#x3D; 数据链路层 + 物理层</p>
-<h2 id="DMA-技术"><a href="#DMA-技术" class="headerlink" title="DMA 技术"></a>DMA 技术</h2><p>DMA 的作用就是实现数据的直接传输，而去掉了传统数据传输需要 CPU 参与的环节。下图中内存读取外设的数据，这个过程不再先之前那样需要 CPU 的参与，而是利用 DMA 这个通道，直接读取。</p>
+<h2><span id="dma-技术">DMA 技术</span></h2><p>DMA 的作用就是实现数据的直接传输，而去掉了传统数据传输需要 CPU 参与的环节。下图中内存读取外设的数据，这个过程不再先之前那样需要 CPU 的参与，而是利用 DMA 这个通道，直接读取。</p>
 <p><img src="/images/2024/09/25/1923cd30-7b0e-11ef-b257-21ef1724fa3f.png" alt="DMA.png"></p>
 <ol>
 <li><strong>请求阶段</strong>: 外设发出 DMA 请求给 DMA 控制器，表明其需要进行数据传输。</li>
@@ -195,7 +204,7 @@
 <li><strong>数据传输阶段</strong>: 一旦获得总线控制权，DMA 控制器<strong>直接将数据从源地址传输到目的地址，而无需经过 CPU</strong>。</li>
 <li><strong>完成阶段</strong>: 数据传输完成后，DMA 控制器会发送传输完成信号给外设，并向 CPU 发出中断信号，通知数据传输已经完成。</li>
 </ol>
-<h2 id="DMA-和-CPU主导的数据拷贝到区别"><a href="#DMA-和-CPU主导的数据拷贝到区别" class="headerlink" title="DMA 和 CPU主导的数据拷贝到区别"></a>DMA 和 CPU主导的数据拷贝到区别</h2><p>CPU 明显是可以进行数据拷贝，但是 DMA 设计出来就是为了接受这份“无聊”的工作，让 CPU 专注于计算相关的工作。因此，DMA 在针对数据拷贝这块的设计上，究竟有哪些优势？</p>
+<h2><span id="dma-和-cpu主导的数据拷贝到区别">DMA 和 CPU主导的数据拷贝到区别</span></h2><p>CPU 明显是可以进行数据拷贝，但是 DMA 设计出来就是为了接受这份“无聊”的工作，让 CPU 专注于计算相关的工作。因此，DMA 在针对数据拷贝这块的设计上，究竟有哪些优势？</p>
 <p>（一）工作方式的不同</p>
 <ul>
 <li>CPU：当没有 DMA 时，CPU 需要逐字节（或逐字）地读取数据源，然后将其写入目标地址。这种操作会消耗 CPU 的大量时钟周期，因为 CPU 需要从 I&#x2F;O 设备（如磁盘、网卡）读取数据、处理数据再写入内存，每次数据读写都涉及 CPU 指令、总线操作、缓存管理等，效率低下。</li>
@@ -216,7 +225,7 @@
 <li>CPU：通常需要在不同存储空间（如用户空间、内核空间）之间进行多次拷贝，每次拷贝都意味着额外的内存操作和时间开销。</li>
 <li>DMA：DMA 控制器可以直接将数据从外设搬移到目标存储空间（如内核缓冲区、用户内存），甚至通过 Scatter-Gather DMA 直接分发到多个目标内存块，实现零拷贝或最小化拷贝次数的优化。</li>
 </ul>
-<h2 id="接收网络数据包"><a href="#接收网络数据包" class="headerlink" title="接收网络数据包"></a>接收网络数据包</h2><p>只需要讲清楚 接受网络数据包的过程，就可以轻松理解 发送用户数据包的过程了。</p>
+<h2><span id="接收网络数据包">接收网络数据包</span></h2><p>只需要讲清楚 接受网络数据包的过程，就可以轻松理解 发送用户数据包的过程了。</p>
 <p><img src="/images/2024/09/25/14980380-7b0e-11ef-b257-21ef1724fa3f.png" alt="收发.png"></p>
 <ol>
 <li>网络数据帧到达网卡，按照 FIFO 顺序被存入网卡的接收队列。网卡通过 DMA 技术，将网络包写入到环形缓冲区（Ring Buffer）的一个空闲位置。</li>
@@ -402,10 +411,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -439,6 +444,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -458,21 +467,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -520,10 +514,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -542,9 +532,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -555,6 +549,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -590,6 +599,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

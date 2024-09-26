@@ -181,14 +181,22 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="消息头完善"><a href="#消息头完善" class="headerlink" title="消息头完善"></a>消息头完善</h2><p>早前我们的数据包设计为 头部+数据，但是要进行逻辑处理，就需要传递一个 id 字段表示要处理的消息 id，当然可以不在包头传 id 字段，将 id 序列化到消息体也是可以的，但是我们为了便于处理也便于回调逻辑层对应的函数，最好是将 id 写入包头。</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%B6%88%E6%81%AF%E5%A4%B4%E5%AE%8C%E5%96%84">消息头完善</a></li>
+<li><a href="#%E4%BC%98%E9%9B%85%E9%80%80%E5%87%BA">优雅退出</a></li>
+<li><a href="#logicsystem%E5%8D%95%E4%BE%8B%E7%B1%BB">LogicSystem单例类</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="消息头完善">消息头完善</span></h2><p>早前我们的数据包设计为 头部+数据，但是要进行逻辑处理，就需要传递一个 id 字段表示要处理的消息 id，当然可以不在包头传 id 字段，将 id 序列化到消息体也是可以的，但是我们为了便于处理也便于回调逻辑层对应的函数，最好是将 id 写入包头。</p>
 <p><img src="/images/2024/09/14/19a4b5c0-7236-11ef-95c5-9b77976d41aa.png" alt="新的消息体.png"></p>
 <p>基于之前的 MsgNode 再设计两个节点类，即 RecvNode 和 SendNode，前者表示接收消息的节点，后者表示发送消息的节点。就不新建类来定义，直接再 MsgNode 类文件中一起实现了。随之，我们的 Session 类也要有所改动。</p>
 <p>上一章的末尾讲到把传递的实体数据序列化，那就在这节把传递数据序列化的代码完成。同时，本次代码还进行一收一发的过程，如果你要测试是否存在粘包，只需要把客户端代码中的收数据过程注释掉进行测试即可，如果你想测试客户端和服务端通信的收发过程没有问题，再将注释关闭即可。</p>
 <p><img src="/images/2024/09/14/16324b50-7236-11ef-95c5-9b77976d41aa.png" alt="加入序列化和完善MsgNode.png"></p>
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/8-%E5%8A%A0%E5%85%A5%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%AE%8C%E5%96%84MsgNode">加入序列化和完善MsgNode</a></p>
-<h2 id="优雅退出"><a href="#优雅退出" class="headerlink" title="优雅退出"></a>优雅退出</h2><p>让服务器优化退出可以采用信号的方式，如果你是在 Linux 系统中，你可以在主线程设置监听某个信号，如果有对应的信号产生，就执行事先设置好的回调函数。</p>
+<h2><span id="优雅退出">优雅退出</span></h2><p>让服务器优化退出可以采用信号的方式，如果你是在 Linux 系统中，你可以在主线程设置监听某个信号，如果有对应的信号产生，就执行事先设置好的回调函数。</p>
 <p>asio 也提供有这样的方式，在主函数中添加如下代码即可：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        boost::asio::io_context  io_context;<br>        boost::<span class="hljs-function">asio::signal_set <span class="hljs-title">signals</span><span class="hljs-params">(io_context, SIGINT, SIGTERM)</span></span>;<br>        signals.<span class="hljs-built_in">async_wait</span>([&amp;io_context](<span class="hljs-keyword">auto</span>, <span class="hljs-keyword">auto</span>) &#123;<br>            io_context.<span class="hljs-built_in">stop</span>();<br>            &#125;);<br>        <span class="hljs-function">CServer <span class="hljs-title">s</span><span class="hljs-params">(io_context, <span class="hljs-number">10086</span>)</span></span>;<br>        io_context.<span class="hljs-built_in">run</span>();<br>    &#125;<br>    <span class="hljs-built_in">catch</span> (std::exception&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -199,7 +207,7 @@
 <p>下面是一些其他的 API，可以了解看看。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">signal_set</span>(io_context): 构造函数，接受一个 io_context 对象来处理异步操作<br>    <br><span class="hljs-built_in">add</span>(<span class="hljs-type">int</span> signal_number): 向信号集添加要监听的信号<br>    <br><span class="hljs-built_in">remove</span>(<span class="hljs-type">int</span> signal_number): 从信号集中移除指定信号<br>    <br><span class="hljs-built_in">clear</span>(): 清除所有已注册的信号<br>    <br><span class="hljs-built_in">async_wait</span>(handler): 异步等待信号的触发，当信号被捕获时调用指定的处理程序<br></code></pre></td></tr></table></figure>
 
-<h2 id="LogicSystem单例类"><a href="#LogicSystem单例类" class="headerlink" title="LogicSystem单例类"></a>LogicSystem单例类</h2><p>单例类的实现可见此文：<a href="https://xiaoyangst.github.io/2024/09/11/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">单例模式</a></p>
+<h2><span id="logicsystem单例类">LogicSystem单例类</span></h2><p>单例类的实现可见此文：<a href="https://xiaoyangst.github.io/2024/09/11/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">单例模式</a></p>
 <p>我们的消息格式已经重新设计，这个新增的 ID 字段究竟代表着什么？客户端通过 ID 来表明自己需要的服务。简单举例，服务器现在是一个聊天服务器，客户端就谈过 ID 来表达自己的功能需求。传递 ID &#x3D; 1 表明需要注册用户，其账号和密码就包含在消息体中，服务器通过解析 JSON 数据就可以拿出并把数据存储注册信息的数据库中，同时返回 ID &#x3D; 10，表示注册成功。客户端接收到这个信息之后，也就知道自己已经注册成功了。</p>
 <p>LgicSystem 类就是和网络库进行分离的，即网络和计算工作进行分离。在网络阶段解析到 用户数据包中的 ID字段之后，就加入到 LgicSystem 提供的队列中，LgicSystem 这边会自动唤醒工作线程来执行任务函数（ID 和 回调函数以 key-value 存在 map 容器中，查找方便）。也就是说，之前我们是让网络库来执行和用户交互的工作，但是现在网络库就是来处理客户端的连接和客户端发来的消息，至于后续执行客户端需求和回复客户端状态的事情将交给工作线程来做（LgicSystem 中的 dealMsg成员函数），实现网络和计算工作的解耦合。</p>
 <p><img src="/images/2024/09/14/062c6d30-7236-11ef-95c5-9b77976d41aa.png" alt="逻辑层设计完成.png"></p>
@@ -379,10 +387,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -416,6 +420,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -435,21 +443,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -497,10 +490,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -519,9 +508,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -532,6 +525,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -567,6 +575,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

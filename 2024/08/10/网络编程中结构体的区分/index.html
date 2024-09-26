@@ -181,21 +181,29 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="sockaddr结构体和sockaddr-in结构体"><a href="#sockaddr结构体和sockaddr-in结构体" class="headerlink" title="sockaddr结构体和sockaddr_in结构体"></a>sockaddr结构体和sockaddr_in结构体</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr</span> &#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> sa_family;    <span class="hljs-comment">// 协议族 (AF_INET, AF_INET6, etc.)</span><br>    <span class="hljs-type">char</span> sa_data[<span class="hljs-number">14</span>];            <span class="hljs-comment">// 地址数据 (协议相关)</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+        <!-- toc -->
+
+<ul>
+<li><a href="#sockaddr%E7%BB%93%E6%9E%84%E4%BD%93%E5%92%8Csockaddr_in%E7%BB%93%E6%9E%84%E4%BD%93">sockaddr结构体和sockaddr_in结构体</a></li>
+<li><a href="#gethostbyname%E5%87%BD%E6%95%B0">gethostbyname函数</a></li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2ip%E4%B8%8E%E5%A4%A7%E7%AB%AF%E5%BA%8Fip%E5%9C%B0%E5%9D%80%E7%9A%84%E8%BD%AC%E6%8D%A2">字符串IP与大端序IP地址的转换</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="sockaddr结构体和sockaddr_in结构体">sockaddr结构体和sockaddr_in结构体</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr</span> &#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> sa_family;    <span class="hljs-comment">// 协议族 (AF_INET, AF_INET6, etc.)</span><br>    <span class="hljs-type">char</span> sa_data[<span class="hljs-number">14</span>];            <span class="hljs-comment">// 地址数据 (协议相关)</span><br>&#125;;<br></code></pre></td></tr></table></figure>
 
 <p>存放协议族、端口和地址信息。客户端的 connect 函数和服务端的 bind 函数需要这个结构体。</p>
 <p>sockaddr 结构体是为了统一地址结构的表示方法，统一接口函数，但是这个结构体并不方便使用，因此定义了等价的 sockaddr_in 结构体，它的大小和 sockaddr 结构体相同，可以强制转换成 sockaddr。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr_in</span> &#123;<br>    <span class="hljs-type">short</span> <span class="hljs-type">int</span> sin_family;         <span class="hljs-comment">// 协议族 (AF_INET)</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> <span class="hljs-type">int</span> sin_port;  <span class="hljs-comment">// 16位端口号 ，大端序。用htons(整数的端口)转换。</span><br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">in_addr</span> sin_addr;      <span class="hljs-comment">// IP地址</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> sin_zero[<span class="hljs-number">8</span>];    <span class="hljs-comment">// 填充，使得结构体大小与sockaddr一致（不用管）</span><br>&#125;;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">in_addr</span> &#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> s_addr;         <span class="hljs-comment">// 32位的IP地址，大端序 (使用网络字节序)</span><br>&#125;;<br></code></pre></td></tr></table></figure>
 
 <p>因此，在实际的网络编程中，先定义 sockaddr_in结构体把相关信息存储之后，再强制转换成 sockaddr，毕竟提供的API接受的类型是 sockaddr。</p>
-<h2 id="gethostbyname函数"><a href="#gethostbyname函数" class="headerlink" title="gethostbyname函数"></a>gethostbyname函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">hostent</span> *<span class="hljs-built_in">gethostbyname</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name);<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">hostent</span> &#123;<br>    <span class="hljs-type">char</span>  *h_name;       	   <span class="hljs-comment">// 主机的正式名称</span><br>    <span class="hljs-type">char</span> **h_aliases;   	 <span class="hljs-comment">// 主机的别名列表</span><br>    <span class="hljs-type">int</span>    h_addrtype;   	 <span class="hljs-comment">// 地址类型，通常为 AF_INET</span><br>    <span class="hljs-type">int</span>    h_length;     	   <span class="hljs-comment">// 地址长度，通常为 4（对于 IPv4）</span><br>    <span class="hljs-type">char</span> **h_addr_list;  	<span class="hljs-comment">//地址列表，可能包含多个 IP 地址（网络字节序）</span><br>&#125;;<br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> h_addr h_addr_list[0] <span class="hljs-comment">// For backward compatibility.</span></span><br></code></pre></td></tr></table></figure>
+<h2><span id="gethostbyname函数">gethostbyname函数</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">hostent</span> *<span class="hljs-built_in">gethostbyname</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name);<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">hostent</span> &#123;<br>    <span class="hljs-type">char</span>  *h_name;       	   <span class="hljs-comment">// 主机的正式名称</span><br>    <span class="hljs-type">char</span> **h_aliases;   	 <span class="hljs-comment">// 主机的别名列表</span><br>    <span class="hljs-type">int</span>    h_addrtype;   	 <span class="hljs-comment">// 地址类型，通常为 AF_INET</span><br>    <span class="hljs-type">int</span>    h_length;     	   <span class="hljs-comment">// 地址长度，通常为 4（对于 IPv4）</span><br>    <span class="hljs-type">char</span> **h_addr_list;  	<span class="hljs-comment">//地址列表，可能包含多个 IP 地址（网络字节序）</span><br>&#125;;<br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> h_addr h_addr_list[0] <span class="hljs-comment">// For backward compatibility.</span></span><br></code></pre></td></tr></table></figure>
 
 <p>这个函数的优点就是不仅可以直接传递IP地址（字符串类型或字符数组类型），还支持传递域名。根据返回的hostent结构体中的成员，添加到所需的其它结构体中。</p>
 <p>如下是部分应用核心代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 定义主机名</span><br><span class="hljs-type">const</span> <span class="hljs-type">char</span>* hostname = <span class="hljs-string">&quot;www.example.com&quot;</span>;<br><br><span class="hljs-comment">// 获取主机信息</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">hostent</span>* host_info = <span class="hljs-built_in">gethostbyname</span>(hostname);<br><br><span class="hljs-comment">// 设置服务器地址结构</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr_in</span> server_addr;<br>std::<span class="hljs-built_in">memset</span>(&amp;server_addr, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(server_addr));<br>server_addr.sin_family = AF_INET;<br>server_addr.sin_port = <span class="hljs-built_in">htons</span>(<span class="hljs-number">80</span>); <span class="hljs-comment">// HTTP 端口号</span><br>std::<span class="hljs-built_in">memcpy</span>(&amp;server_addr.sin_addr, host_info-&gt;h_addr_list[<span class="hljs-number">0</span>], host_info-&gt;h_length);<br></code></pre></td></tr></table></figure>
 
-<h2 id="字符串IP与大端序IP地址的转换"><a href="#字符串IP与大端序IP地址的转换" class="headerlink" title="字符串IP与大端序IP地址的转换"></a>字符串IP与大端序IP地址的转换</h2><p>C语言提供几个库函数，用于字符串格式的IP和大端序IP的相互转换，用于网络通讯的服务端程序中。</p>
+<h2><span id="字符串ip与大端序ip地址的转换">字符串IP与大端序IP地址的转换</span></h2><p>C语言提供几个库函数，用于字符串格式的IP和大端序IP的相互转换，用于网络通讯的服务端程序中。</p>
 <p><code>inet_addr</code>：将字符串形式的 IP 地址转换为 <code>in_addr_t</code></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">in_addr_t</span> <span class="hljs-title">inet_addr</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *cp)</span></span>;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    const char *ip = &quot;127.0.0.1&quot;;</span><br><span class="hljs-comment">    in_addr_t addr = inet_addr(ip);</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
 
@@ -379,10 +387,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -416,6 +420,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -435,21 +443,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -497,10 +490,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -519,9 +508,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -532,6 +525,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -567,6 +575,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

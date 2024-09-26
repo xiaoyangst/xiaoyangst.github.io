@@ -181,8 +181,16 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="演示常见项目的管理方式"><a href="#演示常见项目的管理方式" class="headerlink" title="演示常见项目的管理方式"></a>演示常见项目的管理方式</h2><p>很多人讲 CMake 特别喜欢讲单个文件夹和单个文件的处理情况，可这是没有必要的。这种文件结构并不常见，不如上来直接讲如何管理多个目录和多个文件，这样更具实际价值。</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%BC%94%E7%A4%BA%E5%B8%B8%E8%A7%81%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%AE%A1%E7%90%86%E6%96%B9%E5%BC%8F">演示常见项目的管理方式</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+<li><a href="#%E4%B8%8D%E5%BE%97%E4%B8%8D%E4%BB%8B%E7%BB%8D%E7%9A%84file%E5%91%BD%E4%BB%A4">不得不介绍的FILE命令</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="演示常见项目的管理方式">演示常见项目的管理方式</span></h2><p>很多人讲 CMake 特别喜欢讲单个文件夹和单个文件的处理情况，可这是没有必要的。这种文件结构并不常见，不如上来直接讲如何管理多个目录和多个文件，这样更具实际价值。</p>
 <p>就当前个人的项目编写情况来看，常用的结构如下：</p>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs markdown">include<br>src<br>thirdparty<br>CMakeLists.txt<br></code></pre></td></tr></table></figure>
 
@@ -211,12 +219,12 @@
 <p>再看④ CMakeLists.txt 文件：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment"># 将当前目录中的所有源文件添加到 SRC_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(. SRC_LIST)<br><br><span class="hljs-comment"># 将 ./db 目录中的所有源文件添加到 DB_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(./db DB_LIST)<br><br><span class="hljs-comment"># 将 ./model 目录中的所有源文件添加到 MODEL_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(./model MODEL_LIST)<br><br><span class="hljs-comment"># 将 ./redis 目录中的所有源文件添加到 REDIS_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(./redis REDIS_LIST)<br><br><span class="hljs-comment"># 创建一个名为 ChatServer 的可执行文件，并将 SRC_LIST、DB_LIST、REDIS_LIST 和 MODEL_LIST 中的源文件添加到目标文件中</span><br><span class="hljs-keyword">add_executable</span>(ChatServer <span class="hljs-variable">$&#123;SRC_LIST&#125;</span> <span class="hljs-variable">$&#123;DB_LIST&#125;</span> <span class="hljs-variable">$&#123;REDIS_LIST&#125;</span> <span class="hljs-variable">$&#123;MODEL_LIST&#125;</span>)<br><br><span class="hljs-comment"># 链接 ChatServer 可执行文件所需的库</span><br><span class="hljs-keyword">target_link_libraries</span>(ChatServer muduo_net muduo_base mysqlclient hiredis pthread)<br></code></pre></td></tr></table></figure>
 
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>include_directories：搜索头文件。指定文件夹下的头文件编译器就能找到，且最好在根CMakeLists.txt 文件完成这个工作，那么所有子CMakeLists.txt 文件都无需再用该语法了。</p>
+<h2><span id="总结">总结</span></h2><p>include_directories：搜索头文件。指定文件夹下的头文件编译器就能找到，且最好在根CMakeLists.txt 文件完成这个工作，那么所有子CMakeLists.txt 文件都无需再用该语法了。</p>
 <p>aux_source_directory ：搜索源文件。用于将指定目录中的所有源文件添加到一个变量中。</p>
 <p>add_executable：生成可执行程序。第一个参数填写可执行程序名称，后面就跟上需要的源文件（通常用aux_source_directory 搜索到源文件且保存到一个变量中，然后再把这个变量引入进来）。</p>
 <p>target_link_libraries：链接所需库。第一个参数填写可执行程序名称，后面就跟库文件名称。</p>
 <p><em>include_directories 和 aux_source_directory都不会递归地搜索指定目录及其子目录中的文件。它只会在指定的目录中查找文件，而不会自动搜索子目录中的文件</em>。</p>
-<h2 id="不得不介绍的FILE命令"><a href="#不得不介绍的FILE命令" class="headerlink" title="不得不介绍的FILE命令"></a>不得不介绍的FILE命令</h2><p>这个命令非常重要，可以替代 include_directories 和 aux_source_directory 命令（<strong>能层级搜索</strong>指定目录下的文件）。</p>
+<h2><span id="不得不介绍的file命令">不得不介绍的FILE命令</span></h2><p>这个命令非常重要，可以替代 include_directories 和 aux_source_directory 命令（<strong>能层级搜索</strong>指定目录下的文件）。</p>
 <p>后面讲 Qt 项目配置的时候，就需要这个命令，因为 ui 文件、qss 文件、qrc 文件等资源没有专门的命令来查找，但是借助 file 这个命令就能解决。简单来讲，file 可以把任何文件保存到一个变量中，然后给别人引用。</p>
 <p>这里只演示匹配指定模式的文件，并将结果存储在变量中：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">file</span>(GLOB TEST_RESULT /public/home *.cpp)			<span class="hljs-comment">#只会查找指定目录下的文件，不会递归子目录，即不会层级搜索.cpp文件</span><br><br><span class="hljs-keyword">file</span>(GLOB_RECURSE TEST_RESULT /public/home *.cpp)	 <span class="hljs-comment">#会递归查找指定目录及其所有子目录中的文件，即会层级搜索.cpp文件</span><br></code></pre></td></tr></table></figure>
@@ -399,10 +407,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -436,6 +440,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -455,21 +463,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -517,10 +510,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -539,9 +528,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -552,6 +545,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -587,6 +595,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

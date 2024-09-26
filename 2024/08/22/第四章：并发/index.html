@@ -181,11 +181,21 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="并发：介绍"><a href="#并发：介绍" class="headerlink" title="并发：介绍"></a>并发：介绍</h2><p>同一进程下的多线程共享内存地址，对同一块内存地址的读不会引发数据竞争，但是修改会引发数据竞争。常用的办法是加锁保护临界区或保证修改的动作是原子的。</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E5%B9%B6%E5%8F%91%E4%BB%8B%E7%BB%8D">并发：介绍</a></li>
+<li><a href="#%E9%94%81">锁</a></li>
+<li><a href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F">条件变量</a></li>
+<li><a href="#%E4%BF%A1%E5%8F%B7%E9%87%8F">信号量</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98">常见并发问题</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="并发介绍">并发：介绍</span></h2><p>同一进程下的多线程共享内存地址，对同一块内存地址的读不会引发数据竞争，但是修改会引发数据竞争。常用的办法是加锁保护临界区或保证修改的动作是原子的。</p>
 <p>原子性是指当指令执行时，它会像期望那样执行更新。它不能在指令中间中断，因为这正是我们从硬件获得的保证：发生中断时，指令根本没有运行，或者运行完成，没有中间状态。</p>
 <p><img src="/images/2024/08/22/d02433f0-606d-11ef-b5d8-395e250ad2a7.png" alt="多线程.png"></p>
-<h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++">没有加锁<br>    balance = balance + <span class="hljs-number">1</span>;<br><br>加锁<br>    <span class="hljs-type">lock_t</span> mutex; <br>    ...<br>    <span class="hljs-built_in">lock</span>(&amp;mutex); <br>    balance = balance + <span class="hljs-number">1</span>; 	<br>    <span class="hljs-built_in">unlock</span>(&amp;mutex);<br></code></pre></td></tr></table></figure>
+<h2><span id="锁">锁</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++">没有加锁<br>    balance = balance + <span class="hljs-number">1</span>;<br><br>加锁<br>    <span class="hljs-type">lock_t</span> mutex; <br>    ...<br>    <span class="hljs-built_in">lock</span>(&amp;mutex); <br>    balance = balance + <span class="hljs-number">1</span>; 	<br>    <span class="hljs-built_in">unlock</span>(&amp;mutex);<br></code></pre></td></tr></table></figure>
 
 <p>没有加锁前，balance &#x3D; balance + 1 这个指令可以被多线程同时访问；加锁之后，保证只有一个线程访问到 balance &#x3D; balance + 1 指令，确保 balance 的值正确 加 1，不会遗漏。</p>
 <p><strong>锁就是一个变量</strong>，因此我们需要声明一个某种类型的锁变量（lock variable，如上面的mutex），才能使用。这个<strong>锁变量（简称锁）保存了锁在某一时刻的状态</strong>。它要么是可用的（available，或 unlocked，或 free），表示没有线程持有锁，要么是被占用的（acquired，或 locked，或 held），表示有一个线程持有锁，正处于临界区。我们也可以保存其他的信息，比如持有锁的线程，或请求获取锁的线程队列，但这些信息会隐藏起来，锁的使用者不会发现。</p>
@@ -193,12 +203,12 @@
 <p>调用 lock()尝试获取锁，如果没有其他线程持有锁（即它是可用的），该线程会获得锁，进入临界区。这个线程有时被称为锁的持有者（owner）。如果另外一个线程对相同的锁变量（本例中的 mutex）调用 lock()，因为锁被另一线程持有，该调用不会返回。这样，当持有锁的线程在临界区时，其他线程就无法进入临界区。</p>
 <p>锁的持有者一旦调用 unlock()，锁就变成可用了。如果没有其他等待线程（即没有其他线程调用过 lock()并卡在那里），锁的状态就变成可用了。如果有等待线程（卡在 lock()里），其中一个会（最终）注意到（或收到通知）锁状态的变化，获取该锁，进入临界区。</p>
 <p>锁为程序员提供了最小程度的调度控制。我们把线程视为程序员创建的实体，但是被操作系统调度，具体方式由操作系统选择。<strong>锁让程序员获得一些控制权</strong>。通过给临界区加锁，可以保证临界区内只有一个线程活跃。<strong>锁将原本由操作系统调度的混乱状态变得更为可控</strong>。</p>
-<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p>线程可以使用条件变量（condition variable），来等待一个条件变成真。条件变量是一个显式队列，当某些执行状态（即条件，condition）不满足时，线程可以把自己加入队列，等待（waiting）该条件。另外某个线程，当它改变了上述状态时，就可以唤醒一个或者多个等待线程（通过在该条件上发信号），让它们继续执行。</p>
+<h2><span id="条件变量">条件变量</span></h2><p>线程可以使用条件变量（condition variable），来等待一个条件变成真。条件变量是一个显式队列，当某些执行状态（即条件，condition）不满足时，线程可以把自己加入队列，等待（waiting）该条件。另外某个线程，当它改变了上述状态时，就可以唤醒一个或者多个等待线程（通过在该条件上发信号），让它们继续执行。</p>
 <p>条件变量有两种相关操作：wait()和 signal()。线程要睡眠的时候（等待条件被满足，条件满足会被唤醒，即后面的signal指令），调用 wait()。当线程想唤醒等待在某个条件变量上的睡眠线程时，调用 signal()。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-comment">// 定义全局变量和同步原语</span><br><span class="hljs-type">int</span> done = <span class="hljs-number">0</span>;<br><span class="hljs-type">pthread_mutex_t</span> m = PTHREAD_MUTEX_INITIALIZER;<br><span class="hljs-type">pthread_cond_t</span> c = PTHREAD_COND_INITIALIZER;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">thr_exit</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-built_in">pthread_mutex_lock</span>(&amp;m);  <span class="hljs-comment">// 锁住互斥锁</span><br>    done = <span class="hljs-number">1</span>;               <br>    <span class="hljs-built_in">pthread_cond_signal</span>(&amp;c); <span class="hljs-comment">// 发出条件变量信号</span><br>    <span class="hljs-built_in">pthread_mutex_unlock</span>(&amp;m); <span class="hljs-comment">// 解锁互斥锁</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> *<span class="hljs-title">child</span><span class="hljs-params">(<span class="hljs-type">void</span> *arg)</span> </span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;child\n&quot;</span>);<br>    <span class="hljs-built_in">thr_exit</span>();<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">thr_join</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-built_in">pthread_mutex_lock</span>(&amp;m); <span class="hljs-comment">// 锁住互斥锁</span><br>    <span class="hljs-keyword">while</span> (done == <span class="hljs-number">0</span>) &#123;     <span class="hljs-comment">// 等待条件满足</span><br>        <span class="hljs-built_in">pthread_cond_wait</span>(&amp;c, &amp;m); <span class="hljs-comment">// 等待条件变量信号</span><br>    &#125;<br>    <span class="hljs-built_in">pthread_mutex_unlock</span>(&amp;m); <span class="hljs-comment">// 解锁互斥锁</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> </span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;parent: begin\n&quot;</span>);<br>    <span class="hljs-type">pthread_t</span> p;<br>    <span class="hljs-built_in">pthread_create</span>(&amp;p, <span class="hljs-literal">NULL</span>, child, <span class="hljs-literal">NULL</span>); <span class="hljs-comment">// 创建子线程</span><br>    <span class="hljs-built_in">thr_join</span>(); <span class="hljs-comment">// 等待子线程完成</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;parent: end\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>你可能注意到一点，wait()调用有一个参数，它是互斥量。它假定在 wait()调用时，这个互斥量是已上锁状态。wait()的职责是释放锁，并让调用线程休眠（原子地）。当线程被唤醒时（在另外某个线程发信号给它后），它必须重新获取锁，再返回调用者。这样复杂的步骤也是为了避免在线程陷入休眠时，产生一些竞态条件。</p>
-<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h2><p>信号量是有一个整数值的对象，可以用两个函数来操作它。在 POSIX 标准中，是 sem_wait() 和 sem_post()。因为信号量的初始值能够决定其行为，所以首先要初始化信号量，才能调用其他函数与之交互。</p>
+<h2><span id="信号量">信号量</span></h2><p>信号量是有一个整数值的对象，可以用两个函数来操作它。在 POSIX 标准中，是 sem_wait() 和 sem_post()。因为信号量的初始值能够决定其行为，所以首先要初始化信号量，才能调用其他函数与之交互。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;semaphore.h&gt;</span> </span><br><span class="hljs-type">sem_t</span> s; <br><span class="hljs-built_in">sem_init</span>(&amp;s, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
 
 <p>其中申明了一个信号量 s，通过第三个参数，将它的值初始化为 1。sem_init() 的第二个参数，在我们看到的所有例子中都设置为 0，表示信号量是在同一进程的多个线程共享的。</p>
@@ -223,7 +233,7 @@
 <p>信号量还可以用于解决生产者&#x2F;消费者问题，互斥锁+条件变量同样可以用于解决生产者&#x2F;消费者问题。实际上，我们完全可以利用互斥锁+条件变量封装出信号量。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">int</span> count;<br>    <span class="hljs-type">pthread_mutex_t</span> mutex;<br>    <span class="hljs-type">pthread_cond_t</span> cond;<br>&#125; Semaphore;<br><br><span class="hljs-comment">// 初始化信号量</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">sem_init</span><span class="hljs-params">(Semaphore *sem, <span class="hljs-type">int</span> value)</span> &#123;<br>    sem-&gt;count = value;<br>    pthread_mutex_init(&amp;sem-&gt;mutex, <span class="hljs-literal">NULL</span>);<br>    pthread_cond_init(&amp;sem-&gt;cond, <span class="hljs-literal">NULL</span>);<br>&#125;<br><br><span class="hljs-comment">// 等待信号量</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">sem_wait</span><span class="hljs-params">(Semaphore *sem)</span> &#123;<br>    pthread_mutex_lock(&amp;sem-&gt;mutex);<br>    <span class="hljs-keyword">while</span> (sem-&gt;count == <span class="hljs-number">0</span>) &#123;<br>        pthread_cond_wait(&amp;sem-&gt;cond, &amp;sem-&gt;mutex);<br>    &#125;<br>    sem-&gt;count--;<br>    pthread_mutex_unlock(&amp;sem-&gt;mutex);<br>&#125;<br><br><span class="hljs-comment">// 发出信号</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">sem_post</span><span class="hljs-params">(Semaphore *sem)</span> &#123;<br>    pthread_mutex_lock(&amp;sem-&gt;mutex);<br>    sem-&gt;count++;<br>    pthread_cond_signal(&amp;sem-&gt;cond);<br>    pthread_mutex_unlock(&amp;sem-&gt;mutex);<br>&#125;<br><br><span class="hljs-comment">// 销毁信号量</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">sem_destroy</span><span class="hljs-params">(Semaphore *sem)</span> &#123;<br>    pthread_mutex_destroy(&amp;sem-&gt;mutex);<br>    pthread_cond_destroy(&amp;sem-&gt;cond);<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="常见并发问题"><a href="#常见并发问题" class="headerlink" title="常见并发问题"></a>常见并发问题</h2><p><img src="/images/2024/08/22/f0219850-606d-11ef-b5d8-395e250ad2a7.png" alt="现代应用程序的缺陷统计.png"></p>
+<h2><span id="常见并发问题">常见并发问题</span></h2><p><img src="/images/2024/08/22/f0219850-606d-11ef-b5d8-395e250ad2a7.png" alt="现代应用程序的缺陷统计.png"></p>
 <p>我们现在来深入分析这两种类型的缺陷。对于第一类非死锁的缺陷，我们通过该研究的例子来讨论。对于第二类死锁缺陷，我们讨论人们在阻止、避免和处理死锁上完成的大量工作。</p>
 <p>（一）非死锁缺陷</p>
 <p>我们现在主要讨论其中两种：违反原子性缺陷和错误顺序缺陷</p>
@@ -427,10 +437,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -464,6 +470,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -483,21 +493,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -545,10 +540,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -567,9 +558,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -580,6 +575,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -615,6 +625,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

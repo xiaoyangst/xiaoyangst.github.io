@@ -181,8 +181,29 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="条件变量的正确使用方法"><a href="#条件变量的正确使用方法" class="headerlink" title="条件变量的正确使用方法"></a>条件变量的正确使用方法</h2><p>这里只介绍 wait，至于其他如 wait_for和 wait_until 自己查阅即可，无外乎增加一些新的功能而已。wait 提供两种方式：无条件等待和有条件等待</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%E7%9A%84%E6%AD%A3%E7%A1%AE%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95">条件变量的正确使用方法</a></li>
+<li><a href="#%E9%94%81%E7%9A%84%E9%80%89%E6%8B%A9">锁的选择</a></li>
+<li><a href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E9%98%9F%E5%88%97">生产者-消费者队列</a><ul>
+<li><a href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E9%98%9F%E5%88%97%E7%AE%80%E4%BB%8B">生产者-消费者队列简介</a></li>
+<li><a href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E9%98%9F%E5%88%97%E6%9C%89%E7%95%8C%E9%98%9F%E5%88%97">生产者-消费者队列（有界队列）</a></li>
+<li><a href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E9%98%9F%E5%88%97%E6%97%A0%E7%95%8C%E9%98%9F%E5%88%97">生产者-消费者队列（无界队列）</a></li>
+</ul>
+</li>
+<li><a href="#%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C">异步操作</a><ul>
+<li><a href="#future-%E4%B8%8E-promise">future 与 promise</a></li>
+<li><a href="#future-%E4%B8%8E-package_task">future 与 package_task</a></li>
+<li><a href="#future-%E4%B8%8E-async">future 与 async</a></li>
+<li><a href="#future-%E4%B8%8E-shared_future">future 与 shared_future</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="条件变量的正确使用方法">条件变量的正确使用方法</span></h2><p>这里只介绍 wait，至于其他如 wait_for和 wait_until 自己查阅即可，无外乎增加一些新的功能而已。wait 提供两种方式：无条件等待和有条件等待</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">wait</span> <span class="hljs-params">(unique_lock&lt;mutex&gt;&amp; lck)</span></span>;	<span class="hljs-comment">// 无条件等待</span><br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Predicate</span>&gt; <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">wait</span> <span class="hljs-params">(unique_lock&lt;mutex&gt;&amp; lck, Predicate pred)</span></span>;	<span class="hljs-comment">// 有条件等待</span><br></code></pre></td></tr></table></figure>
 
 <p>无条件等待只有在唤醒的情况下才会解除阻塞，否则一直阻塞。阻塞期间释放锁（即不占有锁），被唤醒就会重新获取锁，解除阻塞往下执行。</p>
@@ -213,11 +234,11 @@
 <li>判断条件是否满足使用while，不可以用if</li>
 <li>务必添加变量来保证等待线程不会错过其他线程发送的唤醒信号</li>
 </ul>
-<h2 id="锁的选择"><a href="#锁的选择" class="headerlink" title="锁的选择"></a>锁的选择</h2><p>C++11提供四种语义的互斥量：独占互斥量<code>std::mutex</code>，带超时的独占互斥量<code>std::timed_mutex</code>，递归互斥量<code>std::recursive_mutex</code>，带超时的递归互斥量<code>std::recursive_timed_mutex</code>。应该优先选择std::mutex，因为它满足我们所有的需要使用互斥的场景。</p>
+<h2><span id="锁的选择">锁的选择</span></h2><p>C++11提供四种语义的互斥量：独占互斥量<code>std::mutex</code>，带超时的独占互斥量<code>std::timed_mutex</code>，递归互斥量<code>std::recursive_mutex</code>，带超时的递归互斥量<code>std::recursive_timed_mutex</code>。应该优先选择std::mutex，因为它满足我们所有的需要使用互斥的场景。</p>
 <p>对于 mutex 的关键两个操作是 lock 和 unlock，将需要保护的临界区用这两个方法包裹即可。C++11为了方便锁的使用，提供 std::lock_guard 和 unique_lock 给我们使用：</p>
 <p><code>std::lock_guard</code>：只是对操作系统锁的API进行RAII的封装，构造时获得锁（加锁），析构时释放锁（解锁），并不提供额外的方法，也不提供 lock 和 unlock 方法。</p>
 <p><code>unique_lock</code>：它除了对操作系统锁的API进行RAII的封装，还提供手动控制锁的方法，即 lock 和 unlock 方法。并且提供给多的 lock 策略，比如 try_lock，try_lock_until等。</p>
-<h2 id="生产者-消费者队列"><a href="#生产者-消费者队列" class="headerlink" title="生产者-消费者队列"></a>生产者-消费者队列</h2><h3 id="生产者-消费者队列简介"><a href="#生产者-消费者队列简介" class="headerlink" title="生产者-消费者队列简介"></a>生产者-消费者队列简介</h3><p>它是实现线程间协作，交互的一种重要手段。从一端放数据（生产者），从另一端取数据（消费者）。生产者和消费者可以有一个或多个。</p>
+<h2><span id="生产者-消费者队列">生产者-消费者队列</span></h2><h3><span id="生产者-消费者队列简介">生产者-消费者队列简介</span></h3><p>它是实现线程间协作，交互的一种重要手段。从一端放数据（生产者），从另一端取数据（消费者）。生产者和消费者可以有一个或多个。</p>
 <p><img src="/images/2024/08/16/16a8ca30-5b95-11ef-922f-4335b82b6d11.png" alt="生产者消费者队列.png"></p>
 <ul>
 <li>队列作为临界区需要被保护，消费者与生产者间要互斥</li>
@@ -241,17 +262,17 @@
 <p>容量有大小限制，当满了后，生产者线程需要等待，为空的时候，消费者线程需要等待。这种队列可以用于数据分发的场景，但不能用于异步调用(异步调用的特性是生产者调用能马上返回，所以如果生产者阻塞在等待容器空闲显然是不满足要求的)。</p>
 <p><strong>无界队列</strong></p>
 <p>容量大小无限制，生产者线程可以一直放数据，队列为空的时候，消费者线程需要等待。这种队列即可以用于数据分发，也可以用于异步操作。这种情况下，消费者线程数量要大于生产者线程，是让数据或任务及时被处理，避免堆积。</p>
-<h3 id="生产者-消费者队列（有界队列）"><a href="#生产者-消费者队列（有界队列）" class="headerlink" title="生产者-消费者队列（有界队列）"></a>生产者-消费者队列（有界队列）</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BoundQueue</span> &#123;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">int</span> maxSize_&#123;<span class="hljs-number">1024</span>&#125;; <span class="hljs-comment">// 最大容量</span><br>  <span class="hljs-type">int</span> size&#123;<span class="hljs-number">0</span>&#125;;  <span class="hljs-comment">// 当前队列容量</span><br>  mutex mutex_;<br>  condition_variable full_;     <span class="hljs-comment">// 每次生产每次唤醒消费者</span><br>  condition_variable empty_;    <span class="hljs-comment">// 每次消费每次唤醒生产者</span><br>  queue&lt;T&gt; boundQueue_;<br><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">BoundQueue</span><span class="hljs-params">(<span class="hljs-type">int</span> maxSize)</span> : maxSize_(maxSize) &#123;</span>&#125;<br>  ~<span class="hljs-built_in">BoundQueue</span>() = <span class="hljs-keyword">default</span>;<br><br>  <span class="hljs-function">T <span class="hljs-title">get</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 消费</span><br>    <span class="hljs-function">unique_lock&lt;mutex&gt; <span class="hljs-title">um</span><span class="hljs-params">(mutex_)</span></span>;<br>    full_.<span class="hljs-built_in">wait</span>(um, [<span class="hljs-keyword">this</span>]()&#123;<br>      <span class="hljs-keyword">return</span> !<span class="hljs-built_in">isEmpty</span>();<br>    &#125;);<br>    T re = boundQueue_.<span class="hljs-built_in">front</span>();<br>    boundQueue_.<span class="hljs-built_in">pop</span>();<br>    size--;<br>    empty_.<span class="hljs-built_in">notify_all</span>();<br>    <span class="hljs-keyword">return</span> re;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">post</span><span class="hljs-params">(<span class="hljs-type">const</span> T &amp;data)</span> </span>&#123;  <span class="hljs-comment">// 生产</span><br>    <span class="hljs-function">unique_lock&lt;mutex&gt; <span class="hljs-title">um</span><span class="hljs-params">(mutex_)</span></span>;<br>    empty_.<span class="hljs-built_in">wait</span>(um, [<span class="hljs-keyword">this</span>]()&#123;<br>      <span class="hljs-keyword">return</span> !<span class="hljs-built_in">isFull</span>();<br>    &#125;);<br>    boundQueue_.<span class="hljs-built_in">push</span>(data);<br>    size++;<br>    full_.<span class="hljs-built_in">notify_all</span>();<br>  &#125;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isEmpty</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">return</span> boundQueue_.<span class="hljs-built_in">empty</span>();<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isFull</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">return</span> size &gt;= maxSize_;<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3><span id="生产者-消费者队列有界队列">生产者-消费者队列（有界队列）</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BoundQueue</span> &#123;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">int</span> maxSize_&#123;<span class="hljs-number">1024</span>&#125;; <span class="hljs-comment">// 最大容量</span><br>  <span class="hljs-type">int</span> size&#123;<span class="hljs-number">0</span>&#125;;  <span class="hljs-comment">// 当前队列容量</span><br>  mutex mutex_;<br>  condition_variable full_;     <span class="hljs-comment">// 每次生产每次唤醒消费者</span><br>  condition_variable empty_;    <span class="hljs-comment">// 每次消费每次唤醒生产者</span><br>  queue&lt;T&gt; boundQueue_;<br><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">BoundQueue</span><span class="hljs-params">(<span class="hljs-type">int</span> maxSize)</span> : maxSize_(maxSize) &#123;</span>&#125;<br>  ~<span class="hljs-built_in">BoundQueue</span>() = <span class="hljs-keyword">default</span>;<br><br>  <span class="hljs-function">T <span class="hljs-title">get</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 消费</span><br>    <span class="hljs-function">unique_lock&lt;mutex&gt; <span class="hljs-title">um</span><span class="hljs-params">(mutex_)</span></span>;<br>    full_.<span class="hljs-built_in">wait</span>(um, [<span class="hljs-keyword">this</span>]()&#123;<br>      <span class="hljs-keyword">return</span> !<span class="hljs-built_in">isEmpty</span>();<br>    &#125;);<br>    T re = boundQueue_.<span class="hljs-built_in">front</span>();<br>    boundQueue_.<span class="hljs-built_in">pop</span>();<br>    size--;<br>    empty_.<span class="hljs-built_in">notify_all</span>();<br>    <span class="hljs-keyword">return</span> re;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">post</span><span class="hljs-params">(<span class="hljs-type">const</span> T &amp;data)</span> </span>&#123;  <span class="hljs-comment">// 生产</span><br>    <span class="hljs-function">unique_lock&lt;mutex&gt; <span class="hljs-title">um</span><span class="hljs-params">(mutex_)</span></span>;<br>    empty_.<span class="hljs-built_in">wait</span>(um, [<span class="hljs-keyword">this</span>]()&#123;<br>      <span class="hljs-keyword">return</span> !<span class="hljs-built_in">isFull</span>();<br>    &#125;);<br>    boundQueue_.<span class="hljs-built_in">push</span>(data);<br>    size++;<br>    full_.<span class="hljs-built_in">notify_all</span>();<br>  &#125;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isEmpty</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">return</span> boundQueue_.<span class="hljs-built_in">empty</span>();<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isFull</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">return</span> size &gt;= maxSize_;<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<h3 id="生产者-消费者队列（无界队列）"><a href="#生产者-消费者队列（无界队列）" class="headerlink" title="生产者-消费者队列（无界队列）"></a>生产者-消费者队列（无界队列）</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">UnBoundQueue</span>&#123;<br> <span class="hljs-keyword">private</span>:<br>  mutex mutex_;<br>  condition_variable full_;     <span class="hljs-comment">// 每次生产每次唤醒消费者</span><br>  queue&lt;T&gt; unboundQueue_;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">UnBoundQueue</span><span class="hljs-params">()</span> </span>&#123;&#125;;<br>  ~<span class="hljs-built_in">UnBoundQueue</span>() = <span class="hljs-keyword">default</span>;<br>  <span class="hljs-function">T <span class="hljs-title">get</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 消费</span><br>    <span class="hljs-function">unique_lock&lt;mutex&gt; <span class="hljs-title">um</span><span class="hljs-params">(mutex_)</span></span>;<br>    full_.<span class="hljs-built_in">wait</span>(um, [<span class="hljs-keyword">this</span>]()&#123;<br>      <span class="hljs-keyword">return</span> !<span class="hljs-built_in">isEmpty</span>();<br>    &#125;);<br>    T re = unboundQueue_.<span class="hljs-built_in">front</span>();<br>    unboundQueue_.<span class="hljs-built_in">pop</span>();<br>    <span class="hljs-keyword">return</span> re;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">post</span><span class="hljs-params">(<span class="hljs-type">const</span> T &amp;data)</span> </span>&#123;  <span class="hljs-comment">// 生产</span><br>    &#123;<br>      <span class="hljs-function">lock_guard&lt;mutex&gt; <span class="hljs-title">lock_guard</span><span class="hljs-params">(mutex_)</span></span>;<br>      unboundQueue_.<span class="hljs-built_in">push</span>(data);<br>    &#125;<br><br>    full_.<span class="hljs-built_in">notify_all</span>();<br>  &#125;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isEmpty</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">return</span> unboundQueue_.<span class="hljs-built_in">empty</span>();<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3><span id="生产者-消费者队列无界队列">生产者-消费者队列（无界队列）</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">UnBoundQueue</span>&#123;<br> <span class="hljs-keyword">private</span>:<br>  mutex mutex_;<br>  condition_variable full_;     <span class="hljs-comment">// 每次生产每次唤醒消费者</span><br>  queue&lt;T&gt; unboundQueue_;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">UnBoundQueue</span><span class="hljs-params">()</span> </span>&#123;&#125;;<br>  ~<span class="hljs-built_in">UnBoundQueue</span>() = <span class="hljs-keyword">default</span>;<br>  <span class="hljs-function">T <span class="hljs-title">get</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 消费</span><br>    <span class="hljs-function">unique_lock&lt;mutex&gt; <span class="hljs-title">um</span><span class="hljs-params">(mutex_)</span></span>;<br>    full_.<span class="hljs-built_in">wait</span>(um, [<span class="hljs-keyword">this</span>]()&#123;<br>      <span class="hljs-keyword">return</span> !<span class="hljs-built_in">isEmpty</span>();<br>    &#125;);<br>    T re = unboundQueue_.<span class="hljs-built_in">front</span>();<br>    unboundQueue_.<span class="hljs-built_in">pop</span>();<br>    <span class="hljs-keyword">return</span> re;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">post</span><span class="hljs-params">(<span class="hljs-type">const</span> T &amp;data)</span> </span>&#123;  <span class="hljs-comment">// 生产</span><br>    &#123;<br>      <span class="hljs-function">lock_guard&lt;mutex&gt; <span class="hljs-title">lock_guard</span><span class="hljs-params">(mutex_)</span></span>;<br>      unboundQueue_.<span class="hljs-built_in">push</span>(data);<br>    &#125;<br><br>    full_.<span class="hljs-built_in">notify_all</span>();<br>  &#125;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isEmpty</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">return</span> unboundQueue_.<span class="hljs-built_in">empty</span>();<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<h2 id="异步操作"><a href="#异步操作" class="headerlink" title="异步操作"></a>异步操作</h2><h3 id="future-与-promise"><a href="#future-与-promise" class="headerlink" title="future 与 promise"></a>future 与 promise</h3><p>它提供了一种机制可以获取异步操作的结果，因为一个异步操作的结果不能马上获取，只能在未来某个时候从某个地方获取。这个异步操作的结果是一个未来的期待值，所有称为 future，可以称它为未来量。</p>
+<h2><span id="异步操作">异步操作</span></h2><h3><span id="future-与-promise">future 与 promise</span></h3><p>它提供了一种机制可以获取异步操作的结果，因为一个异步操作的结果不能马上获取，只能在未来某个时候从某个地方获取。这个异步操作的结果是一个未来的期待值，所有称为 future，可以称它为未来量。</p>
 <p>std::future 通常结合 std::promise，std::package_task，std::async使用。因为 future 本身只是用来存储某个结果，所以实际代码的执行还是需要借助其它函数。获取 future  存储结果的方法是 get()，并且只能获取一次，再次获取会异常。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//std::future 是一个类模板，模板参数需要传入一个类型</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br>future;<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">R</span>&amp;&gt; future&lt;R&amp;&gt;;<br></code></pre></td></tr></table></figure>
 
 <p>std::promise 是一个协助线程赋值的类，它能够将数据和 future 对象绑定起来，为获取线程函数中的某个值提供便利。std::future 通常结合 std::promise 就相当于给线程间<strong>建立一个通道</strong>，分为以下几步：</p>
 <ol>
-<li>在主线程中创建一个 std::promise 对象，promise<int> count_value</li>
+<li>在主线程中创建一个 std::promise 对象，promise<int> count_value</int></li>
 <li>将 count_value 传给线程 t1</li>
 <li>线程 t1 使用 std::promise 对象 count_value 的 get_future 方法获得一个 std::future对象，因为前面说过 std::future对象 可以存储异步操作的结果。截止到这个时候，通道已经建立，就可以使用通道了</li>
 <li>在主线程中调用调用std::promise 对象 count_value 的 get 方法，如果 count_value 没有被设置只，主线程就会一直阻塞</li>
@@ -259,7 +280,7 @@
 </ol>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;future&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">thr_func</span><span class="hljs-params">(<span class="hljs-type">int</span> num,promise&lt;<span class="hljs-type">int</span>&gt; &amp;p)</span></span>&#123;<br>    <span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; num; ++i) &#123;<br>        count += i;<br>    &#125;<br>    p.<span class="hljs-built_in">set_value</span>(count);	<span class="hljs-comment">//将需要的结果存储起来</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br><br>    promise&lt;<span class="hljs-type">int</span>&gt; count_value;<br><br>    <span class="hljs-function">thread <span class="hljs-title">t1</span><span class="hljs-params">(thr_func,<span class="hljs-number">10</span>, ref(count_value))</span></span>;<br>    <br>    <br>    t<span class="hljs-number">1.</span><span class="hljs-built_in">join</span>();<br><br>    cout&lt;&lt;<span class="hljs-string">&quot;0~10之间数字的总和：&quot;</span>&lt;&lt;count_value.<span class="hljs-built_in">get_future</span>().<span class="hljs-built_in">get</span>()&lt;&lt;endl;	<span class="hljs-comment">//获取返回值</span><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h3 id="future-与-package-task"><a href="#future-与-package-task" class="headerlink" title="future 与 package_task"></a>future 与 package_task</h3><p><code>packaged_task</code> 包装了一个可调用对象，并允许其结果以异步方式获取。它类似于 <code>std::function</code>，但会将结果<strong>自动传递</strong>给一个 <code>future</code> 对象。它的内部包含两个元素：</p>
+<h3><span id="future-与-package_task">future 与 package_task</span></h3><p><code>packaged_task</code> 包装了一个可调用对象，并允许其结果以异步方式获取。它类似于 <code>std::function</code>，但会将结果<strong>自动传递</strong>给一个 <code>future</code> 对象。它的内部包含两个元素：</p>
 <ol>
 <li>存储的任务（用户传递），这是某种可调用对象（如函数指针、成员函数指针或函数对象）</li>
 <li>共享状态（自动传递），能够存储调用存储任务的结果（类型为 <code>Ret</code>），并通过 <code>future</code> 异步访问</li>
@@ -268,7 +289,7 @@
 <p>比方说下面的代码中，先把普通函数 thr_func 包装成 packaged_task 类型的对象（返回值类型和参数列表要一直） task，最终的得到的这个 task 需要通过<strong>引用的方式传递到子线程内部</strong>，这样才能在主线程的最后通过任务对象的 get_future 方法得到 future 对象，打包的 task 代码中 return 的返回值就存储在 future 对象里。前面我们讲过 future 对象 获取存储结果的方式就是 get 方法。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;future&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">thr_func</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span></span>&#123;      <span class="hljs-comment">//  普通函数</span><br>    <span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; num; ++i) &#123;<br>        count += i;<br>    &#125;<br>    <span class="hljs-keyword">return</span> count;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br><br>    <span class="hljs-function">packaged_task&lt;<span class="hljs-title">int</span><span class="hljs-params">(<span class="hljs-type">int</span>)</span>&gt; <span class="hljs-title">task</span><span class="hljs-params">(thr_func)</span></span>;     <span class="hljs-comment">//将函数thr_func 打包为 task函数</span><br><br>    future&lt;<span class="hljs-type">int</span>&gt; result = task.<span class="hljs-built_in">get_future</span>();     <span class="hljs-comment">//返回值存储在future中</span><br><br>    <span class="hljs-function">thread <span class="hljs-title">t1</span><span class="hljs-params">(ref(task),<span class="hljs-number">10</span>)</span></span>;        <span class="hljs-comment">//将打包的函数task传递进去，包括这个函数所需要的参数</span><br><br>    t<span class="hljs-number">1.</span><span class="hljs-built_in">join</span>();<br><br>    cout&lt;&lt;<span class="hljs-string">&quot;0~10之间数字的总和：&quot;</span>&lt;&lt;result.<span class="hljs-built_in">get</span>()&lt;&lt;endl;       <span class="hljs-comment">//拿到返回值</span><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h3 id="future-与-async"><a href="#future-与-async" class="headerlink" title="future 与 async"></a>future 与 async</h3><p>可以直接启动一个子线程并在这个子线程中执行对应的任务函数，异步任务执行完成返回的结果也是存储到一个future对象中。也就是说调用 async 的返回值是一个 future 对象，里面存储返回值。这么看要比 package_task 方便很多，因为不需要取打包可调用对象，直接传递进去即可。</p>
+<h3><span id="future-与-async">future 与 async</span></h3><p>可以直接启动一个子线程并在这个子线程中执行对应的任务函数，异步任务执行完成返回的结果也是存储到一个future对象中。也就是说调用 async 的返回值是一个 future 对象，里面存储返回值。这么看要比 package_task 方便很多，因为不需要取打包可调用对象，直接传递进去即可。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt; <span class="hljs-keyword">class</span> <span class="hljs-title class_">Function</span>, <span class="hljs-keyword">class</span>... Args&gt;<br>std::future&lt;std::<span class="hljs-type">result_of_t</span>&lt;std::<span class="hljs-built_in">decay_t</span>&lt;Function&gt;(std::<span class="hljs-type">decay_t</span>&lt;Args&gt;...)&gt;&gt;<br>    <span class="hljs-built_in">async</span>( Function&amp;&amp; f, Args&amp;&amp;... args );<br><br><br><span class="hljs-keyword">template</span>&lt; <span class="hljs-keyword">class</span> <span class="hljs-title class_">Function</span>, <span class="hljs-keyword">class</span>... Args &gt;<br>std::future&lt;std::<span class="hljs-type">result_of_t</span>&lt;std::<span class="hljs-built_in">decay_t</span>&lt;Function&gt;(std::<span class="hljs-type">decay_t</span>&lt;Args&gt;...)&gt;&gt;<br>    <span class="hljs-built_in">async</span>( std::launch policy, Function&amp;&amp; f, Args&amp;&amp;... args );<br></code></pre></td></tr></table></figure>
 
 <p>函数参数:</p>
@@ -279,9 +300,9 @@
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;future&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">thr_func</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span></span>&#123;      <span class="hljs-comment">//  普通函数</span><br>    <span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; num; ++i) &#123;<br>        count += i;<br>    &#125;<br>    <span class="hljs-keyword">return</span> count;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br><br><br>    future&lt;<span class="hljs-type">int</span>&gt; result = <span class="hljs-built_in">async</span>(launch::async,thr_func,<span class="hljs-number">10</span>);      <span class="hljs-comment">//自动创建线程，并返回thr_func的返回值</span><br><br>    cout&lt;&lt;<span class="hljs-string">&quot;0~10之间数字的总和：&quot;</span>&lt;&lt;result.<span class="hljs-built_in">get</span>()&lt;&lt;endl;       <span class="hljs-comment">//拿到返回值</span><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h3 id="future-与-shared-future"><a href="#future-与-shared-future" class="headerlink" title="future 与 shared_future"></a>future 与 shared_future</h3><p><code>std::funture</code> 只支持移动语义，它要求类型参数也支持移动语义。它的get方法只能调用 1 次，调用get相当于将结果移走(移动语义的通俗意义)。再次调用会抛异常。</p>
+<h3><span id="future-与-shared_future">future 与 shared_future</span></h3><p><code>std::funture</code> 只支持移动语义，它要求类型参数也支持移动语义。它的get方法只能调用 1 次，调用get相当于将结果移走(移动语义的通俗意义)。再次调用会抛异常。</p>
 <p><code>std:shared_future</code> 可以共享结果，可以多次调用get方法，它要求类型参数支持复制语义。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<h3><span id="总结">总结</span></h3><ol>
 <li>future 是异步函数存储结果的所在</li>
 <li>promise 异步函数相当于创建一个变量给到线程，然后在线程中把值存储到变量中之后，主线程再进行获取</li>
 <li>packaged_task 异步函数对函数进行封装，这样线程函数可以有 return 返回值，不像 promise 是将在线程函数中把值存储起来，但是 packaged_task 却可以有 return 返回值</li>
@@ -461,10 +482,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -498,6 +515,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -517,21 +538,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -579,10 +585,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -601,9 +603,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -614,6 +620,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -649,6 +670,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

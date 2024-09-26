@@ -181,13 +181,24 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>我们将介绍两种模式：</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B">多线程</a><ul>
+<li><a href="#ioservicepool">IOServicePool</a></li>
+<li><a href="#iothreadpool">IOThreadPool</a></li>
+<li><a href="#%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83">性能比较</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="多线程">多线程</span></h2><p>我们将介绍两种模式：</p>
 <ul>
 <li>IOServicePool –&gt; 启动多个线程，每个线程管理一个 io_context</li>
 <li>IOThreadPool –&gt; 只启动一个 io_context，被多个线程共享</li>
 </ul>
-<h3 id="IOServicePool"><a href="#IOServicePool" class="headerlink" title="IOServicePool"></a>IOServicePool</h3><p>早前的单线程模式中，我们的主线程不仅要监听客户端的连接，同时还要继续监听该客户端后续的读写事件。尽管我们已经把客户端需要的服务交互给工作线程，达到网络和计算工作的解耦，但是在接下来的多线程中，还可以继续解耦。即让主线程继续监听客户端的连接，但是后续这些连接的读写事件讲交给其他的线程处理。</p>
+<h3><span id="ioservicepool">IOServicePool</span></h3><p>早前的单线程模式中，我们的主线程不仅要监听客户端的连接，同时还要继续监听该客户端后续的读写事件。尽管我们已经把客户端需要的服务交互给工作线程，达到网络和计算工作的解耦，但是在接下来的多线程中，还可以继续解耦。即让主线程继续监听客户端的连接，但是后续这些连接的读写事件讲交给其他的线程处理。</p>
 <p><img src="/images/2024/09/18/274f5ec0-75b8-11ef-9cea-e757e7343ac6.png" alt="IOServicePool.png"></p>
 <ol>
 <li>每一个 io_context 跑在不同的线程里，所以同一个 socket 会被注册在同一个 io_context 里，它的回调函数也会被单独的一个线程回调，那么对于同一个 socket，他的回调函数每次触发都是在同一个线程里，就不会有线程安全问题，网络 IO 层面上的并发是线程安全的</li>
@@ -204,7 +215,7 @@
 <p>有新连接到来就会轮询分配 IOService。</p>
 <p><img src="/images/2024/09/18/1ed80300-75b8-11ef-9cea-e757e7343ac6.png" alt="IOSerTest.png"></p>
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/10-%E5%A2%9E%E5%8A%A0IOServicePool">增加IOServicePool</a></p>
-<h3 id="IOThreadPool"><a href="#IOThreadPool" class="headerlink" title="IOThreadPool"></a>IOThreadPool</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++">AsioIOServicePool::<span class="hljs-built_in">AsioIOServicePool</span>(std::<span class="hljs-type">size_t</span> size)<br>	:<span class="hljs-built_in">threadVec_</span>(size),<span class="hljs-built_in">nextIOService_</span>(<span class="hljs-number">0</span>),<span class="hljs-built_in">size_</span>(size)<br>	,<span class="hljs-built_in">work_</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Work</span>(ioService_))<br>&#123;<br>	<span class="hljs-comment">// 一个 线程上 启动同一个 ioService</span><br>	<span class="hljs-keyword">for</span> (std::<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; size; i++) &#123;<br>		threadVec_.<span class="hljs-built_in">emplace_back</span>([<span class="hljs-keyword">this</span>]() &#123;<br>			ioService_.<span class="hljs-built_in">run</span>();<br>			&#125;);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3><span id="iothreadpool">IOThreadPool</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++">AsioIOServicePool::<span class="hljs-built_in">AsioIOServicePool</span>(std::<span class="hljs-type">size_t</span> size)<br>	:<span class="hljs-built_in">threadVec_</span>(size),<span class="hljs-built_in">nextIOService_</span>(<span class="hljs-number">0</span>),<span class="hljs-built_in">size_</span>(size)<br>	,<span class="hljs-built_in">work_</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Work</span>(ioService_))<br>&#123;<br>	<span class="hljs-comment">// 一个 线程上 启动同一个 ioService</span><br>	<span class="hljs-keyword">for</span> (std::<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; size; i++) &#123;<br>		threadVec_.<span class="hljs-built_in">emplace_back</span>([<span class="hljs-keyword">this</span>]() &#123;<br>			ioService_.<span class="hljs-built_in">run</span>();<br>			&#125;);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>我们的代码不是基于前一个多线程代码来修改的，而是基于上一章的 LogicalDesign。</p>
 <p>我首先疑惑的是为什么多个线程可以多次启动 io_context，这当然是不了解 Asio 底层原理所致，也打算在第七章或者终章记录任何有关 Asio 库的相关问题。</p>
@@ -223,7 +234,7 @@
 
 <p>绑定 strand 之后，绑定的函数就会有 strand 来调用，就不会有前面讲的并发安全问题。我们需要在所有收发的地方，都将调度器绑定为<code>strand_</code>，这边是集中在 Session类 中。Server类 中尽管也有，但是它是工作在单线程的，不存在并发问题。</p>
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/11-%E5%A2%9E%E5%8A%A0IOThreadPool">增加IOThreadPool</a></p>
-<h3 id="性能比较"><a href="#性能比较" class="headerlink" title="性能比较"></a>性能比较</h3><p>把两端的输入全部移除，压力测试不要有任何输出。我这边 10万并发量 需要 15s （IOThreadPool 和 IOSerivcePool都是一样），这当然取决于你的机器。</p>
+<h3><span id="性能比较">性能比较</span></h3><p>把两端的输入全部移除，压力测试不要有任何输出。我这边 10万并发量 需要 15s （IOThreadPool 和 IOSerivcePool都是一样），这当然取决于你的机器。</p>
 <hr>
 <p>⭐️内容取自 B 站 UP 恋恋风辰和 mmoaay 的《Boost.Asio C++ 网络编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议看原视频或者读原书。</p>
 
@@ -399,10 +410,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -436,6 +443,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -455,21 +466,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -517,10 +513,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -539,9 +531,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -552,6 +548,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -587,6 +598,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

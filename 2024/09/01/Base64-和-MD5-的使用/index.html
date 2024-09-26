@@ -181,14 +181,23 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="为什么要使用-Base64"><a href="#为什么要使用-Base64" class="headerlink" title="为什么要使用 Base64 ?"></a>为什么要使用 Base64 ?</h2><p>Base64 虽然可以用于简单的加密，但通常用于传输数据。</p>
-<p>在网络上交换数据时，比如说从 A 地传到 B 地，往往要经过多个路由设备，由于不同的设备对字符的处理方式有一些不同，这样那些不可见字符就有可能被处理错误，这是不利于传输的。把数据先做一个 Base64 编码，统统变成可见字符，这样出错的可能性就大降低了。很多场景下的数据传输要求数据只能由简单通用的字符组成，比如 HTTP 协议要求请求的首行和请求头都必须是 ASCII 编码。</p>
-<h2 id="为什么要使用-MD5"><a href="#为什么要使用-MD5" class="headerlink" title="为什么要使用 MD5 ?"></a>为什么要使用 MD5 ?</h2><p>MD5 就是用来加密数据（<strong>MD5 并不是一种加密算法，而是一种摘要算法</strong>，我们也可以叫它哈希函数），且不可逆，即只用暴力碰撞来解密，当时它已经不是一个安全的加密算法了。</p>
-<p>使用 MD5 加密数据的目的通常是为了验证数据的完整性。因为哈希算法具有一致性，所以如果数据没有被篡改，我们可以把它的哈希值与原来的哈希值进行比较，如果完全一致，则说明数据没有被篡改。但是，由于哈希算法是单向的，所以我们无法通过哈希值推出原来的数据。如果你需要获取原来的数据，你必须要拥有原来的数据本身。</p>
-<h2 id="Qt-中使用-Base64"><a href="#Qt-中使用-Base64" class="headerlink" title="Qt 中使用 Base64"></a>Qt 中使用 Base64</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 编码</span><br>    QByteArray base = <span class="hljs-string">&quot;你好, 世界&quot;</span>;<br>    base = base.<span class="hljs-built_in">toBase64</span>();<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; base;<br><br><span class="hljs-comment">// 解码</span><br>    base= QByteArray::<span class="hljs-built_in">fromBase64</span>(base);<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; base.<span class="hljs-built_in">data</span>();<br></code></pre></td></tr></table></figure>
+        <!-- toc -->
 
-<h2 id="Qt-中使用-MD5"><a href="#Qt-中使用-MD5" class="headerlink" title="Qt 中使用 MD5"></a>Qt 中使用 MD5</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">    QString input = <span class="hljs-string">&quot;Hello, World!&quot;</span>;<br>    QByteArray byteArray = input.<span class="hljs-built_in">toUtf8</span>();<br>    <br><span class="hljs-comment">// 生成 MD5 哈希</span><br>    QByteArray md5Hash = QCryptographicHash::<span class="hljs-built_in">hash</span>(byteArray, QCryptographicHash::Md5);<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;MD5 Hash:&quot;</span> &lt;&lt; md5Hash.<span class="hljs-built_in">toHex</span>();<br></code></pre></td></tr></table></figure>
+<ul>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8-base64">为什么要使用 Base64 ?</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8-md5">为什么要使用 MD5 ?</a></li>
+<li><a href="#qt-%E4%B8%AD%E4%BD%BF%E7%94%A8-base64">Qt 中使用 Base64</a></li>
+<li><a href="#qt-%E4%B8%AD%E4%BD%BF%E7%94%A8-md5">Qt 中使用 MD5</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="为什么要使用-base64">为什么要使用 Base64 ?</span></h2><p>Base64 虽然可以用于简单的加密，但通常用于传输数据。</p>
+<p>在网络上交换数据时，比如说从 A 地传到 B 地，往往要经过多个路由设备，由于不同的设备对字符的处理方式有一些不同，这样那些不可见字符就有可能被处理错误，这是不利于传输的。把数据先做一个 Base64 编码，统统变成可见字符，这样出错的可能性就大降低了。很多场景下的数据传输要求数据只能由简单通用的字符组成，比如 HTTP 协议要求请求的首行和请求头都必须是 ASCII 编码。</p>
+<h2><span id="为什么要使用-md5">为什么要使用 MD5 ?</span></h2><p>MD5 就是用来加密数据（<strong>MD5 并不是一种加密算法，而是一种摘要算法</strong>，我们也可以叫它哈希函数），且不可逆，即只用暴力碰撞来解密，当时它已经不是一个安全的加密算法了。</p>
+<p>使用 MD5 加密数据的目的通常是为了验证数据的完整性。因为哈希算法具有一致性，所以如果数据没有被篡改，我们可以把它的哈希值与原来的哈希值进行比较，如果完全一致，则说明数据没有被篡改。但是，由于哈希算法是单向的，所以我们无法通过哈希值推出原来的数据。如果你需要获取原来的数据，你必须要拥有原来的数据本身。</p>
+<h2><span id="qt-中使用-base64">Qt 中使用 Base64</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 编码</span><br>    QByteArray base = <span class="hljs-string">&quot;你好, 世界&quot;</span>;<br>    base = base.<span class="hljs-built_in">toBase64</span>();<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; base;<br><br><span class="hljs-comment">// 解码</span><br>    base= QByteArray::<span class="hljs-built_in">fromBase64</span>(base);<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; base.<span class="hljs-built_in">data</span>();<br></code></pre></td></tr></table></figure>
+
+<h2><span id="qt-中使用-md5">Qt 中使用 MD5</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">    QString input = <span class="hljs-string">&quot;Hello, World!&quot;</span>;<br>    QByteArray byteArray = input.<span class="hljs-built_in">toUtf8</span>();<br>    <br><span class="hljs-comment">// 生成 MD5 哈希</span><br>    QByteArray md5Hash = QCryptographicHash::<span class="hljs-built_in">hash</span>(byteArray, QCryptographicHash::Md5);<br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;MD5 Hash:&quot;</span> &lt;&lt; md5Hash.<span class="hljs-built_in">toHex</span>();<br></code></pre></td></tr></table></figure>
 
 <p><a target="_blank" rel="noopener" href="https://draveness.me/whys-the-design-password-with-md5/">MD5 既然不安全</a>，那么 Qt 中可以使用的加密算法还有很多，主要通过 <code>QCryptographicHash</code> 和 <code>QCA</code>（Qt Cryptographic Architecture）库来实现。在任何场景下，我们都应该避免 MD5 的使用，可以选择更好的摘要算法替代 MD5，例如 SHA256、SHA512。</p>
 <p>尽管摘要算法无论如何都不安全，因为会被碰撞出来。哈希加盐的方式确实能够增加攻击者的成本，但这远远不够，随着计算机算力的增强已经难以抵挡。使用 <code>bcrypt</code> 相比于直接使用哈希加盐是一种更加安全的方式，也是我们目前推荐使用的方法，为了增加攻击者的成本，<code>bcrypt</code> 引入了计算成本这一可以调节的参数，能够调节执行 <code>bcrypt</code> 函数的成本。</p>
@@ -367,10 +376,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -404,6 +409,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -423,21 +432,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -485,10 +479,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -507,9 +497,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -520,6 +514,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -555,6 +564,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

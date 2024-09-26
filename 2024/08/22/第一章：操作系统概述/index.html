@@ -181,12 +181,23 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>一个正在运行的程序称之为进程，运行的动作发生就是不断从内存中取指令并执行指令，直到程序最终完成。</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
+<li><a href="#%E8%99%9A%E6%8B%9F%E5%8C%96cpu">虚拟化CPU</a></li>
+<li><a href="#%E8%99%9A%E6%8B%9F%E5%8C%96%E5%86%85%E5%AD%98">虚拟化内存</a></li>
+<li><a href="#%E5%B9%B6%E5%8F%91">并发</a></li>
+<li><a href="#%E6%8C%81%E4%B9%85%E6%80%A7">持久性</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="概述">概述</span></h2><p>一个正在运行的程序称之为进程，运行的动作发生就是不断从内存中取指令并执行指令，直到程序最终完成。</p>
 <p>实际上，有一类软件负责让程序运行变得容易（甚至允许你同时允许多个程序），允许程序共享内容，让程序能够与设备交互，以及其它类型的有趣的工作。这些软件称为<strong>操作系统</strong>，因为他们负责确保系统既易于使用又正确高效地运行。</p>
 <p>操作系统作为硬件和应用程序的中间人，负责把硬件资源更加方便地提供给应用程序使用。如果要实现这点，操作系统主要利用一种通用的技术，称为<strong>虚拟化</strong>。即操作系统将物理资源（如处理器、内存或磁盘）转换为更通用、更强大且更易于使用的虚拟形式。应用程序通过操作系统提供的一些接口（API），间接使用硬件资源。每个 CPU、内存和磁盘都是系统的资源（resource），因此操作系统扮演的主要角色就是管理这些资源，以做到高效或公平，或者实际上考虑其他许多可能的目标。</p>
 <p><img src="/images/2024/08/22/31942a70-6062-11ef-b5d8-395e250ad2a7.png" alt="OS.png"></p>
-<h2 id="虚拟化CPU"><a href="#虚拟化CPU" class="headerlink" title="虚拟化CPU"></a>虚拟化CPU</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Spin</span><span class="hljs-params">(<span class="hljs-type">int</span> seconds)</span> </span>&#123;<br>  <span class="hljs-built_in">usleep</span>(seconds * <span class="hljs-number">1000000</span>);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> </span>&#123;<br>  <span class="hljs-keyword">if</span> (argc != <span class="hljs-number">2</span>) &#123;<br>    <span class="hljs-built_in">fprintf</span>(stderr, <span class="hljs-string">&quot;usage: cpu &lt;string&gt;\n&quot;</span>);<br>    <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>  &#125;<br>  <span class="hljs-type">char</span> *str = argv[<span class="hljs-number">1</span>];<br>  <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>    <span class="hljs-built_in">Spin</span>(<span class="hljs-number">1</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, str);<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="虚拟化cpu">虚拟化CPU</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Spin</span><span class="hljs-params">(<span class="hljs-type">int</span> seconds)</span> </span>&#123;<br>  <span class="hljs-built_in">usleep</span>(seconds * <span class="hljs-number">1000000</span>);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> </span>&#123;<br>  <span class="hljs-keyword">if</span> (argc != <span class="hljs-number">2</span>) &#123;<br>    <span class="hljs-built_in">fprintf</span>(stderr, <span class="hljs-string">&quot;usage: cpu &lt;string&gt;\n&quot;</span>);<br>    <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>  &#125;<br>  <span class="hljs-type">char</span> *str = argv[<span class="hljs-number">1</span>];<br>  <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>    <span class="hljs-built_in">Spin</span>(<span class="hljs-number">1</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, str);<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>这个程序的功能是无限循环地输出用户传递给它的字符串，每次输出之间等待一秒钟。</p>
 <p><img src="/images/2024/08/22/2679e940-6062-11ef-b5d8-395e250ad2a7.png" alt="单个程序.png"></p>
@@ -194,7 +205,7 @@
 <p><img src="/images/2024/08/22/2292c400-6062-11ef-b5d8-395e250ad2a7.png" alt="多个程序.png"></p>
 <p>尽管我们只有一个处理器，但这 3 个程序似乎在同时运行！</p>
 <p>操作系统负责提供这样一种假象，即让每个正在运行的程序觉得自己独占CPU资源，实际上是操作系统在各进程间来回快速切换分配资源。将单个 CPU（或其中一小部分）转换为看似无限数量的 CPU，从而让许多程序看似同时运行，这就是所谓的虚拟化 CPU。</p>
-<h2 id="虚拟化内存"><a href="#虚拟化内存" class="headerlink" title="虚拟化内存"></a>虚拟化内存</h2><p>程序运行时，一直要访问内存。程序将所有数据结构保存在内存中，并通过各种指令来访问它们，例如加载和保存，或利用其他明确的指令，在工作时访问内存。不要忘记，程序的每个指令都在内存中，因此每一读取指令都会访问内存。</p>
+<h2><span id="虚拟化内存">虚拟化内存</span></h2><p>程序运行时，一直要访问内存。程序将所有数据结构保存在内存中，并通过各种指令来访问它们，例如加载和保存，或利用其他明确的指令，在工作时访问内存。不要忘记，程序的每个指令都在内存中，因此每一读取指令都会访问内存。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;assert.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Spin</span><span class="hljs-params">(<span class="hljs-type">int</span> seconds)</span> </span>&#123;<br>  <span class="hljs-built_in">usleep</span>(seconds * <span class="hljs-number">1000000</span>); <br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> </span>&#123;<br>  <span class="hljs-type">int</span> *p = (<span class="hljs-type">int</span> *)<span class="hljs-built_in">malloc</span>(<span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>)); <br>  <span class="hljs-built_in">assert</span>(p != <span class="hljs-literal">NULL</span>);<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;(%d) memory address of p: %p\n&quot;</span>, <span class="hljs-built_in">getpid</span>(), (<span class="hljs-type">void</span> *)p); <br>  *p = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>    <span class="hljs-built_in">Spin</span>(<span class="hljs-number">1</span>);<br>    *p = *p + <span class="hljs-number">1</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;(%d) p: %d\n&quot;</span>, <span class="hljs-built_in">getpid</span>(), *p); <br>  &#125;<br>  <span class="hljs-built_in">free</span>(p); <br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>这个程序的功能是不断地增加并打印一个整数，同时显示该整数所在的内存地址和当前进程的ID。</p>
@@ -203,17 +214,17 @@
 <p><img src="/images/2024/08/22/16b029c0-6062-11ef-b5d8-395e250ad2a7.png" alt="多个虚拟内存.png"></p>
 <p>每个正在运行的程序都在相同的地址（00200000）处分配了内存，但每个似乎都独立更新了 00200000 处的值！就好像每个正在运行的程序都有自己的私有内存，而不是与其他正在运行的程序共享相同的物理内存。</p>
 <p>实际上程序给进程看到的是虚拟内存，操作系统拿到这个虚拟内存会自行转换到物理内存。每个进程访问自己的私有虚拟地址空间（有时称为地址空间），操作系统以某种方式映射到机器的物理内存上。一个正在运行的程序中的内存引用不会影响其他进程（或操作系统本身）的地址空间。对于正在运行的程序，它完全拥有自己的物理内存。尽管这也是操作系统营造的假象。</p>
-<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><p>并发来指代一系列问题，这些问题在同时（甚发地）处理很多事情时出现且必须解决。并发问题首先出现在操作系统本身中，可多线程程序中同样存在相同的问题。</p>
+<h2><span id="并发">并发</span></h2><p>并发来指代一系列问题，这些问题在同时（甚发地）处理很多事情时出现且必须解决。并发问题首先出现在操作系统本身中，可多线程程序中同样存在相同的问题。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> Pthread_create(thread, attr, start_routine, arg) \</span><br><span class="hljs-meta">    pthread_create(thread, attr, start_routine, arg)</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> Pthread_join(thread, retval) pthread_join(thread, retval)</span><br><br><span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> counter = <span class="hljs-number">0</span>;<br><span class="hljs-type">int</span> loops;<br><br><span class="hljs-function"><span class="hljs-type">void</span> *<span class="hljs-title">worker</span><span class="hljs-params">(<span class="hljs-type">void</span> *arg)</span> </span>&#123;<br>  <span class="hljs-type">int</span> i;<br>  <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; loops; i++) &#123;<br>    counter++;<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> </span>&#123;<br>  <span class="hljs-keyword">if</span> (argc != <span class="hljs-number">2</span>) &#123;<br>    <span class="hljs-built_in">fprintf</span>(stderr, <span class="hljs-string">&quot;usage: threads &lt;value&gt;\n&quot;</span>);<br>    <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>  &#125;<br>  loops = <span class="hljs-built_in">atoi</span>(argv[<span class="hljs-number">1</span>]);<br><br>  <span class="hljs-type">pthread_t</span> p1, p2;<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Initial value : %d\n&quot;</span>, counter);<br><br>  <span class="hljs-built_in">Pthread_create</span>(&amp;p1, <span class="hljs-literal">NULL</span>, worker, <span class="hljs-literal">NULL</span>);<br>  <span class="hljs-built_in">Pthread_create</span>(&amp;p2, <span class="hljs-literal">NULL</span>, worker, <span class="hljs-literal">NULL</span>);<br><br>  <span class="hljs-built_in">Pthread_join</span>(p1, <span class="hljs-literal">NULL</span>);<br>  <span class="hljs-built_in">Pthread_join</span>(p2, <span class="hljs-literal">NULL</span>);<br><br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Final value : %d\n&quot;</span>, counter);<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>当我们让两个线程去求和，如果这个求和是较小不会出错，如果这个求和值很大就会不符合预期。</p>
 <p>如下图示，第二次的测试程序中最终结果应该为200000，但是结果却为172280，这就是并发带来的问题。</p>
 <p><img src="/images/2024/08/22/10e50240-6062-11ef-b5d8-395e250ad2a7.png" alt="多线程.png"></p>
 <p>这些奇怪的、不寻常的结果与指令如何执行有关，指令每次执行一条。遗憾的是，上面的程序中的关键部分是增加共享计数器的地方，它需要 3 条指令：一条将计数器的值从内存加载到寄存器，一条将其递增，另一条将其保存回内存。因为这 3 条指令不是以原子方式（atomically）执行（所有的指令一次性执行）的，所以奇怪的事情可能会发生。</p>
-<h2 id="持久性"><a href="#持久性" class="headerlink" title="持久性"></a>持久性</h2><p>在系统内存中，数据容易丢失，因为像DRAM 这样的设备以易失的方式存储数值。如果断电或系统崩溃，那么内存中的所有数据都会丢失。因此，我们需要硬件和软件来持久地存储数据。</p>
+<h2><span id="持久性">持久性</span></h2><p>在系统内存中，数据容易丢失，因为像DRAM 这样的设备以易失的方式存储数值。如果断电或系统崩溃，那么内存中的所有数据都会丢失。因此，我们需要硬件和软件来持久地存储数据。</p>
 <p>操作系统中操理磁盘的软件通常称为<strong>文件系统</strong>。因此它负责以可靠和高效的方式，将用户创建的任何文件存储在系统的磁盘上。</p>
 <p>操作系统为了实际写入磁盘而做了什么？首先确定新数据将驻留在磁盘上的哪个位置，然后在文件系统所维护的各种结构中对其进行记录。这样做需要向底层存储设备发出 I&#x2F;O 请求，以读取现有结构或更新（写入）它们。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们已经了解了操作系统实际上做了什么：它取得 CPU、内存或磁盘等物理资源，并对它们进行虚拟化。它处理与并发有关的麻烦且棘手的问题。它持久地存储文件，从而使它们长期安全。</p>
+<h2><span id="总结">总结</span></h2><p>我们已经了解了操作系统实际上做了什么：它取得 CPU、内存或磁盘等物理资源，并对它们进行虚拟化。它处理与并发有关的麻烦且棘手的问题。它持久地存储文件，从而使它们长期安全。</p>
 <p>抽象是计算机科学中非常主要的手段，使得编写一个大型程序成为可能，将其划分为小而且容易理解的部分，用 C 这样的高级语言编写这样的程序不用考虑汇编，用汇编写代码不用考虑逻辑门，用逻辑门来构建处理器不用太多考虑晶体管。</p>
 <p>设计和实现操作系统：</p>
 <ol>
@@ -396,10 +407,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -433,6 +440,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -452,21 +463,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -514,10 +510,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -536,9 +528,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -549,6 +545,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -584,6 +595,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

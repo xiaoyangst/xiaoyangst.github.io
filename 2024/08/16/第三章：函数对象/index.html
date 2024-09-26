@@ -181,11 +181,18 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%8C%85%E8%A3%85%E5%99%A8">操作符包装器</a></li>
+<li><a href="#stdfunction%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98">std::function的性能问题和并发安全问题</a></li>
+</ul>
+<!-- tocstop -->
+
 <p><strong>注意</strong>：此文介绍很多<a href="https://xiaoyangst.github.io/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/">C++11新特性</a>的知识（auto 关键字、Lambda 表达式、function 包装器），这不会在此读书笔记中记录，可以在我的其它地方找到相关的笔记，或者你可以自行去学习，毕竟，C++11 是现在 C++ 学习者必备的语法。</p>
-<h2 id="操作符包装器"><a href="#操作符包装器" class="headerlink" title="操作符包装器"></a>操作符包装器</h2><p><img src="/images/2024/08/16/d632a100-5bc2-11ef-a253-abb20d863bc2.png" alt="操作符包装器.png"></p>
+<h2><span id="操作符包装器">操作符包装器</span></h2><p><img src="/images/2024/08/16/d632a100-5bc2-11ef-a253-abb20d863bc2.png" alt="操作符包装器.png"></p>
 <p>C++11 使用操作符包装器需要指明类型，如greater&lt;int&gt;()。但是 C++14 之后就可以不用了，如greater&lt;&gt;()。</p>
-<h2 id="std-function的性能问题和并发安全问题"><a href="#std-function的性能问题和并发安全问题" class="headerlink" title="std::function的性能问题和并发安全问题"></a>std::function的性能问题和并发安全问题</h2><p>虽然前面的内容都证明 std::function 很有用，但不能滥用，因为它有明显的性能问题。为了隐藏包含的类型并提供一个对所有可调用类型的通用接口，std::function 使用类型擦除的技术。本书并不打算深入研究这个问题，只需要知道它是基于虚成员函数调用就足够了。因为虚调用是在运行时进行的，编译器不能在线调用，所以也就失去了优化的机会。</p>
+<h2><span id="stdfunction的性能问题和并发安全问题">std::function的性能问题和并发安全问题</span></h2><p>虽然前面的内容都证明 std::function 很有用，但不能滥用，因为它有明显的性能问题。为了隐藏包含的类型并提供一个对所有可调用类型的通用接口，std::function 使用类型擦除的技术。本书并不打算深入研究这个问题，只需要知道它是基于虚成员函数调用就足够了。因为虚调用是在运行时进行的，编译器不能在线调用，所以也就失去了优化的机会。</p>
 <p>std::function 另一个需要注意的是，虽然它的调用操作符限定为 const，但它可以调用非const对象。在多线程代码中，容易导致各种问题。</p>
 <hr>
 <p>⭐️内容取自译者程继洪、孙玉梅、娄山佑《函数式编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
@@ -362,10 +369,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -399,6 +402,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -418,21 +425,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -480,10 +472,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -502,9 +490,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -515,6 +507,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -550,6 +557,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

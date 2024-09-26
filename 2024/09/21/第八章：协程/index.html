@@ -181,8 +181,25 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="协程是什么？"><a href="#协程是什么？" class="headerlink" title="协程是什么？"></a>协程是什么？</h2><p>普通函数返回点：返回</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E5%8D%8F%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88">协程是什么？</a></li>
+<li><a href="#asio-%E6%8F%90%E4%BE%9B%E7%9A%84%E5%8D%8F%E7%A8%8B%E6%8E%A5%E5%8F%A3">Asio 提供的协程接口</a><ul>
+<li><a href="#boostasioawaitable">boost::asio::awaitable</a></li>
+<li><a href="#boostasiouse_awaitable">boost::asio::use_awaitable</a></li>
+<li><a href="#boostasioco_spawn">boost::asio::co_spawn</a></li>
+<li><a href="#co_await">co_await</a></li>
+<li><a href="#use_future">use_future</a></li>
+<li><a href="#boostasiosteady_timer">boost::asio::steady_timer</a></li>
+<li><a href="#%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0">异步操作函数</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A7%A3%E8%AF%BB%E5%AE%98%E6%96%B9%E4%BB%A3%E7%A0%81">解读官方代码</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="协程是什么">协程是什么？</span></h2><p>普通函数返回点：返回</p>
 <p>协程返回点：<strong>暂停</strong> + 返回</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">func</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;A&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;B&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;C&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -190,7 +207,7 @@
 <p>如果是协程，待输出字符 A，执行 return 返回，该函数执行完成。但下一次该函数可以继续被执行，并且从上次结束的地方继续往下执行，你可以说它有暂停功能，但也许记忆功能会更容易理解。往下执行，输出字符 A，执行 return 返回。</p>
 <p>至于 C++20 中如何支持协程，可见此文：<a target="_blank" rel="noopener" href="https://zplutor.github.io/2022/03/25/cpp-coroutine-beginner/">C++20协程入门教程</a>。</p>
 <p><img src="/images/2024/09/21/ca34b010-781d-11ef-b897-6fd30f248963.png" alt="协程.png"></p>
-<h2 id="Asio-提供的协程接口"><a href="#Asio-提供的协程接口" class="headerlink" title="Asio 提供的协程接口"></a>Asio 提供的协程接口</h2><p>Boost.Asio 从 C++20 开始支持协程。通过协程，可以编写异步代码，避免了嵌套的回调函数或复杂的状态机。这使得代码结构更加直观和易于维护。Boost.Asio 利用 C++ 的协程语法，使得异步操作看起来像同步操作。</p>
+<h2><span id="asio-提供的协程接口">Asio 提供的协程接口</span></h2><p>Boost.Asio 从 C++20 开始支持协程。通过协程，可以编写异步代码，避免了嵌套的回调函数或复杂的状态机。这使得代码结构更加直观和易于维护。Boost.Asio 利用 C++ 的协程语法，使得异步操作看起来像同步操作。</p>
 <p>常用库组件：</p>
 <ul>
 <li><strong><code>boost::asio::awaitable</code></strong>: 表示一个可以使用协程等待的类型</li>
@@ -198,19 +215,19 @@
 <li><strong><code>co_spawn</code></strong>: 启动一个协程，参数分别为调度器，执行的函数，以及启动方式。比方说启动方式是 deatched，表示将协程对象分离出来，这种启动方式可以启动多个协程，他们都是独立的，如何调度取决于调度器，在用户的感知上更像是线程调度的模式，类似于并发运行，其实底层都是串行的</li>
 <li><strong><code>co_await</code></strong>: 等待异步操作完成</li>
 </ul>
-<h3 id="boost-asio-awaitable"><a href="#boost-asio-awaitable" class="headerlink" title="boost::asio::awaitable"></a>boost::asio::awaitable</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-keyword">typename</span> T,<br>    <span class="hljs-keyword">typename</span> Executor = any_io_executor&gt;<br><span class="hljs-keyword">class</span> awaitable<br></code></pre></td></tr></table></figure>
+<h3><span id="boostasioawaitable">boost::asio::awaitable</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-keyword">typename</span> T,<br>    <span class="hljs-keyword">typename</span> Executor = any_io_executor&gt;<br><span class="hljs-keyword">class</span> awaitable<br></code></pre></td></tr></table></figure>
 
 <p>作为协程或异步操作的<strong>返回类型</strong>。从定义来看，必填模板参数是返回类型 T，也就是说协程或异步操作的返回类型是什么， T 就填什么。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++">boost::<span class="hljs-function">asio::awaitable&lt;<span class="hljs-type">void</span>&gt; <span class="hljs-title">my_async_function</span><span class="hljs-params">()</span></span>;<br>boost::<span class="hljs-function">asio::awaitable&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">my_async_function_with_result</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
 
 <p>第一个代表 my_async_function 返回值类型是 void ，第二个代表 my_async_function_with_result 返回值类型是 int。</p>
-<h3 id="boost-asio-use-awaitable"><a href="#boost-asio-use-awaitable" class="headerlink" title="boost::asio::use_awaitable"></a>boost::asio::use_awaitable</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">use_awaitable_t</span> use_awaitable;<br><br><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-keyword">typename</span> Executor = any_io_executor&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-type">use_awaitable_t</span><br></code></pre></td></tr></table></figure>
+<h3><span id="boostasiouse_awaitable">boost::asio::use_awaitable</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">use_awaitable_t</span> use_awaitable;<br><br><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-keyword">typename</span> Executor = any_io_executor&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-type">use_awaitable_t</span><br></code></pre></td></tr></table></figure>
 
 <p><code>use_awaitable</code> 是一个标记（无参数，仅作为标记使用），告诉 Boost.Asio 返回一个 <code>awaitable</code> 对象，支持协程等待。</p>
 <p>常用操作：在进行异步操作时，它作为参数传递给函数，表示希望异步结果能够与协程配合使用。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">co_await</span> <span class="hljs-title">async_read</span><span class="hljs-params">(socket, boost::asio::buffer(data), boost::asio::use_awaitable)</span></span>;<br></code></pre></td></tr></table></figure>
 
-<h3 id="boost-asio-co-spawn"><a href="#boost-asio-co-spawn" class="headerlink" title="boost::asio::co_spawn"></a>boost::asio::co_spawn</h3><p>用于启动协程的函数，它允许协程在 <code>io_context</code> 中运行，管理异步任务的生命周期。</p>
+<h3><span id="boostasioco_spawn">boost::asio::co_spawn</span></h3><p>用于启动协程的函数，它允许协程在 <code>io_context</code> 中运行，管理异步任务的生命周期。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;</span><br><span class="hljs-function">    <span class="hljs-keyword">typename</span> Executor, </span><br><span class="hljs-function">    <span class="hljs-keyword">typename</span> Awaitable, </span><br><span class="hljs-function">    <span class="hljs-keyword">typename</span> Token&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">co_spawn</span><span class="hljs-params">(Executor&amp;&amp; ex, Awaitable&amp;&amp; awaitable, Token&amp;&amp; token)</span></span>;<br></code></pre></td></tr></table></figure>
 
 <p><code>Executor</code>：执行异步任务的执行器（通常是 <code>io_context</code>）。</p>
@@ -221,20 +238,20 @@
 
 <p><code>detached</code>：表示协程完成后不需要返回值或等待结果。它用于简单的异步操作，不关心任务的结果。</p>
 <p><code>use_future</code>：协程完成后，返回一个 <code>std::future</code> 对象，可以等待协程的结果。</p>
-<h3 id="co-await"><a href="#co-await" class="headerlink" title="co_await"></a>co_await</h3><p>等待一个异步操作完成，通常配合 <code>awaitable</code> 一起使用。</p>
+<h3><span id="co_await">co_await</span></h3><p>等待一个异步操作完成，通常配合 <code>awaitable</code> 一起使用。</p>
 <p>比方说：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">co_await</span> <span class="hljs-title">async_read</span><span class="hljs-params">(socket, boost::asio::buffer(buffer), boost::asio::use_awaitable)</span></span>;<br></code></pre></td></tr></table></figure>
 
-<h3 id="use-future"><a href="#use-future" class="headerlink" title="use_future"></a>use_future</h3><p><code>use_future</code> 是 <code>co_spawn</code> 的另一个选项，表示协程运行完成后，将返回一个 <code>std::future</code> 对象，可以等待并获取协程的结果。</p>
+<h3><span id="use_future">use_future</span></h3><p><code>use_future</code> 是 <code>co_spawn</code> 的另一个选项，表示协程运行完成后，将返回一个 <code>std::future</code> 对象，可以等待并获取协程的结果。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">auto</span> future = boost::asio::<span class="hljs-built_in">co_spawn</span>(io_context, <span class="hljs-built_in">my_async_function</span>(), boost::asio::use_future);<br><span class="hljs-keyword">auto</span> result = future.<span class="hljs-built_in">get</span>(); <span class="hljs-comment">// 等待协程结果</span><br></code></pre></td></tr></table></figure>
 
-<h3 id="boost-asio-steady-timer"><a href="#boost-asio-steady-timer" class="headerlink" title="boost::asio::steady_timer"></a>boost::asio::steady_timer</h3><p><code>steady_timer</code> 是 Boost.Asio 的定时器类，常与协程一起使用，用于执行定时任务或延迟任务。</p>
+<h3><span id="boostasiosteady_timer">boost::asio::steady_timer</span></h3><p><code>steady_timer</code> 是 Boost.Asio 的定时器类，常与协程一起使用，用于执行定时任务或延迟任务。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">boost::<span class="hljs-function">asio::steady_timer <span class="hljs-title">timer</span><span class="hljs-params">(io_context)</span></span>;<br>timer.<span class="hljs-built_in">expires_after</span>(std::chrono::<span class="hljs-built_in">seconds</span>(<span class="hljs-number">5</span>));<br><span class="hljs-keyword">co_await</span> timer.<span class="hljs-built_in">async_wait</span>(boost::asio::use_awaitable);<br></code></pre></td></tr></table></figure>
 
 <p><code>io_context</code>：执行器，用于管理异步操作。</p>
 <p><code>expires_after</code>：设置定时器的超时时间。</p>
 <p><code>async_wait</code>：等待定时器超时，与协程配合使用。</p>
-<h3 id="异步操作函数"><a href="#异步操作函数" class="headerlink" title="异步操作函数"></a>异步操作函数</h3><p>Boost.Asio 提供了各种异步操作函数（如 <code>async_read</code>, <code>async_write</code>, <code>async_connect</code>, <code>async_resolve</code>），这些函数都可以使用协程来等待结果。</p>
+<h3><span id="异步操作函数">异步操作函数</span></h3><p>Boost.Asio 提供了各种异步操作函数（如 <code>async_read</code>, <code>async_write</code>, <code>async_connect</code>, <code>async_resolve</code>），这些函数都可以使用协程来等待结果。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">co_await</span> boost::asio::<span class="hljs-built_in">async_connect</span>(socket, endpoints, boost::asio::use_awaitable);<br><span class="hljs-keyword">co_await</span> boost::asio::<span class="hljs-built_in">async_read</span>(socket, boost::asio::<span class="hljs-built_in">buffer</span>(buffer), boost::asio::use_awaitable);<br><span class="hljs-keyword">co_await</span> boost::asio::<span class="hljs-built_in">async_write</span>(socket, boost::asio::<span class="hljs-built_in">buffer</span>(data), boost::asio::use_awaitable);<br></code></pre></td></tr></table></figure>
 
 <p>常见参数：</p>
@@ -244,7 +261,7 @@
 <li><code>endpoints</code>：用于连接的地址列表。</li>
 <li><code>use_awaitable</code>：表示使用协程等待异步操作的结果。</li>
 </ul>
-<h2 id="解读官方代码"><a href="#解读官方代码" class="headerlink" title="解读官方代码"></a>解读官方代码</h2><p>我觉得结合前面接口的介绍，读懂下面的代码就不难了：</p>
+<h2><span id="解读官方代码">解读官方代码</span></h2><p>我觉得结合前面接口的介绍，读懂下面的代码就不难了：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio/co_spawn.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio/detached.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio/io_context.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio/ip/tcp.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio/signal_set.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio/write.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdio&gt;</span></span><br><span class="hljs-keyword">using</span> boost::asio::ip::tcp;<br><span class="hljs-keyword">using</span> boost::asio::awaitable;<br><span class="hljs-keyword">using</span> boost::asio::co_spawn;<br><span class="hljs-keyword">using</span> boost::asio::detached;<br><span class="hljs-keyword">using</span> boost::asio::use_awaitable;<br><span class="hljs-keyword">namespace</span> this_coro = boost::asio::this_coro;<br><span class="hljs-meta">#<span class="hljs-keyword">if</span> defined(BOOST_ASIO_ENABLE_HANDLER_TRACKING)</span><br><span class="hljs-meta"># <span class="hljs-keyword">define</span> use_awaitable \</span><br><span class="hljs-meta">  boost::asio::use_awaitable_t(__FILE__, __LINE__, __PRETTY_FUNCTION__)</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-function">awaitable&lt;<span class="hljs-type">void</span>&gt; <span class="hljs-title">echo</span><span class="hljs-params">(tcp::socket socket)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        <span class="hljs-type">char</span> data[<span class="hljs-number">1024</span>];<br>        <span class="hljs-keyword">for</span> (;;)<br>        &#123;<br>            std::<span class="hljs-type">size_t</span> n = <span class="hljs-keyword">co_await</span> socket.<span class="hljs-built_in">async_read_some</span>(boost::asio::<span class="hljs-built_in">buffer</span>(data), use_awaitable);<br>            <span class="hljs-function"><span class="hljs-keyword">co_await</span> <span class="hljs-title">async_write</span><span class="hljs-params">(socket, boost::asio::buffer(data, n), use_awaitable)</span></span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-built_in">catch</span> (std::exception&amp; e)<br>    &#123;<br>        std::<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;echo Exception: %s\n&quot;</span>, e.<span class="hljs-built_in">what</span>());<br>    &#125;<br>&#125;<br><span class="hljs-function">awaitable&lt;<span class="hljs-type">void</span>&gt; <span class="hljs-title">listener</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">auto</span> executor = <span class="hljs-keyword">co_await</span> this_coro::executor;<br>    <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(executor, &#123; tcp::v4(), <span class="hljs-number">10086</span> &#125;)</span></span>;<br>    <span class="hljs-keyword">for</span> (;;)<br>    &#123;<br>        tcp::socket socket = <span class="hljs-keyword">co_await</span> acceptor.<span class="hljs-built_in">async_accept</span>(use_awaitable);<br>        <span class="hljs-built_in">co_spawn</span>(executor, <span class="hljs-built_in">echo</span>(std::<span class="hljs-built_in">move</span>(socket)), detached);<br>    &#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        boost::<span class="hljs-function">asio::io_context <span class="hljs-title">io_context</span><span class="hljs-params">(<span class="hljs-number">1</span>)</span></span>;<br>        boost::<span class="hljs-function">asio::signal_set <span class="hljs-title">signals</span><span class="hljs-params">(io_context, SIGINT, SIGTERM)</span></span>;<br>        signals.<span class="hljs-built_in">async_wait</span>([&amp;](<span class="hljs-keyword">auto</span>, <span class="hljs-keyword">auto</span>) &#123; io_context.<span class="hljs-built_in">stop</span>(); &#125;);<br>        <span class="hljs-built_in">co_spawn</span>(io_context, <span class="hljs-built_in">listener</span>(), detached);<br>        io_context.<span class="hljs-built_in">run</span>();<br>    &#125;<br>    <span class="hljs-built_in">catch</span> (std::exception&amp; e)<br>    &#123;<br>        std::<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Exception: %s\n&quot;</span>, e.<span class="hljs-built_in">what</span>());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p><code>co_spawn(io_context, listener(), detached)</code> 。co_spawn 意味着 启动一个协程，那么需要传递三个参数，第一个参数是异步任务的执行器，网络编程中通常就是 io_context 无疑了。第二个参数就是协程，即一个函数，只不过这个函数如何才可以被视为协程，后续再聊。第三个参数有两种选择，一种选择是不关心返回值，一种是关心返回值。你可以看到我们传递的协程是没有返回值的，那就可以用 detached，表示协程完成后不需要返回值或等待结果。否则你传递 use_future ，代表协程完成后，返回一个 <code>std::future</code> 对象，可以等待协程的结果。</p>
@@ -437,10 +454,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -474,6 +487,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -493,21 +510,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -555,10 +557,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -577,9 +575,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -590,6 +592,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -625,6 +642,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

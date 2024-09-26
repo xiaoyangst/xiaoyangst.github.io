@@ -181,15 +181,33 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="什么是函数式编程？"><a href="#什么是函数式编程？" class="headerlink" title="什么是函数式编程？"></a>什么是函数式编程？</h2><p>我们常用的是命令式编程，它关心“怎么做”，而函数式编程关心“做什么”。通俗来讲，函数式编程更关注结果的定义，而命令式编程更关注实现的步骤。</p>
-<h3 id="命令式编程"><a href="#命令式编程" class="headerlink" title="命令式编程"></a>命令式编程</h3><p>在命令式编程中，我们会明确地告诉计算机每一个步骤应该怎么做。在如下这个代码中，我们使用了一个循环，逐个元素地累加到 <code>sum</code> 变量上。我们需要明确地描述每一步操作。</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B">什么是函数式编程？</a><ul>
+<li><a href="#%E5%91%BD%E4%BB%A4%E5%BC%8F%E7%BC%96%E7%A8%8B">命令式编程</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B">函数式编程</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BA%AF%E5%87%BD%E6%95%B0">纯函数</a></li>
+<li><a href="#%E4%BB%A5%E5%87%BD%E6%95%B0%E6%96%B9%E5%BC%8F%E6%80%9D%E8%80%83%E9%97%AE%E9%A2%98">以函数方式思考问题</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E7%9A%84%E4%BC%98%E7%82%B9">函数式编程的优点</a><ul>
+<li><a href="#%E4%BB%A3%E7%A0%81%E7%AE%80%E6%B4%81%E6%98%93%E8%AF%BB">代码简洁易读</a></li>
+<li><a href="#%E5%B9%B6%E5%8F%91%E5%92%8C%E5%90%8C%E6%AD%A5">并发和同步</a></li>
+<li><a href="#%E6%8C%81%E7%BB%AD%E4%BC%98%E5%8C%96">持续优化</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="什么是函数式编程">什么是函数式编程？</span></h2><p>我们常用的是命令式编程，它关心“怎么做”，而函数式编程关心“做什么”。通俗来讲，函数式编程更关注结果的定义，而命令式编程更关注实现的步骤。</p>
+<h3><span id="命令式编程">命令式编程</span></h3><p>在命令式编程中，我们会明确地告诉计算机每一个步骤应该怎么做。在如下这个代码中，我们使用了一个循环，逐个元素地累加到 <code>sum</code> 变量上。我们需要明确地描述每一步操作。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::vector&lt;<span class="hljs-type">int</span>&gt; numbers = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;;<br>    <span class="hljs-type">int</span> sum = <span class="hljs-number">0</span>;<br><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; numbers.<span class="hljs-built_in">size</span>(); ++i) &#123;<br>        sum += numbers[i];<br>    &#125;<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Sum: &quot;</span> &lt;&lt; sum &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h3 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h3><p>在声明式编程中，我们更关注的是“做什么”，而不是“怎么做”。使用函数式编程的风格，我们可以使用递归或者标准库的算法来实现这一点。在如下这个代码中，<code>std::accumulate</code> 函数定义了如何计算数列的和，而不需要手动地进行循环和累加。这里编程语言提供的库函数实现了所有细节，程序员只需要指定“想要什么”，而不需要关心“如何去做”。</p>
+<h3><span id="函数式编程">函数式编程</span></h3><p>在声明式编程中，我们更关注的是“做什么”，而不是“怎么做”。使用函数式编程的风格，我们可以使用递归或者标准库的算法来实现这一点。在如下这个代码中，<code>std::accumulate</code> 函数定义了如何计算数列的和，而不需要手动地进行循环和累加。这里编程语言提供的库函数实现了所有细节，程序员只需要指定“想要什么”，而不需要关心“如何去做”。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numeric&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::vector&lt;<span class="hljs-type">int</span>&gt; numbers = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;;<br>    <span class="hljs-type">int</span> sum = std::<span class="hljs-built_in">accumulate</span>(numbers.<span class="hljs-built_in">begin</span>(), numbers.<span class="hljs-built_in">end</span>(), <span class="hljs-number">0</span>);<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Sum: &quot;</span> &lt;&lt; sum &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h2><p>函数式编程的核心思想是纯函数，即函数只使用（而不修改）传递给它们的实际参数计算结果。如果使用相同的实参多次调用纯函数，将得到相同的结果，并不会留下调用痕迹（无副作用）。这都意味着纯函数不能修改程序的状态。</p>
+<h2><span id="纯函数">纯函数</span></h2><p>函数式编程的核心思想是纯函数，即函数只使用（而不修改）传递给它们的实际参数计算结果。如果使用相同的实参多次调用纯函数，将得到相同的结果，并不会留下调用痕迹（无副作用）。这都意味着纯函数不能修改程序的状态。</p>
 <p>但是这样的要求未必过于苛刻，意味着纯函数不能从标准输入读取内容，不能向标准输出写入内容，不能创建或删除文件，也不能像数据库插入记录等。如果要追求彻底的“不变性”，甚至要禁止纯函数改变处理器的寄存器、内存或其它硬件的状态。这样的纯函数的定义就没意义了。</p>
 <p>CPU 一条一条地执行指令，他需要跟踪下一条要执行的指令。如果连 CPU 的内部状态都不可修改，那么在计算机上将无法执行任何操作。另外，如果不能与用户或其它软件系统交互，程序就毫无作用。</p>
 <p>正是因为如此，我们降低一下纯函数的要求，重新定义如下：<strong>任何没有可见副作用的函数称为纯函数</strong>。纯函数的调用者除了接受它的返回结果外，看不到任何它执行的痕迹。本书不提倡只使用纯函数，而只是限制非纯函数的数量。</p>
@@ -209,7 +227,7 @@
 <p>下面的代码使用了范围操作符实现 count_lines_in_files 函数，没有局部状态–没有可变状态也没有不可变状态。它的实现只是对给定的输入调用了其它的函数：</p>
 <p><img src="/images/2024/08/12/120dd2d0-58b7-11ef-b8eb-03ab487c67e2.png" alt="函数式编程.png"></p>
 <p>这个解决方案就是函数式编程很好的例子。它简明扼要，浅显易懂。更重要的是，其他的事情（除统计行数外）它一概没做–没有任何可见的副作用。它只是对给定的输入给出期望的结果。</p>
-<h2 id="以函数方式思考问题"><a href="#以函数方式思考问题" class="headerlink" title="以函数方式思考问题"></a>以函数方式思考问题</h2><p>先写出命令式编程的代码，再去转换为函数式编程的代码是低效的，应该在拿到任务之前思考输入是什么，输出是什么，输入到输出需要怎样的转换，而不是去思考算法的步骤（命令式编程）。</p>
+<h2><span id="以函数方式思考问题">以函数方式思考问题</span></h2><p>先写出命令式编程的代码，再去转换为函数式编程的代码是低效的，应该在拿到任务之前思考输入是什么，输出是什么，输入到输出需要怎样的转换，而不是去思考算法的步骤（命令式编程）。</p>
 <p>给定一个文件名字的列表（集合），需要计算出每一个文件中的行数。首先想到的应该是简化这个问题，即一次只处理一个文件。虽然给定了一个文件名的集合，但可以一次一个地处理它们。如果能找出解决统计一个文件行数的办法，就可以很容易地解决这个问题。</p>
 <p><img src="/images/2024/08/12/0bd23640-58b7-11ef-b8eb-03ab487c67e2.png" alt="函数方式思考.png"></p>
 <p>现在问题转化为，定义一个函数，接收一个文件名并计算该文件中行数的问题。从这个角度分析，很明显给定了一个东西（文件名），但需要的却是另一个东西（文件的内容，这样才可以统计出文件的行数）。因此，需要一个函数，它可以接收一个文件名，并给出它的内容。至于内容是字符串、文件流、或其他形式由用户决定。它只需要每次提供一个字符，用户把这个字符传递给统计行数的函数就可以了。</p>
@@ -220,10 +238,10 @@
 <p>通过这个例子，读者已经学会了利用函数式的方法，把一个大的问题分解成小的问题、独立的任务，并且方便地把它们组合起来。与函数组合和提升比较类似的例子是动态流水线，如下图所示。最初是制作产品的原料。这些原料通过机器的转换，最后得到最终产品。在流水线中，关心的是产品经过哪些转换，而不是机器加工产品的具体步骤。</p>
 <p><img src="/images/2024/08/12/faa3b6a0-58b6-11ef-b8eb-03ab487c67e2.png" alt="流水线.png"></p>
 <p>在这个例子中，原料是输入，机器是施加于输入的函数。每个函数只做自己的工作而不关心其他的函数。每个函数只需要一个有效的输入，而不论这个输入来自何处。输入条目逐个放在流水线中（或有多个流水线，那就可以并行处理多个条目了）。每个条目经过转换，最终得到想要的东西。</p>
-<h2 id="函数式编程的优点"><a href="#函数式编程的优点" class="headerlink" title="函数式编程的优点"></a>函数式编程的优点</h2><h3 id="代码简洁易读"><a href="#代码简洁易读" class="headerlink" title="代码简洁易读"></a>代码简洁易读</h3><p>有许多情况下，循环和分支也过于原始。就好像 GOTO 一样，循环和分支使程序难以编写和理解，可以使用层次更高的函数式编程结构替代。程序员在多处编写相同的代码，却没有发现它们是相同的，因为它们用于不同的类型或有不同的行为，但可以很容易地把它们重构出来。</p>
+<h2><span id="函数式编程的优点">函数式编程的优点</span></h2><h3><span id="代码简洁易读">代码简洁易读</span></h3><p>有许多情况下，循环和分支也过于原始。就好像 GOTO 一样，循环和分支使程序难以编写和理解，可以使用层次更高的函数式编程结构替代。程序员在多处编写相同的代码，却没有发现它们是相同的，因为它们用于不同的类型或有不同的行为，但可以很容易地把它们重构出来。</p>
 <p>通过使用STL或第三方库提供的抽象，并通过创建自己的抽象，可以使代码更安全更简短。同时，更易于暴露这些抽象中的缺陷，因为这些相同的代码将被用于不同的场合。</p>
-<h3 id="并发和同步"><a href="#并发和同步" class="headerlink" title="并发和同步"></a>并发和同步</h3><p>开发并发系统的主要难点在于共享可变的状态。必须保证组件不能相互干扰。使用纯函数编写并行程序就很简单，因为这些函数并不修改任何东西。不需要原子或信号量进行显式同步，可以把用于单线程的代码，几乎不加修改地用于多线程系统。</p>
-<h3 id="持续优化"><a href="#持续优化" class="headerlink" title="持续优化"></a>持续优化</h3><p>使用抽象层次更高的 STL 或其他可信的库函数还有另一个优点：即使不修改任何一行代码，程序也在不断地提高。编程语言、编译器实现或正在使用的库的实现的每一个改进都将改进程序。虽然函数式或非函数式的高层次抽象都会得到改进，但函数式编程概念显著增加了可以用这些抽象来覆盖的代码量。</p>
+<h3><span id="并发和同步">并发和同步</span></h3><p>开发并发系统的主要难点在于共享可变的状态。必须保证组件不能相互干扰。使用纯函数编写并行程序就很简单，因为这些函数并不修改任何东西。不需要原子或信号量进行显式同步，可以把用于单线程的代码，几乎不加修改地用于多线程系统。</p>
+<h3><span id="持续优化">持续优化</span></h3><p>使用抽象层次更高的 STL 或其他可信的库函数还有另一个优点：即使不修改任何一行代码，程序也在不断地提高。编程语言、编译器实现或正在使用的库的实现的每一个改进都将改进程序。虽然函数式或非函数式的高层次抽象都会得到改进，但函数式编程概念显著增加了可以用这些抽象来覆盖的代码量。</p>
 <p>这看起来有点简单，但很多程序员倾向于手动编写低层次的关键性能代码，有时甚至用汇编语言。这种做法有一定的好处，但这种优化只针对特定的平台，而且阻碍了编译器对其他平台代码的优化。</p>
 <p>再来看一下 sum 函数。针对预取指令的系统进行优化，可以在内部循环中一次取两个（或更多）条目，而不是一次只取一个。这可以减少代码中的跳转次数，因此 CPU 一般会预取到正确的指令，而且在目标系统中可大幅提高性能。但如果在另一不同的平台上运行这个程序会怎样呢？对于某些平台来说，其原始的循环可能已经是优化了的；对于其他平台，有可能每次循环能对更多的条目进行累加。有些系统甚至可以提供CPU级的指来实现这个函数的功能。</p>
 <p>通过这种方式手动优化代码，针对的只有一个平台，而失去了其他所有平台的优化。如果使用高层次抽象，就可以依赖其他的人对代码进行优化。绝大多数STL实现都对目标平台和编译器进行了特定的优化。</p>
@@ -402,10 +420,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -439,6 +453,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -458,21 +476,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -520,10 +523,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -542,9 +541,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -555,6 +558,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -590,6 +608,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

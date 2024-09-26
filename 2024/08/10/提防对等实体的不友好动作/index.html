@@ -181,12 +181,19 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%A3%80%E6%B5%8B%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E7%BB%88%E6%AD%A2">检测客户端的终止</a></li>
+<li><a href="#%E6%A3%80%E6%B5%8B%E6%97%A0%E6%95%88%E8%BE%93%E5%85%A5">检测无效输入</a></li>
+</ul>
+<!-- tocstop -->
+
 <p>亦如在程序中接受用户的输入前，要对用户的输入进行“安全检测”，以防止恶意输入破坏应用程序的正常运行。可见，防御性编程在编码中是必备的意识，网络编程中也要考虑各种概率看似很小的事件，做出相应的处理动作。</p>
-<h2 id="检测客户端的终止"><a href="#检测客户端的终止" class="headerlink" title="检测客户端的终止"></a>检测客户端的终止</h2><p><img src="/images/2024/08/10/ddfaa030-56af-11ef-9b76-6d6092cc6dd4.png" alt="检测客户端的终止.png"></p>
+<h2><span id="检测客户端的终止">检测客户端的终止</span></h2><p><img src="/images/2024/08/10/ddfaa030-56af-11ef-9b76-6d6092cc6dd4.png" alt="检测客户端的终止.png"></p>
 <p>这段代码中，如果客户端发送字符串”quit”代表客户端要退出，服务器这边就可以正常和客户端断开连接。如果客户端发生故障或者异常导致没有发生字符串”quit”，那么服务器这边就会频繁执行最后一条分支语句。</p>
 <p>可以只在读操作上设置一个定时器，如果客户端在某段时间区间内没有发出请求，服务器就假定客户端已经不存在了。很多 FTP 服务器就是这么做的：如果客户端在某段时间区间内没有发送任何请求，服务器就放弃连接。用一个显式定时器或者像心跳实例那样使用 select 定时器，就可以很方便地解决这个问题。</p>
-<h2 id="检测无效输入"><a href="#检测无效输入" class="headerlink" title="检测无效输入"></a>检测无效输入</h2><p>即客户端恶意输入无效字符，服务器如果没有进行“拦截检测”，可能会造成程序崩溃。崩溃最常见的两种原因是缓冲器溢出和指针丢失。</p>
+<h2><span id="检测无效输入">检测无效输入</span></h2><p>即客户端恶意输入无效字符，服务器如果没有进行“拦截检测”，可能会造成程序崩溃。崩溃最常见的两种原因是缓冲器溢出和指针丢失。</p>
 <p><code>缓冲区溢出</code>是由于写入的数据超过了缓冲区的大小，从而覆盖了相邻的内存区域。为了防止缓冲区溢出，可以采取以下措施：</p>
 <ol>
 <li><strong>使用安全函数</strong>：使用库中提供的安全函数，例如 <code>strncpy</code> 代替 <code>strcpy</code>，<code>snprintf</code> 代替 <code>sprintf</code> 等</li>
@@ -373,10 +380,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -410,6 +413,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -429,21 +436,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -491,10 +483,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -513,9 +501,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -526,6 +518,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -561,6 +568,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

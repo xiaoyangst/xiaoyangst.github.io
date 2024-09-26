@@ -181,8 +181,21 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="打开文件"><a href="#打开文件" class="headerlink" title="打开文件"></a>打开文件</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">FILE *<span class="hljs-title">freopen</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *mode, FILE *stream)</span></span>;<br></code></pre></td></tr></table></figure>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6">打开文件</a></li>
+<li><a href="#%E5%85%B3%E9%97%AD%E6%96%87%E4%BB%B6">关闭文件</a></li>
+<li><a href="#%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6">读写文件</a><ul>
+<li><a href="#%E6%96%87%E6%9C%AC">文本</a></li>
+<li><a href="#%E4%BA%8C%E8%BF%9B%E5%88%B6">二进制</a></li>
+</ul>
+</li>
+<li><a href="#%E7%A7%BB%E5%8A%A8%E6%96%87%E4%BB%B6%E4%BD%8D%E7%BD%AE">移动文件位置</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="打开文件">打开文件</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">FILE *<span class="hljs-title">freopen</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *mode, FILE *stream)</span></span>;<br></code></pre></td></tr></table></figure>
 
 <p>pathname：可以填写相对路径或绝对路径</p>
 <p>stream：文件流</p>
@@ -235,10 +248,10 @@
 </tbody></table>
 <p>上面是以文本形式进行操作，如果你想以二进制形式操作文件，只需要在 mode 后面添加 b 即可。</p>
 <p><img src="/images/2024/09/20/08476880-7719-11ef-b0af-63b8ef3b8d38.png" alt="二进制操作.png"></p>
-<h2 id="关闭文件"><a href="#关闭文件" class="headerlink" title="关闭文件"></a>关闭文件</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fclose</span><span class="hljs-params">(FILE *stream)</span></span>;<br></code></pre></td></tr></table></figure>
+<h2><span id="关闭文件">关闭文件</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fclose</span><span class="hljs-params">(FILE *stream)</span></span>;<br></code></pre></td></tr></table></figure>
 
 <p>文件流不再需要使用，记得用 fclose 关闭。</p>
-<h2 id="读写文件"><a href="#读写文件" class="headerlink" title="读写文件"></a>读写文件</h2><h3 id="文本"><a href="#文本" class="headerlink" title="文本"></a>文本</h3><p>（一）读写单个字符</p>
+<h2><span id="读写文件">读写文件</span></h2><h3><span id="文本">文本</span></h3><p>（一）读写单个字符</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">fgetc</span><span class="hljs-params">(FILE *stream)</span>;	<span class="hljs-comment">// 从文件流 stream 中读取单个字符</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">fputc</span><span class="hljs-params">(<span class="hljs-type">int</span> c, FILE *stream)</span>;	<span class="hljs-comment">// 把单个字符写入文件流 stream</span><br></code></pre></td></tr></table></figure>
 
 <p>示例程序：</p>
@@ -256,13 +269,13 @@
 <p>示例程序：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> MAX_LEN 128</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> NAME_LEN 20</span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">student</span></span><br><span class="hljs-class">&#123;</span><br>	<span class="hljs-type">int</span> id;<br>	<span class="hljs-type">char</span> name[NAME_LEN];<br>	<span class="hljs-type">char</span> sex;<br>	<span class="hljs-type">int</span> chinese;<br>	<span class="hljs-type">int</span> math;<br>	<span class="hljs-type">int</span> english;<br>&#125; Student;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">readFile</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span> &#123;<br>	FILE* src = fopen(path, <span class="hljs-string">&quot;r&quot;</span>);<br>	<span class="hljs-keyword">if</span> (!src) &#123;<br>		<span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;src fopen failed!!!&quot;</span>);<br>		<span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>	&#125;<br><br>	FILE* dst = fopen(<span class="hljs-string">&quot;b.txt&quot;</span>, <span class="hljs-string">&quot;w&quot;</span>);<br>	<span class="hljs-keyword">if</span> (!dst) &#123;<br>		<span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;dst fopen failed!!!&quot;</span>);<br>		<span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>	&#125;<br>	<br>	<span class="hljs-comment">// 按格式读取和写入 fscanf，fprintf</span><br>	<span class="hljs-keyword">for</span> (;;) &#123;<br>		Student s;<br>		<span class="hljs-type">int</span> n = <span class="hljs-built_in">fscanf</span>(src, <span class="hljs-string">&quot;%d%s %c%d%d%d&quot;</span>, &amp;s.id, s.name, &amp;s.sex, &amp;s.chinese, &amp;s.math, &amp;s.english);<br>		<span class="hljs-keyword">if</span> (n != <span class="hljs-number">6</span>) <span class="hljs-keyword">break</span>;<br><br>		s.chinese = s.chinese * <span class="hljs-number">0.85</span>;<br>		s.math = s.math * <span class="hljs-number">0.9</span>;<br>		s.english = s.english * <span class="hljs-number">0.8</span>;<br><br>		<span class="hljs-built_in">fprintf</span>(dst, <span class="hljs-string">&quot;%d %s %c %d %d %d\n&quot;</span>, s.id, s.name, s.sex, s.chinese, s.math, s.english);<br>	&#125;<br><br>	fclose(src);<br>	fclose(dst);<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h3 id="二进制"><a href="#二进制" class="headerlink" title="二进制"></a>二进制</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">fread</span><span class="hljs-params">(<span class="hljs-type">void</span> *ptr, <span class="hljs-type">size_t</span> size, <span class="hljs-type">size_t</span> nmemb, FILE *stream)</span></span>;<br><br><span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">fwrite</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">void</span> *ptr, <span class="hljs-type">size_t</span> size, <span class="hljs-type">size_t</span> nmemb,FILE *stream)</span></span>;<br></code></pre></td></tr></table></figure>
+<h3><span id="二进制">二进制</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">fread</span><span class="hljs-params">(<span class="hljs-type">void</span> *ptr, <span class="hljs-type">size_t</span> size, <span class="hljs-type">size_t</span> nmemb, FILE *stream)</span></span>;<br><br><span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">fwrite</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">void</span> *ptr, <span class="hljs-type">size_t</span> size, <span class="hljs-type">size_t</span> nmemb,FILE *stream)</span></span>;<br></code></pre></td></tr></table></figure>
 
 <p>fread 的返回值是读取的大小，这个返回值将作为 fwrite size 参数。不然读取超出已读的长度会出现错误。</p>
 <p>示例程序：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> MAX_LEN 128</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">readFile</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span> </span>&#123;<br>	FILE* src = <span class="hljs-built_in">fopen</span>(path, <span class="hljs-string">&quot;r&quot;</span>);<br>	<span class="hljs-keyword">if</span> (!src) &#123;<br>		<span class="hljs-built_in">fprintf</span>(stderr, <span class="hljs-string">&quot;src fopen failed!!!&quot;</span>);<br>		<span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>	&#125;<br><br>	FILE* dst = <span class="hljs-built_in">fopen</span>(<span class="hljs-string">&quot;b.txt&quot;</span>, <span class="hljs-string">&quot;w&quot;</span>);<br>	<span class="hljs-keyword">if</span> (!dst) &#123;<br>		<span class="hljs-built_in">fprintf</span>(stderr, <span class="hljs-string">&quot;dst fopen failed!!!&quot;</span>);<br>		<span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>	&#125;<br><br>	<span class="hljs-type">char</span>* data[MAX_LEN];<br>	<span class="hljs-type">int</span> n = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span> ((n = <span class="hljs-built_in">fread</span>(data, <span class="hljs-number">1</span>, MAX_LEN, src)) &gt; <span class="hljs-number">0</span>) &#123;<br>		<span class="hljs-built_in">fwrite</span>(data, <span class="hljs-number">1</span>, n, dst);	<span class="hljs-comment">// 容易犯错的地方,误填为MAX_LEN，应该填写读的字节数 n</span><br>	&#125;<br><br>	<span class="hljs-built_in">fclose</span>(src);<br>	<span class="hljs-built_in">fclose</span>(dst);<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="移动文件位置"><a href="#移动文件位置" class="headerlink" title="移动文件位置"></a>移动文件位置</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">fseek</span><span class="hljs-params">(FILE *stream, <span class="hljs-type">long</span> offset, <span class="hljs-type">int</span> whence)</span>;	<span class="hljs-comment">// 移动文件位置</span><br><br><span class="hljs-type">long</span> <span class="hljs-title function_">ftell</span><span class="hljs-params">(FILE *stream)</span>;	 <span class="hljs-comment">// 获取当前文件位置</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">rewind</span><span class="hljs-params">(FILE *stream)</span>;	<span class="hljs-comment">// 回到文件起始位置</span><br></code></pre></td></tr></table></figure>
+<h2><span id="移动文件位置">移动文件位置</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">fseek</span><span class="hljs-params">(FILE *stream, <span class="hljs-type">long</span> offset, <span class="hljs-type">int</span> whence)</span>;	<span class="hljs-comment">// 移动文件位置</span><br><br><span class="hljs-type">long</span> <span class="hljs-title function_">ftell</span><span class="hljs-params">(FILE *stream)</span>;	 <span class="hljs-comment">// 获取当前文件位置</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">rewind</span><span class="hljs-params">(FILE *stream)</span>;	<span class="hljs-comment">// 回到文件起始位置</span><br></code></pre></td></tr></table></figure>
 
 <p>其中 whence 参数有三个取值：</p>
 <p><strong><code>SEEK_SET</code></strong>: 文件开头，表示从文件的起始位置移动文件指针。</p>
@@ -445,10 +458,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -482,6 +491,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -501,21 +514,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -563,10 +561,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -585,9 +579,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -598,6 +596,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -633,6 +646,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

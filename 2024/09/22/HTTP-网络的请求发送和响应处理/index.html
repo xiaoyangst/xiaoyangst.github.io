@@ -181,7 +181,14 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#finished-%E4%BF%A1%E5%8F%B7%E6%84%8F%E5%91%B3%E7%9D%80%E4%BB%80%E4%B9%88">finished 信号意味着什么 ？</a></li>
+<li><a href="#%E8%AF%BB%E5%8F%96%E5%AF%B9%E7%AB%AF%E5%93%8D%E5%BA%94">读取对端响应</a></li>
+</ul>
+<!-- tocstop -->
+
 <p>通常需要包含以下头文件：</p>
 <ol>
 <li><strong><code>QNetworkAccessManager</code></strong>: 用于管理网络请求</li>
@@ -193,14 +200,14 @@
 <p><img src="/images/2024/09/22/d2a19700-788a-11ef-9d1d-2119386dba73.gif" alt="运行演示.gif"></p>
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Qt%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/HTTP%20%E5%92%8C%20JSON">HTTP 和 JSON</a></p>
 <p>文章指引：<a href="https://xiaoyangst.github.io/2024/09/22/Json-%E7%9A%84%E5%A4%84%E7%90%86/">JSON 处理</a> </p>
-<h2 id="finished-信号意味着什么-？"><a href="#finished-信号意味着什么-？" class="headerlink" title="finished 信号意味着什么 ？"></a>finished 信号意味着什么 ？</h2><p>待我们发送请求之后，直到对端响应才会继续往下执行代码：</p>
+<h2><span id="finished-信号意味着什么">finished 信号意味着什么 ？</span></h2><p>待我们发送请求之后，直到对端响应才会继续往下执行代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">QNetworkReply* response_ = httpManager_-&gt;<span class="hljs-built_in">get</span>(request_);<br></code></pre></td></tr></table></figure>
 
 <p>响应之后，QNetworkReply 会发出 finished 信号，这个信号的触发<strong>并不意味着请求一定成功</strong>，它只是表示网络请求的处理已经完成，所有数据都已接收，无论请求的结果是成功还是失败。要判断请求是否成功，需要检查 QNetworkReply 对象的状态。</p>
 <p>我们先判断此次请求是否有错误（QNetworkReply::NoError），如果有就打印错误情况，否则就继续我们的代码逻辑。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">connect</span>(response_,&amp;QNetworkReply::finished,<span class="hljs-keyword">this</span>,[response_,<span class="hljs-keyword">this</span>]()&#123;<br>    <span class="hljs-keyword">if</span>(response_-&gt;<span class="hljs-built_in">error</span>() == QNetworkReply::NoError)&#123;   <span class="hljs-comment">// 没有发送错误</span><br>        emit <span class="hljs-built_in">http_finished</span>(response_);<br>    &#125;<span class="hljs-keyword">else</span>&#123;<br>        <span class="hljs-built_in">qDebug</span>()&lt;&lt;response_-&gt;<span class="hljs-built_in">error</span>();   <span class="hljs-comment">// 打印失败情况</span><br>    &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
 
-<h2 id="读取对端响应"><a href="#读取对端响应" class="headerlink" title="读取对端响应"></a>读取对端响应</h2><p>此代码中是 readAll 读取全部的数据，然后保存到 QByteArray 中，但是如果传来的数据很大，这未必是合理的处理方式。对几种常用的方式简单总结：</p>
+<h2><span id="读取对端响应">读取对端响应</span></h2><p>此代码中是 readAll 读取全部的数据，然后保存到 QByteArray 中，但是如果传来的数据很大，这未必是合理的处理方式。对几种常用的方式简单总结：</p>
 <ul>
 <li><strong>readAll()</strong> 是最简单的方式，但可能在数据较大时消耗较多内存。</li>
 <li><strong>read()</strong> 和 <strong>readLine()</strong> 提供了逐步读取的控制，适合处理流式或分块数据。</li>
@@ -395,10 +402,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -432,6 +435,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -451,21 +458,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -513,10 +505,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -535,9 +523,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -548,6 +540,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -583,6 +590,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

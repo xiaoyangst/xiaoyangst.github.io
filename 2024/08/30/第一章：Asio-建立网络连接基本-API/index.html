@@ -181,7 +181,18 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#ip%E5%9C%B0%E5%9D%80%E7%9A%84%E5%A4%84%E7%90%86">IP地址的处理</a></li>
+<li><a href="#%E7%BB%88%E7%AB%AF%E7%AB%AF%E7%82%B9">终端端点</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BAsocket">创建socket</a></li>
+<li><a href="#%E7%BB%91%E5%AE%9Aacceptor">绑定acceptor</a></li>
+<li><a href="#%E8%BF%9E%E6%8E%A5%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AB%AF%E7%82%B9">连接指定的端点</a></li>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8E%A5%E6%94%B6%E8%BF%9E%E6%8E%A5">服务器接收连接</a></li>
+</ul>
+<!-- tocstop -->
+
 <ul>
 <li><em>boost::asio</em>：这是核心类和函数所在的地方。重要的类有 <em>io_service</em> 和 <em>streambuf</em>。类似<em>read, read_at, read_until</em>方法，它们的异步方法，它们的写方法和异步写方法等自由函数也在这里</li>
 <li><em>boost::asio::ip</em>：这是网络通信部分所在的地方。重要的类有 <em>address, endpoint, tcp, udp和 icmp</em>，重要的自由函数有 <em>connect</em> 和 <em>async_connect</em>。要注意的是在 <em>boost::asio::ip::tcp::socket</em>中间，<em>socket</em>只是 <em>boost::asio::ip::tcp</em> 类中间的一个<em>typedef</em>关键字</li>
@@ -190,7 +201,7 @@
 <li><em>boost::asio::local</em>：这个命名空间包含了 POSIX 特性的类</li>
 <li><em>boost::asio::windows</em>：这个命名空间包含了 Windows 特性的类</li>
 </ul>
-<h2 id="IP地址的处理"><a href="#IP地址的处理" class="headerlink" title="IP地址的处理"></a>IP地址的处理</h2><p>由于下面介绍终端端点需要用到关于 IP 地址作为参数传递，先提前讲，因为不是单纯的传递 string 类型的 IP 参数就可以的。</p>
+<h2><span id="ip地址的处理">IP地址的处理</span></h2><p>由于下面介绍终端端点需要用到关于 IP 地址作为参数传递，先提前讲，因为不是单纯的传递 string 类型的 IP 参数就可以的。</p>
 <ul>
 <li>ip::address(v4_or_v6_address)：这个函数把一个v4或者v6的地址转换成 ip::address</li>
 <li>ip::address:from_string(str)：这个函数根据一个IPv4地址或者一个IPv6地址创建一个地址</li>
@@ -201,7 +212,7 @@
 <li>ip::host_name()：这个函数用 string 数据类型返回当前的主机名</li>
 </ul>
 <p>注：不支持传递域名</p>
-<h2 id="终端端点"><a href="#终端端点" class="headerlink" title="终端端点"></a>终端端点</h2><p>所谓终端节点就是<strong>用来通信的端对端的节点</strong>，可以通过ip地址和端口构造，其它的节点可以连接这个终端节点进行通信。不同类型的 socket 有它自己的 endpoint 类，比如 ip::tcp::endpoint、 ip::udp::endpoint 和 ip::icmp::endpoint。</p>
+<h2><span id="终端端点">终端端点</span></h2><p>所谓终端节点就是<strong>用来通信的端对端的节点</strong>，可以通过ip地址和端口构造，其它的节点可以连接这个终端节点进行通信。不同类型的 socket 有它自己的 endpoint 类，比如 ip::tcp::endpoint、 ip::udp::endpoint 和 ip::icmp::endpoint。</p>
 <ul>
 <li>endpoint()：这是默认构造函数，某些时候可以用来创建UDP&#x2F;ICMP socket</li>
 <li>endpoint(protocol, port)：这个方法通常用来创建可以接受新连接的服务器端socket</li>
@@ -213,7 +224,7 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">cout &lt;&lt; c_ep.<span class="hljs-built_in">address</span>().<span class="hljs-built_in">to_string</span>() &lt;&lt; <span class="hljs-string">&quot;:&quot;</span> &lt;&lt; c_ep.<span class="hljs-built_in">port</span>() &lt;&lt; <span class="hljs-string">&quot;/&quot;</span> &lt;&lt; c_ep.<span class="hljs-built_in">protocol</span>() &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
 
 <p>注：输出协议部分报错，因为 <code>c_ep.protocol()</code> 返回的 <code>tcp::protocol</code> 类型没有与 <code>std::cout</code> 流兼容的 <code>&lt;&lt;</code> 运算符重载，所以实际上你只能打印出地址和端口信息</p>
-<h2 id="创建socket"><a href="#创建socket" class="headerlink" title="创建socket"></a>创建socket</h2><p>asio 有三种类型的套接字类：ip::tcp, ip::udp 和 ip::icmp。当然它也是可扩展的，你可以创建自己的socket类，尽管这相当复杂。我们知道在网络通信中有两种 socket 类型，即监听客户端连接的socket，以及用于后续和客户端通信的socket。</p>
+<h2><span id="创建socket">创建socket</span></h2><p>asio 有三种类型的套接字类：ip::tcp, ip::udp 和 ip::icmp。当然它也是可扩展的，你可以创建自己的socket类，尽管这相当复杂。我们知道在网络通信中有两种 socket 类型，即监听客户端连接的socket，以及用于后续和客户端通信的socket。</p>
 <p>下面介绍 socket 相关的函数，这些函数用来连接或绑定socket、断开socket字连接以及查询连接是活动还是非活动的：</p>
 <ul>
 <li>assign(protocol,socket)：这个函数分配了一个原生的 socket 给这个 socket 实例。当处理老（旧）程序时会使用它（也就是说，原生socket已经被建立了）</li>
@@ -232,13 +243,13 @@
 <p>创建用于通信的 socket</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++">io_context ic;<br>tcp protocol = tcp::<span class="hljs-built_in">v4</span>();<br><span class="hljs-function">tcp::socket <span class="hljs-title">sock</span><span class="hljs-params">(ic)</span></span>;<br>sock.<span class="hljs-built_in">open</span>(protocol);<br></code></pre></td></tr></table></figure>
 
-<h2 id="绑定acceptor"><a href="#绑定acceptor" class="headerlink" title="绑定acceptor"></a>绑定acceptor</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 服务端需要创建的端点</span><br>    <span class="hljs-type">int</span> server_port = <span class="hljs-number">8080</span>;<br>    <span class="hljs-function">tcp::endpoint <span class="hljs-title">s_ep</span><span class="hljs-params">(address_v4::any(), server_port)</span></span>;<br><br><span class="hljs-comment">// 创建用于接收客户端连接的 socket 类型，即 acceptor</span><br>    io_context ic;<br>    tcp protocol = tcp::<span class="hljs-built_in">v4</span>();<br>    <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(ic)</span></span>;<br>    acceptor.<span class="hljs-built_in">open</span>(protocol);<br><br><span class="hljs-comment">// 绑定 端点和acceptor</span><br>    acceptor.<span class="hljs-built_in">bind</span>(s_ep);<br></code></pre></td></tr></table></figure>
+<h2><span id="绑定acceptor">绑定acceptor</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 服务端需要创建的端点</span><br>    <span class="hljs-type">int</span> server_port = <span class="hljs-number">8080</span>;<br>    <span class="hljs-function">tcp::endpoint <span class="hljs-title">s_ep</span><span class="hljs-params">(address_v4::any(), server_port)</span></span>;<br><br><span class="hljs-comment">// 创建用于接收客户端连接的 socket 类型，即 acceptor</span><br>    io_context ic;<br>    tcp protocol = tcp::<span class="hljs-built_in">v4</span>();<br>    <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(ic)</span></span>;<br>    acceptor.<span class="hljs-built_in">open</span>(protocol);<br><br><span class="hljs-comment">// 绑定 端点和acceptor</span><br>    acceptor.<span class="hljs-built_in">bind</span>(s_ep);<br></code></pre></td></tr></table></figure>
 
 <p>将 acceptor 绑定到 端点，意味着在这个端点上进行客户端连接的接收，即所有连接这个端点的连接都可以被接收到。</p>
-<h2 id="连接指定的端点"><a href="#连接指定的端点" class="headerlink" title="连接指定的端点"></a>连接指定的端点</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//  创建端点，记录服务器的信息   </span><br>    string ip = <span class="hljs-string">&quot;192.168.1.12&quot;</span>;<br>    <span class="hljs-type">int</span> port = <span class="hljs-number">8080</span>;<br>    <span class="hljs-function">tcp::endpoint <span class="hljs-title">ep</span><span class="hljs-params">(address::from_string(ip), port)</span></span>;<br><br><span class="hljs-comment">//  连接到服务器</span><br>    io_context ic;<br>    <span class="hljs-function">tcp::socket <span class="hljs-title">sock</span><span class="hljs-params">(ic, ep.protocol())</span></span>;<br>    sock.<span class="hljs-built_in">connect</span>(ep);<br><br><span class="hljs-comment">// 后续就可以通信了</span><br></code></pre></td></tr></table></figure>
+<h2><span id="连接指定的端点">连接指定的端点</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//  创建端点，记录服务器的信息   </span><br>    string ip = <span class="hljs-string">&quot;192.168.1.12&quot;</span>;<br>    <span class="hljs-type">int</span> port = <span class="hljs-number">8080</span>;<br>    <span class="hljs-function">tcp::endpoint <span class="hljs-title">ep</span><span class="hljs-params">(address::from_string(ip), port)</span></span>;<br><br><span class="hljs-comment">//  连接到服务器</span><br>    io_context ic;<br>    <span class="hljs-function">tcp::socket <span class="hljs-title">sock</span><span class="hljs-params">(ic, ep.protocol())</span></span>;<br>    sock.<span class="hljs-built_in">connect</span>(ep);<br><br><span class="hljs-comment">// 后续就可以通信了</span><br></code></pre></td></tr></table></figure>
 
 <p>作为客户端可以连接服务器指定的端点进行连接，用于后续通信。</p>
-<h2 id="服务器接收连接"><a href="#服务器接收连接" class="headerlink" title="服务器接收连接"></a>服务器接收连接</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++">    <span class="hljs-type">const</span> <span class="hljs-type">int</span> BACKLOG_SIZE = <span class="hljs-number">30</span>;<br>    <span class="hljs-type">int</span> server_port = <span class="hljs-number">8080</span>;<br>    <span class="hljs-function">tcp::endpoint <span class="hljs-title">s_ep</span><span class="hljs-params">(address_v4::any(), server_port)</span></span>;<br><br><span class="hljs-comment">// 创建用于接收客户端连接的 socket 类型，即 acceptor</span><br>    io_context ic;<br>    tcp protocol = tcp::<span class="hljs-built_in">v4</span>();<br>    <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(ic)</span></span>;<br>    acceptor.<span class="hljs-built_in">open</span>(protocol);<br><br><span class="hljs-comment">// 绑定、监听、接收客户端连接</span><br>    acceptor.<span class="hljs-built_in">bind</span>(s_ep);<br>    acceptor.<span class="hljs-built_in">listen</span>(BACKLOG_SIZE);<br><br>    <span class="hljs-function">tcp::socket <span class="hljs-title">c_socket</span><span class="hljs-params">(ic)</span></span>;<br>    acceptor.<span class="hljs-built_in">accept</span>(c_socket);<br><br><span class="hljs-comment">// 后续就可以和客户端通信了</span><br></code></pre></td></tr></table></figure>
+<h2><span id="服务器接收连接">服务器接收连接</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++">    <span class="hljs-type">const</span> <span class="hljs-type">int</span> BACKLOG_SIZE = <span class="hljs-number">30</span>;<br>    <span class="hljs-type">int</span> server_port = <span class="hljs-number">8080</span>;<br>    <span class="hljs-function">tcp::endpoint <span class="hljs-title">s_ep</span><span class="hljs-params">(address_v4::any(), server_port)</span></span>;<br><br><span class="hljs-comment">// 创建用于接收客户端连接的 socket 类型，即 acceptor</span><br>    io_context ic;<br>    tcp protocol = tcp::<span class="hljs-built_in">v4</span>();<br>    <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(ic)</span></span>;<br>    acceptor.<span class="hljs-built_in">open</span>(protocol);<br><br><span class="hljs-comment">// 绑定、监听、接收客户端连接</span><br>    acceptor.<span class="hljs-built_in">bind</span>(s_ep);<br>    acceptor.<span class="hljs-built_in">listen</span>(BACKLOG_SIZE);<br><br>    <span class="hljs-function">tcp::socket <span class="hljs-title">c_socket</span><span class="hljs-params">(ic)</span></span>;<br>    acceptor.<span class="hljs-built_in">accept</span>(c_socket);<br><br><span class="hljs-comment">// 后续就可以和客户端通信了</span><br></code></pre></td></tr></table></figure>
 
 <p>当有客户端连接时，服务器需要接收连接，如何就可以完成这个工作。</p>
 <hr>
@@ -416,10 +427,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -453,6 +460,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -472,21 +483,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -534,10 +530,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -556,9 +548,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -569,6 +565,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -604,6 +615,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

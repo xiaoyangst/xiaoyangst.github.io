@@ -181,9 +181,26 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="auto"><a href="#auto" class="headerlink" title="auto"></a>auto</h2><p>使用了 auto 关键字以后，编译器会在编译期间自动推导出变量的类型，这样我们就不用手动指明变量的数据类型了。auto 仅仅是一个占位符，在编译器期间它会被真正的类型所替代。</p>
-<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><ol>
+        <!-- toc -->
+
+<ul>
+<li><a href="#auto">auto</a><ul>
+<li><a href="#%E6%B3%A8%E6%84%8F%E7%82%B9">注意点</a></li>
+<li><a href="#auto-%E4%B8%8E-const-%E7%BB%93%E5%90%88">auto 与 const 结合</a></li>
+</ul>
+</li>
+<li><a href="#decltype">decltype</a></li>
+<li><a href="#auto%E5%92%8Cdecltype%E7%9A%84%E5%8C%BA%E5%88%AB">auto和decltype的区别</a><ul>
+<li><a href="#%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC%E7%9A%84%E6%97%B6%E6%9C%BA%E5%92%8C%E6%96%B9%E5%BC%8F">类型推导的时机和方式</a></li>
+<li><a href="#%E7%94%A8%E9%80%94">用途</a></li>
+<li><a href="#%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%88%B0%E7%9A%84%E7%BB%93%E6%9E%9C">类型推到的结果</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="auto">auto</span></h2><p>使用了 auto 关键字以后，编译器会在编译期间自动推导出变量的类型，这样我们就不用手动指明变量的数据类型了。auto 仅仅是一个占位符，在编译器期间它会被真正的类型所替代。</p>
+<h3><span id="注意点">注意点</span></h3><ol>
 <li>auto 变量<strong>必须在定义时初始化</strong>，因为编译器需要根据初始化表达式来推导类型</li>
 <li>auto 不能在函数的参数中使用，因为 auto 后面的变量需要初始化，当时函数的参数还只是声明（哪怕你是给这个函数参数填上默认参数也不行）</li>
 <li>auto 其实在 C++11 不能用于推断函数的返回值，当时 C++14 支持了。在 C++11 不支持推断函数的返回值的情况下，利用 decltype 能解决这个问题</li>
@@ -201,11 +218,11 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">x = <span class="hljs-number">3.14</span>;  <span class="hljs-comment">// 虽然你尝试赋值一个 double 类型，但 x 仍然是 int</span><br></code></pre></td></tr></table></figure>
 
 <p>在这里，x 已经被推导为 int 类型，因此赋值时，3.14 会被截断为整数 3，因为 x 是 int 类型。</p>
-<h3 id="auto-与-const-结合"><a href="#auto-与-const-结合" class="headerlink" title="auto 与 const 结合"></a>auto 与 const 结合</h3><ul>
+<h3><span id="auto-与-const-结合">auto 与 const 结合</span></h3><ul>
 <li>当类型不为引用时，auto 的推导结果将不保留表达式的 const 属性</li>
 <li>当类型为引用时，auto 的推导结果将保留表达式的 const 属性</li>
 </ul>
-<h2 id="decltype"><a href="#decltype" class="headerlink" title="decltype"></a>decltype</h2><p>decltype 和 auto 功能相同，但 auto 有些无法做到的 decltype 可以完成。</p>
+<h2><span id="decltype">decltype</span></h2><p>decltype 和 auto 功能相同，但 auto 有些无法做到的 decltype 可以完成。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">decltype</span>(exp) varname = value;<br></code></pre></td></tr></table></figure>
 
 <p>auto 会根据 value 推断类型，当时decltype 根据 exp 表达式（变量、字面量、带有运算符的表达式）推导出变量的类型，跟 &#x3D; 右边的 value 没有关系。</p>
@@ -215,7 +232,7 @@
 <li>如果 exp 是函数调用，那么 decltype(exp) 的类型就和函数返回值的类型一致</li>
 <li>如果 exp 是一个左值，或者被括号( )包围，那么 decltype(exp) 的类型就是 exp 的引用；假设 exp 的类型为 T，那么 decltype(exp) 的类型就是 T&amp;</li>
 </ul>
-<h2 id="auto和decltype的区别"><a href="#auto和decltype的区别" class="headerlink" title="auto和decltype的区别"></a>auto和decltype的区别</h2><h3 id="类型推导的时机和方式"><a href="#类型推导的时机和方式" class="headerlink" title="类型推导的时机和方式"></a>类型推导的时机和方式</h3><p>auto:</p>
+<h2><span id="auto和decltype的区别">auto和decltype的区别</span></h2><h3><span id="类型推导的时机和方式">类型推导的时机和方式</span></h3><p>auto:</p>
 <ul>
 <li>auto 在变量声明和初始化时，根据初始化表达式推导变量的类型。</li>
 <li>auto 只能用于变量声明，并且必须在声明时进行初始化。</li>
@@ -231,7 +248,7 @@
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">cppCopy codeint x = <span class="hljs-number">10</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span>&amp; ref = x;<br><br><span class="hljs-keyword">decltype</span>(x) a;      <span class="hljs-comment">// a 的类型是 int</span><br><span class="hljs-keyword">decltype</span>(ref) b = x;  <span class="hljs-comment">// b 的类型是 const int&amp;</span><br></code></pre></td></tr></table></figure>
 
-<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>auto:</p>
+<h3><span id="用途">用途</span></h3><p>auto:</p>
 <ul>
 <li>用于推导变量的类型，简化代码。</li>
 <li>经常用于遍历容器、返回值复杂的函数调用、lambda 表达式等。</li>
@@ -245,7 +262,7 @@
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++">cppCopy codeint x = <span class="hljs-number">10</span>;<br><span class="hljs-keyword">decltype</span>(x) y = <span class="hljs-number">20</span>;  <span class="hljs-comment">// y 的类型是 int</span><br></code></pre></td></tr></table></figure>
 
-<h3 id="类型推到的结果"><a href="#类型推到的结果" class="headerlink" title="类型推到的结果"></a>类型推到的结果</h3><p>auto:</p>
+<h3><span id="类型推到的结果">类型推到的结果</span></h3><p>auto:</p>
 <ul>
 <li>auto 的推导结果通常是值类型，除非显式使用引用或指针。</li>
 <li>对于引用类型，auto 会去掉引用和 const 修饰符（除非使用 auto&amp; 或 const auto&amp;）。</li>
@@ -430,10 +447,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -467,6 +480,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -486,21 +503,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -548,10 +550,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -570,9 +568,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -583,6 +585,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -618,6 +635,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

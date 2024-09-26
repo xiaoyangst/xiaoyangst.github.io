@@ -181,9 +181,16 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88">二级指针</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88">函数指针</a></li>
+</ul>
+<!-- tocstop -->
+
 <p>* 可以作为定义指针时的形式说明符和取出指针变量保存的地址所指向的内存单元的值。我们可以通过 * 结合地址的方式来访问内存单元中的数据并存入数据；而＆是取地址运算符，通过它得到变量的地址。</p>
-<h2 id="二级指针"><a href="#二级指针" class="headerlink" title="二级指针"></a>二级指针</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> num = <span class="hljs-number">10</span>;<br><br><span class="hljs-type">int</span>* p = &amp;num;	<span class="hljs-comment">// 一级指针</span><br><br><span class="hljs-type">int</span>** m = &amp;p;	<span class="hljs-comment">// 二级指针</span><br></code></pre></td></tr></table></figure>
+<h2><span id="二级指针">二级指针</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> num = <span class="hljs-number">10</span>;<br><br><span class="hljs-type">int</span>* p = &amp;num;	<span class="hljs-comment">// 一级指针</span><br><br><span class="hljs-type">int</span>** m = &amp;p;	<span class="hljs-comment">// 二级指针</span><br></code></pre></td></tr></table></figure>
 
 <p>指向关系如下：</p>
 <p><img src="/images/2024/09/09/050aedc0-6eab-11ef-a00b-73f543e7dc50.png" alt="二级指针3.png"></p>
@@ -221,7 +228,7 @@
 
 <p>如何修改？那就是修改 head 指针变量指向的地址，即让 head 原本指向 Node1（0x001） 现在指向 new_node（0x000）。也就是要拿到 head 指针变量本身的地址，phead 就是记录着 head 指针变量本身的地址，通过 *phead &#x3D; new_node 就修改成功了。</p>
 <p><img src="/images/2024/09/09/22c0ac10-6eab-11ef-a00b-73f543e7dc50.png" alt="二级指针5.png"></p>
-<h2 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h2><p>函数指针常见的应用是回调函数，它只支持两个操作：</p>
+<h2><span id="函数指针">函数指针</span></h2><p>函数指针常见的应用是回调函数，它只支持两个操作：</p>
 <ul>
 <li>解引用<code>*</code></li>
 <li>函数调用<code>()</code></li>
@@ -411,10 +418,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -448,6 +451,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -467,21 +474,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -529,10 +521,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -551,9 +539,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -564,6 +556,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -599,6 +606,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

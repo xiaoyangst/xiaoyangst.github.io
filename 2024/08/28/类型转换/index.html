@@ -181,8 +181,15 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="隐式转换"><a href="#隐式转换" class="headerlink" title="隐式转换"></a>隐式转换</h2><p>即不需要程序员手动添加转换规则，而是由编译器自动转换，为了避免隐式转换可能带来的安全隐患（不被程序员控制，可能导致数据溢出），需要列举出会发生隐式转换的情况。总的来说，当给定的类型与需要的类型不同时，就可能发生隐式转换。</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E9%9A%90%E5%BC%8F%E8%BD%AC%E6%8D%A2">隐式转换</a></li>
+<li><a href="#%E6%98%BE%E5%BC%8F%E8%BD%AC%E6%8D%A2">显式转换</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="隐式转换">隐式转换</span></h2><p>即不需要程序员手动添加转换规则，而是由编译器自动转换，为了避免隐式转换可能带来的安全隐患（不被程序员控制，可能导致数据溢出），需要列举出会发生隐式转换的情况。总的来说，当给定的类型与需要的类型不同时，就可能发生隐式转换。</p>
 <ol>
 <li>如果操作数中有任何低于 int 和 unsigned int 的类型，会首先将该操作数转换为 int 类型或者 unsigned int 类型，这个过程我们称之为整数提升</li>
 <li>int –&gt; long –&gt; long long –&gt; float –&gt; double –&gt; long double（等级由低到高，低等级向高等级隐式转换）</li>
@@ -192,7 +199,7 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> i = <span class="hljs-number">-10</span>;<br><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> u = <span class="hljs-number">10</span>;<br><span class="hljs-keyword">if</span>(i &lt; u)<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;i is less than u\n&quot;</span>);<br></code></pre></td></tr></table></figure>
 
 <p>由于 int 会向 unsigned int 转换（因为你在 if 判断语句中 用 int 类型数据和 unsigned int 数据进行比较），导致 i 会变成一个非常大的数，所以出现不符合题意的判断了。</p>
-<h2 id="显式转换"><a href="#显式转换" class="headerlink" title="显式转换"></a>显式转换</h2><p>需要程序员手动给出需要强转的类型。比方说将 int 类型强制转换为 float 类型。</p>
+<h2><span id="显式转换">显式转换</span></h2><p>需要程序员手动给出需要强转的类型。比方说将 int 类型强制转换为 float 类型。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> x = <span class="hljs-number">10</span>;<br><br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot; x = %f\n&quot;</span>, (<span class="hljs-type">float</span>)x);<br></code></pre></td></tr></table></figure>
 
 <p>那为什么需要显示转换呢？</p>
@@ -385,10 +392,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -422,6 +425,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -441,21 +448,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -503,10 +495,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -525,9 +513,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -538,6 +530,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -573,6 +580,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

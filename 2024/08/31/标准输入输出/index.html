@@ -181,11 +181,19 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%A0%87%E5%87%86%E8%BE%93%E5%87%BA">标准输出</a></li>
+<li><a href="#%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5">标准输入</a></li>
+<li><a href="#getchar-%E5%92%8C-putchar">getchar 和 putchar</a></li>
+</ul>
+<!-- tocstop -->
+
 <p><img src="/images/2024/08/31/ace538c0-6776-11ef-a499-ddf8d91f56f9.png" alt="标准输入输出.png"></p>
 <p>敲击键盘输入的数据会缓存到 stdin 缓冲区中，scanf函数就从缓冲区中取出数据。printf函数会把要显示的数据放到 stdout 缓冲区中，由显示器从中取出并显示。缓冲区中的数据都是一次性的，读取之后就会消失，你完全可以理解为管道。</p>
 <p>由于不同系统，不的硬件底层实现输入输出的具体方法可能不一样，C语言要求系统为每个程序提供两个指针,这两个指针分别指向两个结构体，这两个结构体分别表示了键盘和屏幕在内存中的抽象表示（缓冲区的地址值被记录在这个结构体中）,并将指向这两个结构体的指针命名为stdin和 stdout.这两个指针就是所谓的标准输入和标准输出。</p>
-<h2 id="标准输出"><a href="#标准输出" class="headerlink" title="标准输出"></a>标准输出</h2><p>格式：printf(格式串,表达式1,表达式2,…)</p>
+<h2><span id="标准输出">标准输出</span></h2><p>格式：printf(格式串,表达式1,表达式2,…)</p>
 <p>原理：打印格式串的内容，并用后面的表达式替换格式串中的转换说明</p>
 <p><img src="/images/2024/08/31/a747d800-6776-11ef-a499-ddf8d91f56f9.png" alt="printf.png"></p>
 <p>格式串里面包含两个内容：普通字符和转换说明。</p>
@@ -202,7 +210,7 @@
 <p>X代表发生的类型转换。</p>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs tex">（1）<span class="hljs-comment">%d:用于显示十进制有符号数，char,short,int,long long</span><br><br>（2）<span class="hljs-comment">%u:用于显示十进制无符号数，unsinged short,unsigned int,unsigned long long</span><br><br>（3）<span class="hljs-comment">%x: 用于显示十六进制整数，所有有符号及无符号整型</span><br><br>（4）<span class="hljs-comment">%f:用于显示十进制浮点数，float,double</span><br><br>（5）<span class="hljs-comment">%c:显示字符</span><br><br>（6）<span class="hljs-comment">%s:显示字符串</span><br></code></pre></td></tr></table></figure>
 
-<h2 id="标准输入"><a href="#标准输入" class="headerlink" title="标准输入"></a>标准输入</h2><p>格式：scanf(格式串,表达式1,表达式2,…)</p>
+<h2><span id="标准输入">标准输入</span></h2><p>格式：scanf(格式串,表达式1,表达式2,…)</p>
 <p>原理：本质是模式匹配</p>
 <p>从左到右，根据格式串匹配 stdin 中的字符。如果匹配成功，继续匹配下一项；如果匹配失败，立即返回。最后，返回匹配成功的转换说明的个数。</p>
 <p>我们的格式串包含三块内容：普通字符，空白字符，转换说明。</p>
@@ -222,7 +230,7 @@
 <li>使用 <code>%c</code> 时需要注意，<code>scanf</code> 不会跳过空白字符，可能会读取到空格或换行符。因此要在 占位符前面加上一个空格，比方说 ‘ %c’。</li>
 <li>使用 <code>%s</code> 读取字符串时，<code>scanf</code> 会跳过前导空白字符，并在遇到第一个空白字符时停止读取。</li>
 </ul>
-<h2 id="getchar-和-putchar"><a href="#getchar-和-putchar" class="headerlink" title="getchar 和 putchar"></a>getchar 和 putchar</h2><p>前面我们将 scanf 获取单个字符存在问题，你必须占位符前面添加一个空格才可以，但是这很容易让人忘记。<code>getchar</code> 函数用于从标准输入读取一个字符。</p>
+<h2><span id="getchar-和-putchar">getchar 和 putchar</span></h2><p>前面我们将 scanf 获取单个字符存在问题，你必须占位符前面添加一个空格才可以，但是这很容易让人忘记。<code>getchar</code> 函数用于从标准输入读取一个字符。</p>
 <p>getchar 从标准输入（通常是键盘）读取一个字符。如果输入的字符是 EOF 或在按下回车键之前没有输入字符，它将返回 EOF。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">getchar</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
 
@@ -404,10 +412,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -441,6 +445,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -460,21 +468,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -522,10 +515,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -544,9 +533,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -557,6 +550,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -592,6 +600,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

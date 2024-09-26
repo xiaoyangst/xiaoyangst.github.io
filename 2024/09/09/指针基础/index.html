@@ -181,16 +181,24 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="指针和指针变量"><a href="#指针和指针变量" class="headerlink" title="指针和指针变量"></a>指针和指针变量</h2><p>指针是地址，指针变量是存储地址的变量。</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%8C%87%E9%92%88%E5%92%8C%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F">指针和指针变量</a></li>
+<li><a href="#%E5%8F%96%E5%9C%B0%E5%9D%80%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80%E8%BF%90%E7%AE%97%E7%AC%A6">取地址运算符和间接寻址运算符</a></li>
+<li><a href="#%E6%8C%87%E9%92%88%E8%B5%8B%E5%80%BC">指针赋值</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="指针和指针变量">指针和指针变量</span></h2><p>指针是地址，指针变量是存储地址的变量。</p>
 <p>如下图为，指针变量 p 指向 变量 i 的地址。</p>
 <p><img src="/images/2024/09/09/9c5b2df0-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针1.png"></p>
-<h2 id="取地址运算符和间接寻址运算符"><a href="#取地址运算符和间接寻址运算符" class="headerlink" title="取地址运算符和间接寻址运算符"></a>取地址运算符和间接寻址运算符</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num = <span class="hljs-number">10</span>;<br><br>	<span class="hljs-type">int</span>* p;	<span class="hljs-comment">// 声明一个指针变量</span><br><br>	p = &amp;num;	<span class="hljs-comment">// 指向变量 num 的地址</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d&quot;</span>, *p);	<span class="hljs-comment">// 对指针变量 p 解引用，即获取 指针变量 p 指向地址的数据</span><br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="取地址运算符和间接寻址运算符">取地址运算符和间接寻址运算符</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num = <span class="hljs-number">10</span>;<br><br>	<span class="hljs-type">int</span>* p;	<span class="hljs-comment">// 声明一个指针变量</span><br><br>	p = &amp;num;	<span class="hljs-comment">// 指向变量 num 的地址</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d&quot;</span>, *p);	<span class="hljs-comment">// 对指针变量 p 解引用，即获取 指针变量 p 指向地址的数据</span><br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>&amp; 获取变量的地址，* 对指针变量解引用。</p>
 <p>你可以看到 &amp; 和 * 是互相抵消的关系，如上述代码中<code>*p = *&amp;num = num</code>。</p>
 <p>只要 p 指向 num，p 就是 num 的别名。p 不仅拥有和 num 相同的值，而且对 p 的改变也会改变 num 的值。（p 是左值，所以对它赋值是合法的。）</p>
-<h2 id="指针赋值"><a href="#指针赋值" class="headerlink" title="指针赋值"></a>指针赋值</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num1 = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> num2 = <span class="hljs-number">20</span>;<br><br>	<span class="hljs-type">int</span>* p = &amp;num1;<br>	<span class="hljs-type">int</span>* m = &amp;num2;<br><br>	p = m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);	<br><br>	*p = *m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="指针赋值">指针赋值</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num1 = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> num2 = <span class="hljs-number">20</span>;<br><br>	<span class="hljs-type">int</span>* p = &amp;num1;<br>	<span class="hljs-type">int</span>* m = &amp;num2;<br><br>	p = m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);	<br><br>	*p = *m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>两个指针，对于不同的赋值方式含义也是不同的。</p>
 <p><code>p = m</code> 是指针赋值，即 指针变量p 原来指向变量 num1的地址，现在和 指针变量m 一起指向 变量 num2。</p>
@@ -371,10 +379,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -408,6 +412,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -427,21 +435,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -489,10 +482,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -511,9 +500,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -524,6 +517,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -559,6 +567,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

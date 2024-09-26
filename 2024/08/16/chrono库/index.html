@@ -181,7 +181,17 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%97%B6%E9%97%B4%E6%AE%B5duration">时间段duration</a></li>
+<li><a href="#%E6%97%B6%E9%97%B4%E7%82%B9time_point">时间点time_point</a></li>
+<li><a href="#%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%92%9Fclocks">系统时钟clocks</a></li>
+<li><a href="#%E8%A1%A8%E7%A4%BA%E4%B8%8D%E5%90%8C%E7%9A%84%E6%97%B6%E9%97%B4%E5%8D%95%E4%BD%8D">表示不同的时间单位</a></li>
+<li><a href="#%E8%BD%AC%E6%8D%A2%E4%B8%BAduration%E6%88%96time_point">转换为duration或time_point</a></li>
+</ul>
+<!-- tocstop -->
+
 <blockquote>
 <p>之前浅学这块内容，C++11封装的如此冗长，于是“重学”加深影响，方便后续查阅</p>
 </blockquote>
@@ -194,13 +204,13 @@
 <li>时间点：比如 12:05:00 表示一个时间点，比如 2021-01-01 13:00:00 也表示一个时间点</li>
 </ul>
 <p><img src="/images/2024/08/16/cdf3a940-5b94-11ef-922f-4335b82b6d11.png" alt="时间库.png"></p>
-<h2 id="时间段duration"><a href="#时间段duration" class="headerlink" title="时间段duration"></a>时间段duration</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Rep</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Period</span> = ratio&lt;<span class="hljs-number">1</span>&gt; &gt;<br><span class="hljs-keyword">class</span> duration;<br><br>Rep: 表示时间的数量（例如，整数或浮点数）<br>Period: 表示时间单位（例如，秒、毫秒、微秒等）<br></code></pre></td></tr></table></figure>
+<h2><span id="时间段duration">时间段duration</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Rep</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Period</span> = ratio&lt;<span class="hljs-number">1</span>&gt; &gt;<br><span class="hljs-keyword">class</span> duration;<br><br>Rep: 表示时间的数量（例如，整数或浮点数）<br>Period: 表示时间单位（例如，秒、毫秒、微秒等）<br></code></pre></td></tr></table></figure>
 
 <p>提供 count方法 获得计数值，还能进行运算符运算（加减乘除）</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std::chrono;<br>    <br>    <span class="hljs-comment">// 创建两个时间段</span><br>    <span class="hljs-function">seconds <span class="hljs-title">five_seconds</span><span class="hljs-params">(<span class="hljs-number">5</span>)</span></span>;<br>    <span class="hljs-function">seconds <span class="hljs-title">three_seconds</span><span class="hljs-params">(<span class="hljs-number">3</span>)</span></span>;<br>    <br>    <span class="hljs-comment">// 加法运算</span><br>    seconds total = five_seconds + three_seconds;<br>    <br>    <span class="hljs-comment">// 减法运算</span><br>    seconds difference = five_seconds - three_seconds;<br>    <br>    <span class="hljs-comment">// 乘法运算</span><br>    seconds double_time = five_seconds * <span class="hljs-number">2</span>;<br>    <br>    <span class="hljs-comment">// 除法运算</span><br>    seconds half_time = five_seconds / <span class="hljs-number">2</span>;<br>    <br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Total time: &quot;</span> &lt;&lt; total.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; seconds&quot;</span> &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Difference in time: &quot;</span> &lt;&lt; difference.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; seconds&quot;</span> &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Double time: &quot;</span> &lt;&lt; double_time.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; seconds&quot;</span> &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Half time: &quot;</span> &lt;&lt; half_time.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; seconds&quot;</span> &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">Total time: 8 seconds</span><br><span class="hljs-comment">Difference in time: 2 seconds</span><br><span class="hljs-comment">Double time: 10 seconds</span><br><span class="hljs-comment">Half time: 2 seconds</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
 
 <p>时间段可以应用于 wait_until 这种等到某个时间段的语句，下面介绍的时间点可以应用于 wait_for 这种等到某个时间点的语句</p>
-<h2 id="时间点time-point"><a href="#时间点time-point" class="headerlink" title="时间点time_point"></a>时间点time_point</h2><p>用于表示时间点的类模板，和下面要介绍的clocks结合使用</p>
+<h2><span id="时间点time_point">时间点time_point</span></h2><p>用于表示时间点的类模板，和下面要介绍的clocks结合使用</p>
 <p>创建对象不填写参数，代表构造一个以纪元为值的对象</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br><br>  std::chrono::system_clock::time_point time_point1;<br>  <span class="hljs-type">time_t</span>  tt1 = std::chrono::system_clock::<span class="hljs-built_in">to_time_t</span>(time_point1);<br>  std::cout&lt;&lt;<span class="hljs-built_in">ctime</span>(&amp;tt1);<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	Thu Jan  1 08:00:00 1970</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
 
@@ -211,7 +221,7 @@
 
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 使用另一个时间点来拷贝构造新的时间点</span><br><span class="hljs-built_in">time_point</span>(<span class="hljs-type">const</span> time_point&amp; other) = <span class="hljs-keyword">default</span>;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    // 获取当前时间点</span><br><span class="hljs-comment">    std::chrono::system_clock::time_point tp_now = std::chrono::system_clock::now();</span><br><span class="hljs-comment">    </span><br><span class="hljs-comment">    // 使用拷贝构造函数</span><br><span class="hljs-comment">    std::chrono::system_clock::time_point tp_copy(tp_now);</span><br><span class="hljs-comment">    </span><br><span class="hljs-comment">    auto duration_since_epoch_now = tp_now.time_since_epoch();</span><br><span class="hljs-comment">    auto duration_since_epoch_copy = tp_copy.time_since_epoch();</span><br><span class="hljs-comment">    </span><br><span class="hljs-comment">    std::cout &lt;&lt; &quot;Original time_point: &quot;</span><br><span class="hljs-comment">              &lt;&lt; duration_since_epoch_now.count() &lt;&lt; &quot; ticks since epoch\n&quot;;</span><br><span class="hljs-comment">    std::cout &lt;&lt; &quot;Copied time_point: &quot;</span><br><span class="hljs-comment">              &lt;&lt; duration_since_epoch_copy.count() &lt;&lt; &quot; ticks since epoch\n&quot;;</span><br><span class="hljs-comment">              </span><br><span class="hljs-comment">     输出结果：</span><br><span class="hljs-comment">     Original time_point: 1719716264027922800 ticks since epoch</span><br><span class="hljs-comment">     Copied time_point: 1719716264027922800 ticks since epoch</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
 
-<h2 id="系统时钟clocks"><a href="#系统时钟clocks" class="headerlink" title="系统时钟clocks"></a>系统时钟clocks</h2><p>（一）std::chrono::system_clock</p>
+<h2><span id="系统时钟clocks">系统时钟clocks</span></h2><p>（一）std::chrono::system_clock</p>
 <p>now：可以用于获取当前时间</p>
 <p>to_time_t：转换为 time_t </p>
 <p>from_time_t：从time_t 转换</p>
@@ -226,14 +236,14 @@
 <p>同样只提供 now 方法用于获取当前时间</p>
 <hr>
 <p>看来，测试时间间隔采用std::chrono::steady_clock（稳定，不受系统时间影响，因为原点是计算机启动的时刻），希望将时间转换为日历显示效果或者转换为C语言风格的时间类当采用std::chrono::system_clock（不稳定，如果被恶意修改系统时间，这里跟着受影响，通过 is_steady 判断是否稳定）</p>
-<h2 id="表示不同的时间单位"><a href="#表示不同的时间单位" class="headerlink" title="表示不同的时间单位"></a>表示不同的时间单位</h2><p>通过在构造函数中传递值，表示不同的时间类型，比方说你在 hours(1)代表一个小时，seconds(1)代表一秒</p>
+<h2><span id="表示不同的时间单位">表示不同的时间单位</span></h2><p>通过在构造函数中传递值，表示不同的时间类型，比方说你在 hours(1)代表一个小时，seconds(1)代表一秒</p>
 <p><code>std::chrono::hours</code>：表示小时的持续时间</p>
 <p><code>std::chrono::minutes</code>：表示分钟的持续时间</p>
 <p><code>std::chrono::seconds</code>：表示秒的持续时间</p>
 <p><code>std::chrono::milliseconds</code>：表示毫秒的持续时间</p>
 <p><code>std::chrono::microseconds</code>：表示微秒的持续时间</p>
 <p><code>std::chrono::nanoseconds</code>：表示纳秒的持续时间</p>
-<h2 id="转换为duration或time-point"><a href="#转换为duration或time-point" class="headerlink" title="转换为duration或time_point"></a>转换为duration或time_point</h2><p>（一）duration_cast</p>
+<h2><span id="转换为duration或time_point">转换为duration或time_point</span></h2><p>（一）duration_cast</p>
 <p>用于将时间段从一种单位转换为另一种单位</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">ToDuration</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Rep</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Period</span>&gt;<br><span class="hljs-function"><span class="hljs-keyword">constexpr</span> ToDuration <span class="hljs-title">duration_cast</span><span class="hljs-params">(<span class="hljs-type">const</span> duration&lt;Rep, Period&gt;&amp; d)</span></span>;<br></code></pre></td></tr></table></figure>
 
@@ -418,10 +428,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -455,6 +461,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -474,21 +484,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -536,10 +531,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -558,9 +549,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -571,6 +566,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -606,6 +616,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

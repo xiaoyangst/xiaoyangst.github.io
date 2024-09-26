@@ -181,10 +181,17 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%9E%84%E5%BB%BA%E9%9D%99%E6%80%81%E5%BA%93%E5%92%8C%E5%8A%A8%E6%80%81%E5%BA%93">构建静态库和动态库</a></li>
+<li><a href="#%E9%93%BE%E6%8E%A5%E9%9D%99%E6%80%81%E5%BA%93%E5%92%8C%E5%8A%A8%E6%80%81%E5%BA%93">链接静态库和动态库</a></li>
+</ul>
+<!-- tocstop -->
+
 <p>我最近在尝试手写线程池，尽管还有很多改进的地方，但用来学习本节内容足够了。</p>
 <p><img src="/images/2024/09/20/ddcf40d0-7724-11ef-bb33-ad22fef3cf2e.png" alt="线程池.png"></p>
-<h2 id="构建静态库和动态库"><a href="#构建静态库和动态库" class="headerlink" title="构建静态库和动态库"></a>构建静态库和动态库</h2><p>光是构建静态库和动态库还不够， 还需要指定生成路径，这样别人使用你的库文件将相当方便（后面你就知道了）。</p>
+<h2><span id="构建静态库和动态库">构建静态库和动态库</span></h2><p>光是构建静态库和动态库还不够， 还需要指定生成路径，这样别人使用你的库文件将相当方便（后面你就知道了）。</p>
 <p>先看看如何构建静态库和动态库。</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">add_library</span>(静态库名称 STATIC 源文件) <br><span class="hljs-keyword">add_library</span>(动态库名称 SHARED 源文件) <br></code></pre></td></tr></table></figure>
 
@@ -237,7 +244,7 @@
 <p><img src="/images/2024/09/20/e4d0ec80-7724-11ef-bb33-ad22fef3cf2e.png" alt="install.png"></p>
 <p>以后用户想要使用这个库，就只需要把 YThreadPool_x86 拷贝到自己的项目文件中。</p>
 <p>然后在 CMakeLists.txt 中找到所需库文件和头文件即可，这也是下面要演示的内容，即如何使用链接静态库和动态库。</p>
-<h2 id="链接静态库和动态库"><a href="#链接静态库和动态库" class="headerlink" title="链接静态库和动态库"></a>链接静态库和动态库</h2><p>link_directories 用来指定库的路径，那么后续使用 link_libraries 或 target_link_libraries 搜索库文件的时候，也就只需要传入库文件名称即可。</p>
+<h2><span id="链接静态库和动态库">链接静态库和动态库</span></h2><p>link_directories 用来指定库的路径，那么后续使用 link_libraries 或 target_link_libraries 搜索库文件的时候，也就只需要传入库文件名称即可。</p>
 <p>link_directories 不会进行层级搜索。它只会将指定的目录添加到链接器的搜索路径中，而不会自动搜索该目录下的子目录。也就是说，如果你使用 <code>link_directories($&#123;CMAKE_SOURCE_DIR&#125;/lib)</code>，链接器只会查找 <code>$&#123;CMAKE_SOURCE_DIR&#125;/lib</code> 目录中的库文件，不会查找 <code>lib</code> 目录中的子目录。</p>
 <p>如果你需要链接某个子目录中的库，必须显式地使用 <code>link_directories</code> 指定那个子目录，或者使用 <code>target_link_libraries</code> 直接指定库的完整路径。</p>
 <p>（一）链接静态库</p>
@@ -456,10 +463,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -493,6 +496,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -512,21 +519,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -574,10 +566,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -596,9 +584,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -609,6 +601,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -644,6 +651,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

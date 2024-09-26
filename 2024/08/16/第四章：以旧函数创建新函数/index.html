@@ -181,22 +181,32 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E5%81%8F%E5%87%BD%E6%95%B0%E7%9A%84%E5%BA%94%E7%94%A8">偏函数的应用</a></li>
+<li><a href="#%E6%9F%AF%E9%87%8C%E5%8C%96">柯里化</a></li>
+<li><a href="#%E5%81%8F%E5%87%BD%E6%95%B0%E4%B8%8E%E6%9F%AF%E9%87%8C%E5%8C%96">偏函数与柯里化</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E7%BB%84%E5%90%88">函数组合</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E6%8F%90%E5%8D%87">函数提升</a></li>
+</ul>
+<!-- tocstop -->
+
 <p><strong>注意</strong>：此文介绍很多<a href="https://xiaoyangst.github.io/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/">C++11新特性</a>的知识（bind绑定器），这不会在此读书笔记中记录，可以在我的其它地方找到相关的笔记，或者你可以自行去学习，毕竟，C++11 是现在 C++ 学习者必备的语法。</p>
-<h2 id="偏函数的应用"><a href="#偏函数的应用" class="headerlink" title="偏函数的应用"></a>偏函数的应用</h2><p>这种通过把已知函数的一个或多个参数设定为特定值的方法创建新函数的概念称为偏函数应用。偏的意思是在计算函数结果时，只需传递部分参数，而不需要传递所有参数。</p>
+<h2><span id="偏函数的应用">偏函数的应用</span></h2><p>这种通过把已知函数的一个或多个参数设定为特定值的方法创建新函数的概念称为偏函数应用。偏的意思是在计算函数结果时，只需传递部分参数，而不需要传递所有参数。</p>
 <p>函数 std::bind1st 和 std::bind2nd 在 C++17中已经删除，C++11也不推荐使用，因为它们可以被更加通用的 std::bind 取代。std::bind 不再局限于二元函数，而是可用于任意数目参数的函数。也不限制用户指定绑定哪些参数，可以以任意顺序绑定任意数目的参数，而留下不需绑定的参数。</p>
 <p>还有提及的地方是 如何把 bind 绑定的函数 转化成用 Lambda 表示，示意图如下：</p>
 <p><img src="/images/2024/08/16/5ebb8440-5bcf-11ef-a253-abb20d863bc2.png" alt="bind转lambda.png"></p>
-<h2 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h2><p>柯里化的基本思想是将一个接受多个参数的函数转换为一系列只接受单个参数的函数的过程。换句话说，柯里化将一个多元函数（接受多个参数的函数）转换为一个嵌套的一元函数（每个只接受一个参数的函数）。</p>
+<h2><span id="柯里化">柯里化</span></h2><p>柯里化的基本思想是将一个接受多个参数的函数转换为一系列只接受单个参数的函数的过程。换句话说，柯里化将一个多元函数（接受多个参数的函数）转换为一个嵌套的一元函数（每个只接受一个参数的函数）。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">f</span>(x, y, z)  # 原函数<br><br># 柯里化后的函数<br><span class="hljs-built_in">f</span>(x)(y)(z)<br></code></pre></td></tr></table></figure>
 
 <p>在这个过程中，<code>f(x)</code> 返回一个新的函数，这个新函数接受参数 y，并返回另一个新的函数，这个函数接受参数 z 并返回最终结果。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;functional&gt;</span></span><br><br><span class="hljs-keyword">auto</span> add = [](<span class="hljs-type">int</span> a) &#123;<br>    <span class="hljs-keyword">return</span> [a](<span class="hljs-type">int</span> b) &#123;<br>        <span class="hljs-keyword">return</span> [a, b](<span class="hljs-type">int</span> c) &#123;<br>            <span class="hljs-keyword">return</span> a + b + c;<br>        &#125;;<br>    &#125;;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-built_in">add</span>(<span class="hljs-number">1</span>)(<span class="hljs-number">2</span>)(<span class="hljs-number">3</span>) &lt;&lt; std::endl; <span class="hljs-comment">// 输出 6</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="偏函数与柯里化"><a href="#偏函数与柯里化" class="headerlink" title="偏函数与柯里化"></a>偏函数与柯里化</h2><p>正如读者看到的，虽然十分类似，但柯里化和偏函数应用各有优缺点，而且都有自己适用的场合。当有一个要绑定其参数的特定函数时，偏函数比较有用。在这种情况下，知道函数有几个参数，可以确切地选择哪些参数要绑定到特定的值。当函数可以有任意多个参数时，柯里化对这种通用情况十分有用。在这种情况下，std::bind 就没有用武之地了，因为既然不知道函数有几个参数，也就不知道有几个参数需要绑定到占位符，甚至不知道需要多少个占位符。</p>
-<h2 id="函数组合"><a href="#函数组合" class="headerlink" title="函数组合"></a>函数组合</h2><p>作者通过一个单词统计列表的故事讲函数的组合，因为即每个函数自有其功能，并且该函数返回处理的结果，这些结果继续传递到下一个函数，直到完成自己的需求。</p>
+<h2><span id="偏函数与柯里化">偏函数与柯里化</span></h2><p>正如读者看到的，虽然十分类似，但柯里化和偏函数应用各有优缺点，而且都有自己适用的场合。当有一个要绑定其参数的特定函数时，偏函数比较有用。在这种情况下，知道函数有几个参数，可以确切地选择哪些参数要绑定到特定的值。当函数可以有任意多个参数时，柯里化对这种通用情况十分有用。在这种情况下，std::bind 就没有用武之地了，因为既然不知道函数有几个参数，也就不知道有几个参数需要绑定到占位符，甚至不知道需要多少个占位符。</p>
+<h2><span id="函数组合">函数组合</span></h2><p>作者通过一个单词统计列表的故事讲函数的组合，因为即每个函数自有其功能，并且该函数返回处理的结果，这些结果继续传递到下一个函数，直到完成自己的需求。</p>
 <p><img src="/images/2024/08/16/58749d10-5bcf-11ef-a253-abb20d863bc2.png" alt="单词统计.png"></p>
-<h2 id="函数提升"><a href="#函数提升" class="headerlink" title="函数提升"></a>函数提升</h2><p>在第一章接触了提升的概念，这里展开一下。一般来说，提升是种编程模式，它提供了一种方式，把给定的函数转换成一个类似可广泛应用的函数。例如，如果有一个操作字符串的函数，提升允许程序员容易地创建一个新的函数，该函数可以操作字符串向量、列表、字符串指针、整数-字符串 map 和其他包含字符串的结构。</p>
+<h2><span id="函数提升">函数提升</span></h2><p>在第一章接触了提升的概念，这里展开一下。一般来说，提升是种编程模式，它提供了一种方式，把给定的函数转换成一个类似可广泛应用的函数。例如，如果有一个操作字符串的函数，提升允许程序员容易地创建一个新的函数，该函数可以操作字符串向量、列表、字符串指针、整数-字符串 map 和其他包含字符串的结构。</p>
 <p><img src="/images/2024/08/16/6c9310b0-5bcf-11ef-a253-abb20d863bc2.png" alt="操作字符串集合的函数.png"></p>
 <p>读者可以创建一个高阶函数，接收操作单个字符串的任意函数，并创建一个操作字符串指针的函数。前面已经分别创建了操作字符串向量和map的函数。这些函数称为提升函数，因为它们把操作某一类型的函数提升为操作包含这种类型的结构或集合的函数。</p>
 <p><img src="/images/2024/08/16/540bc4b0-5bcf-11ef-a253-abb20d863bc2.png" alt="提升函数.png"></p>
@@ -375,10 +385,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -412,6 +418,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -431,21 +441,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -493,10 +488,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -515,9 +506,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -528,6 +523,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -563,6 +573,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

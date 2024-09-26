@@ -181,16 +181,29 @@
             
           </div>
         
-        <p>@[TOC]</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%83%B0%E6%80%A7%E4%BD%9C%E4%B8%BA%E4%B8%80%E7%A7%8D%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF">惰性作为一种优化技术</a><ul>
+<li><a href="#%E9%9B%86%E5%90%88%E6%83%B0%E6%80%A7%E6%8E%92%E5%BA%8F">集合惰性排序</a></li>
+<li><a href="#%E9%80%9A%E8%BF%87%E7%BC%93%E5%AD%98%E5%87%BD%E6%95%B0%E7%BB%93%E6%9E%9C%E4%BF%AE%E5%89%AA%E9%80%92%E5%BD%92%E6%A0%91">通过缓存函数结果修剪递归树</a></li>
+<li><a href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%BD%9C%E4%B8%BA%E6%83%B0%E6%80%A7%E5%BD%A2%E5%BC%8F">动态规划作为惰性形式</a></li>
+</ul>
+</li>
+<li><a href="#%E9%80%9A%E7%94%A8%E8%AE%B0%E5%BF%86%E5%8C%96">通用记忆化</a></li>
+<li><a href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%83%B0%E6%80%A7%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5">表达式模板与惰性字符串拼接</a></li>
+</ul>
+<!-- tocstop -->
+
 <p>假定现在需要对 A 和 B 进行求值，但问题是后面可能未必需要用到，这就白白浪费 CPU 时间去计算它了。也许可以用 Lambda 表达式，等需要的时候调用函数 P 来获取乘积结果。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">auto</span> P = [A,B] &#123;<br>  <span class="hljs-keyword">return</span> A * B;  <br>&#125;;<br></code></pre></td></tr></table></figure>
 
 <p>对于一个可能不需要结果的复杂的计算，这样做就是对代码的优化。但也带来了新的问题：如果这个值不止一次被使用怎么办？使用这种方法，每次调用都要计算这个值。更好的做法是在第一次计算该值时，将它保存起来。</p>
 <p>这就是“惰性”的全部意义：对于工作不是提前而是尽可能推后。因为有惰性，也不可能多次重复做一件事，所以当得到结果后，就应记住这个结果。</p>
-<h2 id="惰性作为一种优化技术"><a href="#惰性作为一种优化技术" class="headerlink" title="惰性作为一种优化技术"></a>惰性作为一种优化技术</h2><h3 id="集合惰性排序"><a href="#集合惰性排序" class="headerlink" title="集合惰性排序"></a>集合惰性排序</h3><p>假设有几百个员工信息存储在一个向量中，一个窗口一次可以显示其中的 10 名员工。用户可根据姓名、年龄和工龄等多种标准对员工进行排序。当用户选择按年龄对员工进行排序时，程序应显示 10 个年龄最大的员工，并且允许用户向下滚动，查看剩余的部分。</p>
+<h2><span id="惰性作为一种优化技术">惰性作为一种优化技术</span></h2><h3><span id="集合惰性排序">集合惰性排序</span></h3><p>假设有几百个员工信息存储在一个向量中，一个窗口一次可以显示其中的 10 名员工。用户可根据姓名、年龄和工龄等多种标准对员工进行排序。当用户选择按年龄对员工进行排序时，程序应显示 10 个年龄最大的员工，并且允许用户向下滚动，查看剩余的部分。</p>
 <p>用快速排序算法，找到合适的基准元素，对基准前面的元素进行递归排序，对基准后面的元素暂时不进行递归排序。</p>
 <p><img src="/images/2024/09/10/3ac43190-6f39-11ef-b15c-053f95c5eeaa.png" alt="快速排序.png"></p>
-<h3 id="通过缓存函数结果修剪递归树"><a href="#通过缓存函数结果修剪递归树" class="headerlink" title="通过缓存函数结果修剪递归树"></a>通过缓存函数结果修剪递归树</h3><p>C++ 虽然不直接支持惰性求值，但可以根据自己的意愿进行实现。对于不同的情况决定如何实现惰性求职。看一个常见的例子：</p>
+<h3><span id="通过缓存函数结果修剪递归树">通过缓存函数结果修剪递归树</span></h3><p>C++ 虽然不直接支持惰性求值，但可以根据自己的意愿进行实现。对于不同的情况决定如何实现惰性求职。看一个常见的例子：</p>
 <p><img src="/images/2024/09/10/312322e0-6f39-11ef-b15c-053f95c5eeaa.png" alt="斐波拉契数列.png"></p>
 <p>这种实现是低效的，因为有很多重复的计算，见下图：</p>
 <p><img src="/images/2024/09/10/2c4f53b0-6f39-11ef-b15c-053f95c5eeaa.png" alt="重复计算.png"></p>
@@ -202,14 +215,14 @@
 <p>实际上这里还可以继续优化，因为本质上计算当前值，只需要利用前面两个值的结果就行，意味着不需要每次计算都存储一个计算结果，这会导致空间越来越大，实际上只需要存储两个元素的空间大小即可。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title">fib</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> n)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (n == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">if</span> (n == <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> prev1 = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> prev2 = <span class="hljs-number">1</span>;<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; ++i) &#123;<br>        <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> current = prev1 + prev2;<br>        prev1 = prev2;<br>        prev2 = current;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> prev2;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h3 id="动态规划作为惰性形式"><a href="#动态规划作为惰性形式" class="headerlink" title="动态规划作为惰性形式"></a>动态规划作为惰性形式</h3><p>如果你了解动态规划，就明白之前的案例已经就是动态规划的思想，尽管那不是动态规划的写法。</p>
+<h3><span id="动态规划作为惰性形式">动态规划作为惰性形式</span></h3><p>如果你了解动态规划，就明白之前的案例已经就是动态规划的思想，尽管那不是动态规划的写法。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fib</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(n &lt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> n;<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">result</span><span class="hljs-params">(n<span class="hljs-number">+1</span>)</span></span>;<br>        result[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;<br>        result[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++)&#123;<br>            result[i] = result[i - <span class="hljs-number">1</span>] + result[i<span class="hljs-number">-2</span>];<br>        &#125;<br>        <span class="hljs-keyword">return</span> result[n];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<h2 id="通用记忆化"><a href="#通用记忆化" class="headerlink" title="通用记忆化"></a>通用记忆化</h2><p>对于不同的问题单独编写自定义缓存是比较好的，这样就可以控制特特定值在缓存中的存放时间，并且可以确定最好的缓存结构，但有时把一个函数进行包装，而得到该函数的记忆化版本会比较好。</p>
+<h2><span id="通用记忆化">通用记忆化</span></h2><p>对于不同的问题单独编写自定义缓存是比较好的，这样就可以控制特特定值在缓存中的存放时间，并且可以确定最好的缓存结构，但有时把一个函数进行包装，而得到该函数的记忆化版本会比较好。</p>
 <p>如果不知道函数的调用参数，那么通用的缓存就是 map。任何纯函数都是从参数到值得映射，因此这种缓存可毫无问题地适应任何纯函数。</p>
 <p><img src="/images/2024/09/10/1c10d960-6f39-11ef-b15c-053f95c5eeaa.png" alt="函数指针记忆化.png"></p>
 <p>如果要对递归函数记忆化，最好缓存它的最后结果，而不是递归结果，因为递归调用是调用的原函数，而不是记忆化的包装函数。</p>
-<h2 id="表达式模板与惰性字符串拼接"><a href="#表达式模板与惰性字符串拼接" class="headerlink" title="表达式模板与惰性字符串拼接"></a>表达式模板与惰性字符串拼接</h2><p>考虑多个字符串拼接，见下图：</p>
+<h2><span id="表达式模板与惰性字符串拼接">表达式模板与惰性字符串拼接</span></h2><p>考虑多个字符串拼接，见下图：</p>
 <p><img src="/images/2024/09/10/17d133e0-6f39-11ef-b15c-053f95c5eeaa.png" alt="字符串拼接1.png"></p>
 <p>虽然能够实现字符串拼接，但是这样效率低效。因为没有提前分配内存大小，导致没拼接一次就要进行扩容拷贝操作。</p>
 <p><img src="/images/2024/09/10/13997da0-6f39-11ef-b15c-053f95c5eeaa.png" alt="字符串拼接2.png"></p>
@@ -391,10 +404,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -428,6 +437,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -447,21 +460,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -509,10 +507,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -531,9 +525,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -544,6 +542,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -579,6 +592,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         

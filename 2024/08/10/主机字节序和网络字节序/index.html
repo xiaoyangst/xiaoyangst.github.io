@@ -181,14 +181,22 @@
             
           </div>
         
-        <p>@[TOC]</p>
-<h2 id="主机字节序"><a href="#主机字节序" class="headerlink" title="主机字节序"></a>主机字节序</h2><p>主机字节序是指在特定计算机系统中数据的存储顺序。常见的字节序有两种：</p>
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F">主机字节序</a></li>
+<li><a href="#%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F">网络字节序</a></li>
+<li><a href="#%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F%E7%9A%84%E8%BD%AC%E6%8D%A2">主机字节序和网络字节序的转换</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="主机字节序">主机字节序</span></h2><p>主机字节序是指在特定计算机系统中数据的存储顺序。常见的字节序有两种：</p>
 <ul>
 <li><strong>大端字节序（Big-endian）：</strong> 数据的高字节存储在低地址端。例如，数值 0x12345678 将按顺序存储为 0x12 0x34 0x56 0x78</li>
 <li><strong>小端字节序（Little-endian）：</strong> 数据的低字节存储在低地址端。例如，数值 0x12345678 将按顺序存储为 0x78 0x56 0x34 0x12</li>
 </ul>
-<h2 id="网络字节序"><a href="#网络字节序" class="headerlink" title="网络字节序"></a>网络字节序</h2><p>网络字节序是一种标准化的数据表示方式，用于在不同计算机系统之间传输数据。为了确保数据在网络传输中保持一致，<strong>网络协议（如 TCP&#x2F;IP）规定采用大端字节序</strong>。</p>
-<h2 id="主机字节序和网络字节序的转换"><a href="#主机字节序和网络字节序的转换" class="headerlink" title="主机字节序和网络字节序的转换"></a>主机字节序和网络字节序的转换</h2><p><code>htons</code>（Host to Network Short）：将 16 位主机字节序转换为网络字节序</p>
+<h2><span id="网络字节序">网络字节序</span></h2><p>网络字节序是一种标准化的数据表示方式，用于在不同计算机系统之间传输数据。为了确保数据在网络传输中保持一致，<strong>网络协议（如 TCP&#x2F;IP）规定采用大端字节序</strong>。</p>
+<h2><span id="主机字节序和网络字节序的转换">主机字节序和网络字节序的转换</span></h2><p><code>htons</code>（Host to Network Short）：将 16 位主机字节序转换为网络字节序</p>
 <p><code>htonl</code>（Host to Network Long）：将 32 位主机字节序转换为网络字节序</p>
 <p><code>ntohs</code>（Network to Host Short）：将 16 位网络字节序转换为主机字节序</p>
 <p><code>ntohl</code>（Network to Host Long）：将 32 位网络字节序转换为主机字节序</p>
@@ -370,10 +378,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -407,6 +411,10 @@
           </div>
         
       
+    </div>
+  
+    <div class="foot-link-group">
+      
         
         
           <div class="text">
@@ -426,21 +434,6 @@
                  width="20px"
                  src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
-          </div>
-        
-      
-    </div>
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://blueberrystudio.tokyo/">Aoi(营养学和健身)</a>
           </div>
         
       
@@ -488,10 +481,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -510,9 +499,13 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://ecotrust-canada.github.io/markdown-toc/">Markdown TOC</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -523,6 +516,21 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
@@ -558,6 +566,15 @@
                  src="/images/logo-github.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
         
