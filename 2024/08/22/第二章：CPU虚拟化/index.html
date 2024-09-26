@@ -163,7 +163,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner--toc">
+    <div class="post-inner">
       <div class="post-content__head">
         <div class="post-title">第二章：CPU虚拟化</div>
         <div class="post-info">
@@ -174,12 +174,6 @@
           <span class="post-date">2024-08-22</span>
         </div>
       </div>
-      
-        <aside class="toc-outer">
-          <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%8A%BD%E8%B1%A1%EF%BC%9A%E8%BF%9B%E7%A8%8B"><span class="post-toc-text">抽象：进程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%9C%BA%E5%88%B6%EF%BC%9A%E5%8F%97%E9%99%90%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8C"><span class="post-toc-text">机制：受限直接执行</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%97%AE%E9%A2%981%EF%BC%9A%E5%8F%97%E9%99%90%E5%88%B6%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="post-toc-text">问题1：受限制的操作</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%97%AE%E9%A2%982%EF%BC%9A%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%88%87%E6%8D%A2"><span class="post-toc-text">问题2：进程的切换</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%EF%BC%9A%E4%BB%8B%E7%BB%8D"><span class="post-toc-text">进程调度：介绍</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%B0%83%E5%BA%A6%EF%BC%9A%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97"><span class="post-toc-text">调度：多级反馈队列</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B0%9D%E8%AF%951%EF%BC%9A%E5%A6%82%E4%BD%95%E6%94%B9%E5%8F%98%E4%BC%98%E5%85%88%E7%BA%A7%EF%BC%9F"><span class="post-toc-text">尝试1：如何改变优先级？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B0%9D%E8%AF%952%EF%BC%9A%E6%8F%90%E5%8D%87%E4%BC%98%E5%85%88%E7%BA%A7%EF%BC%9F"><span class="post-toc-text">尝试2：提升优先级？</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%B0%83%E5%BA%A6%EF%BC%9A%E6%AF%94%E4%BE%8B%E4%BB%BD%E9%A2%9D"><span class="post-toc-text">调度：比例份额</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E8%B0%83%E5%BA%A6%EF%BC%88%E9%AB%98%E7%BA%A7%EF%BC%89"><span class="post-toc-text">多处理器调度（高级）</span></a></li></ol>
-          <a href="#" class="toc-top">回到顶部</a>
-        </aside>
       
       <div class="post-content__body">
         
@@ -238,8 +232,9 @@
 <li>内核模式下的所有行为皆<strong>不受限制</strong>，运行的代码可以做它喜欢的事，包括特权操作，如发出 I&#x2F;O 请求和执行所有类型的受限指令</li>
 </ul>
 <p>如果用户非要执行特权操作等内核模式下才能做到的事情，操作系统会提供<strong>系统调用</strong>解决这个难题。它允许内核小心地向用户程序暴露某些关键功能，例如访问文件系统、创建和销毁进程、与其他进程通信，以及分配更多内存。</p>
-<p>要执行系统调用，程序必须<strong>执行特殊的陷阱（trap）指令</strong>。该指令同时<strong>跳入内核并将特权级别提升到内核模式</strong>。一旦进入内核，系统就可以执行任何需要的特权操作（如果允许），从而为调用进程执行所需的工作。完成后，操作系统调用一个<strong>特殊的从陷阱返回指令</strong>，如你期望的那样，该指令<strong>返回到发起调用的用户程序中，同时将特权级别降低，回到用户模式</strong>。</p>
-<p>执行陷阱时，硬件需要小心，因为它必须确保存储足够的调用者寄存器，以便在操作系统发出从陷阱返回指令时能够正确返回。</p>
+<p>要执行系统调用，程序必须<strong>执行特殊的陷阱（trap）指令</strong>。该指令同时<strong>跳入内核并将特权级别提升到内核模式</strong>。一旦进入内核，系统就可以执行任何需要的特权操作（如果允许），从而为调用进程执行所需的工作。完成后，操作系统调用一个<strong>特殊的从陷阱返回指令</strong>，如你期望的那样，该指令<strong>返回到发起调用的用户程序中，同时将特权级别降低，回到用户模式</strong>。执行陷阱时，硬件需要小心，因为它必须确保存储足够的调用者寄存器，以便在操作系统发出从陷阱返回指令时能够正确返回。</p>
+<p>由 <strong>系统调用</strong> 完成从用户态到内核态的转变。这个过程也会发生CPU上下文切换。CPU 寄存器里原来用户态的指令位置，需要先保存起来。接着，为了执行内核态代码，CPU 寄存器需要更新为内核态指令的新位置。最后才是跳转到内核态运行内核任务。而系统调用结束后，CPU 寄存器需要恢复原来保存的用户态，然后再切换到用户空间，继续运行进程。 <strong>所以，一次系统调用的过程，其实是发生了两次 CPU 上下文切换。</strong></p>
+<p>不过，需要注意的是，系统调用过程中，并不会涉及到虚拟内存等进程用户态的资源，也不会切换进程。这跟我们通常所说的进程上下文切换是不一样的（系统调用在同一个进程里运行）。 所以系统调用过程通常称为 <strong>特权模式切换</strong> ，而不是上下文切换。但实际上，系统调用过程中，CPU 的上下文切换还是无法避免的。</p>
 <p><img src="/images/2024/08/22/c67e9cf0-6063-11ef-b5d8-395e250ad2a7.png" alt="用户和内核切换.png"></p>
 <p>陷阱如何知道在 OS 内运行哪些代码？</p>
 <p>内核通过在启动时设置<strong>陷阱表</strong>（trap table）来实现。当机器启动时，它在特权（内核）模式下执行，因此可以根据需要自由配置机器硬件。操作系统做的第一件事，就是告诉硬件在发生某些异常事件时要运行哪些代码。操作系统通常通过某种特殊的指令，通知硬件这些陷阱处理程序的位置。一旦硬件被通知，它就会记住这些处理程序的位置，直到下一次重新启动机器，并且硬件知道在发生系统调用和其他异常事件时要做什么（即跳转到哪段代码）。</p>
@@ -664,9 +659,44 @@
             <img alt="link"
                  height="20px"
                  width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://shuyi.tech/">陈树义的博客</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://muyuuuu.github.io/">兰铃</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
         
       
     </div>
