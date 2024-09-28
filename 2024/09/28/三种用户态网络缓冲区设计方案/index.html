@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        Linux 五种 IO 模型 | 搁浅的羊先生
+        三种用户态网络缓冲区设计方案 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -165,13 +165,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">Linux 五种 IO 模型</div>
+        <div class="post-title">三种用户态网络缓冲区设计方案</div>
         <div class="post-info">
           
-  <a href="/tags/Linux/" class="post-tag">#Linux</a>
+  <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" class="post-tag">#基础组件</a>
 
 
-          <span class="post-date">2024-09-27</span>
+          <span class="post-date">2024-09-28</span>
         </div>
       </div>
       
@@ -184,39 +184,56 @@
         <!-- toc -->
 
 <ul>
-<li><a href="#%E9%98%BB%E5%A1%9E-io-%E6%A8%A1%E5%9E%8B">阻塞 IO 模型</a></li>
-<li><a href="#%E9%9D%9E%E9%98%BB%E5%A1%9E-io-%E6%A8%A1%E5%9E%8B">非阻塞 IO 模型</a></li>
-<li><a href="#io-%E5%A4%8D%E7%94%A8%E6%A8%A1%E5%9E%8B">IO 复用模型</a></li>
-<li><a href="#%E4%BF%A1%E5%8F%B7%E9%A9%B1%E5%8A%A8-io-%E6%A8%A1%E5%9E%8B">信号驱动 IO 模型</a></li>
-<li><a href="#%E5%BC%82%E6%AD%A5-io-%E6%A8%A1%E5%9E%8B">异步 IO 模型</a></li>
+<li><a href="#%E5%9B%BA%E5%AE%9A%E7%BC%93%E5%86%B2%E5%8C%BA%E5%A4%A7%E5%B0%8F">固定缓冲区大小</a></li>
+<li><a href="#%E7%8E%AF%E5%BD%A2%E7%BC%93%E5%86%B2%E5%8C%BA-ringbuffer">环形缓冲区 ringBuffer</a></li>
+<li><a href="#%E4%BC%98%E5%8C%96-ringbuffer-%E4%B9%8B-chainbuffer">优化 ringBuffer 之 chainBuffer</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
 </ul>
 <!-- tocstop -->
 
-<h2><span id="阻塞-io-模型">阻塞 IO 模型</span></h2><p><img src="/images/2024/09/27/32b9ce80-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="同步IO.png"></p>
-<p>注：网上的经典图是从左往右，但是不容易理解，特画此图，但后续的几张图就还是得借用了。</p>
-<p>用户发起系统调用 recvform 进入内核，直到内核把数据拷贝到用户态为止才解除阻塞。进入内核之后，内核还没有数据也不会把数据拷贝到用户态去，既然该进程已阻塞，操作系统就会把 CPU 分配给其他进程。等到内核得到数据，并拷贝到用户态去，即 recvform 成功返回之后，CPU 又返回到当前进程，解除阻塞，继续往下执行业务代码。</p>
-<h2><span id="非阻塞-io-模型">非阻塞 IO 模型</span></h2><p><img src="/images/2024/09/27/369e0d90-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="非阻塞IO.png"></p>
-<p>与阻塞 IO 不同的是，非阻塞 IO 调用 recvfrom 之后立即返回，没过多久又去探测内核是否已经有数据了。如果没有，当前进程继续往下执行代码；如果有，就会阻塞并等待内核把数据拷贝到用户态，即 recvform 成功返回之后，解除阻塞，继续往下执行业务代码。</p>
-<h2><span id="io-复用模型">IO 复用模型</span></h2><p><img src="/images/2024/09/27/3adc5380-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="IO多路复用.png"></p>
-<p>前面的阻塞 IO 和 非阻塞 IO 都只可以监听 1 个文件描述符，而 IO 多路复用可以监听多个文件描述符的状态。但凡有一个 fd 有关注的事件发生，就会直接返回，返回值是同一时刻触发的被内核监视的那些文件描述符的个数。这个时候，程序才发起真正的 IO 操作，直接阻塞在等待内核把数据拷贝到用户态，即 recvform 成功返回之后，解除阻塞，继续往下执行业务代码。</p>
-<p>这么看来我们的 select（暂时以它举例） IO 多路复用并没有那么 NB？从 select 把感兴趣的事件注册到内核之后，就一直阻塞，直到有哪怕一个感兴趣的事件返回才进入下一阶段。下一阶段就是真正开始发起 IO 操作，早前的阻塞 IO 与非阻塞 IO 是直接发起 IO 操作，这点二者有些不同之处。可是不管怎样，select 依旧是阻塞在事件返回阶段和内核把数据拷贝到用户态阶段。</p>
-<p>那么 select IO 多路复用究竟有哪些提升？</p>
+<h2><span id="固定缓冲区大小">固定缓冲区大小</span></h2><p>申请固定内存作为缓冲区，用一个写指针进行标识。</p>
+<p><img src="/images/2024/09/28/2eafb120-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="固定缓冲区.png"></p>
+<ul>
+<li>起始下标读取数据的起始地址，写指针是读取数据的结束地址。</li>
+<li>如果写指针已经指向缓冲区末尾，将不允许写入。</li>
+<li>读指针需要判断数据的完整性方可实际去读。通常我们采用 TLV 协议来解决网络传输中存在的<a href="https://xiaoyangst.github.io/2024/09/08/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E7%B2%98%E5%8C%85%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/#%E5%A4%84%E7%90%86%E7%BD%91%E7%BB%9C%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98">粘包问题</a>。</li>
+</ul>
+<p>这种简单的方案在实际的生产中也是很常见的，如果你严格限制传输的数据大小，并且让自己的网络库足够的高性能，用户请求量不大的情况下，也是相当不错。**<code>Redis</code> 的接收缓冲区，使用的是定长 <code>buffer</code>**。</p>
+<p>那么它的缺点是什么？尽管这些缺点我们也有优化方案。</p>
 <ol>
-<li>可以监听多个文件描述符，阻塞 IO 与非阻塞 IO 只可以监听一个文件描述符。</li>
-<li>监听多个文件描述符的事件，但凡有一个就会直接返回，往往就要比 阻塞 IO 与非阻塞 IO 快，因为更容易快速返回。毕竟，人多中奖的概率更大，但凡一个中奖就会解除阻塞了。</li>
-<li>接着处理文件描述符对应的业务代码，这个期间，这些文件描述符如果继续触发事件，内核帮我们监视着，只要后面这边业务处理完，我们又可以继续处理了。但是 阻塞 IO 与非阻塞 IO 就不行，必须等到业务完成，才可以继续等待内核有数据并拷贝到用户态为止，这在效率上就拉开了。</li>
+<li><strong>需要频繁腾挪数据</strong>，只要界定成功一个完整数据包，就需要把后面的数据挪到前面，以空余更多的空间供生产者往里面填充数据。</li>
+<li><strong>需要实现扩缩容机制</strong>，如果缓冲区剩余空间不足以存放数据，需要对缓冲区进行扩容，并且将旧缓冲区中的数据挪到新缓冲区中。</li>
 </ol>
-<h2><span id="信号驱动-io-模型">信号驱动 IO 模型</span></h2><p><img src="/images/2024/09/27/3f820dd0-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="信号IO.png"></p>
-<p>发起信号之后，不会阻塞，直到内核有数据才会继续阻塞，阻塞在等待内核把数据拷贝到用户态，即 recvform 成功返回之后，解除阻塞，继续往下执行业务代码。</p>
-<h2><span id="异步-io-模型">异步 IO 模型</span></h2><p><img src="/images/2024/09/27/432a5550-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="异步IO.png"></p>
-<p>发起异步请求之后，前面介绍的两个阶段都不会阻塞，即等到 recvform 成功返回之后才回来继续处理。</p>
-<p>早前我用送外卖来形容同步IO ，信号驱动 IO 和 异步 IO 。放到这里记录：</p>
-<ol>
-<li>同步IO：我本来在打电动，顿感饥饿，就决定打电话点外卖，点完就一直等外卖，啥事也不干。</li>
-<li>信号驱动 IO：我本来在打电动，顿感饥饿，就决定打电话点外卖，点完继续打电动。直到外卖员打电话说外卖送到楼下门口了，我就在家门口等待外卖员把外卖送上来。</li>
-<li>信号驱动 IO：我本来在打电动，顿感饥饿，就决定打电话点外卖，点完继续打电动。直到外卖员打电话说外卖送到楼下门口了，我继续打电动。最后外卖员把外卖送到家门口，我才停止打电动，开始吃外卖。</li>
-</ol>
-<p>明显看到，发起点外卖这个命令，我只关心外卖本身，这个过程与我无关，哪怕这个过程出现问题，也与我无关，外卖什么时候亲手送到我的手里我才吃，否则我就继续干其他任务。</p>
+<p>第一个缺点的解决方案在下一个缓冲区设计中可以解决，如果各位用数组写过环形队列，你应该明白我们不需要每次在界定成功一个完整数据包，就把后面的数据挪到前面。</p>
+<p>第二个缺点的解决方案在 C++ 中又有何难？vector 容器就是动态数组，但是我们通常不建议如此，因为扩容会导致数据的频繁移动，这实在是不可取。在最后一个缓冲区介绍中，我们可以利用 链表 设计出一个扩容但不必因为数据过大而频繁移动数据的缓冲区。</p>
+<h2><span id="环形缓冲区-ringbuffer">环形缓冲区 ringBuffer</span></h2><p>用数组形成的环形缓冲区只是一种抽象，本质上还是一块连续的内存空间。用读指针（read pointer）和写指针（write pointer）进行标识。</p>
+<p>下面简单演示环形数组如何解决固定缓冲区的第一个不足：</p>
+<p><img src="/images/2024/09/28/28c9fcc0-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="环形缓冲区1.png"></p>
+<p>红色块代表已处理的无效数据，绿色块代表待处理的有效数据。此前的固定缓冲区会选择先清理无效数据，再把有效数据往前挪动。但是既然已经是垃圾数据，又何必管它呢？我们只需要管理好有效数据即可。</p>
+<p>接下来又有新数据到来，这个时候的指针和数据存储是怎样？</p>
+<p><img src="/images/2024/09/28/24c56470-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="环形缓冲区2.png"></p>
+<p>它无需移动任何数据，只是通过写指针指向有效数据的末尾即可。Linux 网络数据的处理就用到固定大小的环形缓冲区，名字就叫 ringBuffer。</p>
+<p>但我们明显也看到它由于固定缓冲区大小还是面临相同的问题，如果数据量过大，将会导致之前传输过来的数据被覆盖，这是相当糟糕的。之前的固定缓冲器是容纳不下后来的数据，可以选择丢弃，至少保证之前的连接的消息能够正确处理。而环形缓冲区会导致数据混乱，即得到的数据很有可能不是自己应该处理的数据。</p>
+<p>可以考虑用 vector，只需要合理更新下标的范围，以及应该设置一个最大空间的阈值和恰当时刻的缩容机制。</p>
+<p>还有这般设计又出现另一个值得考虑的问题，即数据不再像前面的固定缓冲区那样必然连续，因为我们现在的数据有可能前面有一部分，后面有一部分，基于操作系统的空间局部性原理，这个带来的性能损失也是应当考虑的。同样地，原先只需要调用一次 read，而这次将需要调用两次 read 才可以把数据完整的读取并存储下来，系统调用多一次。</p>
+<p>可以更换系统调用函数来进行优化，即<code>readv</code> 和 <code>writev</code> 。用于处理向量 I&#x2F;O，允许一次性读写多个非连续的内存区域。尤其在网络编程中，可以减少系统调用次数，提高性能，特别是在需要处理大量小数据块时。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">readv</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> iovec *iov, <span class="hljs-type">int</span> iovcnt)</span></span>;<br><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">writev</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> iovec *iov, <span class="hljs-type">int</span> iovcnt)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>我们用核心代码简单看看两者之间的区别，这里就以 read 和 readv 来举例说明：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// read</span><br><br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">100</span>];<br>    <span class="hljs-type">ssize_t</span> bytesRead = <span class="hljs-built_in">read</span>(fd, buf, <span class="hljs-built_in">sizeof</span>(buf) - <span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">if</span> (bytesRead &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;read&quot;</span>);<br>        <span class="hljs-built_in">close</span>(fd);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br><br>    buf[bytesRead] = <span class="hljs-string">&#x27;\0&#x27;</span>; <span class="hljs-comment">// Null-terminate the string</span><br><br><span class="hljs-comment">// readv</span><br><br>    <span class="hljs-type">char</span> buf1[<span class="hljs-number">50</span>];<br>    <span class="hljs-type">char</span> buf2[<span class="hljs-number">50</span>];<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">iovec</span> iov[<span class="hljs-number">2</span>];<br><br>    iov[<span class="hljs-number">0</span>].iov_base = buf1;<br>    iov[<span class="hljs-number">0</span>].iov_len = <span class="hljs-built_in">sizeof</span>(buf1) - <span class="hljs-number">1</span>;<br>    iov[<span class="hljs-number">1</span>].iov_base = buf2;<br>    iov[<span class="hljs-number">1</span>].iov_len = <span class="hljs-built_in">sizeof</span>(buf2) - <span class="hljs-number">1</span>;<br><br>    <span class="hljs-type">ssize_t</span> bytesRead = <span class="hljs-built_in">readv</span>(fd, iov, <span class="hljs-number">2</span>);<br>    <span class="hljs-keyword">if</span> (bytesRead &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;readv&quot;</span>);<br>        <span class="hljs-built_in">close</span>(fd);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br><br>    buf1[iov[<span class="hljs-number">0</span>].iov_len] = <span class="hljs-string">&#x27;\0&#x27;</span>; <span class="hljs-comment">// Null-terminate buf1</span><br>    buf2[iov[<span class="hljs-number">1</span>].iov_len] = <span class="hljs-string">&#x27;\0&#x27;</span>; <span class="hljs-comment">// Null-terminate buf2</span><br></code></pre></td></tr></table></figure>
+
+<p>只不过我们这里的 Buffer 指定一个就可以，但是起始下标和实际长度要指清楚，不要让数据被污染了。</p>
+<h2><span id="优化-ringbuffer-之-chainbuffer">优化 ringBuffer 之 chainBuffer</span></h2><p>我们总是难以避免这个问题，即 vector 容器扩容导致的数据大量移动，可是我们又不得不避免固定缓冲区大小的局限。消息要尽可能多的存储起来（尽量不丢失用户的请求），需要避免固定缓冲区大小的局限，又不想承担扩容导致的数据大量移动。我们设计出下面这个缓冲区：</p>
+<p><img src="/images/2024/09/28/1e5b3dd0-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="chainBuffer.png"></p>
+<ul>
+<li>start 指向缓冲区的头指针，end 指向缓冲区的尾指针。</li>
+<li>next 指向下一个缓冲区的节点，home 代表数据的起始地址，offert 代表数据的长度，Buffer 代表数据。</li>
+<li>处理完数据更新头指针，添加新数据更新尾指针。</li>
+<li>链表既解决扩容问题，也解决缩容问题（不需要就会被移除）。</li>
+</ul>
+<p>我们的 Buffer 也是有大小限制的，如果不足以存储新来的数据就创建一个新的节点存储。在处理数据时，只有这个节点被合理的处理才可以移除，比方说当前节点的数据和下一个节点联合才是完整数据，务必处理为一个完整数据才进行移除。</p>
+<p>链表的扩容方式的不足就是空间不连续，这在操作系统层面确实是一个不可忽视的缺点，如果你听说过空间局部性原理的话。再者也是和环形缓冲区一样，存在多次调用系统调用的情况。可采用之前提到的优化系统调用的方案。</p>
+<h2><span id="总结">总结</span></h2><p><img src="/images/2024/09/28/1a4b5ae0-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="Buffer总结.png"></p>
 
       </div>
     </div>
@@ -260,23 +277,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2024/09/28/%E4%B8%89%E7%A7%8D%E7%94%A8%E6%88%B7%E6%80%81%E7%BD%91%E7%BB%9C%E7%BC%93%E5%86%B2%E5%8C%BA%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>三种用户态网络缓冲区设计方案</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2024/09/26/Linux%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C/">
+    <a class="post-nav-item-right" href="/2024/09/27/Linux-%E4%BA%94%E7%A7%8D-IO-%E6%A8%A1%E5%9E%8B/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -288,7 +293,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      Linux目录操作
+      Linux 五种 IO 模型
     </a>
   
 </div>
@@ -296,7 +301,7 @@
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a>
+  <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" class="post-tag">#基础组件</a>
 
 </div>
   <div class="realated__body">
