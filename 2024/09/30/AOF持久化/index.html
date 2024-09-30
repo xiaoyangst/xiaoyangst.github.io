@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 搁浅的羊先生
+        AOF持久化 | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -70,7 +70,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -161,205 +162,190 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">AOF持久化</div>
+        <div class="post-info">
+          
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+
+          <span class="post-date">2024-09-30</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/Asio/" style="font-size: 1em;">Asio</a> <a href="/tags/C/" style="font-size: 1em;">C</a> <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 1em;">C++11新特性</a> <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">C++性能优化</a> <a href="/tags/CMake/" style="font-size: 1em;">CMake</a> <a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/Linux/" style="font-size: 1em;">Linux</a> <a href="/tags/OS/" style="font-size: 1em;">OS</a> <a href="/tags/Qt/" style="font-size: 1em;">Qt</a> <a href="/tags/Redis/" style="font-size: 1em;">Redis</a> <a href="/tags/Vim/" style="font-size: 1em;">Vim</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">函数式编程</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" style="font-size: 1em;">基础组件</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 1em;">微服务</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" style="font-size: 1em;">技术杂文</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" style="font-size: 1em;">操作系统导论</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/" style="font-size: 1em;">架构设计入门</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#aof-%E6%97%A5%E5%BF%97">AOF 日志</a></li>
+<li><a href="#%E4%B8%89%E7%A7%8D%E5%86%99%E5%9B%9E%E7%AD%96%E7%95%A5">三种写回策略</a></li>
+<li><a href="#aof-%E9%87%8D%E5%86%99%E6%9C%BA%E5%88%B6">AOF 重写机制</a></li>
+<li><a href="#aof-%E5%90%8E%E5%8F%B0%E9%87%8D%E5%86%99">AOF 后台重写</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="aof-日志">AOF 日志</span></h2><p><img src="/images/2024/09/30/1f673860-7f34-11ef-808b-3d65a27dc1d6.png" alt="存储写命令的流程.png"></p>
+<p>Redis 日志中只需要存储写命令，不需要存储读命令，因为读命令不会对数据进行修改，没有存储价值。</p>
+<p>Redis 存储写命令的时候，会优先写入内存中，接下来才会写入磁盘。内存中的数据访问快，但是如果机器关机，里面存储的数据立马清空；磁盘中的数据访问就比内存慢许多，但存储的数据是持久化的，不会因为计算机重启导致数据丢失。</p>
+<p>Redis 并非直接就把用户发送的写命令直接存储起来，而是要先执行用户的指令，如果出现错误将不会存储。这样提前检查命令的可行性，能够保证存储的写命令必然是正确可行，后续无需承担检查命令是否可行的成本。再有一个好处是不会阻塞当前写命令的执行，毕竟只有成功执行写命令之后才有可能写入日志，先后顺序保证着不会阻塞当前写命令的执行。</p>
+<p>先执行命令，再写入日志的这两个操作是在主线程中同步执行，只有这两个动作全部完成，才可以继续下一个命令执行和写入日志的操作。</p>
+<p><img src="/images/2024/09/30/1a88e1e0-7f34-11ef-808b-3d65a27dc1d6.png" alt="同步执行.png"></p>
+<p>那么先写入内存，再写入磁盘的这种简单机制肯定是存在问题的：</p>
+<ol>
+<li>如果写入内存之后，还没有来得及写入磁盘，机器宕机，那就意味着刚刚写入内存的指令会丢失。</li>
+<li>写操作成功执行才写入 AOF 日志，不会阻塞主线程，但是下一个命令的执行被阻塞了，因为执行命令和写入日志是同步执行。</li>
+</ol>
+<p>如果在将日志内容写入到磁盘时，服务器的硬盘的I&#x2F;O压力太大，就会导致写磁盘的速度很慢，进而阻塞住了，也就会导致后续的命令无法执行。</p>
+<p>你还发现，问题就卡在【写入磁盘】这个位置，这个写入的时机很重要，下面谈一谈三种写回策略。</p>
+<h2><span id="三种写回策略">三种写回策略</span></h2><p>三种写回策略，对应两个极端，一个折中，太经典的思考方式了。没有谁对谁错，各有各自的应用场景。如果你熟悉 <a href="https://xiaoyangst.github.io/2024/09/26/Linux%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">Linux文件操作</a>中 如何把一个文件写入到磁盘的过程，你并不会对 Redis 的写入策略有何惊叹，别无二致。</p>
+<p>Linux 把要写入的数据先写到（fwrite） 用户态缓冲区，用户缓冲区再把里面的数据拷贝（fflush）到内核态缓冲区，内核缓冲区再把数据写入（fsync）磁盘。如果你不调用 fsync 的话，将会由内核自己决定写入时机，否则立即写入磁盘。</p>
+<p><img src="/images/2024/09/30/14898b00-7f34-11ef-808b-3d65a27dc1d6.png" alt="fflsh和fsync区别.png"></p>
+<p>尽管 Redis 写入日志的过程与之极其相似，但还是有必要阐述流程和绘制图形，以便后续逻辑的展开。</p>
+<ol>
+<li>Redis 执行完写操作命令后，会将命令追加到 server.aof_buf 缓冲区。</li>
+<li>然后通过 write 系统调用，将 server.aof_buf 缓冲区 的数据写入到 AOF 文件中，此时的数据并没有写入到磁盘，而是拷贝到内核缓冲区中，等待内核自行决定何时写入磁盘，当然也可以调用 fsync 让内核立即写入磁盘。</li>
+</ol>
+<p><img src="/images/2024/09/30/105a8750-7f34-11ef-808b-3d65a27dc1d6.png" alt="Redis写入日志.png"></p>
+<p>Redis 有三种写入磁盘的策略：两个极端一个折中</p>
+<ul>
+<li>Always：数据拷贝到内核后，立即写入磁盘。很大程度上保证数据的不丢失，但是如此频繁的写入磁盘会影响到主线程性能。</li>
+<li>No：数据拷贝到内核后，由内核自行决定写入磁盘时机。对数据的持久性没有太大的保障，完全看内核的心情，但是性能要好很多。</li>
+<li>Everysec：数据拷贝到内核后，每秒写入一次磁盘。算是一种折中策略，性能和数据的保障介于上面二者之间。</li>
+</ul>
+<p><img src="/images/2024/09/30/0b1c5d90-7f34-11ef-808b-3d65a27dc1d6.png" alt="总结.png"></p>
+<h2><span id="aof-重写机制">AOF 重写机制</span></h2><p>AOF 日志本质上就是一个文件，里面记录 Redis 执行的写命令，可是伴随着命令越来越多，文件也会越来越大，因此Redis 提供重写机制。</p>
+<p>对于同一个 key，但是有着多个修改 value 的指令，那么就应该存储最后一个写指令（修改指令），因为前面的数据可以被视为无效数据了。这样就起到压缩作用了。</p>
+<p><img src="/images/2024/09/30/06c55f80-7f34-11ef-808b-3d65a27dc1d6.png" alt="重写.png"></p>
+<p>AOF 重写机制是在重写时，读取当前数据库中的所有键值对，然后将每一个键值对用一条命令记录到【新的 AOF 文件中】，等到全部记录完后，就将新的 AOF 文件替换掉之前的 AOF 文件。</p>
+<p>你可能会问，为什么不复用旧的 AOF 文件（即后面压缩的指令从旧的 AOF 文件开头进行覆盖，而不用新创建 AOF 文件），而是写入到一个新的 AOF 文件，然后再进行替换呢？我不知道你有没有用过 realloc 函数，它用来调整空间的大小，如果失败就会返回 NULL。很多人在使用的时候，会像下面这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">p = (<span class="hljs-type">int</span> *)<span class="hljs-built_in">realloc</span>(p, <span class="hljs-number">10</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br></code></pre></td></tr></table></figure>
+
+<p>如果 realloc 创建成功会返回内存的首地址，可是你保不准会创建失败，你这个时候就把 源数据 p 用来接收返回值，那不是有把源数据污染的可能吗？你应该创建一个临时指针变量来接收返回值，再判断返回值没有问题之后，再赋值给源数据 p。</p>
+<p>回到这里来，如果我们再重写的过程中，机器出现问题，我原有的 AOF 文件亦不会有损。等到我真的压缩成功之后，再删除原来的 AOF 文件也不迟。</p>
+<h2><span id="aof-后台重写">AOF 后台重写</span></h2><p>AOF 重写是对大文件进行操作，是个相当耗时的操作，绝不可让它在主线程中执行，否则性能大大降低。Redis 是把这个工作交给子<strong>进程</strong> bgrewriteaof 来完成的，这样主线程和子线程互不干扰，各司其职。</p>
+<p>特别注意是进程，而不是线程，因为进程要比线程稳定，还不用考虑多线程下的并发问题。子进程会拷贝父进程的页表等数据结构，会在发生写操作的时候，触发【写时复制】。那么这里就有个问题，如果父进程的物理页很大怎么办？</p>
+<p>其中有两个阶段会导致阻塞父进程：</p>
+<ul>
+<li>创建子进程，子进程会复制父进程的页表等数据结构，尽管共享的同一块物理内存。页表等内容越大，阻塞时间越长。</li>
+<li>触发写时复制，子进程会拷贝修改部分的物理内存出来，得到属于自己的物理内存，未修改部分继续和父进程共享。拷贝的内存越大，阻塞时间越长。</li>
+</ul>
+<p>触发重写机制后，主线程就会创建重写 AOF 的子进程，此时父子进程共享物理内存，重写子进程只会对这个内存进行只读，重写 AOF 子进程会读取数据库里的所有数据（即共享的数据），并逐一把内存数据的键值对转换成一条命令（压缩），再将命令记录到重写日志（新的 AOF 文件）。</p>
+<p>但我们现在要明确如下两个观点：</p>
+<ul>
+<li>写时复制只会把修改的那块内存复制一份出来，其余没有修改的部分父子进程继续共享。</li>
+<li>主进程可以继续执行命令和写入内存，子进程 bgrewriteaof  的任务就是执行重写机制。</li>
+</ul>
+<p>那么这里就有几个问题：</p>
+<ul>
+<li>写时复制的时候，如果这个阶段修改的是一个 bigkey，也就是数据量比较大的 key-value 的时候，这时复制的物理内存数据的过程会比较耗时，有阻塞主进程的风险。</li>
+<li>子进程在重写，但是主进程又写入新的指令，并且还是已重写中的一个指令，这就导致数据不是最新的，出现数据不一致的问题。</li>
+</ul>
+<p>Redis 为了解决数据不一致性问题，设置了一个 AOF 重写缓冲区，这个缓冲区在创建 bgrewriteaof  子进程之后开始使用。在重写 AOF 期间，当 Redis 执行完一个写命令之后，它会同时将这个写命令写入到【AOF缓冲区】和【AOF重写缓冲区】。</p>
+<p><img src="/images/2024/09/30/012fee00-7f34-11ef-808b-3d65a27dc1d6.png" alt="重写缓冲区.png"></p>
+<p>在子进程 bgrewriteaof 执行 AOF 重写期间，主进程要执行下面三个任务：</p>
+<ol>
+<li>执行客户端发来的命令。</li>
+<li>将执行后的写命令追加到【AOF 缓冲区】。</li>
+<li>将执行后的写命令追加到【AOF 重写缓冲区】。</li>
+</ol>
+<p>1 和 2 的操作是之前就有，即 执行命令和写入日志。3 是为了解决一致性问题新加入的缓冲区，并且只会在子进程 bgrewriteaof 执行 AOF 重写期间有存在的必要。当子进程完成 AOF 重写工作后，会向主进程发生一条信号（进程间通信的方式，且是异步）。</p>
+<p>主进程收到信号后，会调用信号处理函数，这个期间主线程阻塞，即不允许再执行指令和写入指令操作，否则每次都无法保证数据的一致性。整个流程如下：</p>
+<ul>
+<li>将 AOF 重写缓冲区中的所有内容追加到 刚刚的 AOF 的文件中（也就是最新的 AOF 文件），使得新旧两个 AOF 文件所保存的数据库状态一致（解决一致性问题）。</li>
+<li>新的 AOF 的文件进行改名，覆盖现有的 AOF 文件（保持最新的数据状态，所以覆盖现有的）。</li>
+</ul>
+<p>信号函数执行完成后，主进程就可以继续像往常一样处理命令了。</p>
+<p>在整个 AOF 后台重写过程中，除了发生写时复制会对主进程造成阻塞，还有信号处理函数执行时也会对主进程造成阻塞，在其他时候，AOF 后台重写都不会阻塞主线程。</p>
+<hr>
+<p>⭐️内容取自《小林Coding》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议访问<a target="_blank" rel="noopener" href="https://xiaolincoding.com/">官方网站</a>。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/05/%E7%BB%93%E6%9E%84%E4%BD%93/" class="post-title hover-line">结构体</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">没必要去搞清楚哪里花里胡哨的声明方式，用那些常用的即可</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/04/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/" class="post-title hover-line">命令模式</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">命令模式是一种行为设计模式， 它可将请求转换为一个包含与请求相关的所有信息的独立对象。 该转换让你能根据不同的请求将方法参数化、 延迟请求执行或将其放入队列中， 且能实现可撤销操作</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C%E7%9A%84%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/" class="post-title hover-line">字符串操作的相关函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">主要是介绍一些惯用法，尽管不一定常用</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E9%87%8F%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E9%87%8F/" class="post-title hover-line">字符串字面量和字符串变量</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">字符串字面量又名字符串常量，即可访问不可修改。字符串变量可访问可修改</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E4%BC%A0%E5%85%A5%E5%8F%82%E6%95%B0%E5%92%8C%E4%BC%A0%E5%87%BA%E5%8F%82%E6%95%B0/" class="post-title hover-line">传入参数和传出参数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">只是让表达更专业</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/03/%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%E5%92%8C%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F/" class="post-title hover-line">常量指针和指针常量</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">最容易混淆的常量指针和指针常量，但如果你经常写代码，那么常量指针最为常见，即 const 类型* 变量名，对于该变量的数据不能做任何修改。基于此，你就能区分常量指针和指针常量的区别，即常量指针可以修改所指对象，但不能修改所指对象的数据；指针常量可以修改所指对象的数据，但是不能修改所指对象</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/01/Base64-%E5%92%8C-MD5-%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title hover-line">Base64 和 MD5 的使用</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">Base64 虽然可以用于简单的加密，但通常用于传输数据。MD5用于加密数据，尽管它已经不安全</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Qt/" class="post-tag">#Qt</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/01/%E4%BD%8D%E8%BF%90%E7%AE%97/" class="post-title hover-line">位运算</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">位运算在 嵌入式开发中可能常用</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/01/if-%E5%92%8C-switch/" class="post-title hover-line">if 和 switch</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">先谈 if 和 switch 需要注意的问题，然后说一说二者的性能问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/31/%E5%85%B3%E4%BA%8E%E6%95%B0%E7%BB%84/" class="post-title hover-line">关于数组</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">数组就是一片连续的内存空间，并且被划分成大小相等的小空间</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C/" class="post-tag">#C</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/technology/">1</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/3/">3</a><a class="page-number" href="/technology/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/technology/page/6/">6</a><a class="page-number" href="/technology/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/11/">11</a></div>
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/09/29/%E5%85%A5%E9%97%A8%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      入门微服务
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -714,6 +700,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>
