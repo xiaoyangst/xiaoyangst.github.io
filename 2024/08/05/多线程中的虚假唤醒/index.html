@@ -181,20 +181,27 @@
             
           </div>
         
-        <p>当一个正在等待条件变量的线程由于条件变量被触发而唤醒时，却发现它等待的条件（共享数据）没有满足</p>
-<p>避免虚假唤醒，就不应该采用 if 条件判断，而应该采用 while 循环判断</p>
-<p>这样，即便生产者唤醒所有消费者，由于消费者这边采用 while 循环判断，确保<code>wait</code>方法会在唤醒后重新检查条件，哪怕 g_deque 中已经没有可消费对象，也不会导致这边出现虚假唤醒</p>
-<p>如果消费者这边采用 if 条件判断，由于生产者唤醒，消费者接收到信号不重新检查g_deque中是否还有可消费对象（有可能已经被其它消费者消费），导致可能出现虚假唤醒</p>
+        <p>当一个正在等待条件变量的线程由于条件变量被触发而唤醒时，却发现它等待的条件（共享数据）没有满足。</p>
+<p>避免虚假唤醒，就不应该采用 if 条件判断，而应该采用 while 循环判断。</p>
+<p>这样，即便生产者唤醒所有消费者，由于消费者这边采用 while 循环判断，确保<code>wait</code>方法会在唤醒后重新检查条件，哪怕 g_deque 中已经没有可消费对象，也不会导致这边出现虚假唤醒。</p>
+<p>如果消费者这边采用 if 条件判断，由于生产者唤醒，消费者接收到信号不重新检查g_deque中是否还有可消费对象（有可能已经被其它消费者消费），导致可能出现虚假唤醒。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 虚假唤醒</span><br><br><span class="hljs-keyword">if</span> (g_deque.<span class="hljs-built_in">empty</span>())<br>&#123;<br>    g_cond.<span class="hljs-built_in">wait</span>(lck);<br>&#125;<br><br><span class="hljs-comment">// 避免虚假唤醒</span><br><br><span class="hljs-keyword">while</span> (g_deque.<span class="hljs-built_in">empty</span>())<br>&#123;<br>    g_cond.<span class="hljs-built_in">wait</span>(lck);<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>还有通过Lambda表达式，同样可以避免虚假唤醒</p>
-<p>即在wait方法的第二个参数提供Lambda表达式，如果返回值为true就获取锁往下执行代码</p>
+<p>还有通过Lambda表达式，同样可以避免虚假唤醒。</p>
+<p>即在wait方法的第二个参数提供Lambda表达式，如果返回值为true就获取锁往下执行代码。这种代码就不必像前面那样显示地 <code>while</code> 循环来检查条件，从而使代码更加简洁和安全。它确保在条件不满足时继续等待，减少逻辑错误。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">g_cond.<span class="hljs-built_in">wait</span>(lock, []&#123; <span class="hljs-keyword">return</span> !g_deque.<span class="hljs-built_in">empty</span>(); &#125;);<br></code></pre></td></tr></table></figure>
 
-<p>如上两种写法的产生，就是C++11提供wait的两种方法的参数列表不同</p>
+<p>如上两种写法的产生，就是C++11提供wait的两种方法，只是参数列表不同。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">wait</span> <span class="hljs-params">(unique_lock&lt;mutex&gt;&amp; lck)</span></span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Predicate</span>&gt;  <br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">wait</span> <span class="hljs-params">(unique_lock&lt;mutex&gt;&amp; lck, Predicate pred)</span></span>;<br></code></pre></td></tr></table></figure>
 
-<p>其中 pred 代表一个可调用的对象或函数，它不接受任何参数，并返回一个可以计算为 <code>bool</code> 的值。 这将被反复调用，直到它的计算结果为 <code>true</code></p>
+<p>第一个 wait 方法只有被唤醒才会解除阻塞，但我们通常不会用，因为无法应对虚假唤醒。</p>
+<p>第二个 wait 方法的第二个参数 pred 代表一个可调用的对象或函数，它不接受任何参数，并返回一个可以计算为 bool 的值。当 bool 值为 true 的时候，才会解除阻塞。这句话我需要再重申一下，信号来唤醒是无法真正解除阻塞的，真正能让其解除阻塞的是 pred 返回值为 true的时候，正因为如此，它才可以解决虚假唤醒问题。信号可以被忽视，pred 是否为 true 才是唯一判定标准。</p>
+<p>我用下面这个例子举例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-type">void</span> SafeQueue&lt;T&gt;::<span class="hljs-built_in">push</span>(T data) &#123;<br>  <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lg</span><span class="hljs-params">(m_mtx)</span></span>;<br>  m_queue.<span class="hljs-built_in">push</span>(std::<span class="hljs-built_in">move</span>(data));<br>  m_have.<span class="hljs-built_in">notify_one</span>();<br>&#125;<br><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-type">void</span> SafeQueue&lt;T&gt;::<span class="hljs-built_in">wait_pop</span>(T &amp;data) &#123;<br>  <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">ul</span><span class="hljs-params">(m_mtx)</span></span>;<br>  m_have.<span class="hljs-built_in">wait</span>(ul,[<span class="hljs-keyword">this</span>]()&#123;<br>    <span class="hljs-keyword">return</span> !m_queue.<span class="hljs-built_in">empty</span>();<br>  &#125;); <span class="hljs-comment">// m_queue have data</span><br>  data = std::<span class="hljs-built_in">move</span>(m_queue.<span class="hljs-built_in">front</span>());<br>  m_queue.<span class="hljs-built_in">pop</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果你提前创建 5 个线程 执行 push 方法，等到 队列中数据之后，再创建 5 个线程 执行 wait_pop 方法。你觉得会 wait_pop 成功吗？因为 push 早就执行完成，并且 notify_one。那后面的 push 会因为 没有再也收不到 notify_one 的信号而阻塞吗？</p>
+<p>不会！当你调用 wait_pop 的时候，尽管没有收到信号，但是队列不为空，那么 pred 为 true，解除阻塞，继续往下执行。</p>
+<p>那你就疑惑了，还要这个信号提醒有啥用？<code>void wait (unique_lock&lt;mutex&gt;&amp; lck, Predicate pred)</code>虽然可以解决虚假唤醒问题，但我们还是应该建立正确的唤醒机制，这边我们是主动去调用 wait_pop ，但是有时候我们建立逻辑关系是被唤醒才会执行这里的 wait_pop。因为你不可能每次都是主动 push，再去主动 wait_pop 吧？往往是 push 成功就 notify_one，然后这边的 wait_pop 被唤醒，检查 pred 情况。push 接口提供给外界，wait_pop 在一个循环中被调用，如果出现虚假唤醒也不会有影响，因为有 pred 做保障。</p>
 
       </div>
     </div>
