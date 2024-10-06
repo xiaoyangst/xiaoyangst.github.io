@@ -195,6 +195,11 @@
 <li><strong>大端字节序（Big-endian）：</strong> 数据的高字节存储在低地址端。例如，数值 0x12345678 将按顺序存储为 0x12 0x34 0x56 0x78</li>
 <li><strong>小端字节序（Little-endian）：</strong> 数据的低字节存储在低地址端。例如，数值 0x12345678 将按顺序存储为 0x78 0x56 0x34 0x12</li>
 </ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> </span>&#123;<br><br>    <span class="hljs-type">int</span> num = <span class="hljs-number">0x61626364</span>;   <span class="hljs-comment">// abcd</span><br><br>    <span class="hljs-comment">// 大端 ： 0x61626364 --》 abcd</span><br>    <br>    <span class="hljs-comment">// 小端 ： 0x64636261 --》 dcba</span><br><br>    <span class="hljs-type">char</span>* str = (<span class="hljs-type">char</span>*)&amp;num;  <span class="hljs-comment">// 将num的地址转为char*类型，逐字节检查;如果是 a，大端；如果是 d，小端</span><br><br>    <span class="hljs-keyword">if</span> (*str == <span class="hljs-string">&#x27;d&#x27;</span>) &#123;  <span class="hljs-comment">// 检查最低字节</span><br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;小端\n&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (*str == <span class="hljs-string">&#x27;a&#x27;</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;大端\n&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>核心还是取到一个可识别的字节对应的内容，一般取 int 类型数据的地址，转换为 char* 代表第一个字节（从左往右看）。因此，也可以有如下代码，原理相同：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> num = <span class="hljs-number">1</span>; <span class="hljs-comment">// 定义一个整数</span><br>    <span class="hljs-type">char</span> *byte = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;num); <span class="hljs-comment">// 将整数的地址转换为字符指针</span><br><br>    <span class="hljs-keyword">if</span> (byte[<span class="hljs-number">0</span>] == <span class="hljs-number">1</span>) &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;小端字节序&quot;</span> &lt;&lt; std::endl; <span class="hljs-comment">// 如果最低位字节在最前面，说明是小端</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;大端字节序&quot;</span> &lt;&lt; std::endl; <span class="hljs-comment">// 如果最高位字节在最前面，说明是大端</span><br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
 <h2><span id="网络字节序">网络字节序</span></h2><p>网络字节序是一种标准化的数据表示方式，用于在不同计算机系统之间传输数据。为了确保数据在网络传输中保持一致，<strong>网络协议（如 TCP&#x2F;IP）规定采用大端字节序</strong>。</p>
 <h2><span id="主机字节序和网络字节序的转换">主机字节序和网络字节序的转换</span></h2><p><code>htons</code>（Host to Network Short）：将 16 位主机字节序转换为网络字节序</p>
 <p><code>htonl</code>（Host to Network Long）：将 32 位主机字节序转换为网络字节序</p>
@@ -546,12 +551,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         

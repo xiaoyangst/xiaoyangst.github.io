@@ -214,7 +214,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">Demo</span><span class="hljs-params">()</span>&#123;<br>  <span class="hljs-type">int</span> public_var = <span class="hljs-number">10</span>;<br>  <span class="hljs-type">pid_t</span> pid = fork();<br>  <span class="hljs-keyword">switch</span> (pid) &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">-1</span>:<br>      perror(<span class="hljs-string">&quot;Fork failed&quot;</span>);<br>      <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <span class="hljs-comment">// Child process</span><br>      public_var = <span class="hljs-number">20</span>;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child process: public_var = %d\n&quot;</span>, public_var);<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">default</span>: <span class="hljs-comment">// Parent process</span><br>      sleep(<span class="hljs-number">3</span>);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Parent process: public_var = %d\n&quot;</span>, public_var);<br>      <span class="hljs-keyword">break</span>;<br>  &#125;<br>&#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">Child process: public_var = 20</span><br><span class="hljs-comment">Parent process: public_var = 10</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
 
 <p>在这个程序中，可以让父进程睡眠 3s ，让子进程有机会修改 public_var 变量。如果父进程输出结果为 20，说明父子进程共享变量；如果父进程输出结果为 10，说明父子进程不共享变量。</p>
-<p>子进程创建成功，此时父子进程是共用物理内存页的，对应下图中左半部分。可是当子进程开始修改对应物理页的数据，就会触发写时复制机制，对应下图中右半部分。这就合理解释上述变量变与不变的现象了。</p>
+<p>子进程创建成功，此时父子进程是共用物理内存页的，对应下图中左半部分。可是当子进程开始修改对应物理页的数据，就会触发这块被修改的物理页写时复制机制（没有修改的物理页继续共享，谁修改谁拥有一块新的物理页并脱离原来的物理页），对应下图中右半部分。这就合理解释上述变量变与不变的现象了。</p>
 <p><img src="/images/2024/09/28/5a41a110-7d9e-11ef-b348-95e5e18530fa.png" alt="父子进程.png"></p>
 <p>（二）fork 与 用户态缓冲区的数据</p>
 <p><img src="/images/2024/09/28/3834e4b0-7d9e-11ef-b348-95e5e18530fa.png" alt="fork与缓冲区.png"></p>
@@ -636,12 +636,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         
