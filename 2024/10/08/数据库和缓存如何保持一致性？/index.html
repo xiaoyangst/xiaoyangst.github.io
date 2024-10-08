@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-         | 搁浅的羊先生
+        数据库和缓存如何保持一致性？ | 搁浅的羊先生
       
     </title>
     <meta name="description" content="！！" />
@@ -70,7 +70,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -161,79 +162,162 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/blog)"></div>
-        博客
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">数据库和缓存如何保持一致性？</div>
+        <div class="post-info">
+          
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+
+          <span class="post-date">2024-10-08</span>
+        </div>
       </div>
-      <div class="wall-category-description"></div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Asio/" rel="tag">Asio</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" rel="tag">C++11新特性</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">C++性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CMake/" rel="tag">CMake</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CPP/" rel="tag">CPP</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clion/" rel="tag">Clion</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OS/" rel="tag">OS</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vim/" rel="tag">Vim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%80%E7%82%B9%E5%B0%8F%E4%BA%8B/" rel="tag">一点小事</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%B2%E5%AF%86%E5%85%B3%E7%B3%BB/" rel="tag">亲密关系</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag">函数式编程</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" rel="tag">单调栈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%9C%81/" rel="tag">反省</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF/" rel="tag">回溯</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" rel="tag">基础组件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">字符串</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag">并发编程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" rel="tag">技术摘录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" rel="tag">技术杂文</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A8%E8%8D%90/" rel="tag">推荐</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" rel="tag">操作系统导论</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E6%96%87/" rel="tag">杂文</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%9C%E7%B4%A0%E5%A8%9F/" rel="tag">杜素娟</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/" rel="tag">架构设计入门</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9F%8F%E6%8B%89%E5%9B%BE/" rel="tag">柏拉图</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9F%8F%E6%8B%89%E5%9B%BE%E4%B8%AD%E7%9F%AD%E7%AF%87%E5%85%A8%E9%9B%86/" rel="tag">柏拉图中短篇全集</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%88/" rel="tag">栈</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91/" rel="tag">树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" rel="tag">模板元编程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%9B%E6%B3%BD%E4%B8%9C/" rel="tag">毛泽东</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%9B%E6%B3%BD%E4%B8%9C%E9%80%89%E9%9B%86/" rel="tag">毛泽东选集</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B0%B4%E6%9E%9C/" rel="tag">水果</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%90%86%E6%83%B3%E5%9B%BD/" rel="tag">理想国</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%AD%E7%AF%87/" rel="tag">短篇</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag">网络编程</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91/" rel="tag">自我</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag">链表</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%9F%E5%88%97/" rel="tag">队列</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%B6%E7%A2%8E%E4%B9%8B%E6%80%9D/" rel="tag">零碎之思</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AC%BC%E8%B0%B7%E5%AD%90/" rel="tag">鬼谷子</a><span class="tag-list-count">1</span></li></ul></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E5%85%88%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%98%E6%98%AF%E5%85%88%E6%9B%B4%E6%96%B0%E7%BC%93%E5%AD%98">先更新数据库，还是先更新缓存？</a><ul>
+<li><a href="#%E5%85%88%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%8D%E6%9B%B4%E6%96%B0%E7%BC%93%E5%AD%98">先更新数据库，再更新缓存</a></li>
+<li><a href="#%E5%85%88%E6%9B%B4%E6%96%B0%E7%BC%93%E5%AD%98%E5%86%8D%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93">先更新缓存，再更新数据库</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%88%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%98%E6%98%AF%E5%85%88%E5%88%A0%E9%99%A4%E7%BC%93%E5%AD%98">先更新数据库，还是先删除缓存？</a><ul>
+<li><a href="#%E5%85%88%E5%88%A0%E9%99%A4%E7%BC%93%E5%AD%98%E5%86%8D%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93">先删除缓存，再更新数据库</a></li>
+<li><a href="#%E5%85%88%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%8D%E5%88%A0%E9%99%A4%E7%BC%93%E5%AD%98">先更新数据库，再删除缓存</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E4%B8%A4%E4%B8%AA%E6%93%8D%E4%BD%9C%E9%83%BD%E8%83%BD%E6%89%A7%E8%A1%8C%E6%88%90%E5%8A%9F">如何保证两个操作都能执行成功？</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="先更新数据库还是先更新缓存">先更新数据库，还是先更新缓存？</span></h2><p>「请求 A 」和「请求 B 」两个请求，同时更新「同一条」数据。</p>
+<h3><span id="先更新数据库再更新缓存">先更新数据库，再更新缓存</span></h3><p>用户肯定先访问缓存，如果更新数据库的顺序和更新缓存的顺序不同，那就会导致命中的缓存不是最新的数据。</p>
+<p>如下图所示，数据库中的数据是 2，但是缓存中的数据却是 1。</p>
+<p><img src="/images/2024/10/08/0f4d3380-856a-11ef-99f7-f1acdd0d8718.png" alt="先更新数据库再更新缓存.png"></p>
+<h3><span id="先更新缓存再更新数据库">先更新缓存，再更新数据库</span></h3><p>如果更新缓存的顺序和更新数据库的顺序不同，那就会导致数据库中存储的不是最新的数据，这比上面那种情况还要糟糕。</p>
+<p>如下图所示，缓冲中的数据是 2，这是没有问题，但是数据库中存储的数据居然是 1，这是严重的错误。</p>
+<p>数据库作为实际存储数据的地方，绝不能有错，因为它是数据的本源。</p>
+<p><img src="/images/2024/10/08/08ace1b0-856a-11ef-99f7-f1acdd0d8718.png" alt="先更新缓存再更新数据库.png"></p>
+<h2><span id="先更新数据库还是先删除缓存">先更新数据库，还是先删除缓存？</span></h2><p>不管是【先更新数据库，再更新缓存】，还是【先更新缓存，再更新数据库】，都不能保证，我们还是另寻它路吧。</p>
+<p>先更新数据库，再把缓存删除。等到客户端访问的时候，发现没有命中缓存，就从数据库中读取数据给到客户端，再把该数据会写到缓存中，保证下一次可以命中。就可以避免前面讨论的并发问题。</p>
+<p><img src="/images/2024/10/08/009ad770-856a-11ef-99f7-f1acdd0d8718.png" alt="读写策略.png"></p>
+<h3><span id="先删除缓存再更新数据库">先删除缓存，再更新数据库</span></h3><p>如果先删除缓存，但还没有来得及更新数据库，此时客户端访问就会无法命中缓存，就会读取数据库的数据（旧数据），返回给客户端之后，再把这个数据回写到缓存中，下次访问还是命中，依旧不是最新的数据。此时，更新数据库的命令才执行完成，可谓姗姗来迟。</p>
+<p>如下图所示，按理应该读取最新数据 21，但是由于此期间客户端请求数据，导致返回旧数据，并且还更新到缓存中，下次命中还是属于旧数据。</p>
+<p><img src="/images/2024/10/08/fc01ee60-8569-11ef-99f7-f1acdd0d8718.png" alt="先删除缓存再更新数据库.png"></p>
+<h3><span id="先更新数据库再删除缓存">先更新数据库，再删除缓存</span></h3><p>假如某个用户数据在缓存中不存在，请求 A 读取数据时从数据库中查询到年龄为 20，在未写入缓存中时另一个请求 B 更新数据。它更新数据库中的年龄为 21，并且清空缓存。这时请求 A 把从数据库中读到的年龄为 20 的数据写入到缓存中。</p>
+<p>最终，该用户年龄在缓存中是20（旧值），在数据库中是21（新值），缓存和数据库数据不一致。</p>
+<p><img src="/images/2024/10/08/f6fc12b0-8569-11ef-99f7-f1acdd0d8718.png" alt="先更新数据库再删除缓存.png"></p>
+<p>从上面的理论上分析，先更新数据库，再删除缓存也是会出现数据不一致性的问题，但是在实际中，这个问题出现的概率并不高。因为<strong>缓存的写入通常要远远快于数据库的写入</strong>，所以在实际中很难出现请求 B 已经更新了数据库并且删除了缓存，请求 A 才更新完缓存的情况。</p>
+<p>因此，我们认为【先更新数据库，再删除缓存】的方案，是可以保证数据一致性的。我想我们应该先保证源头的正确性，才是最重要的。</p>
+<h2><span id="如何保证两个操作都能执行成功">如何保证两个操作都能执行成功？</span></h2><p>我们已经确定【先更新数据库，再删除缓存】作为保证数据一致性的方案，这是两个独立的操作，必须确保两个操作都能执行成功。</p>
+<p>下面介绍两种方案，归根结底就是把操作的数据行为另存一份，直到保证两个操作成功再移除，否则多次重试。</p>
+<p>（一）消息队列重试机制</p>
+<p>引入消息队列，将第二个操作（删除缓存）要操作的数据加入到消息队列，由消费者来操作数据：</p>
+<ul>
+<li>如果应用<strong>删除缓存失败</strong>，可以从消息队列中重新读取数据，然后再次删除缓存，这个就是重试机制。当然，如果重试超过的一定次数，还是没有成功，我们就需要先业务层发送报错信息了。</li>
+<li>如果<strong>删除缓存成功</strong>，就要把数据从消息队列中移除，避免重复操作，否则继续重试。</li>
+</ul>
+<p><img src="/images/2024/10/08/efe8b3c0-8569-11ef-99f7-f1acdd0d8718.png" alt="消息队列.png"></p>
+<p>这个方案的缺点是，对代码入侵性比较强，需要改造原本业务的代码。</p>
+<p>（二）订阅 MySQL binlog，再操作缓存</p>
+<p>【先更新数据库，再删除缓存】的策略第一步是更新数据库，那么更新数据库成功，就会产生对应的日志，记录在 binlog 里。</p>
+<p>于是，我们可以通过订阅 binlog 日志，拿到具体要操作的数据，然后再执行缓存删除。</p>
+<p><img src="/images/2024/10/08/ea4c3d60-8569-11ef-99f7-f1acdd0d8718.png" alt="binlog.png"></p>
+<p>Canal 模拟 MySQL 主从复制的交互协议，把自己伪装成一个 MySQL 的从节点，向 MySQL 主节点发送 dump 请求，MySQL 收到请求后，就会开始推送 Binlog 给 Canal，Canal 解析 Binlog 字节流之后，转换为便于读取的结构化数据，供下游程序订阅使用。</p>
+<p>Canal 方案不会对代码造成入侵，因为它是直接订阅 binlog 日志，和业务代码没有耦合关系，因此我们可以通过 Canal + 消息队列的方案来保证数据缓存的一致性。</p>
+<p>具体的做法是：将 binlog 日志采集发送到MQ队列里面，然后编写一个简单的缓存删除消息者订阅 binlog 根据更新 log 删除缓存，并且通过ACK机制确认处理这条更新log，保证数据缓存一致性。</p>
+<p>日志这里有一个很关键的点，必须是删除缓存成功，再回 ACK 机制给消息队列，否则可能会造成消息丢失的问题。比如消费服务从消息队列拿到事件之后，直接回了 ACK，然后再执行删除缓存操作的话，如果删除缓存的操作还是失败了，那么因为提前给消息队列回 ACK 了，就没办重试了。</p>
+<hr>
+<p>⭐️内容取自《小林Coding》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议访问<a target="_blank" rel="noopener" href="https://xiaolincoding.com/">官方网站</a>。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E6%80%A7%E6%A0%BC%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E4%BA%92%E8%A1%A5%E6%80%A7/" class="post-title hover-line">性格的一致性和互补性</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">曾有一个问题一直令我困扰：一本书告诉我，性格一致的人更容易获得幸福，而另一本书则坚称性格互补的人更快乐。矛盾双方给我带来的折磨激励我思考，并破除表面诱骗众人不解的虚设矛盾，实现思想上的统一，我找到了解决我内心困扰的答案</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E4%BA%B2%E5%AF%86%E5%85%B3%E7%B3%BB/" class="post-tag">#亲密关系</a><a href="/tags/%E9%9B%B6%E7%A2%8E%E4%B9%8B%E6%80%9D/" class="post-tag">#零碎之思</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E6%B5%85%E8%B0%88AI%E5%8F%82%E4%B8%8E%E5%86%99%E4%BD%9C/" class="post-title hover-line">浅谈AI参与写作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">无论是写作还是编写代码，初学者都不应过早依赖AI。我的建议是，像这种需要时间积累的技能，不要轻易让别人代劳</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%9B%B6%E7%A2%8E%E4%B9%8B%E6%80%9D/" class="post-tag">#零碎之思</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/06/21/%E5%A4%A7%E5%AD%A6%E6%AF%95%E4%B8%9A/" class="post-title hover-line">大学毕业</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt"></div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%9D%82%E6%96%87/" class="post-tag">#杂文</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/16/">16</a><a class="page-number" href="/blog/page/17/">17</a><span class="page-number current">18</span></div>
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/10/08/HTTPS%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      HTTPS通信流程
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\01\RDB-持久化\" title="RDB 持久化" rel="bookmark">RDB 持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\06\缓存雪崩、缓存击穿和缓存穿透\" title="缓存雪崩、缓存击穿和缓存穿透" rel="bookmark">缓存雪崩、缓存击穿和缓存穿透</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -596,6 +680,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>
