@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        第二章：原子变量 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/baitaoweideqiutian.ttf);
+        font-weight: baitaoweideqiutian;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?595fde0e4ae7bbb900f020823258c38a";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/article">文章</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/various">杂文</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">第二章：原子变量</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
+
+
+          <span class="post-date">2024-10-15</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#atomic">atomic</a><ul>
+<li><a href="#%E5%85%AC%E5%85%B1%E6%93%8D%E4%BD%9C">公共操作</a></li>
+<li><a href="#%E7%89%B9%E6%9C%89%E6%93%8D%E4%BD%9C">特有操作</a></li>
+</ul>
+</li>
+<li><a href="#atomic_flag">atomic_flag</a></li>
+<li><a href="#memory_order">memory_order</a><ul>
+<li><a href="#%E7%96%91%E9%97%AE">疑问</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<p>原子类型是封装值的类型，其访问保证不会导致数据争用，可用于在不同线程之间同步内存访问。</p>
+<h1><span id="atomic">atomic</span></h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt; <br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">atomic</span>;<br></code></pre></td></tr></table></figure>
+
+<p>原子对象的主要特征是，从不同线程访问此包含的值不会导致数据争用（即，这样做是<strong>明确定义的行为</strong>，访问顺序正确）。通常，对于所有其他对象，如果可能导致数据竞争以同时访问同一对象，则该操作将符合<strong>未定义行为</strong>的条件。</p>
+<p>此外，原子对象还能通过指定不同的内存顺序，同步访问其线程中的其他非原子对象。</p>
+<h2><span id="公共操作">公共操作</span></h2><table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>is_lock_free</td>
+<td>检测对特定类型的原子操作是否为无锁操作</td>
+<td>如果原子操作是无锁的（即不使用锁或自旋锁），则返回 <code>true</code></td>
+</tr>
+<tr>
+<td>store</td>
+<td>设置原子变量的值</td>
+<td></td>
+</tr>
+<tr>
+<td>load</td>
+<td>获取原子变量的当前值</td>
+<td></td>
+</tr>
+<tr>
+<td>exchange</td>
+<td>原子地将存储的值替换为新值，并返回旧值</td>
+<td>常用于实现原子交换操作</td>
+</tr>
+<tr>
+<td>compare_exchange_weak</td>
+<td>原子地比较当前值与预期值，如果相等，则将其替换为期望值</td>
+<td>可能即使比较成功也会失败</td>
+</tr>
+<tr>
+<td>compare_exchange_strong</td>
+<td>功能同上</td>
+<td>保证不会虚假失败（仅在比较结果确实不相等时才会失败）</td>
+</tr>
+</tbody></table>
+<p>对于大部分情况下，要对原子变量操作，一般方法是先通过 <code>load</code> 加载原子变量目前存储的值，然后操作后执行 <code>compare_exchange</code>。</p>
+<p> 在一些平台，弱形式的 CAS 函数，也就是 <code>compare_exchange_weak</code> 函数性能可能更高。两个 CAS 函数均建议使用 do-while 循环进行操作。但是弱形式的函数可能会有 “出乎意料” 的返回，那就直接用 <code>compare_exchange_strong</code> 更稳妥。</p>
+<h2><span id="特有操作">特有操作</span></h2><table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>fetch_add</td>
+<td>将参数值加到原子变量中，并返回修改前的值</td>
+<td>用于实现原子加法操作，常用于计数器或累加操作</td>
+</tr>
+<tr>
+<td>fetch_sub</td>
+<td>从原子变量中减去参数值，并返回修改前的值</td>
+<td>用于实现原子减法操作</td>
+</tr>
+<tr>
+<td>fetch_and</td>
+<td>对原子变量执行位与操作（AND），并返回修改前的值</td>
+<td>通常用于屏蔽或清除特定位</td>
+</tr>
+<tr>
+<td>fetch_or</td>
+<td>对原子变量执行位或操作（OR），并返回修改前的值</td>
+<td>用于设置某些位（即将特定位设置为1），常见于标志位的操作</td>
+</tr>
+<tr>
+<td>fetch_xor</td>
+<td>对原子变量执行位异或操作（XOR），并返回修改前的值</td>
+<td>用于切换位值（即0变1，1变0），这也是一种原子操作</td>
+</tr>
+</tbody></table>
+<h1><span id="atomic_flag">atomic_flag</span></h1><p>可以看到一个比较特殊的布尔型的 atomic 类型：atomic_flag（注意，atomic_flag 跟 atomic_bool 是不同的），相比于其他的 atomic 类型，atomic_flag 是无锁的（lock-free），即线程对其访问不需要加锁，因此对 atomic_flag 而言，也就不需要使用 load、store 等成员函数进行读写（或者重载操作符）。</p>
+<p>功能较少，不推荐使用。</p>
+<h1><span id="memory_order">memory_order</span></h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/xiaoyang-wyxle/his01x/lf3reqke7tnkgbe3">流水线、乱序执行和缓存</a></p>
+<p>为了提高指令执行的效率，指令之间没有数据依赖的话，可以<strong>乱序执行</strong>（为了提高指令执行的效率）。乱序执行的结果必须和编排顺序执行的结果保持一致，否则就改变了程序执行本来的意图，是不合理的。</p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/xiaoyang-wyxle/his01x/ic0qcvcm09cfiwn2">硬件内存模型</a></p>
+<p>让一些代码遵守先于发生的关系，而另外一部分的代码不遵守，可以兼顾性能提升和安全保障。C++11 提供相应的策略。</p>
+<p>语言的设计者的考量远远多过于这一点。更为确切地，他们对各种平台、处理器、编程方式都进行了考量，总结出了不同的“内存模型”。事实上，顺序一致只是属于 C++11 中多种内存模型中的一种。而在 C++11 中，并不是只支持顺序一致单个内存模型的原子变量，因为顺序一致往往意味着最低效的同步方式。要使用 C++11 中更为高效的原子类型变量的同步方式，我们先要了解一些处理器和编译器相关的知识。</p>
+<p>在现实中，x86 以及 SPARC（TSO模式）都被看作是采用强顺序内存模型的平台。对于任何一个线程而言，其看到原子操作（这里都是指数据的读写）都是顺序的。而对于是采用弱顺序内存模型的平台，比如 Alpha、PowerPC、Itanlium、ArmV7 这样的平台而言，如果要保证指令执行的顺序，通常需要在汇编指令中加入一条所谓的内存栅栏（内存屏障）指令。比如在 PowerPC 上，就有一条名为 sync 的内存栅栏指令。该指令迫使已经进入流水线中的指令都完成后处理器才执行 sync 以后指令（排空流水线）。这样一来，sync 之前运行的指令总是先于 sync 之后的指令完成的。</p>
+<p>对于 x86 这样的平台来说，禁止了编译器对原子类型变量间的重排序优化；而对于 PowerPC 这样的平台来说，则不仅禁止了编译器的优化，还插入了大量的内存栅栏。这对于意图是提高性能的多线程程序而言，无疑是一种性能伤害。</p>
+<p><a href="C/C++%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B">C&#x2F;C++内存模型</a></p>
+<p>在C++11中，设计者给出的解决方式是让程序员为原子操作指定所谓的内存顺序。这样的好处是，普通的指令（如普通的内存读写操作）可以发挥乱序执行的优势，而只涉及处理器间通信时采用同步操作来保证顺序一致性。</p>
+<p><img src="/images/2024/10/15/88961c10-8ad9-11ef-a5f5-79a271f1b666.png" alt="内存屏障.png"></p>
+<p>灰色线条代表普通的内存读写操作（彼此可以重排，但不会跨越同步操作重排）。</p>
+<p>红色线条代表同步操作（彼此不会重排，也不会和普通的内存读写操作重排）。</p>
+<table>
+<thead>
+<tr>
+<th>枚举值</th>
+<th>定义规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>memory_order_relaxed</td>
+<td>不对执行顺序做任何保证，最宽松</td>
+</tr>
+<tr>
+<td>memory_order_acquire</td>
+<td>本线程中，所有后续的读操作必须在本条原子操作完成后执行</td>
+</tr>
+<tr>
+<td>memory_order_release</td>
+<td>本线程中，所有之前的写操作完成之后才能执行本条原子操作</td>
+</tr>
+<tr>
+<td>memory_order_acq_rel</td>
+<td>同时包含 memory_order_acquire 和 memory_order_release 标记</td>
+</tr>
+<tr>
+<td>memory_order_consume</td>
+<td>本线程中，所有后续的有关本原子类型的操作，必须在本条原子操作完成之后执行</td>
+</tr>
+<tr>
+<td>memory_order_seq_cst</td>
+<td>全部存取都按照顺序执行，最严苛</td>
+</tr>
+</tbody></table>
+<p><strong>值得注意的是，并非每种 memory_order 都可以被 atomic 的成员使用。</strong>通常情况下，我们可以把 atomic 成员函数可使用的 memory_order 值分为以下 3 组：</p>
+<ul>
+<li>原子存储操作（store）可以使用 memorey_order_relaxed、memory_order_release、 memory_order_seq_cst。</li>
+<li>原子读取操作（load）可以使用 memorey_order_relaxed、memory_order_consume、 memory_order_acquire、memory_order_seq_cst。</li>
+<li>RMW操作（read-modify-write），即一些需要同时读写的操作，比如之前提过的 atomic_flag 类型的test_and_set() 操作。又比如 atomic 类模板的 atomic_compare_exchange() 操作等都是需要同时读写的。RMW操作可以使用 memorey_order_relaxed、memory_order_consume、memory_order_acquire、memory_order_release、memory_order_acq_rel、memory_order_seq_cst 。</li>
+</ul>
+<p>一些形如 “operator&#x3D;” 、“operator+&#x3D;” 的函数，事实上都是 memory_order_seq_cst 作为 memory_order 参数的原子操作的简单封装。也即是说，之前小节中的代码都是采用顺序一致性的内存模型。如果读者需要的正是顺序一致性的内存模型的话，那么这些操作符都是可以直接使用的。而如果读者是要指定内存顺序的话，则应该采用形如 load、atomic_fetch_add 这样的版本。</p>
+<h2><span id="疑问">疑问</span></h2><p>问题1：上面介绍的接口添加 _explicit 有何区别？</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">std::atomic_compare_exchange_strong_explicit<br><br>std::atomic_compare_exchange_strong<br></code></pre></td></tr></table></figure>
+
+<p>前面介绍的都有对应的接口，区别在于：</p>
+<ul>
+<li>前者默认情况下，它使用 <strong><code>std::memory_order_seq_cst</code></strong> 内存顺序，这是最严格的内存序，保证了最强的同步和可见性要求。</li>
+<li>允许显式地指定内存顺序。</li>
+</ul>
+<p>一个不可以指定内存顺序，一个可以指定内存顺序。</p>
+<hr>
+<p>问题2：原子变量的基本运算行为也是原子操作？</p>
+<p>赋值<code>=</code>操作，自加<code>++</code>操作，自减<code>--</code>操作，复合运算操作（<code>+=</code>，<code>-=</code>等操作）。</p>
+<hr>
+<p>问题3：load和store操作只能保证对原子变量本身的操作是原子的，而不能保证对原子变量所引用的对象的操作是原子的？</p>
+<p><strong>原子变量本身</strong>：</p>
+<ul>
+<li>当我们对 <code>std::atomic&lt;T&gt;</code> 类型的原子变量执行 <code>load</code> 和 <code>store</code> 操作时，这些操作是<strong>线程安全</strong>的。即在多线程环境中，读取和写入这个原子变量不会出现竞争条件或数据不一致的问题。无论有多少线程同时操作这个原子变量，读取（<code>load</code>）和写入（<code>store</code>）的操作都能够保持原子性，确保操作的完整性。</li>
+</ul>
+<p><strong>引用的对象</strong>：</p>
+<ul>
+<li>如果这个原子变量是一个指针或引用类型，<code>load</code> 和 <code>store</code> 仅保证对指针或引用变量本身（即存储的地址）的操作是原子的。<strong>但并不保证对指针或引用所指向的对象进行的操作是原子的</strong>。</li>
+<li>举个例子，假设有一个 <code>std::atomic&lt;int*&gt;</code> 类型的原子变量，它存储了指向一个整数对象的指针。当你通过 <code>load</code> 操作获取这个指针时，可以保证得到的指针地址是正确的、线程安全的；但是，<strong>如果多个线程同时修改该指针指向的整数值（即通过指针修改整数），这个修改操作就不是原子的</strong>，需要额外的同步机制来保证线程安全。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">std::atomic&lt;<span class="hljs-type">int</span>*&gt; <span class="hljs-title">atomicPtr</span><span class="hljs-params">(<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>(<span class="hljs-number">10</span>))</span></span>; <span class="hljs-comment">// 原子指针</span><br><br><span class="hljs-comment">// 线程A：修改指针指向的值</span><br>*atomicPtr.<span class="hljs-built_in">load</span>() = <span class="hljs-number">20</span>; <span class="hljs-comment">// 修改指针所指对象</span><br><br><span class="hljs-comment">// 线程B：修改指针指向的值</span><br>*atomicPtr.<span class="hljs-built_in">load</span>() = <span class="hljs-number">30</span>; <span class="hljs-comment">// 修改指针所指对象</span><br><br></code></pre></td></tr></table></figure>
+
+<p>在这个例子中：</p>
+<ul>
+<li><code>atomicPtr.load()</code> 是原子的，保证线程安全，获取指针的操作是安全的。</li>
+<li>但是通过指针 <code>*atomicPtr.load()</code> 修改指针所指向的对象（整数）并不是原子的。如果两个线程同时修改这个对象的值（例如线程A和线程B），它们的操作可能会相互干扰，导致数据竞争。</li>
+</ul>
+<p>如果需要保证对指针所指向的对象的操作是线程安全的，可以使用其他同步机制（如互斥锁），或者使用原子类型直接操作对象（例如使用 <code>std::atomic&lt;int&gt;</code> 代替 <code>int</code>）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">std::atomic&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">atomicInt</span><span class="hljs-params">(<span class="hljs-number">10</span>)</span></span>; <span class="hljs-comment">// 直接使用原子类型保证线程安全</span><br>atomicInt.<span class="hljs-built_in">store</span>(<span class="hljs-number">20</span>); <span class="hljs-comment">// 安全的存储操作</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>问题4：为什么我们只关心读写操作的执行顺序问题？</p>
+<p>这是由处理器的设计决定的，通常情况下，处理器总是从内存中读出数据进行运算，再将运行结果又返回内存，因此内存中的数据是一个“准绳”，相对的，寄存器中的内容则是“临时量”。所以在多核心处理器上，核心往往都有全套的寄存器来分别存储临时量，而数据交流总是以内存中的数据为准。这么一来，一些寄存器中的运算（比如伪汇编中的指令2）就不会被多处理器关注，处理器只关心读写等原子操作指令的顺序。</p>
+<hr>
+<p>问题5：内存屏障的作用？</p>
+<p>内存屏障使得CPU 或编译器在对内存进行操作的时候,，严格按照一定的顺序来执行，也就是说在内存屏障之前的指令和之后的指令不会由于系统优化等原因而导致乱序。</p>
+<p>大多数现代计算机为了提高性能而采取乱序执行，这使得内存屏障成为必须。语义上，内存屏障之前的所有写操作都要写入内存；内存屏障之后的读操作都可以获得同步屏障之前的写操作的结果。因此，对于敏感的程序块，写操作之后、读操作之前可以插入内存屏障。</p>
+<hr>
+<p>参考书籍：《深入理解C++11》</p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/10/15/%E6%B1%89%E5%AE%AB%E6%98%A5%C2%B7%E7%AB%8B%E6%98%A5%E6%97%A5/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>汉宫春·立春日</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/10/15/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E5%89%8D%E8%A8%80/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      第一章：前言
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\05\多线程中的虚假唤醒\" title="多线程中的虚假唤醒" rel="bookmark">多线程中的虚假唤醒</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\15\第一章：前言\" title="第一章：前言" rel="bookmark">第一章：前言</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://paugram.com/">保罗的小宇宙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://shuyi.tech/">陈树义的博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
