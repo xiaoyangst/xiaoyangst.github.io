@@ -172,6 +172,42 @@
   
   <div class="post-card">
     <div class="post__head">
+      <a href="/2024/10/17/Redis%E5%93%A8%E5%85%B5/" class="post-title hover-line">Redis哨兵</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">此前，我们非常依赖主服务器，因为所有的写命令都首先会给主服务器，那如果主服务器死掉，其它从服务器该怎么办？顶替！选择一个从服务器来担任主服务器的职责。Redis 提供哨兵机制（哨兵其实是一个运行在特殊模式下的 Redis 进程，所以它也是一个节点），它会检测主节点是否存活，如果发现主节点挂掉，就会选举一个从节点切换为主节点，并且把新主节点的相关信息通知给从节点和客户端。总结就是主要负责三件事情：监控、选主、通知</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/10/17/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" class="post-title hover-line">Redis主从复制</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">之前介绍 Redis 持久化是针对单台主机，如果这台主机死掉，不能对外提供服务，那持久化策略也没有发挥的余地。为了避免这种情况，那就需要能够有多台 Redis 服务器，哪怕其中一台死掉，再选择一个允许正常的 Redis 服务器顶上，继续正常服务。但我们必须要保证数据的一致性，所以引出接下来介绍的主从复制</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
       <a href="/2024/10/15/%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F/" class="post-title hover-line">第二章：原子变量</a>
       
     </div>
@@ -308,42 +344,6 @@
     <div class="post__foot">
       <div class="post-tags">
   <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/08/%E5%BA%95%E5%B1%82%E5%9F%BA%E4%BA%8ETCP%E5%8D%8F%E8%AE%AE%E7%9A%84Socket%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B/" class="post-title hover-line">底层基于TCP协议的Socket通信流程</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">不是介绍接口，而是讲原理</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/06/%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%E3%80%81%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E5%92%8C%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F/" class="post-title hover-line">缓存雪崩、缓存击穿和缓存穿透</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">Redis 缓存的数据来源于 MySQL数据库，前者作用于内存，后者作用于磁盘，内存访问比磁盘快很多。题目中的缓存失败情况从这两个数据库展开讨论</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Redis/" class="post-tag">#Redis</a>
 
 </div>
     </div>
@@ -666,12 +666,20 @@
             <img alt="link"
                  height="20px"
                  width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
           </div>
         
       
         
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
         
       
         
