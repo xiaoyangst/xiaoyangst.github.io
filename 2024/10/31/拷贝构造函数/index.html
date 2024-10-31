@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-         | 
+        拷贝构造函数 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -153,205 +154,148 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/blog)"></div>
-        博客
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">拷贝构造函数</div>
+        <div class="post-info">
+          
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+
+          <span class="post-date">2024-10-31</span>
+        </div>
       </div>
-      <div class="wall-category-description"></div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Asio/" rel="tag">Asio</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" rel="tag">C++11新特性</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">C++性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CMake/" rel="tag">CMake</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CPP/" rel="tag">CPP</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clion/" rel="tag">Clion</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OS/" rel="tag">OS</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vim/" rel="tag">Vim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%80%E7%82%B9%E5%B0%8F%E4%BA%8B/" rel="tag">一点小事</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%B2%E5%AF%86%E5%85%B3%E7%B3%BB/" rel="tag">亲密关系</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag">函数式编程</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" rel="tag">单调栈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%9C%81/" rel="tag">反省</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF/" rel="tag">回溯</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" rel="tag">基础组件</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">字符串</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag">并发编程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" rel="tag">技术摘录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" rel="tag">技术杂文</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A8%E8%8D%90/" rel="tag">推荐</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" rel="tag">操作系统导论</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E6%96%87/" rel="tag">杂文</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%9C%E7%B4%A0%E5%A8%9F/" rel="tag">杜素娟</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9F%8F%E6%8B%89%E5%9B%BE/" rel="tag">柏拉图</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9F%8F%E6%8B%89%E5%9B%BE%E4%B8%AD%E7%9F%AD%E7%AF%87%E5%85%A8%E9%9B%86/" rel="tag">柏拉图中短篇全集</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%88/" rel="tag">栈</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91/" rel="tag">树</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" rel="tag">模板元编程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%9B%E6%B3%BD%E4%B8%9C/" rel="tag">毛泽东</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%9B%E6%B3%BD%E4%B8%9C%E9%80%89%E9%9B%86/" rel="tag">毛泽东选集</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B0%B4%E6%9E%9C/" rel="tag">水果</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%90%86%E6%83%B3%E5%9B%BD/" rel="tag">理想国</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%AD%E7%AF%87/" rel="tag">短篇</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag">网络编程</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91/" rel="tag">自我</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">计算机组成原理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%97%E8%AF%8D/" rel="tag">诗词</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E5%8F%A4%E6%96%87/" rel="tag">读古文</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E8%AF%97%E8%AF%8D/" rel="tag">读诗词</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%9B%E5%BC%83%E7%96%BE/" rel="tag">辛弃疾</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag">链表</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%9F%E5%88%97/" rel="tag">队列</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%B6%E7%A2%8E%E4%B9%8B%E6%80%9D/" rel="tag">零碎之思</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E6%84%88/" rel="tag">韩愈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AC%BC%E8%B0%B7%E5%AD%90/" rel="tag">鬼谷子</a><span class="tag-list-count">1</span></li></ul></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E6%97%B6%E6%9C%BA%E9%87%8D%E7%82%B9">拷贝构造函数的调用时机（重点）</a></li>
+<li><a href="#%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%9A%84%E5%BD%A2%E5%BC%8F%E6%8E%A2%E7%A9%B6">拷贝构造函数的形式探究</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E9%87%8D%E7%82%B9">实现拷贝构造函数（重点）</a></li>
+</ul>
+<!-- tocstop -->
+
+<p>拷贝构造函数的形式是固定的：**类名(const 类名 &amp;)  **</p>
+<ol>
+<li>该函数是一个构造函数  —— 拷贝构造也是构造！</li>
+<li>该函数用一个<strong>已经存在的</strong>同类型的对象，来初始化新对象，即对对象本身进行复制</li>
+</ol>
+<p>类会默认提供拷贝构造函数，但是它存在问题。</p>
+<p><img src="/images/2024/10/31/16aea0d0-9791-11ef-a80e-c7882be974b3.png" alt="002拷贝构造函数.png"></p>
+<p>如果是默认的拷贝构造函数，pc2 会对 pc 的 _brand 进行<font color="red"><strong>浅拷贝</strong></font>，指向同一片内存；pc2 被销毁时，会调用析构函数，将这片堆空间进行回收；pc 再销毁时，析构函数中又会试图回收这片空间，出现 double free 问题。</p>
+<p>所以，如果拷贝构造函数需要显式写出时（该类有指针成员申请堆空间），在自定义的拷贝构造函数中要换成<font color="red"><strong>深拷贝</strong></font>的方式，先申请空间，再复制内容。</p>
+<p><img src="/images/2024/10/31/126f4970-9791-11ef-a80e-c7882be974b3.png" alt="003拷贝构造函数.png"></p>
+<h2><span id="拷贝构造函数的调用时机重点">拷贝构造函数的调用时机（重点）</span></h2><p><strong>1-当使用一个已经存在的对象初始化另一个同类型的新对象时</strong></p>
+<p><img src="/images/2024/10/31/0e936ed0-9791-11ef-a80e-c7882be974b3.png" alt="004拷贝构造函数.png"></p>
+<p><strong>2-当函数参数（实参和形参的类型都是对象），形参与实参结合时（实参初始化形参）</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">func</span><span class="hljs-params">(Student s)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>说白了，上面这个就是值传递，值传递肯定是要拷贝的。</p>
+<p>建议将函数参数用引用，即 <code>void func(Student &amp; s)</code>。避免拷贝。</p>
+<p><strong>3-当函数的返回值是对象，执行return语句时</strong></p>
+<p>我们可以选择，将返回值定义为返回引用来避免拷贝。但同时你要注意，万不可返回一个临时对象的引用。</p>
+<p>&nbsp;</p>
+<p>第三种情况直接编译并不会显示拷贝构造函数的调用，但是底层实际是调用了的，加上下面的优化参数进行编译可以看到效果。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">g++ CopyComputer.cc -fno-elide-constructors<br></code></pre></td></tr></table></figure>
+
+<h2><span id="拷贝构造函数的形式探究">拷贝构造函数的形式探究</span></h2><p><strong>思考1：拷贝构造函数是否可以去掉引用符号？</strong></p>
+<p>如果拷贝函数的参数中去掉引用符号，进行拷贝时调用拷贝构造函数的过程中会发生“实参和形参都是对象，用实参初始化形参”（拷贝构造第二种调用时机），会再一次调用拷贝构造函数。形成递归调用，直到栈溢出，导致程序崩溃。</p>
+<p><strong>思考2：拷贝构造函数是否可以去掉 const？</strong></p>
+<p>加 const 的第一个用意：为了确保右操作数的数据成员不被改变。</p>
+<p>加const的第二个用意：<strong>为了能够复制临时对象的内容，因为非const引用不能绑定临时变量（右值）</strong></p>
+<h2><span id="实现拷贝构造函数重点">实现拷贝构造函数（重点）</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">int</span> *coordinates; <span class="hljs-comment">// 动态分配的数组</span><br>    <span class="hljs-type">int</span> dimension;    <span class="hljs-comment">// 维度</span><br><br><span class="hljs-keyword">public</span>:<br><br>    <span class="hljs-comment">// 拷贝构造函数</span><br>    <span class="hljs-built_in">Point</span>(<span class="hljs-type">const</span> Point &amp;other)<br>        : <span class="hljs-built_in">dimension</span>(other.dimension)<br>   &#123;<br>        coordinates = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[dimension]; <span class="hljs-comment">// 动态分配数组</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; dimension; ++i) &#123;<br>            coordinates[i] = other.coordinates[i]; <span class="hljs-comment">// 深拷贝</span><br>        &#125;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Copy constructor called&quot;</span> &lt;&lt; std::endl;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>拷贝构造函数本身也属于构造函数，因此可以利用初始化列表初始化，而对于实际的数据拷贝，可以在函数体完成。这种初始化方式已在构造函数章节讲过了。</p>
+<p>实际上拷贝构造函数就是把此类的构造函数重新行为一遍，只不过接受的参数是一个同类对象。</p>
+<p>构造函数就是初始化成员变量，指针成员变量还要申请堆空间来初始化，如果有实际数据，就在函数体中初始化。那么拷贝构造函数和构造函数唯一的不同是，拷贝构造函数是用存在的同类对象初始化正在创建的同类对象的成员变量，构造函数是用全部或部分的成员变量参数来初始化正在创建的同类对象的成员变量。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/09/select%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title hover-line">select的使用</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">彻底讲清楚 select</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/09/%E5%86%AF%C2%B7%E8%AF%BA%E4%BE%9D%E6%9B%BC%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" class="post-title hover-line">冯·诺依曼体系结构</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">冯·诺依曼体系结构又名存储程序计算机，这里面其实暗含了两个概念，一个是“可编程”计算机，一个是“存储”计算机</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="post-tag">#计算机组成原理</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/08/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E7%BC%93%E5%AD%98%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%9F/" class="post-title hover-line">数据库和缓存如何保持一致性？</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">先更新数据库，再删除缓存也是会出现数据不一致性的问题，但是在实际中，这个问题出现的概率并不高。因为缓存的写入通常要远远快于数据库的写入</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Redis/" class="post-tag">#Redis</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/08/HTTPS%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B/" class="post-title hover-line">HTTPS通信流程</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">简单来讲，非对称加密完成客户端对称加密的密钥交换，双方后续就用对称加密的方式进行通信</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/08/%E5%BA%95%E5%B1%82%E5%9F%BA%E4%BA%8ETCP%E5%8D%8F%E8%AE%AE%E7%9A%84Socket%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B/" class="post-title hover-line">底层基于TCP协议的Socket通信流程</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">不是介绍接口，而是讲原理</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/06/%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%E3%80%81%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E5%92%8C%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F/" class="post-title hover-line">缓存雪崩、缓存击穿和缓存穿透</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">Redis 缓存的数据来源于 MySQL数据库，前者作用于内存，后者作用于磁盘，内存访问比磁盘快很多。题目中的缓存失败情况从这两个数据库展开讨论</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Redis/" class="post-tag">#Redis</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/03/Linux%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/" class="post-title hover-line">Linux线程操作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">线程并没有想象中那么简单，对于代码很难保证说完全正确</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/03/%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" class="post-title hover-line">分布式架构设计</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">认识分布式设计，尽管微服务正在普及，但始终记住，架构是发展而来的，适合自己的才是最好的</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" class="post-tag">#分布式</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/01/%E3%80%8A%E6%AD%A4%E6%96%87%E4%BB%B6%E4%B8%8D%E5%B1%9E%E4%BA%8E%E4%BB%BB%E4%BD%95%E9%A1%B9%E7%9B%AE%E7%9B%AE%E6%A0%87-%E4%BB%A3%E7%A0%81%E6%B4%9E%E5%AF%9F%E5%8A%9F%E8%83%BD%E5%8F%AF%E8%83%BD%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E5%B7%A5%E4%BD%9C%E3%80%8B%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title hover-line">《此文件不属于任何项目目标 代码洞察功能可能无法正常工作》解决方案</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">头文件必须在其他任意一个源文件中被 include ，否则 Clion 不识别</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Clion/" class="post-tag">#Clion</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/01/Clion%E8%BF%9C%E7%A8%8BLinux%E6%89%BE%E4%B8%8D%E5%88%B0%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E5%A4%B4%E6%96%87%E4%BB%B6%EF%BC%9F/" class="post-title hover-line">Clion远程Linux找不到第三方库头文件？</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">先同步更新的库文件，再配置好  CMakeList.txt 文件查找库文件</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Clion/" class="post-tag">#Clion</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><a class="page-number" href="/blog/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/20/">20</a></div>
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/10/31/Effective-C-%E6%94%B9%E5%96%84%E7%A8%8B%E5%BA%8F%E4%B8%8E%E8%AE%BE%E8%AE%A1%E7%9A%8455%E4%B8%AA%E5%85%B7%E4%BD%93%E5%81%9A%E6%B3%95/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      Effective C++ 改善程序与设计的55个具体做法
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\模板元编程的意义\" title="模板元编程的意义" rel="bookmark">模板元编程的意义</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\22\HTTP-网络的请求发送和响应处理\" title="HTTP 网络的请求发送和响应处理" rel="bookmark">HTTP 网络的请求发送和响应处理</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -802,6 +746,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>

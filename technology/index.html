@@ -172,6 +172,78 @@
   
   <div class="post-card">
     <div class="post__head">
+      <a href="/2024/10/31/%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" class="post-title hover-line">拷贝构造函数</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">构造函数就是初始化成员变量，指针成员变量还要申请堆空间来初始化，如果有实际数据，就在函数体中初始化。那么拷贝构造函数和构造函数唯一的不同是，拷贝构造函数是用存在的同类对象初始化正在创建的同类对象的成员变量，构造函数是用全部或部分的成员变量参数来初始化正在创建的同类对象的成员变量。</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/10/31/Effective-C-%E6%94%B9%E5%96%84%E7%A8%8B%E5%BA%8F%E4%B8%8E%E8%AE%BE%E8%AE%A1%E7%9A%8455%E4%B8%AA%E5%85%B7%E4%BD%93%E5%81%9A%E6%B3%95/" class="post-title hover-line">Effective C++ 改善程序与设计的55个具体做法</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">用这些条款规范自己的代码规则，极个别条款因个人当下情况选择移除</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/10/31/%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0/" class="post-title hover-line">析构函数</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">我们自定义的析构函数是回收自己类中的成员变量，通过 delete 去回收 拥有堆内存的成员变量。但是它不具备 delete 自身的能力，因此我们讲 使用者创建该对象之后（堆上的对象），记得 delete 掉。后面学习智能指针就更方便，它会自动将管理的对象，在对象销毁之后，自动 delete 掉该对象。注意析构函数不是智能指针调用的，而是对象本身销毁之后自己会调用，但是对象本身的堆内存 delete 会由智能指针完成。</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/10/31/%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" class="post-title hover-line">构造函数</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">类的数据成员中有指针时，意味着创建该类的对象时要进行指针成员的初始化，需要申请堆空间。在初始化列表中申请空间，在函数体中复制内容。</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
       <a href="/2024/10/24/Redis%E9%9B%86%E7%BE%A4/" class="post-title hover-line">Redis集群</a>
       
     </div>
@@ -277,81 +349,9 @@
     </div>
   </div>
 
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/10/epoll%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title hover-line">epoll的使用</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">彻底讲清楚epoll</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/09/select%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title hover-line">select的使用</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">彻底讲清楚 select</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/09/%E5%86%AF%C2%B7%E8%AF%BA%E4%BE%9D%E6%9B%BC%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" class="post-title hover-line">冯·诺依曼体系结构</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">冯·诺依曼体系结构又名存储程序计算机，这里面其实暗含了两个概念，一个是“可编程”计算机，一个是“存储”计算机</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="post-tag">#计算机组成原理</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/08/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E7%BC%93%E5%AD%98%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%9F/" class="post-title hover-line">数据库和缓存如何保持一致性？</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">先更新数据库，再删除缓存也是会出现数据不一致性的问题，但是在实际中，这个问题出现的概率并不高。因为缓存的写入通常要远远快于数据库的写入</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Redis/" class="post-tag">#Redis</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/technology/page/2/">2</a><a class="page-number" href="/technology/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/12/">12</a></div>
+    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/technology/page/2/">2</a><a class="page-number" href="/technology/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/13/">13</a></div>
   </div>
 
     </div>
