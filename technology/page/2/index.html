@@ -172,6 +172,60 @@
   
   <div class="post-card">
     <div class="post__head">
+      <a href="/2024/10/17/Redis%E5%93%A8%E5%85%B5/" class="post-title hover-line">Redis哨兵</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">此前，我们非常依赖主服务器，因为所有的写命令都首先会给主服务器，那如果主服务器死掉，其它从服务器该怎么办？顶替！选择一个从服务器来担任主服务器的职责。Redis 提供哨兵机制（哨兵其实是一个运行在特殊模式下的 Redis 进程，所以它也是一个节点），它会检测主节点是否存活，如果发现主节点挂掉，就会选举一个从节点切换为主节点，并且把新主节点的相关信息通知给从节点和客户端。总结就是主要负责三件事情：监控、选主、通知</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/10/17/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" class="post-title hover-line">Redis主从复制</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">之前介绍 Redis 持久化是针对单台主机，如果这台主机死掉，不能对外提供服务，那持久化策略也没有发挥的余地。为了避免这种情况，那就需要能够有多台 Redis 服务器，哪怕其中一台死掉，再选择一个允许正常的 Redis 服务器顶上，继续正常服务。但我们必须要保证数据的一致性，所以引出接下来介绍的主从复制</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/10/14/%E8%BF%9B%E7%A8%8B%E6%B1%A0%E5%92%8C%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD/" class="post-title hover-line">进程池和文件下载</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">结合学过的文件操作、网络通信、以及进程和线程的知识, 实现一个基本的文件下载服务器模型。尽管线程池才是最常用的，但先从进程池谈起</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" class="post-tag">#基础组件</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
       <a href="/2024/10/10/epoll%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title hover-line">epoll的使用</a>
       
     </div>
@@ -290,60 +344,6 @@
     <div class="post__foot">
       <div class="post-tags">
   <a href="/tags/Redis/" class="post-tag">#Redis</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/03/Linux%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/" class="post-title hover-line">Linux线程操作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">线程并没有想象中那么简单，对于代码很难保证说完全正确</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/03/%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" class="post-title hover-line">分布式架构设计</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">认识分布式设计，尽管微服务正在普及，但始终记住，架构是发展而来的，适合自己的才是最好的</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" class="post-tag">#分布式</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/01/%E3%80%8A%E6%AD%A4%E6%96%87%E4%BB%B6%E4%B8%8D%E5%B1%9E%E4%BA%8E%E4%BB%BB%E4%BD%95%E9%A1%B9%E7%9B%AE%E7%9B%AE%E6%A0%87-%E4%BB%A3%E7%A0%81%E6%B4%9E%E5%AF%9F%E5%8A%9F%E8%83%BD%E5%8F%AF%E8%83%BD%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E5%B7%A5%E4%BD%9C%E3%80%8B%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title hover-line">《此文件不属于任何项目目标 代码洞察功能可能无法正常工作》解决方案</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">头文件必须在其他任意一个源文件中被 include ，否则 Clion 不识别</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Clion/" class="post-tag">#Clion</a>
 
 </div>
     </div>
