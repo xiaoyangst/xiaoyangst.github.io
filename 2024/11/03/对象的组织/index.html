@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 
+        对象的组织 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -153,205 +154,165 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">对象的组织</div>
+        <div class="post-info">
+          
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+
+          <span class="post-date">2024-11-03</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/Asio/" style="font-size: 1em;">Asio</a> <a href="/tags/C/" style="font-size: 1em;">C</a> <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 1em;">C++11新特性</a> <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">C++性能优化</a> <a href="/tags/CMake/" style="font-size: 1em;">CMake</a> <a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/Clion/" style="font-size: 1em;">Clion</a> <a href="/tags/Linux/" style="font-size: 1em;">Linux</a> <a href="/tags/MySQL/" style="font-size: 1em;">MySQL</a> <a href="/tags/OS/" style="font-size: 1em;">OS</a> <a href="/tags/Qt/" style="font-size: 1em;">Qt</a> <a href="/tags/Redis/" style="font-size: 1em;">Redis</a> <a href="/tags/Vim/" style="font-size: 1em;">Vim</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">函数式编程</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 1em;">分布式</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" style="font-size: 1em;">基础组件</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 1em;">微服务</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" style="font-size: 1em;">技术杂文</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" style="font-size: 1em;">操作系统导论</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 1em;">计算机组成原理</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#const-%E5%AF%B9%E8%B1%A1">const 对象</a></li>
+<li><a href="#%E6%8C%87%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%8C%87%E9%92%88">指向对象的指针</a></li>
+<li><a href="#%E5%AF%B9%E8%B1%A1%E6%95%B0%E7%BB%84">对象数组</a></li>
+<li><a href="#%E5%A0%86%E5%AF%B9%E8%B1%A1">堆对象</a></li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="const-对象">const 对象</span></h1><p>类对象也可以声明为 const 对象，一般来说，能作用于 const 对象的成员函数除了构造函数和析构函数，就只有 const 成员函数了。因为 const 对象只能被创建、撤销和只读访问，写操作是不允许的。</p>
+<p><strong>const 对象与 const 成员函数的规则：</strong></p>
+<ol>
+<li>当类中有 const 成员函数和非 const 成员函数重载时，const 对象会调用 const 成员函数，非 const 对象会调用非 const 成员函数。</li>
+<li>当类中只有一个 const 成员函数时，无论 const 对象还是非 const 对象都可以调用这个版本。</li>
+<li>当类中只有一个非 const 成员函数时，const 对象就不能调用非 const 版本。</li>
+</ol>
+<p>&nbsp;</p>
+<p><strong>思考1：</strong>一个类中可以有参数形式“完全相同”的两个成员函数（ const 版本与非 const 版本），既然没有报错重定义，那么它们必然是构成了重载，为什么它们能构成重载呢？</p>
+<p>参数（ this 指针 ）的类型是不同的。</p>
+<p>&nbsp;</p>
+<p><strong>思考2：</strong>const 成员函数中不允许修改数据成员，const 数据成员初始化后不允许修改，其效果是否相同？</p>
+<p><strong>不可修改的范围不同</strong>：</p>
+<ul>
+<li><code>const</code> 成员函数保护<strong>整个对象</strong>，防止成员变量在函数调用期间被修改。</li>
+<li><code>const</code> 数据成员则是特定成员变量一旦初始化后保持不变，不依赖于 <code>const</code> 成员函数。</li>
+</ul>
+<p><strong>修改权限不同</strong>：</p>
+<ul>
+<li><code>const</code> 成员函数不允许修改任何非 <code>mutable</code> 成员变量，但不要求成员变量必须为 <code>const</code>。</li>
+<li><code>const</code> 数据成员在对象生命周期内完全不可修改，不管在 <code>const</code> 成员函数还是非 <code>const</code> 成员函数中。</li>
+</ul>
+<p><strong>用途不同</strong>：</p>
+<ul>
+<li><code>const</code> 成员函数适用于需要承诺“只读”访问的函数，使代码更具安全性。</li>
+<li><code>const</code> 数据成员适用于逻辑上恒定不变的数据，比如对象创建后就不会改变的配置或标识符。</li>
+</ul>
+<h1><span id="指向对象的指针">指向对象的指针</span></h1><p>对象占据一定的内存空间，和普通变量一致， C++ 程序中采用如下形式声明指向对象的指针：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">类名 * 指针名 [=初始化表达式];<br></code></pre></td></tr></table></figure>
+
+<p>初始化表达式是可选的，既可以通过取地址（&amp;对象名）给指针初始化，也可以通过申请动态内存给指针初始化，或者干脆不初始化（比如置为 nullptr ），在程序中再对该指针赋值。指针中存储的是对象所占内存空间的首地址。针对上述定义，则下列形式都是合法的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">Point <span class="hljs-title">pt</span><span class="hljs-params">(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)</span></span>;<br>Point * p1 = <span class="hljs-literal">nullptr</span>;<br>Point * p2 = &amp;pt;<br>Point * p3 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Point</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>);<br></code></pre></td></tr></table></figure>
+
+<h1><span id="对象数组">对象数组</span></h1><p>对象数组和标准类型数组的使用方法并没有什么不同，也有声明、初始化和使用等步骤。</p>
+<ul>
+<li>对象数组的声明</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">Point pts[<span class="hljs-number">2</span>];<br></code></pre></td></tr></table></figure>
+
+<p>这种格式会自动调用默认构造函数或所有参数都是缺省值的构造函数。</p>
+<ul>
+<li>对象数组的初始化（可以在声明时进行初始化）</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++">Point pts[<span class="hljs-number">2</span>] = &#123;<span class="hljs-built_in">Point</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), <span class="hljs-built_in">Point</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)&#125;;<br>Point pts[] = &#123;<span class="hljs-built_in">Point</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), <span class="hljs-built_in">Point</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)&#125;;<br>Point pts[<span class="hljs-number">5</span>] = &#123;<span class="hljs-built_in">Point</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), <span class="hljs-built_in">Point</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)&#125;;<br><span class="hljs-comment">//或者</span><br>Point pts[<span class="hljs-number">2</span>] = &#123;&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;&#125;;<br>pts-&gt;<span class="hljs-built_in">print</span>();  <span class="hljs-comment">// 第一个对象（1,2）</span><br>(pts + <span class="hljs-number">1</span>)-&gt;<span class="hljs-built_in">print</span>(); <span class="hljs-comment">// 第二个对象 (3,4)</span><br>Point pts[] = &#123;&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;&#125;;<br>Point pts[<span class="hljs-number">5</span>] = &#123;&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>这里最后一点需要提及，我们的对象数组是 5 个大小，但是只有前 2 个是有参，对于后 3 个位置，默认就是调用无参构造函数。</p>
+<h1><span id="堆对象">堆对象</span></h1><p>和把一个简单变量创建在动态存储区一样，可以用 new 和 delete 表达式为对象分配动态存储区，在拷贝构造函数一节中已经介绍了为类内的指针成员分配动态内存的相关范例，这里主要讨论如何为对象和对象数组动态分配内存。如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	Point * pt1 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Point</span>(<span class="hljs-number">11</span>, <span class="hljs-number">12</span>);<br>	pt1-&gt;<span class="hljs-built_in">print</span>();<br>	<span class="hljs-keyword">delete</span> pt1;<br>	pt1 = <span class="hljs-literal">nullptr</span>;<br>    <br>	Point * pt2 = <span class="hljs-keyword">new</span> Point[<span class="hljs-number">5</span>]();<span class="hljs-comment">//注意</span><br>	pt2-&gt;<span class="hljs-built_in">print</span>();<br>	(pt2 + <span class="hljs-number">1</span>)-&gt;<span class="hljs-built_in">print</span>();<br>	<span class="hljs-keyword">delete</span> [] pt2;<br>    pt2 = <span class="hljs-literal">nullptr</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/22/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0/" class="post-title hover-line">第一章：操作系统概述</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我们已经了解了操作系统实际上做了什么：它取得 CPU、内存或磁盘等物理资源，并对它们进行虚拟化。它处理与并发有关的麻烦且棘手的问题。它持久地存储文件，从而使它们长期安全</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a><a href="/tags/OS/" class="post-tag">#OS</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/21/%E4%BC%98%E5%8C%96%E5%B9%B6%E5%8F%91/" class="post-title hover-line">优化并发</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">本章将会讨论几个用于改善基于线程的并发程序的性能的技巧。我们假设读者已经基本掌握了线程级别的并发和同步原语，并正在寻找优化多线程程序的方法。线程级别的并发的基础知识并不是本书的主题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#C++性能优化</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/20/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" class="post-title hover-line">面向对象的设计原则</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">设计的目标：低耦合、高内聚</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/19/%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E7%BA%AF%E6%B4%81%E6%80%A7-%E9%81%BF%E5%85%8D%E5%8F%AF%E5%8F%98%E7%8A%B6%E6%80%81/" class="post-title hover-line">第五章：纯洁性--避免可变状态</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我不认为这章节有什么可用于将来实践的地方，因为并不会让性能有多大的提高，反而会拖累程序。况且用 const 来表明不可变状态，事实是可变状态才是常态。</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E4%BB%A5%E6%97%A7%E5%87%BD%E6%95%B0%E5%88%9B%E5%BB%BA%E6%96%B0%E5%87%BD%E6%95%B0/" class="post-title hover-line">第四章：以旧函数创建新函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">偏函数、柯里化和函数提升的讲解</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" class="post-title hover-line">第三章：函数对象</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果你熟悉 C++11 新特性，此文并无太多需要学习的地方</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/tuple%E5%85%83%E7%BB%84/" class="post-title hover-line">tuple元组</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">它是一种可以包含多个不同类型元素的容器（ 它是一个模板类，允许将多个不同类型的对象组合在一起）</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/auto-%E5%92%8C-decltype/" class="post-title hover-line">auto 和 decltype</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">用于类型推断，auto 和 decltype 属于互补关系。auto 虽然比 decltype 方便，但有些场景还是需要 decltype 来</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/thread%E5%BA%93/" class="post-title hover-line">thread库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">强调并发编程中需要注意的问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/chrono%E5%BA%93/" class="post-title hover-line">chrono库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">C语言虽然也有时间处理方法，但是精度只到秒。Linux 和 Windows 都有提供相应的方法精确到微秒，但是用法不同，显然不支持跨平台。chrono 库精度更高，同时支持跨平台，因此C++11之后使用chrono 库处理时间和日期是有必要的，至于到后面的C++版本是否会继续加强，那是以后的事情</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/technology/">1</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/8/">8</a><a class="page-number" href="/technology/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/technology/page/11/">11</a><a class="page-number" href="/technology/page/12/">12</a><a class="page-number" href="/technology/page/13/">13</a></div>
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/11/03/new%E5%92%8Cdelete%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%AD%A5%E9%AA%A4/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      new和delete表达式的工作步骤
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\05\模板元编程的意义\" title="模板元编程的意义" rel="bookmark">模板元编程的意义</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\22\HTTP-网络的请求发送和响应处理\" title="HTTP 网络的请求发送和响应处理" rel="bookmark">HTTP 网络的请求发送和响应处理</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -802,6 +763,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>
