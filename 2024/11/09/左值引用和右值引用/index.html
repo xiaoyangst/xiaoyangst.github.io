@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        CPP | 
+        左值引用和右值引用 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,9 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet"
-        type="text/css"
-        href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -157,83 +156,154 @@
     </div>
     <div class="body">
       
-  <div class="tag-page-title">#CPP</div>
-  <div class="post-list">
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">左值引用和右值引用</div>
+        <div class="post-info">
+          
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+
+          <span class="post-date">2024-11-09</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E5%B7%A6%E5%80%BC%E5%92%8C%E5%8F%B3%E5%80%BC%E7%9A%84%E5%8C%BA%E5%88%86">左值和右值的区分</a></li>
+<li><a href="#%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8">左值引用和右值引用</a></li>
+<li><a href="#%E8%BD%AC%E6%8D%A2">转换</a><ul>
+<li><a href="#%E5%8F%B3%E5%80%BC%E5%88%B0%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8%E7%9A%84%E7%BB%91%E5%AE%9A">右值到左值引用的绑定</a></li>
+<li><a href="#%E5%B7%A6%E5%80%BC%E5%88%B0%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E7%9A%84%E8%BD%AC%E6%8D%A2">左值到右值引用的转换</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%87%BA%E7%8E%B0%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89">为什么出现右值引用和移动语义？</a></li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="左值和右值的区分">左值和右值的区分</span></h1><p>左值是取地址，代表持续存活之物</p>
+<p>右值不可以取地址，代表即将消亡之物</p>
+<p>示例见下：num 是左值，3 是右值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> num = <span class="hljs-number">3</span>;<br></code></pre></td></tr></table></figure>
+
+<h1><span id="左值引用和右值引用">左值引用和右值引用</span></h1><p>无论左值引用还是右值引用，本质都是引用，即都是给对象取别名。</p>
+<p>传统的 C++ 语法中就存在引用语法，而 C++11 标准中新增了右值引用的语法特性，因此为了区分两者，将 C++11 标准出现之前的引用称为左值引用。</p>
+<p>左值引用就是对左值的引用，给左值取别名。<strong>主要作用是避免对象拷贝。</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> x = <span class="hljs-number">10</span>;<br><span class="hljs-type">int</span> &amp;ref = x; <span class="hljs-comment">// 左值引用，绑定到变量x</span><br></code></pre></td></tr></table></figure>
+
+<p>右值引用就是对右值的引用，给右值取别名。<strong>主要作用是延长对象的生命周期，一般是延长到作用域之外</strong>。广泛用于实现<strong>移动语义</strong>和<strong>完美转发</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> &amp;&amp;rref = <span class="hljs-number">10</span>; <span class="hljs-comment">// 右值引用，绑定到临时对象10</span><br></code></pre></td></tr></table></figure>
+
+<p>&nbsp;</p>
+<p>代码示例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">MyClass</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;Constructor\n&quot;</span>; &#125;<br>    <span class="hljs-built_in">MyClass</span>(<span class="hljs-type">const</span> MyClass &amp;) &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;Copy Constructor\n&quot;</span>; &#125;<br>    <span class="hljs-built_in">MyClass</span>(MyClass &amp;&amp;) &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;Move Constructor\n&quot;</span>; &#125;<br>&#125;;<br><br><span class="hljs-function">MyClass <span class="hljs-title">createObject</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">MyClass</span>(); <span class="hljs-comment">// 返回一个右值（临时对象）</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    MyClass obj1;              		             <span class="hljs-comment">// 调用默认构造函数</span><br>    MyClass obj2 = obj1;      			 <span class="hljs-comment">// 调用拷贝构造函数（左值引用）</span><br><br>    MyClass obj3 = <span class="hljs-built_in">createObject</span>(); 		<span class="hljs-comment">// 调用移动构造函数（右值引用）</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1><span id="转换">转换</span></h1><p>此前我们说左值引用绑定左值，右值引用绑定右值。</p>
+<p>那么，左值引用可以绑定右值吗？右值引用可以绑定左值吗？</p>
+<h2><span id="右值到左值引用的绑定">右值到左值引用的绑定</span></h2><p>右值可以通过<strong>const 左值引用</strong>进行绑定，虽然右值通常没有持久的地址，但 C++ 允许我们使用 <code>const</code> 左值引用来绑定一个右值。这种绑定可以使临时对象的生命周期延长至引用的作用域结束。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">int</span>&amp; ref = <span class="hljs-number">10</span>; <span class="hljs-comment">// 右值 10 被绑定到 const 左值引用 ref 上</span><br></code></pre></td></tr></table></figure>
+
+<p>这里，右值 <code>10</code> 可以通过 <code>const int&amp;</code> 绑定到 <code>ref</code>，从而延长了 <code>10</code> 的生命周期。在这种情况下，<code>ref</code> 只能被读取，不能被修改。</p>
+<h2><span id="左值到右值引用的转换">左值到右值引用的转换</span></h2><p>左值可以通过 <code>std::move</code> 显式地转换成右值引用，这使得一个本来是左值的对象可以被移动语义所使用。例如在移动构造函数和移动赋值运算符中，使用 <code>std::move</code> 将左值转为右值引用以实现高效的资源转移。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">process</span><span class="hljs-params">(<span class="hljs-type">int</span>&amp;&amp; x)</span> </span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Right value: &quot;</span> &lt;&lt; x &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br>    <span class="hljs-built_in">process</span>(std::<span class="hljs-built_in">move</span>(a)); <span class="hljs-comment">// std::move 将 a 转换为右值引用</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里 <code>std::move(a)</code> 将左值 <code>a</code> 转为右值引用，因此可以传递给 <code>process</code> 函数。需要注意，使用 <code>std::move</code> 后，<code>a</code> 的状态可能变成“未定义”，通常在此之后不应再直接使用 <code>a</code>，除非它被重新赋值。</p>
+<h1><span id="为什么出现右值引用和移动语义">为什么出现右值引用和移动语义？</span></h1><p>因为有个问题，左值引用解决不了，见下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++">string <span class="hljs-keyword">operator</span>+(<span class="hljs-type">const</span> string&amp; s, <span class="hljs-type">char</span> ch)<br>&#123;<br><span class="hljs-function">string <span class="hljs-title">ret</span><span class="hljs-params">(s)</span></span>;<br>ret.<span class="hljs-built_in">push_back</span>(ch);<br><span class="hljs-keyword">return</span> ret;<br>&#125;<br><br><span class="hljs-comment">// 拿现在这个函数来举例：ret是函数内的局部对象，出了函数作用域后会被析构，即被销毁了</span><br><span class="hljs-comment">// 若此时再返回它的别名（左值引用），也就是再拿这个对象来用，就会出问题</span><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">①：不能返回局部变量的引用。局部变量会在函数返回后被销毁，此时对 局部变量的引用就会成为“无所指”的引用，程序会进入未知状态。</span><br><span class="hljs-comment">②：不能返回函数内部通过 new 分配的内存的引用。虽然不存在局部变量的被动销毁问题，但如果被返回的函数的引用只是作为一个临时变量出现，而没有将其赋值给一个实际的变量，    那么就可能造成这个引用所指向的空间（有 new 分配）无法释放的情况（由于没有具体的变量名，故无法用 delete 手动释放该内存），从而造成内存泄漏。</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+      </div>
+    </div>
     
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/13/C-%E4%B8%AD%E7%9A%84%E5%8F%8B%E5%85%83%E7%B1%BB/" class="post-title hover-line">C++中的友元类</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">早之前很少用友元类，直到最近跟某个博主写 Asio 网络库，跟着用到友元类，但是今天却遇到一个问题，通过查询得到解决，特记录于此。不过，在此之前，还是把友元类的基础知识做个记录</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/11/08/More-Effective-C-35%E4%B8%AA%E6%94%B9%E5%96%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%9C%89%E6%95%88%E6%96%B9%E6%B3%95%E7%AC%94%E8%AE%B0/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      More Effective C++ 35个改善编程与设计的有效方法笔记
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
   <a href="/tags/CPP/" class="post-tag">#CPP</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\31\Effective-C-改善程序与设计的55个具体做法\" title="Effective C++ 改善程序与设计的55个具体做法" rel="bookmark">Effective C++ 改善程序与设计的55个具体做法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+    
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/08/CPP-%E4%B8%AD-cctype-%E5%BA%93%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95/" class="post-title hover-line">CPP 中 cctype 库的常用方法</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">通常用于处理字符串中字母、数字、特殊字符，还包括大小写转换</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
 </div>
-    </div>
-  </div>
 
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B%E7%9A%84%E6%84%8F%E4%B9%89/" class="post-title hover-line">模板元编程的意义</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">模板元编程可以只需要设计一份代码，传入不同的类型并生成实际的代码，完美解决面向过程和面向对象的不足</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a><a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" class="post-tag">#模板元编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/05/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E7%9A%84%E5%9C%BA%E6%99%AF/" class="post-title hover-line">虚析构函数的场景</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？阅读此文，给你解惑</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
-
-    <div class="paginator"><a class="page-number" href="/tags/CPP/">1</a><span class="page-number current">2</span></div>
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -684,6 +754,16 @@
     
     <script src="/js/copy-code.js"></script>
     
-    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
   </body>
 </html>
