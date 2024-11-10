@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 
+        C++内存泄露检测工具 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,205 +156,137 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">C++内存泄露检测工具</div>
+        <div class="post-info">
+          
+  <a href="/tags/Tools/" class="post-tag">#Tools</a>
+
+
+          <span class="post-date">2024-11-10</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/Asio/" style="font-size: 1em;">Asio</a> <a href="/tags/C/" style="font-size: 1em;">C</a> <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 1em;">C++11新特性</a> <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">C++性能优化</a> <a href="/tags/CMake/" style="font-size: 1em;">CMake</a> <a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/Clion/" style="font-size: 1em;">Clion</a> <a href="/tags/Linux/" style="font-size: 1em;">Linux</a> <a href="/tags/MySQL/" style="font-size: 1em;">MySQL</a> <a href="/tags/OS/" style="font-size: 1em;">OS</a> <a href="/tags/Qt/" style="font-size: 1em;">Qt</a> <a href="/tags/Redis/" style="font-size: 1em;">Redis</a> <a href="/tags/Tools/" style="font-size: 1em;">Tools</a> <a href="/tags/Vim/" style="font-size: 1em;">Vim</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">函数式编程</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 1em;">分布式</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" style="font-size: 1em;">基础组件</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 1em;">微服务</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" style="font-size: 1em;">技术杂文</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" style="font-size: 1em;">操作系统导论</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 1em;">计算机组成原理</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++">sudo apt install valgrind		<span class="hljs-comment">// 安装</span><br><br>valgrind --tool=memcheck --leak-check=full ./a.out	<span class="hljs-comment">// 使用</span><br></code></pre></td></tr></table></figure>
+
+<p>但是这么长的指令使用起来不方便，每查一次就得输入一次，可以设置一下：</p>
+<ol>
+<li>在home目录下编辑 .bashrc 文件，改别名</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">alias memcheck=<span class="hljs-string">&#x27;valgrind --tool=memcheck --leak-check=full --show-reachable=yes&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>重新加载 source .bashrc</li>
+</ol>
+<p>改写之后，就可以直接使用 memcheck 指令查看内存泄漏情况：<code>memcheck ./a.out</code></p>
+<p><img src="/images/2024/11/10/5841fb60-9f1a-11ef-8908-41febc593dbb.png" alt="内存泄露.png"></p>
+<p>LEAK SUMMARY：</p>
+<p>（1）绝对泄漏了</p>
+<p>（2）间接泄漏了</p>
+<p>（3）可能泄漏了，基本不会出现</p>
+<p>（4）没有被回收，但是不确定要不要回收</p>
+<p>（5）被编译器自动回收了，不用管</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/22/Json-%E7%9A%84%E5%A4%84%E7%90%86/" class="post-title hover-line">Json 的处理</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">Json 处理常用的方式和接口都在这里面了，可满足日常需求</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Qt/" class="post-tag">#Qt</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/21/%E7%AC%AC%E5%85%AB%E7%AB%A0%EF%BC%9A%E5%8D%8F%E7%A8%8B/" class="post-title hover-line">第八章：协程</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">反正比 C++20 原生提供的好用，以后C++标准协会可以考虑把这些拿过去，否则真没人用你那个协程，难用的要死</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a><a href="/tags/Asio/" class="post-tag">#Asio</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/%E7%AC%AC%E4%B9%9D%E7%AB%A0%EF%BC%9ACMake-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" class="post-title hover-line">第九章：CMake 交叉编译</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">之前学习过交叉编译，但一直缺乏实践，因为我也不接触嵌入式开发。就在昨天和网络上一个朋友解决CMake相关的问题，恰好就有机会实践交叉编译</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CMake/" class="post-tag">#CMake</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/%E7%AC%AC%E5%85%AB%E7%AB%A0%EF%BC%9ACMake-%E5%88%87%E6%8D%A2%E7%94%9F%E6%88%90%E5%99%A8/" class="post-title hover-line">第八章：CMake 切换生成器</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">图形化界面要比命令行更好用，如果你可以选择图像界面的话</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CMake/" class="post-tag">#CMake</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/%E7%BB%88%E7%AB%A0%EF%BC%9A%E7%BB%93%E5%B1%80%E5%8F%AA%E6%98%AF%E4%B8%80%E7%A7%8D%E8%99%9A%E6%9E%84/" class="post-title hover-line">终章：结局只是一种虚构</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">远远没有结束...</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CMake/" class="post-tag">#CMake</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/%E7%AC%AC%E4%B8%83%E7%AB%A0%EF%BC%9ACMake-%E6%9E%84%E5%BB%BA-Qt-%E9%A1%B9%E7%9B%AE/" class="post-title hover-line">第七章：CMake 构建 Qt 项目</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">网上就我的搜索经验来看，没有一篇文章实打实的把这个讲清楚，尽管我实践成功也来源于网上公布的文章，因此绝非要嘲讽谁。发此文就是希望那些想要通过 CMake 来管理 Qt 项目的人能够成功，网上的文章针对这块比较零散，把这些零散的内容和自身的实际情况结合，此文得以形成</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CMake/" class="post-tag">#CMake</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/%E7%AC%AC%E5%85%AD%E7%AB%A0%EF%BC%9ACMake-%E6%89%BE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/" class="post-title hover-line">第六章：CMake 找库文件的两种方式</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">find_package 和 find_library 都可以用于在 CMake 中查找和链接库，但 find_package 更适用于具有CMake 配置文件的库，而 find_library 则适用于没有 CMake 配置文件的库</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CMake/" class="post-tag">#CMake</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9ACMake-%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E4%BE%9D%E8%B5%96%E5%BA%93/" class="post-title hover-line">第五章：CMake 添加第三方依赖库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">为什么要单独讲这个？我在导入第三方依赖库时遇到很多曲折，且不说那些没有被 CMake 管理的第三方库。综合考虑选择编译安装 OpenCV，因为它本身还依赖其它第三方库，特别适合做为本节内容演示</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CMake/" class="post-tag">#CMake</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9ACMake-%E6%9E%84%E5%BB%BA%E5%92%8C%E9%93%BE%E6%8E%A5%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%8A%A8%E6%80%81%E5%BA%93/" class="post-title hover-line">第四章：CMake 构建和链接静态库与动态库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">静态库和动态库的打包和链接，以及安装</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CMake/" class="post-tag">#CMake</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/20/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9ACMake-%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%8F%98%E9%87%8F/" class="post-title hover-line">第三章：CMake 常用内置变量</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">CMake变量有很多，记录一些常用且可能会用到的变量，方便后续查阅</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CMake/" class="post-tag">#CMake</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/technology/">1</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/3/">3</a><a class="page-number" href="/technology/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/technology/page/6/">6</a><a class="page-number" href="/technology/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/14/">14</a></div>
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/11/10/C-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>C++输入输出流</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/11/09/%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      左值引用和右值引用
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/Tools/" class="post-tag">#Tools</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -804,6 +737,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>
