@@ -174,6 +174,60 @@
   
   <div class="post-card">
     <div class="post__head">
+      <a href="/2024/11/13/501-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E4%BC%97%E6%95%B0/" class="post-title hover-line">501. 二叉搜索树中的众数</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">通用的方法是这里用到针对 map 或 unordered_map 容器的 value 进行排序，理论上只支持 key 的排序，即 map 本身是自动机械能 key 排序的。如果要进行 value 排序，就需要将其大包围 pair 放到 vector 中，然后利用 sort 的自定义排序函数的方式进行 value 的排序。如果是二叉搜索树，利用中序遍历再来看此树，就是相当于看有序的数组一样</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%A0%91/" class="post-tag">#树</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/11/13/530-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E7%BB%9D%E5%AF%B9%E5%B7%AE/" class="post-title hover-line">530. 二叉搜索树的最小绝对差</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">如果按照前面提供的正确答案，而是 prev 节点 和 cur 节点比较就不会出错，因为在中序遍历下是有序的。而我的这份错误的代码的虽然也是中序，但是 prev 意指 父节点，而 cur 意指 孩子节点，这就无法完全遵循二叉搜索树的有序性，从而出错</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%A0%91/" class="post-tag">#树</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/11/13/654-%E6%9C%80%E5%A4%A7%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title hover-line">654. 最大二叉树</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">我居然把 getMaxIndex 用二分法去实现，真是聪明反被聪明误，二分法只能处理有序，但是我为了找到下标，是不能把里面的元素进行有序的</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%A0%91/" class="post-tag">#树</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
       <a href="/2024/10/28/237-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/" class="post-title hover-line">237. 删除链表中的节点</a>
       
     </div>
@@ -292,60 +346,6 @@
     <div class="post__foot">
       <div class="post-tags">
   <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/23/283-%E7%A7%BB%E5%8A%A8%E9%9B%B6/" class="post-title hover-line">283.移动零</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">cover_index 指向接下来要被覆盖的下标，只需要把遇到的非0在存放在该下标即可，记得更新 cover_index 。完成元素移动之后，此刻 cover_index 指向的下标到结尾全部置为 0</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/22/27-%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/" class="post-title hover-line">27.移除元素</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">核心就是 维护好 cover_index 下标，即指向接下来要被覆盖的下标</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/21/47-%E5%85%A8%E6%8E%92%E5%88%97II/" class="post-title hover-line">47.全排列II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题很好体现 树层和树枝的去重，树层去重需要创建一个局部记录项，树枝去重需要创建一个全局记录项。因为树枝在不同的栈中，树层在同一个栈中</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
 
 </div>
     </div>
