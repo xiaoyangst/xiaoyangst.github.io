@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        序列式容器 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/baitaoweideqiutian.ttf);
+        font-weight: baitaoweideqiutian;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?595fde0e4ae7bbb900f020823258c38a";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/article">文章</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/various">杂文</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">序列式容器</div>
+        <div class="post-info">
+          
+  <a href="/tags/STL/" class="post-tag">#STL</a>
+
+
+          <span class="post-date">2024-11-20</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#vector">vector</a><ul>
+<li><a href="#push_back">push_back</a></li>
+<li><a href="#insert">insert</a></li>
+<li><a href="#erase">erase</a></li>
+<li><a href="#shrink_to_fit">shrink_to_fit</a></li>
+<li><a href="#resize">resize</a></li>
+<li><a href="#reserve">reserve</a></li>
+<li><a href="#clear">clear</a></li>
+<li><a href="#emplace_back">emplace_back</a></li>
+</ul>
+</li>
+<li><a href="#list">list</a><ul>
+<li><a href="#transfer">transfer</a></li>
+<li><a href="#merge">merge</a></li>
+<li><a href="#reverse">reverse</a></li>
+<li><a href="#sort">sort</a></li>
+<li><a href="#splice-%E6%8B%BC%E6%8E%A5">splice–拼接</a></li>
+<li><a href="#unique">unique</a></li>
+<li><a href="#remove">remove</a></li>
+<li><a href="#remove_if">remove_if</a></li>
+</ul>
+</li>
+<li><a href="#deque">deque</a></li>
+<li><a href="#%E6%93%8D%E4%BD%9C">操作</a><ul>
+<li><a href="#%E4%B8%BA%E4%BD%95vector%E4%B8%8D%E6%94%AF%E6%8C%81%E5%9C%A8%E5%A4%B4%E9%83%A8%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%85%A5%E5%85%83%E7%B4%A0%E4%B8%8E%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0%E5%91%A2">为何vector不支持在头部进行插入元素与删除元素呢？</a></li>
+<li><a href="#%E5%BA%8F%E5%88%97%E5%BC%8F%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%A0%E9%99%A4">序列式容器的删除</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="vector">vector</span></h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">typedef</span> simple_alloc&lt;value_type, Alloc&gt; data_allocator;<br>iterator start;<br>iterator finish;<br>iterator end_of_storage;<br></code></pre></td></tr></table></figure>
+
+<p>data_allocator 是一个类，里面含有公共的 4 个方法，《STL空间配置器》章节已对其源码进行分析。本质上就是两个功能，即内存的申请和释放。</p>
+<p>另外三个成员很重要，我们将其转换为易读的方式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">T* start;<br>T* finish;<br>T* end_of_storage;<br></code></pre></td></tr></table></figure>
+
+<p>示意图：</p>
+<p><img src="/images/2024/11/20/ed519d50-a717-11ef-89c8-fb7594e3c813.png" alt="底层原理.png"></p>
+<p>务必对这三个变量进行阐释，否则会有一些误解。</p>
+<ul>
+<li>start 指向容器的起始地址，本质上就是容器的 begin 迭代器</li>
+<li>finish 指向容器下一个添加元素的地址，本质上就是容器的 end 迭代器</li>
+<li>end_of_storage 指向容器的终止地址，当 finish &#x3D;&#x3D; end_of_storage 的时候就是容器已满的时候</li>
+</ul>
+<p>start 指向容器的起始地址，也就暗指容器的第一个元素；finish 指向容器的下一个添加元素的地址，也就意味着它指向的地址还没有任何有效数据，我们是不可以访问的，否则会出现程序错误。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++">vector&lt;<span class="hljs-type">int</span>&gt; data = &#123; <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span> &#125;;<br><br>cout &lt;&lt; *data.<span class="hljs-built_in">begin</span>() &lt;&lt; endl;  <span class="hljs-comment">// 可访问</span><br>cout &lt;&lt; *data.<span class="hljs-built_in">end</span>() &lt;&lt;endl;     <span class="hljs-comment">// 不可访问，报错</span><br></code></pre></td></tr></table></figure>
+
+<h2><span id="push_back">push_back</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_back</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; x)</span> </span>&#123;<br>  <span class="hljs-keyword">if</span> (finish != end_of_storage) &#123;<br>    <span class="hljs-built_in">construct</span>(finish, x);<br>    ++finish;<br>  &#125;<br>  <span class="hljs-keyword">else</span><br>    <span class="hljs-built_in">insert_aux</span>(<span class="hljs-built_in">end</span>(), x);	<span class="hljs-comment">// 扩容</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>核心跟进 insert_aux：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Alloc</span>&gt;<br><span class="hljs-type">void</span> vector&lt;T, Alloc&gt;::<span class="hljs-built_in">insert_aux</span>(iterator position, <span class="hljs-type">const</span> T&amp; x) &#123;<br>  <span class="hljs-keyword">if</span> (finish != end_of_storage) &#123;	<span class="hljs-comment">// 之所以还要再检查，是因为 insert_aux 不只会被 push_back 调用</span><br>    <span class="hljs-built_in">construct</span>(finish, *(finish - <span class="hljs-number">1</span>));<br>    ++finish;<br>    T x_copy = x;<br>    <span class="hljs-built_in">copy_backward</span>(position, finish - <span class="hljs-number">2</span>, finish - <span class="hljs-number">1</span>);<br>    *position = x_copy;<br>  &#125;<br>  <span class="hljs-keyword">else</span> &#123;	<span class="hljs-comment">// 扩容，核心解读此逻辑下的代码</span><br>    <span class="hljs-type">const</span> size_type old_size = <span class="hljs-built_in">size</span>();<br>    <span class="hljs-type">const</span> size_type len = old_size != <span class="hljs-number">0</span> ? <span class="hljs-number">2</span> * old_size : <span class="hljs-number">1</span>;<br>    iterator new_start = data_allocator::<span class="hljs-built_in">allocate</span>(len);<br>    iterator new_finish = new_start;<br>    __STL_TRY &#123;<br>      new_finish = <span class="hljs-built_in">uninitialized_copy</span>(start, position, new_start);	<br>      <span class="hljs-built_in">construct</span>(new_finish, x);	<br>      ++new_finish;								<br>      new_finish = <span class="hljs-built_in">uninitialized_copy</span>(position, finish, new_finish);<br>    &#125;<br><br><span class="hljs-meta">#       <span class="hljs-keyword">ifdef</span>  __STL_USE_EXCEPTIONS </span><br>    <span class="hljs-built_in">catch</span>(...) &#123;<br>      <span class="hljs-built_in">destroy</span>(new_start, new_finish); <br>      data_allocator::<span class="hljs-built_in">deallocate</span>(new_start, len);<br>      <span class="hljs-keyword">throw</span>;<br>    &#125;<br><span class="hljs-meta">#       <span class="hljs-keyword">endif</span> <span class="hljs-comment">/* __STL_USE_EXCEPTIONS */</span></span><br>    <span class="hljs-built_in">destroy</span>(<span class="hljs-built_in">begin</span>(), <span class="hljs-built_in">end</span>());<br>    <span class="hljs-built_in">deallocate</span>();<br>    start = new_start;<br>    finish = new_finish;<br>    end_of_storage = new_start + len;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果 原始长度不为 0，那么 len 就为 old_size（原容器的元素个数） 的两倍，否则就是为 1。</p>
+<p>等到申请 len 内存空间之后，把原容器的数据拷贝到新容器中，并且把之前要加入的元素放到最新的容器中，然后析构原容器，并更新 statr、finish、end_of_storage。</p>
+<p>但是“把原容器的数据拷贝到新容器中”要单独拿出来说，上面关于这里的表述是专门针对 push_back 而言（我的意思是第二次的 <code>uninitialized_copy</code> 对于 push_back 而言可有可无），但是 insert_aux 并不是只会被 push_back 调用，还有可能被其他函数调用（关于这点，已在代码注释中说明）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">iterator <span class="hljs-title">insert</span><span class="hljs-params">(iterator position)</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-built_in">insert</span>(position, <span class="hljs-built_in">T</span>()); &#125;	<span class="hljs-comment">// 被 insert 调用</span><br></code></pre></td></tr></table></figure>
+
+<p>总的来讲，<code>insert_aux (iterator position, const T&amp; x)</code> 是要在 postion 处插入元素 x。那么上面的这份代码的原意如下：</p>
+<p>**第一次 <code>uninitialized_copy</code>**：将原 <code>vector</code> 中的前半部分 <code>[start, position)</code> 元素复制到新的存储空间 <code>new_start</code> 开始的位置。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">new_finish = <span class="hljs-built_in">uninitialized_copy</span>(start, position, new_start);<br></code></pre></td></tr></table></figure>
+
+<p>这样做是为了在新分配的空间中保留旧的元素，而 <code>position</code> 是插入点的迭代器，插入的元素将位于新数组中的这个位置。</p>
+<p>**插入新元素 <code>x</code>**：在插入位置构造元素 <code>x</code>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">construct</span>(new_finish, x);<br>++new_finish;<br></code></pre></td></tr></table></figure>
+
+<p>这里使用 <code>construct</code> 将新元素 <code>x</code> 插入到目标位置 <code>position</code>（对应新空间的 <code>new_finish</code> 位置）。</p>
+<p>**第二次 <code>uninitialized_copy</code>**：将原 <code>vector</code> 中的后半部分 <code>[position, finish)</code> 元素复制到 <code>new_finish</code> 开始的剩余空间。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">new_finish = <span class="hljs-built_in">uninitialized_copy</span>(position, finish, new_finish);<br></code></pre></td></tr></table></figure>
+
+<p>这一步完成了剩余元素的复制，使得原 <code>vector</code> 的所有元素（以及新插入的 <code>x</code>）都复制到扩容后的存储空间中。</p>
+<h2><span id="insert">insert</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Alloc</span>&gt;<br><span class="hljs-type">void</span> vector&lt;T, Alloc&gt;::<span class="hljs-built_in">insert</span>(iterator position, size_type n, <span class="hljs-type">const</span> T&amp; x) &#123;<br>  <span class="hljs-keyword">if</span> (n != <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 至少添加一个元素</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">size_type</span>(end_of_storage - finish) &gt;= n) &#123;  <span class="hljs-comment">// 剩余空间足够添加 n 个元素</span><br>      T x_copy = x;<br>      <span class="hljs-type">const</span> size_type elems_after = finish - position; <br>      iterator old_finish = finish;<br>      <span class="hljs-keyword">if</span> (elems_after &gt; n) &#123;    <br>        <span class="hljs-built_in">uninitialized_copy</span>(finish - n, finish, finish);<br>        finish += n;<br>        <span class="hljs-built_in">copy_backward</span>(position, old_finish - n, old_finish);<br>        <span class="hljs-built_in">fill</span>(position, position + n, x_copy);<br>      &#125;<br>      <span class="hljs-keyword">else</span> &#123;  <br>        <span class="hljs-built_in">uninitialized_fill_n</span>(finish, n - elems_after, x_copy);<br>        finish += n - elems_after;<br>        <span class="hljs-built_in">uninitialized_copy</span>(position, old_finish, finish);<br>        finish += elems_after;<br>        <span class="hljs-built_in">fill</span>(position, old_finish, x_copy);<br>      &#125;<br>    &#125;<br>    <span class="hljs-keyword">else</span> &#123;  <span class="hljs-comment">// 剩余空间不足以添加 n 个元素</span><br>      <span class="hljs-type">const</span> size_type old_size = <span class="hljs-built_in">size</span>();        <br>      <span class="hljs-type">const</span> size_type len = old_size + <span class="hljs-built_in">max</span>(old_size, n);	<span class="hljs-comment">// 原元素个数 * 2 或者 原元素个数 + 添加元素个数</span><br>      iterator new_start = data_allocator::<span class="hljs-built_in">allocate</span>(len);	<span class="hljs-comment">// 重新分配内存</span><br>      iterator new_finish = new_start;<br>      __STL_TRY &#123;<br>        new_finish = <span class="hljs-built_in">uninitialized_copy</span>(start, position, new_start);<br>        new_finish = <span class="hljs-built_in">uninitialized_fill_n</span>(new_finish, n, x);<br>        new_finish = <span class="hljs-built_in">uninitialized_copy</span>(position, finish, new_finish);<br>      &#125;<br><span class="hljs-meta">#         <span class="hljs-keyword">ifdef</span>  __STL_USE_EXCEPTIONS </span><br>      <span class="hljs-built_in">catch</span>(...) &#123;<br>        <span class="hljs-built_in">destroy</span>(new_start, new_finish);<br>        data_allocator::<span class="hljs-built_in">deallocate</span>(new_start, len);<br>        <span class="hljs-keyword">throw</span>;<br>      &#125;<br><span class="hljs-meta">#         <span class="hljs-keyword">endif</span> <span class="hljs-comment">/* __STL_USE_EXCEPTIONS */</span></span><br>      <span class="hljs-built_in">destroy</span>(start, finish);<br>      <span class="hljs-built_in">deallocate</span>();<br>      start = new_start;<br>      finish = new_finish;<br>      end_of_storage = new_start + len;<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>剩余空间不足以添加 n 个元素，如果原元素个数 size 大于 准备添加的元素个数 n，那么重新申请空间大小为 2倍的 size，否则就是 size + n。切记，不是两倍的扩容哦，之前我们的 vector 的 push_back 的扩容虽然是 两倍的 size，但是 push_back 触发扩容的时候，已经是 size &#x3D;&#x3D; capacity，所以我们看到扩容之后的 capacity 是 两倍的 capacity。但是，insert 的扩容机制是基于 size 和 n 来进行两倍的 size 或者 size + n 来扩容的，这是二者的区别。</p>
+<h2><span id="erase">erase</span></h2><p>此接口在多出被调用，特此拿出来分析：</p>
+<p>copy 方法在此前已经分析过，就是遍历第一个参数到第二个参数，然后逐一赋值给 position（逐步自增）。</p>
+<p>放到这里就是用后面的元素（本质是迭代器）覆盖前面指定的 position 位置。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">iterator <span class="hljs-title">erase</span><span class="hljs-params">(iterator position)</span> </span>&#123;<br>  <span class="hljs-keyword">if</span> (position + <span class="hljs-number">1</span> != <span class="hljs-built_in">end</span>())<br>    <span class="hljs-built_in">copy</span>(position + <span class="hljs-number">1</span>, finish, position);<br>  --finish;<br>  <span class="hljs-built_in">destroy</span>(finish);<br>  <span class="hljs-keyword">return</span> position;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>前面介绍的是删除指定位置处的元素，而这里要讲的是范围删除元素。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">iterator <span class="hljs-title">erase</span><span class="hljs-params">(iterator first, iterator last)</span> </span>&#123;<br>  iterator i = <span class="hljs-built_in">copy</span>(last, finish, first);<br>  <span class="hljs-built_in">destroy</span>(i, finish);<br>  finish = finish - (last - first);<br>  <span class="hljs-keyword">return</span> first;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>erase 确确实实删除指定位置的元素了（即迭代器），本质是被后面的元素（即迭代器）覆盖。</p>
+<p>erase 改变 size 大小，但不会改变 capacity 大小。</p>
+<p>最后，不管是那种删除，返回值是删除元素部分的下一个迭代器。如果是 end 那就视为容器里面已经没有元素可删，如果不是 end 那就必然保证这是一个有效的迭代器（删除的元素的下一个位置的迭代器）。</p>
+<h2><span id="shrink_to_fit">shrink_to_fit</span></h2><p>在 <code>std::vector</code> 容器中，<code>erase</code> 函数会从逻辑上移除元素并减少 <code>vector</code> 的大小，但不会释放其底层内存。因此，<code>erase</code> <strong>不会真正减少 <code>vector</code> 的容量</strong>。</p>
+<ul>
+<li><strong>逻辑删除</strong>：<code>erase</code> 会将指定位置或区间的元素从 <code>vector</code> 中移除，并调整 <code>vector</code> 的大小 (<code>size</code>)。被删除的元素会被销毁（调用其析构函数），但 <code>vector</code> 的容量 (<code>capacity</code>) 不会改变。</li>
+<li><strong>底层内存</strong>：<code>vector</code> 的 <code>capacity</code> 表示已分配的底层内存，可以容纳的元素总量。在使用 <code>erase</code> 删除元素后，<code>vector</code> 的容量保持不变，这意味着底层的内存空间仍然保留，以便后续在不重新分配内存的情况下添加新元素。</li>
+</ul>
+<p>C++11 提供 shrink_to_fit 函数，用以释放多余的内存，下面是核心代码实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt; <span class="hljs-keyword">typename</span> _Alloc &gt; <span class="hljs-type">void</span> vector &lt; <span class="hljs-type">bool</span>,<br>_Alloc &gt; ::_M_reallocate(size_type __n) &#123;		<span class="hljs-comment">// __n 为 容器元素个数</span><br>    _Bit_pointer __q = <span class="hljs-keyword">this</span> - &gt;_M_allocate(__n);<br>    iterator __start(std: :__addressof( * __q), <span class="hljs-number">0</span>);<br>    iterator __finish(_M_copy_aligned(<span class="hljs-built_in">begin</span>(), <span class="hljs-built_in">end</span>(), __start));<br>    <span class="hljs-keyword">this</span> - &gt;_M_deallocate();<br>    <span class="hljs-keyword">this</span> - &gt;_M_impl._M_start = __start;<br>    <span class="hljs-keyword">this</span> - &gt;_M_impl._M_finish = __finish;<br>    <span class="hljs-keyword">this</span> - &gt;_M_impl._M_end_of_storage = __q + _S_nword(__n);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可以看到确实在对空间进行重新申请和回收，并更新 start、finish、end_of_storage。</p>
+<p>由于我们的 erase 方法会更改 finish 的值，也就意味着 size 会更改，进而会把多余的内存实际销毁掉。</p>
+<h2><span id="resize">resize</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resize</span><span class="hljs-params">(size_type new_size)</span> </span>&#123;<br>    <span class="hljs-built_in">resize</span>(new_size, <span class="hljs-built_in">T</span>());<br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resize</span><span class="hljs-params">(size_type new_size, <span class="hljs-type">const</span> T &amp; x)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (new_size &lt; <span class="hljs-built_in">size</span>())&#123;<br>      <span class="hljs-built_in">erase</span>(<span class="hljs-built_in">begin</span>() + new_size, <span class="hljs-built_in">end</span>());  <br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-built_in">insert</span>(<span class="hljs-built_in">end</span>(), new_size - <span class="hljs-built_in">size</span>(), x);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果 resize 的大小 小于 原先大小（即元素个数）会调用 erase，导致其后的迭代器失效。</p>
+<p>如果 resize 的大小 大于 原先大小会调用 insert，如果 resize 的大小比 capacity 小，那么只会导致 <code>end()</code> 迭代器失效，但不影响其他迭代器。但如果 resize 的大小比 capacity 大，就会导致重新分配内存，迭代器全部失效。</p>
+<h2><span id="reserve">reserve</span></h2><p>形参 n 代表新容量的大小，只有 n 大于当前容量，才会实际去扩容，否则就相当于没有任何执行意义。</p>
+<p>n &gt; capacity 的话，就是新分配 n 个大小的内存空间，然后把原先的数据拷贝到该区域后析构，然后更新 start、finsih、end_of_storage。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++">vector &lt; T,Alloc &gt; &amp;<span class="hljs-keyword">operator</span> = (<span class="hljs-type">const</span> vector &lt; T, Alloc &gt; &amp;x);<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reserve</span><span class="hljs-params">(size_type n)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">capacity</span>() &lt; n) &#123;<br>        <span class="hljs-type">const</span> size_type old_size = <span class="hljs-built_in">size</span>();<br>        iterator tmp = <span class="hljs-built_in">allocate_and_copy</span>(n, start, finish);<br>        <span class="hljs-built_in">destroy</span>(start, finish);<br>        <span class="hljs-built_in">deallocate</span>();<br>        start = tmp;<br>        finish = tmp + old_size;<br>        end_of_storage = start + n;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>正确使用 reserve 可以防止不必要的重新分配，但不恰当地使用 reserve（例如，在每次 push_back 调用之前调用它）实际上可能会增加重新分配的次数。</p>
+<p>因为 vector 只有在最开始初始化的时候有机会指定容量大小，此后只能在插入后等待底层自行扩容。我们想象这样一种情景，你的 vector 现在容量很大，并且元素数量即将接近触发扩容的边缘，但是你知晓后面用不到太大的空间，为了避免浪费空间资源，你可以选择 reserve。虽然它也会 重新分配内存，但是你后面因为添加元素导致扩容是一样的，可前者会在你合理的设计下减少内存空间的白白浪费。</p>
+<h2><span id="clear">clear</span></h2><p>让所有迭代器失效，size 为 0，capacity 保持不变。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123; <br>    <span class="hljs-built_in">erase</span>(<span class="hljs-built_in">begin</span>(), <span class="hljs-built_in">end</span>()); <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2><span id="emplace_back">emplace_back</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">emplace_back</span><span class="hljs-params">( _Args &amp;&amp; ... __args )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-built_in">push_back</span>( <span class="hljs-built_in">bool</span>(__args ...) );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>你可能好奇这不就是把 push_back 封装了一下？</p>
+<p>实际上不是这样的，这是不同的函数接口，只是名称相同而已：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++">vector&lt;_Tp, _Alloc&gt;::<br><span class="hljs-built_in">emplace_back</span>( _Args &amp;&amp; ... __args )		<span class="hljs-comment">// emplace_back</span><br>&#123;<br>	<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>-&gt;_M_impl._M_finish != <span class="hljs-keyword">this</span>-&gt;_M_impl._M_end_of_storage )<br>	&#123;<br>		_Alloc_traits::<span class="hljs-built_in">construct</span>( <span class="hljs-keyword">this</span>-&gt;_M_impl, <span class="hljs-keyword">this</span>-&gt;_M_impl._M_finish,			<span class="hljs-comment">// 构造函数</span><br>					  std::forward&lt;_Args&gt;( __args ) ... );<br>		++<span class="hljs-keyword">this</span>-&gt;_M_impl._M_finish;<br>	&#125;<span class="hljs-keyword">else</span><br>		_M_realloc_insert( <span class="hljs-built_in">end</span>(), std::forward&lt;_Args&gt;( __args ) ... );<br><span class="hljs-meta">#<span class="hljs-keyword">if</span> __cplusplus &gt; 201402L</span><br>	<span class="hljs-keyword">return</span>(<span class="hljs-built_in">back</span>() );<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>&#125;<br><br><br><span class="hljs-function"><span class="hljs-type">void</span></span><br><span class="hljs-function"><span class="hljs-title">push_back</span><span class="hljs-params">( <span class="hljs-type">const</span> value_type &amp; __x )</span>		<span class="hljs-comment">// push_back，接受左值</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>-&gt;_M_impl._M_finish != <span class="hljs-keyword">this</span>-&gt;_M_impl._M_end_of_storage )<br>	&#123;<br>		_Alloc_traits::<span class="hljs-built_in">construct</span>( <span class="hljs-keyword">this</span>-&gt;_M_impl, <span class="hljs-keyword">this</span>-&gt;_M_impl._M_finish,__x );		<span class="hljs-comment">// 拷贝构造函数</span><br>		++<span class="hljs-keyword">this</span>-&gt;_M_impl._M_finish;<br>	&#125;<span class="hljs-keyword">else</span><br>		_M_realloc_insert( <span class="hljs-built_in">end</span>(), __x );<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span></span><br><span class="hljs-function"><span class="hljs-title">push_back</span><span class="hljs-params">( value_type &amp;&amp; __x )</span>				<span class="hljs-comment">// push_back，接受右值</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-built_in">emplace_back</span>( std::<span class="hljs-built_in">move</span>( __x ) );	<span class="hljs-comment">// 移动构造函数</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们通常把 emplace_back 和 push_back 进行比较，它们的功能都是把元素插入到容器末尾。</p>
+<p>但是在使用上有所区别：</p>
+<ul>
+<li><code>push_back</code> 接受一个已创建的临时对象，将它拷贝&#x2F;移动到容器的末尾。</li>
+<li><code>emplace_back</code> 接受的是构造函数的参数，而不是对象本身，在容器末尾直接构造元素。可避免一次拷贝&#x2F;移动。</li>
+</ul>
+<p>实际你去跟代码（暂时不考虑移动构造函数），你就会发现，正因为你 push_back 传递的是对象，进而走向拷贝构造函数。emplace_back 传递的是对象所需的参数，进行走向构造函数。</p>
+<p>验证代码见下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">testDemo</span><br>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">testDemo</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span>:num(num)&#123;</span><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;调用构造函数&quot;</span> &lt;&lt; endl;<br>  &#125;<br>  <span class="hljs-built_in">testDemo</span>(<span class="hljs-type">const</span> testDemo&amp; other) :<span class="hljs-built_in">num</span>(other.num) &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;调用拷贝构造函数&quot;</span> &lt;&lt; endl;<br>  &#125;<br>  <span class="hljs-built_in">testDemo</span>(testDemo&amp;&amp; other)  <span class="hljs-keyword">noexcept</span> :<span class="hljs-built_in">num</span>(other.num) &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;调用移动构造函数&quot;</span> &lt;&lt; endl;<br>  &#125;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">int</span> num;<br>&#125;;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>  cout &lt;&lt; <span class="hljs-string">&quot;emplace_back:&quot;</span> &lt;&lt; endl;<br>  std::vector&lt;testDemo&gt; demo1;<br>  demo<span class="hljs-number">1.</span><span class="hljs-built_in">emplace_back</span>(<span class="hljs-number">2</span>);<br>  cout &lt;&lt; <span class="hljs-string">&quot;push_back:&quot;</span> &lt;&lt; endl;<br>  std::vector&lt;testDemo&gt; demo2;<br>  <span class="hljs-function">testDemo <span class="hljs-title">t1</span><span class="hljs-params">(<span class="hljs-number">2</span>)</span></span>;<br>  demo<span class="hljs-number">2.</span><span class="hljs-built_in">push_back</span>(t1);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">emplace_back:<br>调用构造函数<br>push_back:<br>调用构造函数<br>调用拷贝构造函数<br></code></pre></td></tr></table></figure>
+
+<p>push_back 底层会优先调用移动构造函数，如果不可以才会调用拷贝构造函数。</p>
+<h1><span id="list">list</span></h1><p>list 是一个环状双向链表（循环双向链表）。</p>
+<p><img src="/images/2024/11/20/db40d400-a717-11ef-89c8-fb7594e3c813.png" alt="list.png"></p>
+<p>list 和此前的 vector 有所不同，没有 capacity 概念，因为 size 就是 capacity。这就让 list 和 vector 有所不同的是，list 的 erase 方法实际更改 size 和 capacity，而 vector 的 erase 方法只更改了 size。</p>
+<p>这里实际上只会去看看 list 独属于自己的一些接口，这些接口并非其它容器就一定没有（在 algorithm 中）。但由于 list 的数据结构，它自己单独实现这些接口，因此你不可以使用 algorithm 的相关接口来操作 list，只能用它自己的。</p>
+<h2><span id="transfer">transfer</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">transfer</span><span class="hljs-params">( iterator position, iterator first, iterator last )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> ( position != last )<br>	&#123;<br>		(*(<span class="hljs-built_in">link_type</span>( (*last.node).prev ) ) ).next	= position.node;<br>		(*(<span class="hljs-built_in">link_type</span>( (*first.node).prev ) ) ).next	= last.node;<br>		(*(<span class="hljs-built_in">link_type</span>( (*position.node).prev ) ) ).next	= first.node;<br>		link_type tmp = <span class="hljs-built_in">link_type</span>( (*position.node).prev );<br>		(*position.node).prev	= (*last.node).prev;<br>		(*last.node).prev	= (*first.node).prev;<br>		(*first.node).prev	= tmp;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>多个地方用到该接口，特此分析。为了方便理解，代码呈现如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">transfer</span><span class="hljs-params">( iterator position, iterator first, iterator last )</span>	<span class="hljs-comment">// 初始阶段</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> ( position != last )<br>	&#123;<br>        <span class="hljs-comment">// 第一阶段</span><br>		link_type	posPrev		= <span class="hljs-built_in">link_type</span>( (*position.node).prev );<br>		link_type	lastPrev	= <span class="hljs-built_in">link_type</span>( (*last.node).prev );<br>		link_type	firstPrev	= <span class="hljs-built_in">link_type</span>( (*first.node).prev );<br>					<br>        <span class="hljs-comment">// 第二阶段</span><br>		(*lastPrev).next	= position.node;<br>		(*firstPrev).next	= last.node;<br>		(*posPrev).next		= first.node;<br><br>        <span class="hljs-comment">// 第三阶段</span><br>		link_type tmp = <span class="hljs-built_in">link_type</span>( (*position.node).prev );<br>		(*position.node).prev	= (*last.node).prev;<br>		(*last.node).prev	= (*first.node).prev;<br>		(*first.node).prev	= tmp;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>初始形态：</p>
+<p><img src="/images/2024/11/20/c35e0560-a717-11ef-89c8-fb7594e3c813.png" alt="01.png"></p>
+<p>第一阶段：</p>
+<p><img src="/images/2024/11/20/c015b830-a717-11ef-89c8-fb7594e3c813.png" alt="02.png"></p>
+<p>第二阶段：</p>
+<p><img src="/images/2024/11/20/bcf56560-a717-11ef-89c8-fb7594e3c813.png" alt="03.png"></p>
+<p>第三阶段：</p>
+<p><img src="/images/2024/11/20/b8e3adb0-a717-11ef-89c8-fb7594e3c813.png" alt="04.png"></p>
+<p>把核心节点的 prev 和 next 画出来：</p>
+<p><img src="/images/2024/11/20/b5851960-a717-11ef-89c8-fb7594e3c813.png" alt="05.png"></p>
+<p>整理成 人能看的样子：</p>
+<p><img src="/images/2024/11/20/b1d11210-a717-11ef-89c8-fb7594e3c813.png" alt="06.png"></p>
+<p>把最初的形参情况拿过来对照着看：<code>transfer(position, first, last)</code></p>
+<p>就是把 <code>[first,last)</code> 内的节点 <strong>拼接</strong> 到 position 之前。</p>
+<p>注意： <code>[first,last)</code> 是左闭右开。</p>
+<h2><span id="merge">merge</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Alloc</span>&gt;<br><span class="hljs-type">void</span> list&lt;T, Alloc&gt;::<span class="hljs-built_in">merge</span>(list&lt;T, Alloc&gt;&amp; x) &#123;<br>  iterator first1 = <span class="hljs-built_in">begin</span>();<br>  iterator last1 = <span class="hljs-built_in">end</span>();<br>  iterator first2 = x.<span class="hljs-built_in">begin</span>();<br>  iterator last2 = x.<span class="hljs-built_in">end</span>();<br>  <span class="hljs-keyword">while</span> (first1 != last1 &amp;&amp; first2 != last2)<br>    <span class="hljs-keyword">if</span> (*first2 &lt; *first1) &#123;<br>      iterator next = first2;<br>      <span class="hljs-built_in">transfer</span>(first1, first2, ++next);<br>      first2 = next;<br>    &#125;<br>    <span class="hljs-keyword">else</span>&#123;<br>      ++first1;<br>    &#125;<br>  <span class="hljs-keyword">if</span> (first2 != last2) &#123;<br>      <span class="hljs-built_in">transfer</span>(last1, first2, last2);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>从代码实现来看，是将传入的链表 x 合并到当前链表（merge 调用方），并且还会进行有序插入（递增），而非把链表 x 直接 merge 到当前链表的尾部。</p>
+<p>但是这个有序插入并不是说，merge 之后链表就是必然有序。你可以看到是让当前链表和传入的链表进行大小比较，如果当前链表 小于等于 传入的链表，那么当前链表迭代器增加进入下一轮。否则才会把传入的链表比较的那个节点加入到当前链表中，即当前链表比较节点的前一个位置。</p>
+<p>等到最后的 <code>if (first2 != last2) transfer(last1, first2, last2);</code> 操作就是把传入的链表 x 剩余的节点给一起合并到当前节点尾部，因为可能没有被遍历完全。</p>
+<p>至于当前链表没有遍历完节点不用管，那是因为加入节点的行为就是在其上操作的，自然不必考虑这个问题。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">list&lt;<span class="hljs-type">int</span>&gt;	l1 = &#123; <span class="hljs-number">1</span>, <span class="hljs-number">7</span>, <span class="hljs-number">19</span>, <span class="hljs-number">0</span>, <span class="hljs-number">80</span> &#125;;<br>list&lt;<span class="hljs-type">int</span>&gt;	l2 = &#123; <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">3</span>, <span class="hljs-number">9</span> &#125;;<br><br>l<span class="hljs-number">1.</span><span class="hljs-built_in">merge</span>( l2 );<br><br><span class="hljs-comment">// 1 2 5 3 7 9 19 0 80 </span><br></code></pre></td></tr></table></figure>
+
+<p>所以网上那些说 merge 需要传递两个有序的链表自然是不正确的，但你要知道 merge 有种有序性在里面，通过传递两个有序的链表可以 merge 出一个有序的链表出来，这也是官方案例在 merge 之前会把两个链表各自调用一次 sort 方法。</p>
+<h2><span id="reverse">reverse</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Alloc</span>&gt;<br><span class="hljs-type">void</span> list&lt;T, Alloc&gt;::<span class="hljs-built_in">reverse</span>() &#123;<br>  <span class="hljs-keyword">if</span> (node-&gt;next == node || <span class="hljs-built_in">link_type</span>(node-&gt;next)-&gt;next == node) <span class="hljs-keyword">return</span>;<br>  iterator first = <span class="hljs-built_in">begin</span>();	<span class="hljs-comment">// 第一个节点</span><br>  ++first;	<span class="hljs-comment">// 第二个节点</span><br>  <span class="hljs-keyword">while</span> (first != <span class="hljs-built_in">end</span>()) &#123;	<span class="hljs-comment">// 遍历</span><br>    iterator old = first;<br>    ++first;<br>    <span class="hljs-built_in">transfer</span>(<span class="hljs-built_in">begin</span>(), old, first);<br>  &#125;<br>&#125;  <br></code></pre></td></tr></table></figure>
+
+<p>因为 list 本身迭代器的受限，只能通过先存储 begin 迭代器，进行 ++ 来到第二个迭代器，如果只有一个节点没有必要进行反转。</p>
+<p>结合前面我们讲的 transfer，很容易理解这里的行为。下面就简单举例。</p>
+<p>第一次：<code>transfer(begin(), old, first)</code></p>
+<p><img src="/images/2024/11/20/aac41bc0-a717-11ef-89c8-fb7594e3c813.png" alt="07.png"></p>
+<p>整个循环，只会导致 old 和 first 迭代器会改变，而 begin 这个迭代器始终指向图中节点 7。</p>
+<h2><span id="sort">sort</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Alloc</span>&gt; <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">StrictWeakOrdering</span>&gt;<br><span class="hljs-type">void</span> list&lt;T, Alloc&gt;::<span class="hljs-built_in">sort</span>(StrictWeakOrdering comp) &#123;<br>  <span class="hljs-keyword">if</span> (node-&gt;next == node || <span class="hljs-built_in">link_type</span>(node-&gt;next)-&gt;next == node) <span class="hljs-keyword">return</span>;<br>  list&lt;T, Alloc&gt; carry;<br>  list&lt;T, Alloc&gt; counter[<span class="hljs-number">64</span>];<br>  <span class="hljs-type">int</span> fill = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">while</span> (!<span class="hljs-built_in">empty</span>()) &#123;<br>    carry.<span class="hljs-built_in">splice</span>(carry.<span class="hljs-built_in">begin</span>(), *<span class="hljs-keyword">this</span>, <span class="hljs-built_in">begin</span>());<br>    <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(i &lt; fill &amp;&amp; !counter[i].<span class="hljs-built_in">empty</span>()) &#123;<br>      counter[i].<span class="hljs-built_in">merge</span>(carry, comp);<br>      carry.<span class="hljs-built_in">swap</span>(counter[i++]);<br>    &#125;<br>    carry.<span class="hljs-built_in">swap</span>(counter[i]);         <br>    <span class="hljs-keyword">if</span> (i == fill) ++fill;<br>  &#125; <br><br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; fill; ++i) counter[i].<span class="hljs-built_in">merge</span>(counter[i<span class="hljs-number">-1</span>], comp);<br>  <span class="hljs-built_in">swap</span>(counter[fill<span class="hljs-number">-1</span>]);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>sort 可以接受一个函数对象 comp，不要去管 sort 底层的实现，重点观察到 <code>counter[i].merge(carry, comp)</code> 把 comp 继续传递，再跟：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Alloc</span>&gt; <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">StrictWeakOrdering</span>&gt;<br><span class="hljs-type">void</span> list&lt;T, Alloc&gt;::<span class="hljs-built_in">merge</span>(list&lt;T, Alloc&gt;&amp; x, StrictWeakOrdering comp) &#123;<br>  iterator first1 = <span class="hljs-built_in">begin</span>();<br>  iterator last1 = <span class="hljs-built_in">end</span>();<br>  iterator first2 = x.<span class="hljs-built_in">begin</span>();<br>  iterator last2 = x.<span class="hljs-built_in">end</span>();<br>  <span class="hljs-keyword">while</span> (first1 != last1 &amp;&amp; first2 != last2)<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">comp</span>(*first2, *first1)) &#123;<br>      iterator next = first2;<br>      <span class="hljs-built_in">transfer</span>(first1, first2, ++next);<br>      first2 = next;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>      ++first1;<br>  <span class="hljs-keyword">if</span> (first2 != last2) <span class="hljs-built_in">transfer</span>(last1, first2, last2);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>就可以看到 <code>if (comp(*first2, *first1))</code> 自动会把元素遍历并放到函数对象中进行执行。因此我们的函数对象是要支持接受两个容器元素，但我们在传递的时候直接传函数对象即可。代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Test</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">int</span> num1,<span class="hljs-type">int</span> num2)</span></span>&#123;<span class="hljs-keyword">return</span> num1 &gt; num2;&#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>  std::list&lt;<span class="hljs-type">int</span>&gt; data = &#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">10</span>,<span class="hljs-number">5</span>&#125;;<br>  data.<span class="hljs-built_in">sort</span>(<span class="hljs-built_in">Test</span>());<br>  <br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2><span id="splice拼接">splice–拼接</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 把 x 全部元素移动到 position 迭代器之前</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">splice</span><span class="hljs-params">( iterator position, list &amp; x )</span>	</span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> ( !x.<span class="hljs-built_in">empty</span>() )<br>		<span class="hljs-built_in">transfer</span>( position, x.<span class="hljs-built_in">begin</span>(), x.<span class="hljs-built_in">end</span>() );<br>&#125;<br><br><span class="hljs-comment">// 把 i 指向的元素移动到 position 迭代器之前</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">splice</span><span class="hljs-params">( iterator position, list &amp;, iterator i )</span></span><br><span class="hljs-function"></span>&#123;<br>	iterator j = i;<br>	++j;<br>	<span class="hljs-keyword">if</span> ( position == i || position == j )<br>		<span class="hljs-keyword">return</span>;<br>	<span class="hljs-built_in">transfer</span>( position, i, j );<br>&#125;<br><br><span class="hljs-comment">// 把 [first,last) 全部元素移动到 position 迭代器之前</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">splice</span><span class="hljs-params">( iterator position, list &amp;, iterator first, iterator last )</span> </span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> ( first != last )<br>		<span class="hljs-built_in">transfer</span>( position, first, last );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>翻译为拼接实在是不合理，本意是上述注释之意。还有就是该接口调用与 list 无关，关键是你传递的参数，这我们在源码中已经看得清楚：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">showContainer</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; data)</span></span>&#123;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; item : data) &#123;<br>    cout &lt;&lt; item &lt;&lt;<span class="hljs-string">&quot; &quot;</span>;<br>  &#125;<br>  cout&lt;&lt;endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br><br>  list&lt;<span class="hljs-type">int</span>&gt; data = &#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">3</span>,<span class="hljs-number">3</span>,<span class="hljs-number">5</span>&#125;;<br><br>  list&lt;<span class="hljs-type">int</span>&gt; demo = &#123;<span class="hljs-number">10</span>,<span class="hljs-number">3</span>,<span class="hljs-number">89</span>&#125;;<br><br>  list&lt;<span class="hljs-type">int</span>&gt; tmp = &#123;<span class="hljs-number">30</span>,<span class="hljs-number">33</span>,<span class="hljs-number">389</span>&#125;;<br><br>  <span class="hljs-keyword">auto</span> it = data.<span class="hljs-built_in">begin</span>();<br>  ++it;<br>  data.<span class="hljs-built_in">splice</span>(tmp.<span class="hljs-built_in">begin</span>(),demo);<br><br>  <span class="hljs-built_in">showContainer</span>(data);<br>  <span class="hljs-built_in">showContainer</span>(tmp);<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>尽管我们是 <code>data.splice(tmp.begin(),demo)</code> ，但是我们传递的却是与 data 毫无关联的迭代器和 list，所以被操作的对象是 demo 这个 list 容器和 tmo 这个 list 容器的 begin 迭代器。</p>
+<p>splice 不能针对单个 list 操作，即用 这个 list 中的迭代器作为形参和 list 作为形参来进行操作，这是不合理的。</p>
+<p>所以我们对上面三个接口，作出这般解释：</p>
+<p><strong>整体转移</strong>：一个列表 <code>list2</code> 的所有元素插入到 <code>list1</code> 的指定位置，<code>list2</code> 变为空。</p>
+<p><strong>单元素转移</strong>：将 <code>list2</code> 中的某个元素移动到 <code>list1</code> 指定位置。</p>
+<p><strong>范围转移</strong>：将 <code>list2</code> 中的一个范围内的元素插入到 <code>list1</code> 指定位置。</p>
+<h2><span id="unique">unique</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp, <span class="hljs-keyword">typename</span> _Alloc&gt;<br><span class="hljs-keyword">typename</span> list&lt;_Tp, _Alloc&gt;::__remove_return_type<br>list&lt;_Tp, _Alloc&gt;::<br><span class="hljs-built_in">unique</span>()<br>&#123;<br>	iterator	__first = <span class="hljs-built_in">begin</span>();<br>	iterator	__last	= <span class="hljs-built_in">end</span>();<br>	<span class="hljs-keyword">if</span> ( __first == __last )<br>		<span class="hljs-keyword">return</span>(_GLIBCXX20_ONLY( <span class="hljs-number">0</span> ) );<br>	size_type	__removed __attribute__( (__unused__) ) = <span class="hljs-number">0</span>;<br>	iterator	__next					= __first;<br>	<span class="hljs-keyword">while</span> ( ++__next != __last )<br>	&#123;<br>		<span class="hljs-keyword">if</span> ( *__first == *__next )<br>		&#123;<br>			_M_erase( __next );<br>			_GLIBCXX20_ONLY( __removed++ );<br>		&#125;<span class="hljs-keyword">else</span><br>			__first = __next;<br>		__next = __first;<br>	&#125;<br>	<span class="hljs-keyword">return</span>(_GLIBCXX20_ONLY( __removed ) );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>++__next != __last</code> 循环判断，本意就是从第二个迭代器开始（因为第一个迭代器必然不会有被去重的可能而被移除，因此在接口的开始会判断 <code>__first == __last</code> 会直接返回）遍历到整个 list 的末尾。</p>
+<p>如果 <code>*__first == *__next</code> 就删除当前迭代器 <code>__next</code>；否则，就更新 <code>__first</code> 和 <code>__next</code> 两个迭代器往前进一步， <code>__next</code> 的实际递增会在 while 循环中递增。</p>
+<h2><span id="remove">remove</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp, <span class="hljs-keyword">typename</span> _Alloc&gt;<br><span class="hljs-keyword">typename</span> list&lt;_Tp, _Alloc&gt;::__remove_return_type<br>list&lt;_Tp, _Alloc&gt;::<br><span class="hljs-built_in">remove</span>( <span class="hljs-type">const</span> value_type &amp; __value )<br>&#123;<br>	size_type	__removed __attribute__( (__unused__) ) = <span class="hljs-number">0</span>;<br>	iterator	__first					= <span class="hljs-built_in">begin</span>(); <br>	iterator	__last					= <span class="hljs-built_in">end</span>();<br>	iterator	__extra					= __last;<br>	<span class="hljs-keyword">while</span> ( __first != __last )	<span class="hljs-comment">// 遍历</span><br>	&#123;<br>		iterator __next = __first;<br>		++__next;<br>		<span class="hljs-keyword">if</span> ( *__first == __value ) <span class="hljs-comment">// 相等</span><br>		&#123;<br>			<span class="hljs-keyword">if</span> ( std::__addressof( *__first ) != std::__addressof( __value ) )<br>			&#123;<br>				_M_erase( __first );	<span class="hljs-comment">// 删除</span><br>				_GLIBCXX20_ONLY( __removed++ );<br>			&#125;    <span class="hljs-keyword">else</span><br>				__extra = __first;<br>		&#125;<br>		__first = __next;<br>	&#125;<br>	<span class="hljs-keyword">if</span> ( __extra != __last )<br>	&#123;<br>		_M_erase( __extra );	<br>		_GLIBCXX20_ONLY( __removed++ );<br>	&#125;<br>	<span class="hljs-keyword">return</span>(_GLIBCXX20_ONLY( __removed ) );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>remove 删除指定的元素，是把所有与之相等的元素删除，绝非只删除一个。</p>
+<h2><span id="remove_if">remove_if</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp, <span class="hljs-keyword">typename</span> _Alloc&gt;<br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> _Predicate&gt;<br><span class="hljs-keyword">typename</span> list&lt;_Tp, _Alloc&gt;::__remove_return_type<br>list&lt;_Tp, _Alloc&gt;::<br><span class="hljs-built_in">remove_if</span>( _Predicate __pred )<br>&#123;<br>	size_type	__removed __attribute__( (__unused__) ) = <span class="hljs-number">0</span>;<br>	iterator	__first					= <span class="hljs-built_in">begin</span>();<br>	iterator	__last					= <span class="hljs-built_in">end</span>();<br>	<span class="hljs-keyword">while</span> ( __first != __last )	<span class="hljs-comment">// 遍历</span><br>	&#123;<br>		iterator __next = __first;<br>		++__next;<br>		<span class="hljs-keyword">if</span> ( __pred( *__first ) )<br>		&#123;<br>			_M_erase( __first );<br>			_GLIBCXX20_ONLY( __removed++ );<br>		&#125;<br>		__first = __next;<br>	&#125;<br>	<span class="hljs-keyword">return</span>(_GLIBCXX20_ONLY( __removed ) );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接受一个函数对象，该函数对象需要接受一个参数，见代码中 <code>__pred( *__first )</code> 。会遍历所有元素，并逐一传递给 <code>__pred</code> 函数对象进行处理，我们自己只需要把实现的逻辑写在传递的函数对象 <code>__pred</code> 中即可。</p>
+<h1><span id="deque">deque</span></h1><p>它看起来就像是一个数组，支持头部插入和删除，尾部插入和删除。</p>
+<p><img src="/images/2024/11/20/9f960470-a717-11ef-89c8-fb7594e3c813.png" alt="deque.png"></p>
+<p>我们在使用的时候就可以像使用数组一样，但是有必要去搞清楚它的底层结构是怎么构成的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 中控器中的一个指针</span><br>_Map_pointer     					 _M_node;	<br><span class="hljs-comment">// 指针指向连续内存区域的指针指向情况</span><br>_Tp*                      _M_cur;			 <span class="hljs-comment">// 等同于 vector 中的 finish</span><br>_Tp*                      _M_first;		 <span class="hljs-comment">// 等同于 vector 中的 start</span><br>_Tp*                      _M_last;		 <span class="hljs-comment">// 等同于 vector 中的 end_of_storage</span><br></code></pre></td></tr></table></figure>
+
+<p>示意图：中控器 Map 中的一个节点（下标）和其指向的内存区域构成上述数据结构。</p>
+<p><img src="/images/2024/11/20/9ab738c0-a717-11ef-89c8-fb7594e3c813.png" alt="d1.png"></p>
+<p>也就是说 deque 中物理内存是部分连续的，中控器 Map 中存储的下标就指向这块连续的内存，而各个下标指向的内存区域之间是分散的，没有关联。见下图：</p>
+<p><img src="/images/2024/11/20/9628fe10-a717-11ef-89c8-fb7594e3c813.png" alt="d2.png"></p>
+<p>实际上整个 deque 是由三个指针进行管理：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++">iterator start;<br>iterator finish;<br><br>map_pointer map;<br></code></pre></td></tr></table></figure>
+
+<p>中控器 map 里面存储一个一个的指针，指针指向一块连续的内存。start 是中控器 map 里面存储的第一个指针，finish 是中控器 map 里面存储的最后一个指针。</p>
+<h1><span id="操作">操作</span></h1><h2><span id="为何vector不支持在头部进行插入元素与删除元素呢">为何vector不支持在头部进行插入元素与删除元素呢？</span></h2><p>因为前面头部插入或删除必然导致所有元素全部向后或向前移动，这在性能能上损失很多。</p>
+<p>deque 和 list 本身底层数据结构的缘故，支持头部插入和删除。</p>
+<h2><span id="序列式容器的删除">序列式容器的删除</span></h2><p>（一）vector删除连续重复元素</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++">vector&lt;<span class="hljs-type">int</span>&gt; data = &#123; <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span> &#125;;<br><br><span class="hljs-keyword">for</span> ( <span class="hljs-keyword">auto</span> i = data.<span class="hljs-built_in">begin</span>(); i != data.<span class="hljs-built_in">end</span>(); )<br>&#123;<br>	<span class="hljs-keyword">if</span> ( *i == <span class="hljs-number">3</span> )<br>	&#123;<br>		data.<span class="hljs-built_in">erase</span>( i );<br>	&#125;<span class="hljs-keyword">else</span>&#123;<br>		++i;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>由于 vector 删除指定的迭代器，其本质行为是后面的迭代器往前移动，这也是为什么我们不会在 erase 之后进行迭代器 i 的更新。但如果没有进行 erase 行为，那就需要通过 递增迭代器指向下一个迭代器。</p>
+<p>但我们这种写法不具有通用性，到 list 删除的时候就有问题，下面这种是通用写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++">vector&lt;<span class="hljs-type">int</span>&gt; data = &#123; <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span> &#125;;<br><br><span class="hljs-keyword">for</span> ( <span class="hljs-keyword">auto</span> i = data.<span class="hljs-built_in">begin</span>(); i != data.<span class="hljs-built_in">end</span>(); )<br>&#123;<br>	<span class="hljs-keyword">if</span> ( *i == <span class="hljs-number">3</span> )<br>	&#123;<br>		i = data.<span class="hljs-built_in">erase</span>( i );<br>	&#125;<span class="hljs-keyword">else</span>&#123;<br>		++i;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>下面这种常见错误的写法，你也明白原因了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> p1 = v<span class="hljs-number">1.</span><span class="hljs-built_in">begin</span>(); p1 != v<span class="hljs-number">1.</span><span class="hljs-built_in">end</span>();p1++)<br>&#123;<br>    <span class="hljs-keyword">if</span> (*p1 == <span class="hljs-number">9</span>)<br>    &#123;<br>        v<span class="hljs-number">1.</span><span class="hljs-built_in">erase</span>(p1);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>（二）list删除连续重复元素</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++">list&lt;<span class="hljs-type">int</span>&gt; data = &#123; <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span> &#125;;<br><br><span class="hljs-keyword">for</span> ( <span class="hljs-keyword">auto</span> i = data.<span class="hljs-built_in">begin</span>(); i != data.<span class="hljs-built_in">end</span>(); )<br>&#123;<br>	<span class="hljs-keyword">if</span> ( *i == <span class="hljs-number">3</span> )<br>	&#123;<br>		i = data.<span class="hljs-built_in">erase</span>( i );<br>	&#125;<span class="hljs-keyword">else</span>&#123;<br>		++i;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>list 的内存不是连续的，也就无法保证 i 在被删除之后，能够像前面介绍 vector 那样可以不更新迭代器也可以平替（尽管后面也补充通用写法），所以我们需要用被删除的迭代器用来接收 erase 之后的返回值，达到更新迭代器 i 的效果。</p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/11/19/%E5%8D%95%E7%BB%A7%E6%89%BF%E5%92%8C%E5%A4%9A%E7%BB%A7%E6%89%BF/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      单继承和多继承
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/STL/" class="post-tag">#STL</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\17\STL-空间配置器\" title="STL 空间配置器" rel="bookmark">STL 空间配置器</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://paugram.com/">保罗的小宇宙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://shuyi.tech/">陈树义的博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
