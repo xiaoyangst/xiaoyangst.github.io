@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 
+        移动构造函数和移动赋值函数 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,205 +156,139 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">移动构造函数和移动赋值函数</div>
+        <div class="post-info">
+          
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+
+          <span class="post-date">2024-11-24</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/Asio/" style="font-size: 1em;">Asio</a> <a href="/tags/C/" style="font-size: 1em;">C</a> <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 1em;">C++11新特性</a> <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">C++性能优化</a> <a href="/tags/CMake/" style="font-size: 1em;">CMake</a> <a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/Clion/" style="font-size: 1em;">Clion</a> <a href="/tags/Linux/" style="font-size: 1em;">Linux</a> <a href="/tags/MySQL/" style="font-size: 1em;">MySQL</a> <a href="/tags/OS/" style="font-size: 1em;">OS</a> <a href="/tags/Qt/" style="font-size: 1em;">Qt</a> <a href="/tags/Redis/" style="font-size: 1em;">Redis</a> <a href="/tags/STL/" style="font-size: 1em;">STL</a> <a href="/tags/Tools/" style="font-size: 1em;">Tools</a> <a href="/tags/Vim/" style="font-size: 1em;">Vim</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">函数式编程</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 1em;">分布式</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" style="font-size: 1em;">基础组件</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 1em;">微服务</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" style="font-size: 1em;">技术杂文</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" style="font-size: 1em;">操作系统导论</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 1em;">计算机组成原理</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0">移动构造函数</a></li>
+<li><a href="#%E7%A7%BB%E5%8A%A8%E8%B5%8B%E5%80%BC%E5%87%BD%E6%95%B0">移动赋值函数</a></li>
+<li><a href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E5%92%8C%E5%A4%8D%E5%88%B6%E8%AF%AD%E4%B9%89%E7%9A%84%E6%A0%B9%E6%9C%AC%E4%B8%8D%E5%90%8C">移动语义和复制语义的根本不同</a></li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="移动构造函数">移动构造函数</span></h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">MyClass</span>( MyClass &amp;&amp; other ) <span class="hljs-keyword">noexcept</span><br>: <span class="hljs-built_in">data</span>( other.data ), <span class="hljs-built_in">size</span>( other.size )        <span class="hljs-comment">/* 转移资源，浅拷贝 */</span><br>&#123; <br>    other.data	= <span class="hljs-literal">nullptr</span>;                      <span class="hljs-comment">/* 防止源对象析构时释放资源 */</span><br>    other.size	= <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们之前学习过拷贝构造函数，并且还深刻去讨论为什么这样写拷贝构造函数的原因。</p>
+<p>相比拷贝构造函数，移动构造函数的参数是类型为<code>&amp;&amp;</code>是可以理解的，因为移动语义接受右值，但是为什么没有 const 属性了？</p>
+<p>在移动构造或移动赋值操作中，通常会从源对象中“移动”资源（例如指针或文件句柄等），然后将源对象置于一种安全的状态（例如将指针设为 <code>nullptr</code> 或将资源句柄重置）。如果参数为 <code>const Type&amp;&amp;</code>，那么在移动构造中就无法修改源对象的状态，这样移动的语义就无法实现。</p>
+<p>移动构造函数中 data 指向 临时资源 <code>other.data</code></p>
+<h1><span id="移动赋值函数">移动赋值函数</span></h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++">MyClass &amp; <span class="hljs-keyword">operator</span>=( MyClass &amp;&amp; other ) <span class="hljs-keyword">noexcept</span><br>&#123;<br>	<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span> != &amp;other )   <span class="hljs-comment">/* 防止自我赋值 */</span><br>	&#123;<br>		<span class="hljs-keyword">delete</span>[] data;  <span class="hljs-comment">/* 释放当前对象的资源，用以接收 other 的 data 资源 */</span><br><br>		<span class="hljs-comment">/* 转移资源 */</span><br>		data	= other.data;<br>		size	= other.size;<br><br>		<span class="hljs-comment">/* 置空源对象的资源 */</span><br>		other.data	= <span class="hljs-literal">nullptr</span>;<br>		other.size	= <span class="hljs-number">0</span>;<br>	&#125;<br>	<span class="hljs-keyword">return</span>(*<span class="hljs-keyword">this</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1><span id="移动语义和复制语义的根本不同">移动语义和复制语义的根本不同</span></h1><p>移动语义内部是不会 new 新对象的，这也是为什么它比复制语义高效的缘故。</p>
+<p>移动构造的成员变量赋值是浅拷贝（把堆空间由相应的成员变量指向，自己不会 new 的），而拷贝构造是深拷贝（堆空间需要自己 new，然后把数据全部拷贝出来）。</p>
+<p>移动赋值也是一样的，只不过它需要先把自己的资源释放掉，因为赋值发生在两个已存在的对象之间，然后接下来的操作就和移动构造没有什么区别。</p>
+<p>看来移动语义和复制语义的根本不同点就是，移动语义是浅拷贝（改变指向），复制语义是深拷贝（重新 new）。</p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/31/%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" class="post-title hover-line">构造函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">类的数据成员中有指针时，意味着创建该类的对象时要进行指针成员的初始化，需要申请堆空间。在初始化列表中申请空间，在函数体中复制内容。</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
+    <a class="post-nav-item-left" href="/2024/11/24/%E5%85%B3%E8%81%94%E5%BC%8F%E5%AE%B9%E5%99%A8/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>关联式容器</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/11/24/%E6%8B%B7%E8%B4%9D%E8%B5%8B%E5%80%BC%E5%87%BD%E6%95%B0/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      拷贝赋值函数
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
   <a href="/tags/CPP/" class="post-tag">#CPP</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\10\C-输入输出流\" title="C++输入输出流" rel="bookmark">C++输入输出流</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/24/Redis%E9%9B%86%E7%BE%A4/" class="post-title hover-line">Redis集群</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">Cluster模式是Redis的一种高级集群模式，它通过数据分片和分布式存储实现了负载均衡和高可用性。在Cluster模式下，Redis将所有的键值对数据分散在多个节点上。每个节点负责一部分数据，称为槽位。通过对数据的分片，Cluster模式可以突破单节点的内存限制，实现更大规模的数据存储</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Redis/" class="post-tag">#Redis</a>
-
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/24/MySQL%E4%BA%8B%E5%8A%A1/" class="post-title hover-line">MySQL事务</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">MySQL 事务是一组被作为一个单独单元执行的操作，要么全部执行，要么全部回滚。事务主要用于保证数据的完整性，尤其是在多步骤操作中（例如涉及多个表的增删改操作），可以确保整个过程要么全部成功，要么全部撤销</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/MySQL/" class="post-tag">#MySQL</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/24/%E5%9F%BA%E4%BA%8E%E9%94%81%E7%9A%84%E5%B9%B6%E5%8F%91%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-title hover-line">基于锁的并发数据结构</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">互斥锁提供了互斥：一次只能有一个线程获得互斥锁。互斥锁保护数据结构是通过显式地阻止对它所保护数据的真正并发访问来实现的。这称为串行化：线程轮流访问被互斥锁保护的数据。它们必须串行而非并发的访问它。因此，必须仔细考虑数据结构的设计，使得能够真正的并发访问。虽然有些数据结构比其他数据结构具有更大的并发范围，但在所有情况下，其思想都是相同的：受保护的区域越小，串行化的操作就越少，并发的潜力也就越大。</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/17/Redis%E5%93%A8%E5%85%B5/" class="post-title hover-line">Redis哨兵</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">此前，我们非常依赖主服务器，因为所有的写命令都首先会给主服务器，那如果主服务器死掉，其它从服务器该怎么办？顶替！选择一个从服务器来担任主服务器的职责。Redis 提供哨兵机制（哨兵其实是一个运行在特殊模式下的 Redis 进程，所以它也是一个节点），它会检测主节点是否存活，如果发现主节点挂掉，就会选举一个从节点切换为主节点，并且把新主节点的相关信息通知给从节点和客户端。总结就是主要负责三件事情：监控、选主、通知</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Redis/" class="post-tag">#Redis</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/17/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" class="post-title hover-line">Redis主从复制</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">之前介绍 Redis 持久化是针对单台主机，如果这台主机死掉，不能对外提供服务，那持久化策略也没有发挥的余地。为了避免这种情况，那就需要能够有多台 Redis 服务器，哪怕其中一台死掉，再选择一个允许正常的 Redis 服务器顶上，继续正常服务。但我们必须要保证数据的一致性，所以引出接下来介绍的主从复制</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Redis/" class="post-tag">#Redis</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/14/%E8%BF%9B%E7%A8%8B%E6%B1%A0%E5%92%8C%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD/" class="post-title hover-line">进程池和文件下载</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">结合学过的文件操作、网络通信、以及进程和线程的知识, 实现一个基本的文件下载服务器模型。尽管线程池才是最常用的，但先从进程池谈起</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" class="post-tag">#基础组件</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/10/epoll%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title hover-line">epoll的使用</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">彻底讲清楚epoll</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/09/select%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title hover-line">select的使用</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">彻底讲清楚 select</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/09/%E5%86%AF%C2%B7%E8%AF%BA%E4%BE%9D%E6%9B%BC%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" class="post-title hover-line">冯·诺依曼体系结构</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">冯·诺依曼体系结构又名存储程序计算机，这里面其实暗含了两个概念，一个是“可编程”计算机，一个是“存储”计算机</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="post-tag">#计算机组成原理</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/technology/">1</a><a class="page-number" href="/technology/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/technology/page/4/">4</a><a class="page-number" href="/technology/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/14/">14</a></div>
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -812,6 +747,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>

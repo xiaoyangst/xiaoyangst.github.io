@@ -163,6 +163,60 @@
   
   <div class="post-card">
     <div class="post__head">
+      <a href="/2024/11/24/%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%B5%8B%E5%80%BC%E5%87%BD%E6%95%B0/" class="post-title hover-line">移动构造函数和移动赋值函数</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">看来移动语义和复制语义的根本不同点就是，移动语义是浅拷贝（改变指向），复制语义是深拷贝（重新 new）</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/11/24/%E6%8B%B7%E8%B4%9D%E8%B5%8B%E5%80%BC%E5%87%BD%E6%95%B0/" class="post-title hover-line">拷贝赋值函数</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">拷贝构造函数是用一个已经存在的对象初始化一个正在创建的对象，而赋值运算符函数是用一个已经存在的对象赋值另一个已经存在的对象，这是二者本质的区别</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/11/23/%E5%86%8D%E8%B0%88%E5%8D%95%E4%BE%8B/" class="post-title hover-line">再谈单例</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">线程安全的单例和单例资源的回收，实现单例模板类支持快速创建单例</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
       <a href="/2024/11/19/%E5%8D%95%E7%BB%A7%E6%89%BF%E5%92%8C%E5%A4%9A%E7%BB%A7%E6%89%BF/" class="post-title hover-line">单继承和多继承</a>
       
     </div>
@@ -277,60 +331,6 @@
     <div class="post__body">
       
       <div class="post-excerpt">需要了解new / delete表达式的工作步骤，以此为依据更合理地设计类的成员函数来进行对象的创建和回收。operator new/operator delete在平时不需要特别地写出，使用默认的即可。只在如上的特别的需求下，可以显式定义出来，实现不同的限制效果</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/11/02/%E7%89%B9%E6%AE%8A%E7%9A%84%E6%95%B0%E6%8D%AE%E6%88%90%E5%91%98%E5%92%8C%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0/" class="post-title hover-line">特殊的数据成员和成员函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">了解这些特殊的成员函数和成员变量，会让我们不迷糊，否则你都不知道为什么错</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/11/01/%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6%E5%87%BD%E6%95%B0/" class="post-title hover-line">赋值运算符函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">拷贝构造函数是用一个已经存在的对象初始化一个正在创建的对象，而赋值运算符函数是用一个已经存在的对象赋值另一个已经存在的对象，这是二者本质的区别。</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/31/%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" class="post-title hover-line">拷贝构造函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">构造函数就是初始化成员变量，指针成员变量还要申请堆空间来初始化，如果有实际数据，就在函数体中初始化。那么拷贝构造函数和构造函数唯一的不同是，拷贝构造函数是用存在的同类对象初始化正在创建的同类对象的成员变量，构造函数是用全部或部分的成员变量参数来初始化正在创建的同类对象的成员变量。</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
