@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 
+        谈一谈 RAII 技术 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,205 +156,148 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">谈一谈 RAII 技术</div>
+        <div class="post-info">
+          
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+
+          <span class="post-date">2024-11-26</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/Asio/" style="font-size: 1em;">Asio</a> <a href="/tags/C/" style="font-size: 1em;">C</a> <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 1em;">C++11新特性</a> <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">C++性能优化</a> <a href="/tags/CMake/" style="font-size: 1em;">CMake</a> <a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/Clion/" style="font-size: 1em;">Clion</a> <a href="/tags/Linux/" style="font-size: 1em;">Linux</a> <a href="/tags/MySQL/" style="font-size: 1em;">MySQL</a> <a href="/tags/OS/" style="font-size: 1em;">OS</a> <a href="/tags/Qt/" style="font-size: 1em;">Qt</a> <a href="/tags/Redis/" style="font-size: 1em;">Redis</a> <a href="/tags/STL/" style="font-size: 1em;">STL</a> <a href="/tags/Tools/" style="font-size: 1em;">Tools</a> <a href="/tags/Vim/" style="font-size: 1em;">Vim</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">函数式编程</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 1em;">分布式</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" style="font-size: 1em;">基础组件</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 1em;">微服务</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" style="font-size: 1em;">技术杂文</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" style="font-size: 1em;">操作系统导论</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 1em;">计算机组成原理</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#raii-%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%BB%93%E6%9D%9F%E8%87%AA%E5%8A%A8%E9%87%8A%E6%94%BE%E8%B5%84%E6%BA%90">RAII–对象生命周期结束自动释放资源</a></li>
+<li><a href="#%E5%9B%9B%E6%9D%A1%E6%80%A7%E8%B4%A8">四条性质</a></li>
+<li><a href="#%E4%B8%8D%E8%B6%B3">不足</a></li>
+<li><a href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5">参考链接</a></li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="raii对象生命周期结束自动释放资源">RAII–对象生命周期结束自动释放资源</span></h1><p>RAII 是一种编程技术或编程思想，它把资源的生命周期绑定到一个对象上，这里的资源指的是分配的堆内存，执行线程，打开的套接字，打开的文件，锁定的互斥锁，磁盘空间，数据库连接等有限供应的一些东西，这些资源必须是申请获得后才能使用。资源请求即初始化，可以这么理解，在对象的初始化的时候请求资源，从具体实现的角度来讲就是指在对象构造的时候去申请资源。从编码的角度来讲，一种可行的实现就是在类的构造函数中去申请资源。</p>
+<p>RAII 除了要保证对象能够被访问的时候资源必须是可以使用的，还必须保证所有资源在其控制对象的生存期结束时释放资源，资源释放的顺序是和资源获取的顺序是相反的。如果资源获取失败（比如构造函数异常退出），则每个完全构造的成员和基础子对象获取的所有资源将以和初始化顺序相反的顺序释放。和初始化顺序相反的顺序释放资源，这个和析构函数的析构过程是一样的。RAI I利用了 C++ 核心语言功能（对象生存期，范围退出，初始化顺序和堆栈展开）来消除资源泄漏并确保异常安全。从实现角度来看，标准库的 RAII 类通常是在其析构函数中释放资源。</p>
+<p>C++保 证了所有<strong>栈对象</strong>在生命周期结束时会被销毁（即调用析构函数），所以该代码是异常安全的。</p>
+<p>也就是说我们通过 RAII 封装的类，如果用这个类创建<strong>局部对象</strong>（切记不是堆对象），当它<strong>离开作用域</strong>之后（不管是正常结束离开作用域，还是发生异常导致的离开作用域，皆可），会<strong>自动调用析构函数</strong>。但如果你是用堆内存创建的话，你就得手动 delete（暂时不考虑指针），也就无法体现“对象生命周期结束自动释放资源”。为什么我们通常选择在析构函数释放资源，因为局部对象会在离开作用域之后自动调用析构函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-built_in">Student</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Student</span>() &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Student destructor&quot;</span> &lt;&lt; std::endl;<br>  &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test</span><span class="hljs-params">()</span> </span>&#123;<br>  Student s1;<br>  &#123;<br>      Student s2;<br>  &#125;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">调用 Test</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">Student destructor</span><br><span class="hljs-comment">Student destructor</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+
+<p>当一个函数需要通过多个局部变量来管理资源时，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RAII">RAII </a>就显得非常好用。因为只有被构造成功（构造函数没有抛出异常）的对象才会在返回时调用析构函数，同时析构函数的调用顺序恰好是它们构造顺序的反序，这样既可以保证多个资源（对象）的正确释放，又能满足多个资源之间的依赖关系。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Mutex</span>&gt; <span class="hljs-keyword">class</span> <span class="hljs-title class_">lock_guard</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    Mutex&amp; mutex_;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">lock_guard</span>(Mutex&amp; mutex) : <span class="hljs-built_in">mutex_</span>(mutex) &#123; mutex_.<span class="hljs-built_in">lock</span>(); &#125;<br>    ~<span class="hljs-built_in">lock_guard</span>() &#123; mutex_.<span class="hljs-built_in">unlock</span>(); &#125;<br><br>    <span class="hljs-built_in">lock_guard</span>(lock_guard <span class="hljs-type">const</span>&amp;) = <span class="hljs-keyword">delete</span>;<br>    lock_guard&amp; <span class="hljs-keyword">operator</span>=(lock_guard <span class="hljs-type">const</span>&amp;) = <span class="hljs-keyword">delete</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h1><span id="四条性质">四条性质</span></h1><ol>
+<li><strong>资源获取即初始化</strong>：资源（如内存、文件句柄、数据库连接等）在对象的构造函数中获得，而资源的释放则在对象的析构函数中进行。这意味着当一个对象被创建时，它就获取了某种资源，当对象销毁时，资源被自动释放。</li>
+<li><strong>自动管理资源生命周期</strong>：RAII 保证了对象的生命周期与资源的生命周期严格绑定。即当对象离开作用域时，析构函数会自动释放其所持有的资源，无需显式地调用释放函数，避免了资源泄漏的问题。</li>
+<li><strong>异常安全性</strong>：RAII 使得资源的管理具备异常安全性。如果在对象的构造过程中抛出异常，则对象的析构函数不会被调用，资源会自动回收，从而防止了资源泄漏。</li>
+<li><strong>明确的资源所有权</strong>：RAII 模式通过对象的生命周期明确资源的所有权，避免了多方竞争资源或资源的重复释放等问题。每个资源通常由一个对象独立管理，该对象是资源的唯一所有者。</li>
+</ol>
+<h1><span id="不足">不足</span></h1><p>RAII 不是万能的技术，在某些资源需要非常精细控制的情况下，依然需要手动管理。必须提早（对象生命周期结束前）释放的东西你就别用 RAII。一定要在用完之后立即释放资源，不想等作用域结束，那只有纯手工操作。</p>
+<p>RAII的作用是帮助处理<strong>发生异常时的资源释放问题</strong>以及<strong>避免程序员忘记释放资源</strong>。</p>
+<h1><span id="参考链接">参考链接</span></h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/bandaoyu/article/details/105461203">【RAII】RAII 技术（内存安全解决技术&#x2F;自动化解锁技术）</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RAII">RAII</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34999565/article/details/115280562">C++ RAII特性及其应用</a></p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" class="post-title hover-line">第三章：函数对象</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果你熟悉 C++11 新特性，此文并无太多需要学习的地方</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/tuple%E5%85%83%E7%BB%84/" class="post-title hover-line">tuple元组</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">它是一种可以包含多个不同类型元素的容器（ 它是一个模板类，允许将多个不同类型的对象组合在一起）</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/auto-%E5%92%8C-decltype/" class="post-title hover-line">auto 和 decltype</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">用于类型推断，auto 和 decltype 属于互补关系。auto 虽然比 decltype 方便，但有些场景还是需要 decltype 来</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/thread%E5%BA%93/" class="post-title hover-line">thread库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">强调并发编程中需要注意的问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/chrono%E5%BA%93/" class="post-title hover-line">chrono库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">C语言虽然也有时间处理方法，但是精度只到秒。Linux 和 Windows 都有提供相应的方法精确到微秒，但是用法不同，显然不支持跨平台。chrono 库精度更高，同时支持跨平台，因此C++11之后使用chrono 库处理时间和日期是有必要的，至于到后面的C++版本是否会继续加强，那是以后的事情</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" class="post-title hover-line">移动语义</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">移动语义就是从给定对象“窃取”资源而不是拷贝资源，源对象不再拥有资源，资源的所有权已经归属于新创建的对象</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-title hover-line">Lambda 表达式</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">一个普通函数不仅可以没有实参，也可以无需具体的返回值类型，但是必须要有函数体。lambda表达式又名匿名函数，即没有函数名的函数，形参和返回值也可以不必有，但是函数体不能丢。至于捕获也可以不进行任何捕获，但是却必须标识它的存在</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/function-%E5%92%8C-bind/" class="post-title hover-line">function 和 bind</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">function 和 bind 的结合，让回调函数的实现更加容易</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" class="post-title hover-line">智能指针</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">程序员可以自由分配堆内存，而栈内存由编译器申请和释放。内存管理针对的就是堆内存，在C++11的智能指针没有出现之前，为了保证内存合理的申请释放，需要配对操作，即new和delete，malloc和free，来避免内存泄漏</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%97%85/" class="post-title hover-line">第二章：函数式编程之旅</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">事实上，函数式编程并不神秘--它只是简单的概念，但作用很大。在前一章，第一个简单的，但还远没有理解的概念就是可以把一个函数作为参数传给STL中的算法。STL 算法可解决大多数问题，因为可以定制它们的行为</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/technology/">1</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/10/">10</a><a class="page-number" href="/technology/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/technology/page/13/">13</a><a class="page-number" href="/technology/page/14/">14</a><a class="page-number" href="/technology/page/15/">15</a></div>
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/11/26/CAS%E6%9C%BA%E5%88%B6/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>CAS机制</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/11/24/%E5%85%B3%E8%81%94%E5%BC%8F%E5%AE%B9%E5%99%A8/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      关联式容器
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\10\C-输入输出流\" title="C++输入输出流" rel="bookmark">C++输入输出流</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -812,6 +756,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>

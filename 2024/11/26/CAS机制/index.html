@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 
+        CAS机制 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,205 +156,139 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">CAS机制</div>
+        <div class="post-info">
+          
+  <a href="/tags/CPP/" class="post-tag">#CPP</a><a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
+
+
+          <span class="post-date">2024-11-26</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/Asio/" style="font-size: 1em;">Asio</a> <a href="/tags/C/" style="font-size: 1em;">C</a> <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 1em;">C++11新特性</a> <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">C++性能优化</a> <a href="/tags/CMake/" style="font-size: 1em;">CMake</a> <a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/Clion/" style="font-size: 1em;">Clion</a> <a href="/tags/Linux/" style="font-size: 1em;">Linux</a> <a href="/tags/MySQL/" style="font-size: 1em;">MySQL</a> <a href="/tags/OS/" style="font-size: 1em;">OS</a> <a href="/tags/Qt/" style="font-size: 1em;">Qt</a> <a href="/tags/Redis/" style="font-size: 1em;">Redis</a> <a href="/tags/STL/" style="font-size: 1em;">STL</a> <a href="/tags/Tools/" style="font-size: 1em;">Tools</a> <a href="/tags/Vim/" style="font-size: 1em;">Vim</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">函数式编程</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 1em;">分布式</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" style="font-size: 1em;">基础组件</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 1em;">微服务</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" style="font-size: 1em;">技术杂文</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" style="font-size: 1em;">操作系统导论</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 1em;">计算机组成原理</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%82%B2%E8%A7%82%E9%94%81%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81">悲观锁和乐观锁</a></li>
+<li><a href="#%E4%B8%8D%E8%B6%B3">不足</a><ul>
+<li><a href="#aba%E9%97%AE%E9%A2%98">ABA问题</a></li>
+<li><a href="#%E5%8F%AF%E8%83%BD%E4%BC%9A%E6%B6%88%E8%80%97%E8%BE%83%E9%AB%98%E7%9A%84cpu">可能会消耗较高的CPU</a></li>
+<li><a href="#%E4%B8%8D%E8%83%BD%E4%BF%9D%E8%AF%81%E4%BB%A3%E7%A0%81%E5%9D%97%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7">不能保证代码块的原子性</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5">参考链接</a></li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="悲观锁和乐观锁">悲观锁和乐观锁</span></h1><p>悲观锁认为访问的资源肯定会被别人访问，为了保险起见，会对访问的资源先加锁，等到不再访问的时候再解锁。</p>
+<p>乐观锁却不这么想，但是资源只有一份，你乐观锁不加锁操作并不代表就可以直接访问资源而不管有没有人访问，所以乐观锁也有“加锁”机制，但是和悲观锁的行为不同。悲观锁是实际加锁和解锁来达到原子性，而乐观锁在正式更新数据之前会检查数据是否被其他线程改变过，如果未被其他线程改变过就将共享变量更新成最新值，如果发现共享变量已经被其他线程更新过了，就重试，直到成功为止。整个过程不涉及加锁和解锁操作，但却已实现原子性。</p>
+<p>原子锁的优点：</p>
+<ul>
+<li>可以保证<strong>变量操作</strong>的原子性</li>
+<li><strong>并发量不是很高</strong>的情况下，使用 CAS 机制比使用锁机制效率更高</li>
+<li>在线程<strong>对共享资源占用时间较短</strong>的情况下，使用 CAS 机制效率也会较高</li>
+</ul>
+<p><img src="/images/2024/11/26/e6b85f20-abf3-11ef-852d-e7432d078b51.jpg" alt="CAS.jpg"></p>
+<p>如上图中，主存中保存 V 值，线程中要使用 V 值要先从主存中读取V值到线程的工作内存 A 中，然后计算后变成 B 值，最后再把B值写回到内存 V 值中。多个线程共用 V 值都是如此操作。CAS 的核心是在将 B 值写入到 V 之前要比较 A 值和 V 值是否相同，如果不相同证明此时 V 值已经被其他线程改变，重新将 V 值赋给 A，并重新计算得到 B，如果相同，则将 B 值赋给 V。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">compare_exchange_strong</span> <span class="hljs-params">(T&amp; expected, T val, memory_order sync = memory_order_seq_cst)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>expected 是期望值，val 是打算替换的值。</p>
+<p>调用 compare_exchange_strong 者的值如果和 期望值相同（返回 true），就把调用者的值替换为 val。</p>
+<p>否则，就把调用者的值替换为 期望值。</p>
+<h1><span id="不足">不足</span></h1><h2><span id="aba问题">ABA问题</span></h2><p>CAS 在操作的时候会检查变量的值是否被更改过，如果没有则更新值，但是带来一个问题，最开始的值是 A，接着变成B，最后又变成了 A。经过检查这个值确实没有修改过，因为最后的值还是 A，但是实际上这个值确实已经被修改过了。为了解决这个问题，在每次进行操作的时候加上一个版本号，每次操作的就是两个值，一个版本号和某个值，A——&gt;B——&gt;A 问题就变成了 1A——&gt;2B——&gt;3A。</p>
+<h2><span id="可能会消耗较高的cpu">可能会消耗较高的CPU</span></h2><p>看起来 CAS 比锁的效率高，从阻塞机制变成了非阻塞机制，减少了线程之间等待的时间。每个方法不能绝对的比另一个好，在线程之间竞争程度大的时候，如果使用 CAS，每次都有很多的线程在竞争，也就是说 CAS 机制不能更新成功。这种情况下 CAS 机制会一直重试，这样就会比较耗费 CPU。<strong>因此可以看出，如果线程之间竞争程度小，使用 CAS 是一个很好的选择；但是如果竞争很大，使用锁可能是个更好的选择</strong>。</p>
+<h2><span id="不能保证代码块的原子性">不能保证代码块的原子性</span></h2><p>只能保证代码行的原子性，可不能保证代码块的原子性（锁是可以做到的，而且随意块的大小都可以做到）。</p>
+<h1><span id="参考链接">参考链接</span></h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/54chensongxia/p/12160085.html">并发编程的基石——CAS机制</a></p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" class="post-title hover-line">第三章：函数对象</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果你熟悉 C++11 新特性，此文并无太多需要学习的地方</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/tuple%E5%85%83%E7%BB%84/" class="post-title hover-line">tuple元组</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">它是一种可以包含多个不同类型元素的容器（ 它是一个模板类，允许将多个不同类型的对象组合在一起）</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/auto-%E5%92%8C-decltype/" class="post-title hover-line">auto 和 decltype</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">用于类型推断，auto 和 decltype 属于互补关系。auto 虽然比 decltype 方便，但有些场景还是需要 decltype 来</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/thread%E5%BA%93/" class="post-title hover-line">thread库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">强调并发编程中需要注意的问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/chrono%E5%BA%93/" class="post-title hover-line">chrono库</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">C语言虽然也有时间处理方法，但是精度只到秒。Linux 和 Windows 都有提供相应的方法精确到微秒，但是用法不同，显然不支持跨平台。chrono 库精度更高，同时支持跨平台，因此C++11之后使用chrono 库处理时间和日期是有必要的，至于到后面的C++版本是否会继续加强，那是以后的事情</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" class="post-title hover-line">移动语义</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">移动语义就是从给定对象“窃取”资源而不是拷贝资源，源对象不再拥有资源，资源的所有权已经归属于新创建的对象</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-title hover-line">Lambda 表达式</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">一个普通函数不仅可以没有实参，也可以无需具体的返回值类型，但是必须要有函数体。lambda表达式又名匿名函数，即没有函数名的函数，形参和返回值也可以不必有，但是函数体不能丢。至于捕获也可以不进行任何捕获，但是却必须标识它的存在</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/function-%E5%92%8C-bind/" class="post-title hover-line">function 和 bind</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">function 和 bind 的结合，让回调函数的实现更加容易</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" class="post-title hover-line">智能指针</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">程序员可以自由分配堆内存，而栈内存由编译器申请和释放。内存管理针对的就是堆内存，在C++11的智能指针没有出现之前，为了保证内存合理的申请释放，需要配对操作，即new和delete，malloc和free，来避免内存泄漏</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-tag">#C++11新特性</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/16/%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%97%85/" class="post-title hover-line">第二章：函数式编程之旅</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">事实上，函数式编程并不神秘--它只是简单的概念，但作用很大。在前一章，第一个简单的，但还远没有理解的概念就是可以把一个函数作为参数传给STL中的算法。STL 算法可解决大多数问题，因为可以定制它们的行为</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/technology/">1</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/10/">10</a><a class="page-number" href="/technology/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/technology/page/13/">13</a><a class="page-number" href="/technology/page/14/">14</a><a class="page-number" href="/technology/page/15/">15</a></div>
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/11/26/%E8%B0%88%E4%B8%80%E8%B0%88-RAII-%E6%8A%80%E6%9C%AF/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      谈一谈 RAII 技术
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a><a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\CPP-中-cctype-库的常用方法\" title="CPP 中 cctype 库的常用方法" rel="bookmark">CPP 中 cctype 库的常用方法</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\10\C-输入输出流\" title="C++输入输出流" rel="bookmark">C++输入输出流</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -812,6 +747,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23li5i2L2uV71Fu3Br","clientSecret":"be91b4eccfd7c53c6414c6f81f8466849cd1f65a","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>
