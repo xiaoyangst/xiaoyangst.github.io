@@ -262,7 +262,7 @@
 
 <h2><span id="异步操作">异步操作</span></h2><h3><span id="future-与-promise">future 与 promise</span></h3><p>它提供了一种机制可以获取异步操作的结果，因为一个异步操作的结果不能马上获取，只能在未来某个时候从某个地方获取。这个异步操作的结果是一个未来的期待值，所有称为 future，可以称它为未来量。</p>
 <p>std::future 通常结合 std::promise，std::package_task，std::async使用。因为 future 本身只是用来存储某个结果，所以实际代码的执行还是需要借助其它函数。获取 future  存储结果的方法是 get()，并且只能获取一次，再次获取会异常。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//std::future 是一个类模板，模板参数需要传入一个类型</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br>future;<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">R</span>&amp;&gt; future&lt;R&amp;&gt;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//std::future 是一个类模板，模板参数需要传入一个类型</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;future;<br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">R</span>&amp;&gt; future&lt;R&amp;&gt;;<br></code></pre></td></tr></table></figure>
 
 <p>std::promise 是一个协助线程赋值的类，它能够将数据和 future 对象绑定起来，为获取线程函数中的某个值提供便利。std::future 通常结合 std::promise 就相当于给线程间<strong>建立一个通道</strong>，分为以下几步：</p>
 <ol>
