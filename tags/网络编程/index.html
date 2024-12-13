@@ -163,6 +163,24 @@
   
   <div class="post-card">
     <div class="post__head">
+      <a href="/2024/12/13/TCP%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E7%9A%84%E6%9C%AC%E8%B4%A8/" class="post-title hover-line">TCP网络编程的本质</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">消息发送对于低流量的服务，倒也不必关心半事件。对于高流量的服务就不可以，因为流量太大会导致内核缓冲区满，那么用户层需要将剩余的消息暂时保存到用户自己的缓冲区中，等到文件描述符变得可写，再继续往里面写入消息。通常要我们自己设计一个 Buffer 来解决这个问题</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
       <a href="/2024/10/10/epoll%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title hover-line">epoll的使用</a>
       
     </div>
@@ -313,24 +331,6 @@
     <div class="post__body">
       
       <div class="post-excerpt">没有多线程，谈何高性能</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a><a href="/tags/Asio/" class="post-tag">#Asio</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/14/%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E9%80%BB%E8%BE%91%E5%B1%82%E8%AE%BE%E8%AE%A1/" class="post-title hover-line">第四章：逻辑层设计</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这一刻，我们就完成单线程的可提供服务的服务器了。完善下消息体，网络和计算工作的解耦合，服务器优雅退出，实在期待后面多线程的引入，我们将一步一步走向高性能服务器</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
