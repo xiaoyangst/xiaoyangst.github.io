@@ -174,6 +174,42 @@
   
   <div class="post-card">
     <div class="post__head">
+      <a href="/2024/08/10/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%8C%BA%E5%88%86/" class="post-title hover-line">网络编程中结构体的区分</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">sockaddr 结构体是为了统一地址结构的表示方法，统一接口函数，但是这个结构体并不方便使用，因此定义了等价的 sockaddr_in 结构体，它的大小和 sockaddr 结构体相同，可以强制转换成 sockaddr。因此，在实际的网络编程中，先定义 sockaddr_in结构体把相关信息存储之后，再强制转换成 sockaddr，毕竟提供的API接受的类型是 sockaddr</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/08/10/%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F/" class="post-title hover-line">主机字节序和网络字节序</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">在网络编程中，数据收发的过程中有自动转换机制，不需要程序员手动转换，只有向 sockadd_in 结构体成员变量填充数据时，才需要考虑字节序的问题</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
       <a href="/2024/08/10/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BA%94%E8%AF%A5%E8%AE%BE%E7%BD%AESO-REUSEADDR%E9%80%89%E9%A1%B9/" class="post-title hover-line">服务器应该设置SO_REUSEADDR选项</a>
       
     </div>
@@ -310,42 +346,6 @@
     <div class="post__foot">
       <div class="post-tags">
   <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/10/%E6%8F%90%E9%98%B2%E5%AF%B9%E7%AD%89%E5%AE%9E%E4%BD%93%E7%9A%84%E4%B8%8D%E5%8F%8B%E5%A5%BD%E5%8A%A8%E4%BD%9C/" class="post-title hover-line">提防对等实体的不友好动作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">亦如在程序中接受用户的输入前，要对用户的输入进行“安全检测”，以防止恶意输入破坏应用程序的正常运行。可见，防御性编程在编码中是必备的意识，网络编程中也要考虑各种概率看似很小的事件，做出相应的处理动作</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/08/CPP-%E4%B8%AD-cctype-%E5%BA%93%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95/" class="post-title hover-line">CPP 中 cctype 库的常用方法</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">通常用于处理字符串中字母、数字、特殊字符，还包括大小写转换</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
 
 </div>
     </div>
