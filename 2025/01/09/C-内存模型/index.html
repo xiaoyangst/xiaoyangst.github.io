@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        C++死锁和数据竞争检查工具 | 
+        C++内存模型 | 
       
     </title>
     <meta name="description" content="" />
@@ -159,13 +159,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">C++死锁和数据竞争检查工具</div>
+        <div class="post-title">C++内存模型</div>
         <div class="post-info">
           
-  <a href="/tags/Tools/" class="post-tag">#Tools</a>
+  <a href="/tags/%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E5%92%8C%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" class="post-tag">#原子变量和内存模型</a>
 
 
-          <span class="post-date">2025-01-08</span>
+          <span class="post-date">2025-01-09</span>
         </div>
       </div>
       
@@ -178,25 +178,197 @@
         <!-- toc -->
 
 <ul>
-<li><a href="#%E6%95%B0%E6%8D%AE%E7%AB%9E%E4%BA%89">数据竞争</a></li>
-<li><a href="#%E6%AD%BB%E9%94%81">死锁</a></li>
+<li><a href="#%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F">原子变量</a><ul>
+<li><a href="#%E5%85%AC%E5%85%B1%E6%93%8D%E4%BD%9C">公共操作</a></li>
+<li><a href="#%E7%89%B9%E6%9C%89%E6%93%8D%E4%BD%9C">特有操作</a></li>
+</ul>
+</li>
+<li><a href="#%E5%86%85%E5%AD%98%E5%BA%8F">内存序</a><ul>
+<li><a href="#%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C%E7%9A%84%E4%BD%9C%E7%94%A8">内存屏障的作用</a></li>
+<li><a href="#memory_order_release">memory_order_release</a></li>
+<li><a href="#memory_order_acquire">memory_order_acquire</a></li>
+<li><a href="#memory_order_relaxed">memory_order_relaxed</a></li>
+<li><a href="#memory_order_consume">memory_order_consume</a></li>
+<li><a href="#memory_order_seq_cst">memory_order_seq_cst</a></li>
+<li><a href="#memory_order_acq_rel">memory_order_acq_rel</a></li>
+<li><a href="#%E6%93%8D%E4%BD%9C%E5%AF%B9%E5%BA%94%E5%8F%AF%E9%80%89%E7%9A%84%E5%86%85%E5%AD%98%E5%BA%8F">操作对应可选的内存序</a></li>
+<li><a href="#acquire-%E5%92%8C-release%E6%88%90%E5%AF%B9">Acquire 和 Release成对</a></li>
+</ul>
+</li>
+<li><a href="#%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B">内存模型</a><ul>
+<li><a href="#%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7%E6%89%80%E6%9C%89%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%85%A8%E5%B1%80%E6%8E%92%E5%BA%8F">顺序一致性：所有线程的全局排序</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96-%E9%87%8A%E6%94%BE%E8%AF%AD%E4%B9%89%E5%90%8C%E4%B8%80%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E4%B8%8A%E7%9A%84%E8%AF%BB%E5%92%8C%E5%86%99%E6%93%8D%E4%BD%9C%E4%B9%8B%E9%97%B4%E7%9A%84%E9%A1%BA%E5%BA%8F">获取-释放语义：同一原子操作上的读和写操作之间的顺序</a></li>
+<li><a href="#%E5%AE%BD%E6%9D%BE%E8%AF%AD%E4%B9%89%E6%97%A0%E5%90%8C%E6%AD%A5%E5%92%8C%E6%8E%92%E5%BA%8F%E9%99%90%E5%88%B6">宽松语义：无同步和排序限制</a></li>
+</ul>
+</li>
+<li><a href="#%E6%96%87%E7%AB%A0%E6%8E%A8%E8%8D%90">文章推荐</a></li>
 </ul>
 <!-- tocstop -->
 
-<h2><span id="数据竞争">数据竞争</span></h2><p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98/%E6%95%B0%E6%8D%AE%E7%AB%9E%E4%BA%89">存在数据竞争</a></p>
-<p><code>valgrind --tool = helgrind ./thread</code></p>
-<p>信息解读：</p>
-<p>1-线程创建信息，表面为 线程 3</p>
-<p><img src="/images/2025/01/08/9c15a29f-a0e3-4a30-83bd-3dadfc514ad7.png" alt="image20250108200134322.png"></p>
-<p>2-global_variable 变量可能存在数据竞争</p>
-<p><img src="/images/2025/01/08/9a172e58-9bca-49b9-b997-a0902a8c5baa.png" alt="image20250108200631379.png"></p>
-<h2><span id="死锁">死锁</span></h2><p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98/%E6%AD%BB%E9%94%81">死锁代码</a></p>
-<p><code>valgrind --tool = helgrind ./thread</code></p>
-<p>运行就会卡住，Ctrl+C 停止程序，就可以看到相关输出了</p>
-<p><img src="/images/2025/01/08/176b8e98-da43-47d0-b13a-4896cdae5c69.png" alt="image20250108204044573.png"></p>
-<p><img src="/images/2025/01/08/5bd54ea0-360d-4534-825c-1b3ce8cf5c37.png" alt="image20250108204308194.png"></p>
-<p>我觉得这个输出非常让人不满意，只可以检测出由死锁问题导致的程序卡住，但是没有提示究竟的哪些锁（我们代码中由两把锁，名字为 mutexA 和 mutexB），不如用 gdb 进行调试死锁，信息比这个全面一些。</p>
-<p>而且还有个问题就是，如果你锁住的内容很多，输出就会很多，非常恶心。</p>
+<p>atomic 有两个功能：原子 和 内存序，这点可以通过官方接口文档看出，只是通常内存序默认是<code>memory_order_seq_cst</code>，从而被忽视。</p>
+<p>原子的作用：保证对一个变量操作期间，其他线程不会对此变量操作，那就称为原子操作。</p>
+<p>内存序的作用：构造一个事件发生先后的顺序关系，同步访问其线程中的其他非原子对象。不仅保护自己的安全，还要考虑保护别人的安全。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs tex">acquire：获得<br><br>release：释放、发布<br></code></pre></td></tr></table></figure>
+
+
+
+<h1><span id="原子变量">原子变量</span></h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt; <br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">atomic</span>;<br></code></pre></td></tr></table></figure>
+
+<h2><span id="公共操作">公共操作</span></h2><table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>is_lock_free</td>
+<td>检测对特定类型的原子操作是否为无锁操作</td>
+<td>如果原子操作是无锁的（即不使用锁或自旋锁），则返回 <code>true</code></td>
+</tr>
+<tr>
+<td>store</td>
+<td>设置原子变量的值</td>
+<td></td>
+</tr>
+<tr>
+<td>load</td>
+<td>获取原子变量的当前值</td>
+<td></td>
+</tr>
+<tr>
+<td>exchange</td>
+<td>原子地将存储的值替换为新值，并返回旧值</td>
+<td>常用于实现原子交换操作</td>
+</tr>
+<tr>
+<td>compare_exchange_weak</td>
+<td>原子地比较当前值与预期值，如果相等，则将其替换为期望值</td>
+<td>可能即使比较成功也会失败</td>
+</tr>
+<tr>
+<td>compare_exchange_strong</td>
+<td>功能同上</td>
+<td>保证不会虚假失败（仅在比较结果确实不相等时才会失败）</td>
+</tr>
+</tbody></table>
+<p>对于大部分情况下，要对原子变量操作，一般方法是先通过 <code>load</code> 加载原子变量目前存储的值，然后操作后执行 <code>compare_exchange</code>。</p>
+<p> 在一些平台，弱形式的 CAS 函数，也就是 <code>compare_exchange_weak</code> 函数性能可能更高。两个 CAS 函数均建议使用 do-while 循环进行操作。但是弱形式的函数可能会有 “出乎意料（Unexpected）” 的返回，那就直接用 <code>compare_exchange_strong</code> 更稳妥。</p>
+<h2><span id="特有操作">特有操作</span></h2><table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>fetch_add</td>
+<td>将参数值加到原子变量中，并返回修改前的值</td>
+<td>用于实现原子加法操作，常用于计数器或累加操作</td>
+</tr>
+<tr>
+<td>fetch_sub</td>
+<td>从原子变量中减去参数值，并返回修改前的值</td>
+<td>用于实现原子减法操作</td>
+</tr>
+<tr>
+<td>fetch_and</td>
+<td>对原子变量执行位与操作（AND），并返回修改前的值</td>
+<td>通常用于屏蔽或清除特定位</td>
+</tr>
+<tr>
+<td>fetch_or</td>
+<td>对原子变量执行位或操作（OR），并返回修改前的值</td>
+<td>用于设置某些位（即将特定位设置为1），常见于标志位的操作</td>
+</tr>
+<tr>
+<td>fetch_xor</td>
+<td>对原子变量执行位异或操作（XOR），并返回修改前的值</td>
+<td>用于切换位值（即0变1，1变0），这也是一种原子操作</td>
+</tr>
+</tbody></table>
+<h1><span id="内存序">内存序</span></h1><p><img src="/images/2025/01/09/d5e562eb-90f5-43a5-b860-27b5ff7aafef.png" alt="image20250108235754333.png"></p>
+<p>内存的顺序描述了计算机CPU获取内存的顺序，内存的排序可能静态也可能动态的发生：</p>
+<ul>
+<li>静态内存排序：编译器期间，编译器对内存重排</li>
+<li>动态内存排序：运行期间，CPU乱序执行</li>
+</ul>
+<p>静态内存排序是为了提高代码的利用率和性能，编译器对代码进行了重新排序；同样为了优化性能CPU也会进行对指令进行重新排序、延缓执行、各种缓存等等，以便达到更好的执行效果。虽然经过排序确实会导致很多执行顺序和源码中不一致，但是你没有必要为这些事情感到棘手足无措。任何的内存排序都不会违背代码本身所要表达的意义，并且在单线程的情况下通常不会有任何的问题。</p>
+<p>但是在多线程场景中，无锁的数据结构设计中，指令的乱序执行会造成无法预测的行为。所以我们通常引入内存屏障这一概念来解决可能存在的并发问题。</p>
+<h2><span id="内存屏障的作用">内存屏障的作用</span></h2><p>内存屏障使得CPU 或编译器在对内存进行操作的时候,，严格按照一定的顺序来执行，也就是说在内存屏障之前的指令和之后的指令不会由于系统优化等原因而导致乱序。</p>
+<p>大多数现代计算机为了提高性能而采取乱序执行，这使得内存屏障成为必须。语义上，内存屏障之前的所有写操作都要写入内存；内存屏障之后的读操作都可以获得同步屏障之前的写操作的结果。因此，对于敏感的程序块，写操作之后、读操作之前可以插入内存屏障。</p>
+<p>我们讲内存屏障只有一种功能，禁止指令越过屏障。</p>
+<p><img src="/images/2025/01/09/773d7e7d-53e1-49d2-9d39-dd6581a1a178.png" alt="image20250108234204041.png"></p>
+<p>注：内存屏障（barrier），又名内存卡，栅栏。</p>
+<h2><span id="memory_order_release">memory_order_release</span></h2><p>以图中原子操作 atomic_store_explicit 为界限。</p>
+<p>界限之前的写和读不允许重排到界限之后，界限之后的写和读允许被重排到界限之前。</p>
+<p><img src="/images/2025/01/09/cf90f32c-a3ae-4712-8948-2b6c619f1533.png" alt="e47efbaacb4a6ee0938bcd388cf9dc69.png"></p>
+<p>在当前线程中 memory_order_release 保护前面，不保护后面，即在原子操作前面加入内存屏障。</p>
+<h2><span id="memory_order_acquire">memory_order_acquire</span></h2><p>以图中原子操作 atomic_load_explicit 为界限。</p>
+<p>界限之前的写和读允许重排到界限之后，界限之后的写和读不允许被重排到界限之前。</p>
+<p><img src="/images/2025/01/09/52a814e7-b90a-4516-a90d-9db4fea0738c.png" alt="564a9847642f9a1446d31054776d5242.png"></p>
+<p>在当前线程中 memory_order_acquire 保护后面，不保护前面，即在原子操作后面加入内存屏障。</p>
+<h2><span id="memory_order_relaxed">memory_order_relaxed</span></h2><p>松散的内存序，即相当于只有原子特性，不顾及事件发生先后的顺序关系。就是说编译器和CPU你想怎么优化就怎么优化，我不关心。</p>
+<p>之前 atomic 有两个功能：原子性和内存序。但如果使用该内存序，就等价于只发挥 atomic 的原子性。</p>
+<p>如果以下面这个原子操作为界限，界限之前的写和读允许重排到界限之后，界限之后的写和读也允许被重排到界限之前。</p>
+<p><img src="/images/2025/01/09/b670d270-48de-4e1e-a6f2-7e199569a6b1.png" alt="image20250108215637833.png"></p>
+<p>在当前线程中 memory_order_acquire 不保护后面，也不保护前面，即在原子操作前面和后面都不会加入内存屏障。</p>
+<h2><span id="memory_order_consume">memory_order_consume</span></h2><p><code>memory_order_consume</code>不应该出现在实际的代码中，即使在 C++17 中也不推荐使用。</p>
+<p>截至 2015 年，大多数生产编译器并未实际跟踪这些依赖链，而是简单地将 <code>memory_order_consume</code> 提升为更强的 <code>memory_order_acquire</code>。</p>
+<p><img src="/images/2025/01/09/9a1fe9bf-8f0e-496f-a795-e198b55f4c84.png" alt="image20250109002037239.png"></p>
+<h2><span id="memory_order_seq_cst">memory_order_seq_cst</span></h2><p>这是最强的内存序，不允许任何编译器等对代码进行优化，性能不是最好，但绝对是最安全。也就是编译器和CPU不要给我优化，代码原来是怎么样就怎么样去执行。</p>
+<p>以图中原子操作 atomic_store_explicit 为界限。</p>
+<p>界限之前的写和读不允许重排到界限之后，界限之后的写和读也不允许被重排到界限之前。</p>
+<p><img src="/images/2025/01/09/ee6ff2f3-0393-41c1-8783-e0e7839c25c4.png" alt="634becf577a6335b0aa845a3ebbccf66.png"></p>
+<p><font color="red">所有线程中</font> memory_order_seq_cst 保护前面，也保护后面，可谓最强内存序，线程的执行顺序与代码顺序严格一致。</p>
+<h2><span id="memory_order_acq_rel">memory_order_acq_rel</span></h2><p>同时包含 memory_order_acquire 和 memory_order_release 标记。</p>
+<p>本线程中 memory_order_acq_rel 保护前面，也保护后面，是 memory_order_release 和 memory_order_acquire 同时作用之意。、</p>
+<p>界限之前的写和读不允许重排到界限之后，界限之后的写和读也不允许被重排到界限之前。</p>
+<p><img src="/images/2025/01/09/a7fff21d-8dd0-4741-a27a-c7b43b8c10e9.png" alt="image20250109000308621.png"></p>
+<h2><span id="操作对应可选的内存序">操作对应可选的内存序</span></h2><p><img src="/images/2025/01/09/7ff48697-ae5b-4350-9dd6-c0a705e2800e.png" alt="image20250109112821940.png"></p>
+<p>特殊的内存序要单独拿出来说一说：</p>
+<ul>
+<li>memory_order_release 只能 写操作，如 store</li>
+<li>memory_order_acquire 只能 读操作，如 load</li>
+<li>memory_order_acq_rel 只能 读-修改-写操作，如 fetch_add</li>
+</ul>
+<blockquote>
+<p>[!IMPORTANT]</p>
+<p>由于 memory_order_consume 特殊性，不加入到单独说明中</p>
+</blockquote>
+<h2><span id="acquire-和-release成对">Acquire 和 Release成对</span></h2><p>Acquire 和 Release 语义通常成对使用以确保不同线程之间的正确同步。</p>
+<p>这样的成对使用保证了：</p>
+<ul>
+<li>在执行 <code>release</code> 操作之前的所有写操作（包括普通非原子写和之前的原子写操作），对于执行 <code>acquire</code> 操作的线程都是可见的。</li>
+<li>这些写操作不会被重排序到 <code>release</code> 操作之后，同时也不会被重排序到 <code>acquire</code> 操作之前。</li>
+</ul>
+<h1><span id="内存模型">内存模型</span></h1><p><img src="/images/2025/01/09/944590a7-fb31-4ad8-8e07-b00d091a4e9e.png" alt="image20250109113216328.png"></p>
+<h2><span id="顺序一致性所有线程的全局排序">顺序一致性：所有线程的全局排序</span></h2><p><img src="/images/2025/01/09/ab7cede0-0d24-49f1-b1a5-f498705567d1.png" alt="image20250109123720977.png"></p>
+<p>顺序一致性中，不允许 CPU 或 编译器对源代码进行重排，即禁止任何优化操作。因此，我们程序的操作将按照源代码顺序执行。</p>
+<p>所有线程上的所有操作都有一个全局顺序，这意味着即使这些操作实际上可能几乎同时发生，系统也会保证所有线程看到的是相同的、确定的操作顺序。</p>
+<p>那究竟会有哪些可能的操作顺序呢？</p>
+<p><img src="/images/2025/01/09/58c4a9f2-3d04-4c6e-9cdd-e8d806eac88c.png" alt="image20250109125701520.png"></p>
+<p>从图中我们可以看到的是，不管如何交错，都保证这样一个前提：x.store 操作 在 y.load 操作之前，y.store 在 x.load 操作之前。</p>
+<p>这是因为我们线程中的代码顺序就是这样的，这是不可改变的。</p>
+<h2><span id="获取-释放语义同一原子操作上的读和写操作之间的顺序">获取-释放语义：同一原子操作上的读和写操作之间的顺序</span></h2><p>原子上的释放操作与同一原子上的获取操作同步，并另外建立排序约束。</p>
+<p><img src="/images/2025/01/09/6367751f-4b00-43f1-b72d-8bc025e8e5c7.png" alt="image20250109131013903.png"></p>
+<p>读写操作不能移动到 acquire（获取） 操作 之前，读写操作不能移动到 release（修改） 操作 之后。</p>
+<p>下面请看示例：</p>
+<p>这里明显是有两个原子变量，分别是 dataProduced 和 dataConSumed。</p>
+<p>三个函数分别可以被多个不同的线程去执行，但是最终执行的顺序却保持一致，这是 acquire 和 release 语义配对形成。</p>
+<p>dataConsumer 只有 dataConSumed 为 true 才可以继续往下执行。</p>
+<p>deliveryBoy 的 两个原子操作不会被重排，dataProduced 为 true 往下执行，再往下 dataConSumed 为 true。</p>
+<p>dataProducer 随时可以被执行，不依赖于任何东西，执行会让 dataProduced 为 true。</p>
+<p>因此，如果三个线程分别去执行 图中三个函数。dataConsumer 和 deliveryBoy  会有依赖，导致无法往下执行。但是 dataProducer 没有依赖，正常执行让 dataProduced 为 true。deliveryBoy 等待的条件被满足，正常往下执行让 dataConSumed 为 true。dataConsumer 等待的条件被满足，得以往下执行。可见，尽管是多线程，操作的顺序是确定的。</p>
+<p>是不是觉得特别像条件变量的感觉，获取-释放语义模型又名同步模型。</p>
+<p><img src="/images/2025/01/09/859eef77-2864-4bdd-85f9-585a0f3f2936.png" alt="image20250109131925059.png"></p>
+<h2><span id="宽松语义无同步和排序限制">宽松语义：无同步和排序限制</span></h2><p>没有同步和排序限制，这些操作只是原子的。</p>
+<p>典型的用例就是 shared_ptr 的引用计数，线程可以以不同的顺序查看另一个线程中的操作。</p>
+<h1><span id="文章推荐">文章推荐</span></h1><p><a target="_blank" rel="noopener" href="https://mariadb.org/wp-content/uploads/2017/11/2017-11-Memory-barriers.pdf">Memory-barriers</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.mdnice.com/writing/2c2a8fea034146b4aa87e157c4b2c6b8">C++内存模型和原子类型操作</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.modernescpp.org/wp-content/uploads/2022/09/TheCppMemoryModel.pdf">The Cpp Memory Model</a></p>
 
       </div>
     </div>
@@ -240,23 +412,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2025/01/09/C-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>C++内存模型</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2025/01/06/CAP-%E4%B8%8E-BASE-%E7%90%86%E8%AE%BA/">
+    <a class="post-nav-item-right" href="/2025/01/08/C-%E6%AD%BB%E9%94%81%E5%92%8C%E6%95%B0%E6%8D%AE%E7%AB%9E%E4%BA%89%E6%A3%80%E6%9F%A5%E5%B7%A5%E5%85%B7/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -268,7 +428,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      CAP 与 BASE 理论
+      C++死锁和数据竞争检查工具
     </a>
   
 </div>
@@ -276,12 +436,12 @@
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/Tools/" class="post-tag">#Tools</a>
+  <a href="/tags/%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E5%92%8C%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" class="post-tag">#原子变量和内存模型</a>
 
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\10\C-内存泄露检测工具\" title="C++内存泄露检测工具" rel="bookmark">C++内存泄露检测工具</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\05\CMake-和-GTest-结合\" title="CMake 和 GTest 结合" rel="bookmark">CMake 和 GTest 结合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\28\UML绘制工具：Visual-Paradigm\" title="UML绘制工具：Visual Paradigm" rel="bookmark">UML绘制工具：Visual Paradigm</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\12\07\流水线、乱序执行和缓存\" title="流水线、乱序执行和缓存" rel="bookmark">流水线、乱序执行和缓存</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
     
   </div>
 </div>
