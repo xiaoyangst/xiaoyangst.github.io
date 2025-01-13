@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        Nginx源码剖析之基本数据结构：数组 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/baitaoweideqiutian.ttf);
+        font-weight: baitaoweideqiutian;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/article">文章</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/various">杂文</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">Nginx源码剖析之基本数据结构：数组</div>
+        <div class="post-info">
+          
+  <a href="/tags/Nginx/" class="post-tag">#Nginx</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag">#源码剖析</a>
+
+
+          <span class="post-date">2025-01-13</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+
+<ul>
+<li><a href="#array-%E6%BA%90%E7%A0%81">array 源码</a><ul>
+<li><a href="#ngx_array_create">ngx_array_create</a></li>
+<li><a href="#ngx_array_init">ngx_array_init</a></li>
+<li><a href="#ngx_array_destroy">ngx_array_destroy</a></li>
+<li><a href="#ngx_array_push">ngx_array_push</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8">基本使用</a><ul>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0">添加一个元素</a></li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E5%A4%9A%E4%B8%AA%E5%85%83%E7%B4%A0">添加多个元素</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs tex">src/core/ngx<span class="hljs-built_in">_</span>array.h<br>src/core/ngx<span class="hljs-built_in">_</span>array.c<br></code></pre></td></tr></table></figure>
+
+<h1><span id="array-源码">array 源码</span></h1><p>ngx_array_t结构体：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">void</span>        *elts;  	<span class="hljs-comment">// 指向数组第一个元素指针</span><br>    <span class="hljs-type">ngx_uint_t</span>   nelts; 	<span class="hljs-comment">// 数组中已有元素个数，添加元素就在该下标添加即可</span><br>    <span class="hljs-type">size_t</span>       size;  	<span class="hljs-comment">// 每个元素的大小</span><br>    <span class="hljs-type">ngx_uint_t</span>   nalloc;  	<span class="hljs-comment">// 元素个数</span><br>    <span class="hljs-type">ngx_pool_t</span>  *pool;	    <span class="hljs-comment">//所使用的内存所在的内存池。</span><br>&#125; <span class="hljs-type">ngx_array_t</span>;<br></code></pre></td></tr></table></figure>
+
+<h2><span id="ngx_array_create">ngx_array_create</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">ngx_array_t</span> *<br><span class="hljs-title function_">ngx_array_create</span><span class="hljs-params">(<span class="hljs-type">ngx_pool_t</span> *p, <span class="hljs-type">ngx_uint_t</span> n, <span class="hljs-type">size_t</span> size)</span><br>&#123;<br>    <span class="hljs-type">ngx_array_t</span> *a;<br><br>    a = ngx_palloc(p, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">ngx_array_t</span>));	<span class="hljs-comment">// 创建 数组对象</span><br>    <span class="hljs-keyword">if</span> (a == <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (ngx_array_init(a, p, n, size) != NGX_OK) &#123;	<span class="hljs-comment">// 初始化数组对象内部成员</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> a;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2><span id="ngx_array_init">ngx_array_init</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> ngx_inline <span class="hljs-type">ngx_int_t</span><br><span class="hljs-title function_">ngx_array_init</span><span class="hljs-params">(<span class="hljs-type">ngx_array_t</span> *<span class="hljs-built_in">array</span>, <span class="hljs-type">ngx_pool_t</span> *pool, <span class="hljs-type">ngx_uint_t</span> n, <span class="hljs-type">size_t</span> size)</span><br>&#123;<br>    <span class="hljs-built_in">array</span>-&gt;nelts = <span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">array</span>-&gt;size = size; <span class="hljs-comment">// 数组中一个元素的大小</span><br>    <span class="hljs-built_in">array</span>-&gt;nalloc = n;  <span class="hljs-comment">// 分配元素个数</span><br>    <span class="hljs-built_in">array</span>-&gt;pool = pool;<br><br>    <span class="hljs-built_in">array</span>-&gt;elts = ngx_palloc(pool, n * size); <span class="hljs-comment">// 从内存池中申请 n（元素个数）* size（元素大小） 内存大小</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">array</span>-&gt;elts == <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-keyword">return</span> NGX_ERROR;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> NGX_OK;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>示意图如下：</p>
+<p><img src="/images/2025/01/13/7a3854cf-b32e-4e42-b871-c689721ecb65.png" alt="image20250113104728861.png"></p>
+<p>nelts 为 0，目前还没有添加任何元素</p>
+<p>nalloc 为 4，目前数组中可容纳 4 个元素</p>
+<h2><span id="ngx_array_destroy">ngx_array_destroy</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span><br><span class="hljs-title function_">ngx_array_destroy</span><span class="hljs-params">(<span class="hljs-type">ngx_array_t</span> *a)</span><br>&#123;<br>    <span class="hljs-type">ngx_pool_t</span>  *p;<br><br>    p = a-&gt;pool;<br><br>    <span class="hljs-comment">// 回收数组中的元素 </span><br>    <span class="hljs-keyword">if</span> ((u_char *) a-&gt;elts + a-&gt;size * a-&gt;nalloc == p-&gt;d.last) &#123;<br>        p-&gt;d.last -= a-&gt;size * a-&gt;nalloc;<br>    &#125;<br><br>    <span class="hljs-comment">// 回收数组对象本身</span><br>    <span class="hljs-keyword">if</span> ((u_char *) a + <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">ngx_array_t</span>) == p-&gt;d.last) &#123;<br>        p-&gt;d.last = (u_char *) a;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当前数组内存布局示意图：</p>
+<p><img src="/images/2025/01/13/98147e40-fa18-4171-9906-0c2c6ab9c58e.png" alt="image20250113113506328.png"></p>
+<p>回收当前内存布局示意图：</p>
+<p><img src="/images/2025/01/13/15128656-7187-4878-88a8-c16d2da9e5ef.png" alt="image20250113113614851.png"></p>
+<p>其实我们也看到 destory 只是更改偏移量，并没有实际回收内存。</p>
+<h2><span id="ngx_array_push">ngx_array_push</span></h2><p>特别注意，<code>ngx_array_push(ngx_array_t *a)</code> 的形参 a 并不是要 push 进来的元素，而是你要 push 元素进去的数组对象。</p>
+<p>当你调用 ngx_array_push 之后会返回一个指针，你把元素存放到这个指针里面去就可以了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> *<br><span class="hljs-title function_">ngx_array_push</span><span class="hljs-params">(<span class="hljs-type">ngx_array_t</span> *a)</span><br>&#123;<br>    <span class="hljs-type">void</span>        *elt, *new;<br>    <span class="hljs-type">size_t</span>       size;<br>    <span class="hljs-type">ngx_pool_t</span>  *p;<br><br>    <span class="hljs-keyword">if</span> (a-&gt;nelts == a-&gt;nalloc) &#123;  <span class="hljs-comment">// 空间已满</span><br><br>        <span class="hljs-comment">/* the array is full */</span><br><br>        size = a-&gt;size * a-&gt;nalloc; <span class="hljs-comment">// 数组总大小</span><br><br>        p = a-&gt;pool;<br><br>        <span class="hljs-keyword">if</span> ((u_char *) a-&gt;elts + size == p-&gt;d.last  <span class="hljs-comment">// 2</span><br>            &amp;&amp; p-&gt;d.last + a-&gt;size &lt;= p-&gt;d.end)     <span class="hljs-comment">// 1</span><br>        &#123;<br>            <span class="hljs-comment">// 1-原内存大小支持分配一个元素</span><br>            <span class="hljs-comment">// 2-要求原内存池的空间还支持连续，即没有被内存池分配给其他人导致被污染（即无法让新增数组元素连续的跟在原数组后面）</span><br>            p-&gt;d.last += a-&gt;size;<br>            a-&gt;nalloc++;<br><br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// 新增元素导致无法在原数组后面继续添加</span><br>            <span class="hljs-comment">// 那就在重新在该内存池中找一块连续的，并且两倍扩容</span><br>            new = ngx_palloc(p, <span class="hljs-number">2</span> * size);<br>            <span class="hljs-keyword">if</span> (new == <span class="hljs-literal">NULL</span>) &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>            &#125;<br><br>            ngx_memcpy(new, a-&gt;elts, size);<br>            a-&gt;elts = new;<br>            a-&gt;nalloc *= <span class="hljs-number">2</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// 添加元素</span><br>    elt = (u_char *) a-&gt;elts + a-&gt;size * a-&gt;nelts;<br>    a-&gt;nelts++;<br><br>    <span class="hljs-keyword">return</span> elt;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果空间没有满，可以直接在元素后面继续添加。</p>
+<p>如果空间不足以容纳新元素，我们看看 Nginx 的数组是如何处置的？</p>
+<p><img src="/images/2025/01/13/d8b4b969-47cd-4d1b-a70e-8a85b76019e3.png" alt="image20250113105817996.png"></p>
+<p>内存池原先分配的数组，后面未分配的空间也没有分配给其他人，即能够保证原数组的连续性，当前内存池新增一个元素也能够容得下。那就不需要重新找一块连续的内存，直接向内存池申请后面一块紧挨着的内存，用于添加新元素。</p>
+<p><img src="/images/2025/01/13/1062cab6-2128-4e15-83e6-eb97ef496bc5.png" alt="image20250113110046493.png"></p>
+<p>如果后面未分配的空间已经分配给其他人，无法保证数组的连续性，那么需要在这个内存池中重新找一块连续的内存，并且进行两倍扩容，失败就返回 NULL，表示插入失败。</p>
+<p><img src="/images/2025/01/13/735cfac9-02ce-43b9-87ab-acd1c9ca3d3b.png" alt="image20250113110749191.png"></p>
+<p>申请成功，就把原数组中的内容拷贝过来，在把新元素添加进去，并更新成员 elts 指向最新的内存。</p>
+<p><img src="/images/2025/01/13/3d72e2b3-5a57-49d1-9bf7-03cebf61cbc0.png" alt="image20250113110911815.png"></p>
+<p>ngx_array_push_n 没有什么好讲的，就是添加多个相同的元素，添加和扩容思路同上。</p>
+<h1><span id="基本使用">基本使用</span></h1><h2><span id="添加一个元素">添加一个元素</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test_array</span><span class="hljs-params">()</span> &#123;<br>  <span class="hljs-comment">// 创建内存池</span><br>  <span class="hljs-type">ngx_pool_t</span>* ngx_pool = ngx_create_pool(<span class="hljs-number">2048</span>, <span class="hljs-literal">NULL</span>);<br><br>  <span class="hljs-comment">// 创建数组，存储 `int` 类型的元素，初始容量为 2</span><br>  <span class="hljs-type">ngx_array_t</span>* ngx_array = ngx_array_create(ngx_pool, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>), <span class="hljs-number">2</span>);<br><br>  <span class="hljs-type">int</span> num = <span class="hljs-number">10</span>;<br><br>  <span class="hljs-comment">// 分配数组的一个新元素</span><br>  <span class="hljs-type">int</span>* elem = ngx_array_push(ngx_array);<br>  <span class="hljs-keyword">if</span> (elem != <span class="hljs-literal">NULL</span>) &#123;<br>    elem[<span class="hljs-number">0</span>] = num;  <span class="hljs-comment">// 将值赋给数组中的新元素</span><br>  &#125;<br><br>  <span class="hljs-comment">// 打印数组内容</span><br>  <span class="hljs-type">int</span>* data = (<span class="hljs-type">int</span>*)ngx_array-&gt;elts;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">ngx_uint_t</span> i = <span class="hljs-number">0</span>; i &lt; ngx_array-&gt;nelts; i++) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Element %lu: %d\n&quot;</span>, (<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span>)i, data[i]);<br>  &#125;<br><br>  <span class="hljs-comment">// 清理内存池</span><br>  ngx_destroy_pool(ngx_pool);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2><span id="添加多个元素">添加多个元素</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test_multi_array</span><span class="hljs-params">()</span>&#123;<br><br>  <span class="hljs-comment">// 初始化内存池</span><br>  <span class="hljs-type">ngx_pool_t</span> *pool = ngx_create_pool(<span class="hljs-number">1024</span>, <span class="hljs-literal">NULL</span>); <span class="hljs-comment">// 创建大小为 1024 字节的内存池</span><br>  <span class="hljs-keyword">if</span> (pool == <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Failed to create memory pool\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> ;<br>  &#125;<br><br>  <span class="hljs-comment">// 创建数组</span><br>  <span class="hljs-type">ngx_array_t</span> *<span class="hljs-built_in">array</span> = ngx_array_create(pool, <span class="hljs-number">5</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">test_element_t</span>)); <span class="hljs-comment">// 初始容量为 5</span><br><br>  <span class="hljs-comment">// 批量添加元素</span><br>  <span class="hljs-type">test_element_t</span> *batch = ngx_array_push_n(<span class="hljs-built_in">array</span>, <span class="hljs-number">5</span>);<br><br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">ngx_uint_t</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;<br>    batch[i].value = <span class="hljs-number">100</span> + i;<br>  &#125;<br><br>  <span class="hljs-comment">// 打印数组中的所有元素</span><br>  <span class="hljs-type">test_element_t</span>* elem = <span class="hljs-built_in">array</span>-&gt;elts;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">ngx_uint_t</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">array</span>-&gt;nelts; i++) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Element %d: %d\n&quot;</span>, i, elem[i].value);<br>  &#125;<br><br>  <span class="hljs-comment">// 销毁数组</span><br>  ngx_array_destroy(<span class="hljs-built_in">array</span>);<br><br>  <span class="hljs-comment">// 销毁内存池</span><br>  ngx_destroy_pool(pool);<br>&#125;<br></code></pre></td></tr></table></figure>
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/01/13/Nginx%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E5%86%85%E5%AD%98%E6%B1%A0/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      Nginx源码剖析之基本数据结构：内存池
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/Nginx/" class="post-tag">#Nginx</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag">#源码剖析</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2025\01\13\Nginx源码剖析之基本数据结构：内存池\" title="Nginx源码剖析之基本数据结构：内存池" rel="bookmark">Nginx源码剖析之基本数据结构：内存池</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://paugram.com/">保罗的小宇宙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://shuyi.tech/">陈树义的博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
