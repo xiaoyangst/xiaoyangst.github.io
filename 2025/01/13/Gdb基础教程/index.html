@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        Nginx源码剖析之基本数据结构：数组 | 
+        Gdb基础教程 | 
       
     </title>
     <meta name="description" content="" />
@@ -159,10 +159,10 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">Nginx源码剖析之基本数据结构：数组</div>
+        <div class="post-title">Gdb基础教程</div>
         <div class="post-info">
           
-  <a href="/tags/Nginx/" class="post-tag">#Nginx</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag">#源码剖析</a>
+  <a href="/tags/Tools/" class="post-tag">#Tools</a>
 
 
           <span class="post-date">2025-01-13</span>
@@ -178,58 +178,152 @@
         <!-- toc -->
 
 <ul>
-<li><a href="#array-%E6%BA%90%E7%A0%81">array 源码</a><ul>
-<li><a href="#ngx_array_create">ngx_array_create</a></li>
-<li><a href="#ngx_array_init">ngx_array_init</a></li>
-<li><a href="#ngx_array_destroy">ngx_array_destroy</a></li>
-<li><a href="#ngx_array_push">ngx_array_push</a></li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令</a></li>
+<li><a href="#%E8%B0%83%E8%AF%95%E6%AE%B5%E9%94%99%E8%AF%AF%E6%96%87%E4%BB%B6">调试段错误文件</a><ul>
+<li><a href="#%E5%85%88%E4%BF%9D%E8%AF%81%E8%83%BD%E7%94%9F%E6%88%90-coredump-%E6%96%87%E4%BB%B6">先保证能生成 coredump 文件</a></li>
+<li><a href="#%E8%B0%83%E8%AF%95%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4">调试基本步骤</a></li>
 </ul>
 </li>
-<li><a href="#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8">基本使用</a><ul>
-<li><a href="#%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0">添加一个元素</a></li>
-<li><a href="#%E6%B7%BB%E5%8A%A0%E5%A4%9A%E4%B8%AA%E5%85%83%E7%B4%A0">添加多个元素</a></li>
+<li><a href="#%E8%B0%83%E8%AF%95%E6%AD%BB%E9%94%81%E6%96%87%E4%BB%B6">调试死锁文件</a></li>
+<li><a href="#%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95">远程调试</a></li>
+<li><a href="#%E5%B0%8F%E6%8A%80%E5%B7%A7">小技巧</a><ul>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0">查看当前函数的参数</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E4%BF%AE%E6%94%B9%E5%8F%98%E9%87%8F%E7%9A%84%E5%80%BC">查看&#x2F;修改变量的值</a></li>
+<li><a href="#%E8%87%AA%E5%8A%A8%E6%98%BE%E7%A4%BA%E5%8F%98%E9%87%8F%E7%9A%84%E5%80%BC">自动显示变量的值</a></li>
+<li><a href="#%E8%B0%83%E8%AF%95%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E7%A8%8B%E5%BA%8F">调试正在运行的程序</a></li>
+<li><a href="#%E6%B8%85%E9%99%A4%E6%96%AD%E7%82%B9%E5%B9%B6%E7%BB%88%E6%AD%A2%E6%AD%A3%E5%9C%A8%E8%B0%83%E8%AF%95%E7%9A%84%E7%A8%8B%E5%BA%8F">清除断点并终止正在调试的程序</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E8%A7%82%E5%AF%9F%E7%82%B9">设置观察点</a></li>
+<li><a href="#%E6%90%9C%E7%B4%A2%E6%BA%90%E4%BB%A3%E7%A0%81">搜索源代码</a></li>
+<li><a href="#%E5%8F%8D%E5%90%91%E6%89%A7%E8%A1%8C">反向执行</a></li>
 </ul>
 </li>
 </ul>
 <!-- tocstop -->
 
-<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs tex">src/core/ngx<span class="hljs-built_in">_</span>array.h<br>src/core/ngx<span class="hljs-built_in">_</span>array.c<br></code></pre></td></tr></table></figure>
+<h1><span id="常用命令">常用命令</span></h1><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>全称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>l</td>
+<td>list</td>
+<td>查看源码</td>
+</tr>
+<tr>
+<td>b</td>
+<td>break</td>
+<td>设置断点</td>
+</tr>
+<tr>
+<td>r</td>
+<td>run</td>
+<td>运行程序，在断点处停止</td>
+</tr>
+<tr>
+<td>n</td>
+<td>next</td>
+<td>单条语句执行（步过）</td>
+</tr>
+<tr>
+<td>s</td>
+<td>step</td>
+<td>单条语句执行（步入）</td>
+</tr>
+<tr>
+<td>c</td>
+<td>continue</td>
+<td>继续运行程序，下一个断点处停止</td>
+</tr>
+<tr>
+<td>f</td>
+<td>finish</td>
+<td>继续运行直到当前函数执行完成</td>
+</tr>
+<tr>
+<td>p</td>
+<td>print</td>
+<td>打印</td>
+</tr>
+<tr>
+<td>q</td>
+<td>quit</td>
+<td>退出GDB</td>
+</tr>
+</tbody></table>
+<h1><span id="调试段错误文件">调试段错误文件</span></h1><h2><span id="先保证能生成-coredump-文件">先保证能生成 coredump 文件</span></h2><p>转存文件可以是某个进程的，也可以是整个系统的。</p>
+<p>可以是进程活着的时候生成的，也可以是进程或者系统崩溃的时候自动生成的。</p>
+<p>但明显段错误文件是要进程或者系统崩溃的时候自动生成，因为段错误必然不可能让进程活着。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">ulimit -c unlimited<br><br>sudo bash -c &quot;echo core &gt; /proc/sys/kernel/core_pattern &quot;<br></code></pre></td></tr></table></figure>
 
-<h1><span id="array-源码">array 源码</span></h1><p>ngx_array_t结构体：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">void</span>        *elts;  	<span class="hljs-comment">// 指向数组第一个元素指针</span><br>    <span class="hljs-type">ngx_uint_t</span>   nelts; 	<span class="hljs-comment">// 数组中已有元素个数，添加元素就在该下标添加即可</span><br>    <span class="hljs-type">size_t</span>       size;  	<span class="hljs-comment">// 每个元素的大小</span><br>    <span class="hljs-type">ngx_uint_t</span>   nalloc;  	<span class="hljs-comment">// 元素个数</span><br>    <span class="hljs-type">ngx_pool_t</span>  *pool;	    <span class="hljs-comment">//所使用的内存所在的内存池。</span><br>&#125; <span class="hljs-type">ngx_array_t</span>;<br></code></pre></td></tr></table></figure>
+<h2><span id="调试基本步骤">调试基本步骤</span></h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">gdb 可执行程序 coredump文件<br><br>bt<br></code></pre></td></tr></table></figure>
 
-<h2><span id="ngx_array_create">ngx_array_create</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">ngx_array_t</span> *<br><span class="hljs-title function_">ngx_array_create</span><span class="hljs-params">(<span class="hljs-type">ngx_pool_t</span> *p, <span class="hljs-type">ngx_uint_t</span> n, <span class="hljs-type">size_t</span> size)</span><br>&#123;<br>    <span class="hljs-type">ngx_array_t</span> *a;<br><br>    a = ngx_palloc(p, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">ngx_array_t</span>));	<span class="hljs-comment">// 创建 数组对象</span><br>    <span class="hljs-keyword">if</span> (a == <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (ngx_array_init(a, p, n, size) != NGX_OK) &#123;	<span class="hljs-comment">// 初始化数组对象内部成员</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> a;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过 bt 就可以看出发生段错误的调用堆栈，调用顺序从下往上看，一般去找自己实现的代码进行错误排查。</p>
+<h1><span id="调试死锁文件">调试死锁文件</span></h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><br>std::mutex mutexA;<br>std::mutex mutexB;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">task1</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lockA</span><span class="hljs-params">(mutexA)</span></span>;<br>    std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">milliseconds</span>(<span class="hljs-number">100</span>)); <span class="hljs-comment">// 模拟一些操作</span><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Task 1 locked mutexA&quot;</span> &lt;&lt; std::endl;<br><br>    <span class="hljs-comment">// 尝试获取 mutexB，导致等待</span><br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lockB</span><span class="hljs-params">(mutexB)</span></span>;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Task 1 locked mutexB&quot;</span> &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">task2</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lockB</span><span class="hljs-params">(mutexB)</span></span>;<br>    std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">milliseconds</span>(<span class="hljs-number">100</span>)); <span class="hljs-comment">// 模拟一些操作</span><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Task 2 locked mutexB&quot;</span> &lt;&lt; std::endl;<br><br>    <span class="hljs-comment">// 尝试获取 mutexA，导致等待</span><br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lockA</span><span class="hljs-params">(mutexA)</span></span>;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Task 2 locked mutexA&quot;</span> &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">std::thread <span class="hljs-title">t1</span><span class="hljs-params">(task1)</span></span>;<br>    <span class="hljs-function">std::thread <span class="hljs-title">t2</span><span class="hljs-params">(task2)</span></span>;<br><br>    t<span class="hljs-number">1.</span><span class="hljs-built_in">join</span>();<br>    t<span class="hljs-number">2.</span><span class="hljs-built_in">join</span>();<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Finished without deadlock (unlikely)&quot;</span> &lt;&lt; std::endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2><span id="ngx_array_init">ngx_array_init</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> ngx_inline <span class="hljs-type">ngx_int_t</span><br><span class="hljs-title function_">ngx_array_init</span><span class="hljs-params">(<span class="hljs-type">ngx_array_t</span> *<span class="hljs-built_in">array</span>, <span class="hljs-type">ngx_pool_t</span> *pool, <span class="hljs-type">ngx_uint_t</span> n, <span class="hljs-type">size_t</span> size)</span><br>&#123;<br>    <span class="hljs-built_in">array</span>-&gt;nelts = <span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">array</span>-&gt;size = size; <span class="hljs-comment">// 数组中一个元素的大小</span><br>    <span class="hljs-built_in">array</span>-&gt;nalloc = n;  <span class="hljs-comment">// 分配元素个数</span><br>    <span class="hljs-built_in">array</span>-&gt;pool = pool;<br><br>    <span class="hljs-built_in">array</span>-&gt;elts = ngx_palloc(pool, n * size); <span class="hljs-comment">// 从内存池中申请 n（元素个数）* size（元素大小） 内存大小</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">array</span>-&gt;elts == <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-keyword">return</span> NGX_ERROR;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> NGX_OK;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>死锁文件是正在运行的，要通过 gcore 命令生成 coredump 文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">gcore &lt;pid&gt; # 生成死锁应用的coredump<br>    <br>info threads # 显示所有线程信息<br><br>t &lt;n&gt; 		# 切换当前显示线程<br></code></pre></td></tr></table></figure>
 
-<p>示意图如下：</p>
-<p><img src="/images/2025/01/13/7a3854cf-b32e-4e42-b871-c689721ecb65.png" alt="image20250113104728861.png"></p>
-<p>nelts 为 0，目前还没有添加任何元素</p>
-<p>nalloc 为 4，目前数组中可容纳 4 个元素</p>
-<h2><span id="ngx_array_destroy">ngx_array_destroy</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span><br><span class="hljs-title function_">ngx_array_destroy</span><span class="hljs-params">(<span class="hljs-type">ngx_array_t</span> *a)</span><br>&#123;<br>    <span class="hljs-type">ngx_pool_t</span>  *p;<br><br>    p = a-&gt;pool;<br><br>    <span class="hljs-comment">// 回收数组中的元素 </span><br>    <span class="hljs-keyword">if</span> ((u_char *) a-&gt;elts + a-&gt;size * a-&gt;nalloc == p-&gt;d.last) &#123;<br>        p-&gt;d.last -= a-&gt;size * a-&gt;nalloc;<br>    &#125;<br><br>    <span class="hljs-comment">// 回收数组对象本身</span><br>    <span class="hljs-keyword">if</span> ((u_char *) a + <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">ngx_array_t</span>) == p-&gt;d.last) &#123;<br>        p-&gt;d.last = (u_char *) a;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>查看所有线程的堆栈，找出处于 <strong>lock wait</strong> 的线程：</p>
+<p><img src="/images/2025/01/13/f6538b8a-6c97-45d0-bff5-168521d0cf36.png" alt="死锁1.png"></p>
+<p>可以看到，线程 2 和 线程 3 是 处于 lock wait 状态，表明它们正在等待锁。当多个线程在 <code>__lll_lock_wait</code> 处停住时，很可能是因为它们在等待某个锁资源，出现了互相等待的情况。</p>
+<p>切换到 这两个线程，打印我们在代码中定义的 mutex 变量（mutexA 和 mutexB）。其中 <strong>owner</strong> 属性代表的就是当前锁占有者的线程 ID（注意在 gdb 中为LWP）。</p>
+<p><img src="/images/2025/01/13/3aaaa165-8fac-447b-87e0-81fe3782ae8c.png" alt="死锁2.png"></p>
+<p>thread 2 的 LWP &#x3D; 260468；thread 3 的 LWP &#x3D; 260469。</p>
+<p>mutexA 的 owner &#x3D; 260468，表明被 thread 2 占有；mutexB 的 owner &#x3D; 260469，表明被 thread 3 占有；</p>
+<p>结合前面的 <code>__lll_lock_wait</code> 信息，我们知道 thread 3 在等待 mutexA 资源；thread 2 在等待 mutex（没有明确是 mutexB） 资源，但我们从 <code>__lll_lock_wait</code> 信息中可以看到这个锁资源的地址为 <code>0x55a71b4011a0</code>，打印 mutexB 的地址，可以知晓就是它。</p>
+<p><img src="/images/2025/01/13/e6ac22c3-dac6-4957-a503-b99ab607f9b0.png" alt="死锁3.png"></p>
+<p>进入两个线程从，并分别查看堆栈情况，依旧是找我们自己的代码，并自行分析死锁原因。</p>
+<p>查看 thread 2 的堆栈情况：</p>
+<p><img src="/images/2025/01/13/62db19c7-3eb3-4601-8c43-698f1f0da674.png" alt="死锁4.png"></p>
+<p>查看 thread 3 的堆栈情况：</p>
+<p><img src="/images/2025/01/13/7d13169f-a442-49f6-b56a-caeff122ed2f.png" alt="死锁5.png"></p>
+<p>然后到相应的地方自己去分析，通常我们解决死锁的办法是按顺序获取锁资源。</p>
+<h1><span id="远程调试">远程调试</span></h1><p>被调试的目标机器需要安装 gdbserver：<code>apt-get install gdbserver</code></p>
+<p>（一）目标机程序没有启动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">目标机：gdbserver 192.168.204.154:9999 ./test<br><br>调试机：target remote 192.168.204.154:9999<br></code></pre></td></tr></table></figure>
 
-<p>当前数组内存布局示意图：</p>
-<p><img src="/images/2025/01/13/98147e40-fa18-4171-9906-0c2c6ab9c58e.png" alt="image20250113113506328.png"></p>
-<p>回收当前内存布局示意图：</p>
-<p><img src="/images/2025/01/13/15128656-7187-4878-88a8-c16d2da9e5ef.png" alt="image20250113113614851.png"></p>
-<p>其实我们也看到 destory 只是更改偏移量，并没有实际回收内存。</p>
-<h2><span id="ngx_array_push">ngx_array_push</span></h2><p>特别注意，<code>ngx_array_push(ngx_array_t *a)</code> 的形参 a 并不是要 push 进来的元素，而是你要 push 元素进去的数组对象。</p>
-<p>当你调用 ngx_array_push 之后会返回一个指针，你把元素存放到这个指针里面去就可以了。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> *<br><span class="hljs-title function_">ngx_array_push</span><span class="hljs-params">(<span class="hljs-type">ngx_array_t</span> *a)</span><br>&#123;<br>    <span class="hljs-type">void</span>        *elt, *new;<br>    <span class="hljs-type">size_t</span>       size;<br>    <span class="hljs-type">ngx_pool_t</span>  *p;<br><br>    <span class="hljs-keyword">if</span> (a-&gt;nelts == a-&gt;nalloc) &#123;  <span class="hljs-comment">// 空间已满</span><br><br>        <span class="hljs-comment">/* the array is full */</span><br><br>        size = a-&gt;size * a-&gt;nalloc; <span class="hljs-comment">// 数组总大小</span><br><br>        p = a-&gt;pool;<br><br>        <span class="hljs-keyword">if</span> ((u_char *) a-&gt;elts + size == p-&gt;d.last  <span class="hljs-comment">// 2</span><br>            &amp;&amp; p-&gt;d.last + a-&gt;size &lt;= p-&gt;d.end)     <span class="hljs-comment">// 1</span><br>        &#123;<br>            <span class="hljs-comment">// 1-原内存大小支持分配一个元素</span><br>            <span class="hljs-comment">// 2-要求原内存池的空间还支持连续，即没有被内存池分配给其他人导致被污染（即无法让新增数组元素连续的跟在原数组后面）</span><br>            p-&gt;d.last += a-&gt;size;<br>            a-&gt;nalloc++;<br><br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// 新增元素导致无法在原数组后面继续添加</span><br>            <span class="hljs-comment">// 那就在重新在该内存池中找一块连续的，并且两倍扩容</span><br>            new = ngx_palloc(p, <span class="hljs-number">2</span> * size);<br>            <span class="hljs-keyword">if</span> (new == <span class="hljs-literal">NULL</span>) &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>            &#125;<br><br>            ngx_memcpy(new, a-&gt;elts, size);<br>            a-&gt;elts = new;<br>            a-&gt;nalloc *= <span class="hljs-number">2</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// 添加元素</span><br>    elt = (u_char *) a-&gt;elts + a-&gt;size * a-&gt;nelts;<br>    a-&gt;nelts++;<br><br>    <span class="hljs-keyword">return</span> elt;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>目标机上运行者需要被调试的程序，调试机是主动远程去调试目标机的机器。</p>
+<p>目标机的命令在 shell 命令行执行，调试机命令在进入 gdb 之后再执行。</p>
+<p>（二）目标机程序已经启动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">目标机：gdbserver 192.168.204.154:9999 --attach pid<br><br>调试机：target remote 192.168.204.154:9999<br></code></pre></td></tr></table></figure>
 
-<p>如果空间没有满，可以直接在元素后面继续添加。</p>
-<p>如果空间不足以容纳新元素，我们看看 Nginx 的数组是如何处置的？</p>
-<p><img src="/images/2025/01/13/d8b4b969-47cd-4d1b-a70e-8a85b76019e3.png" alt="image20250113105817996.png"></p>
-<p>内存池原先分配的数组，后面未分配的空间也没有分配给其他人，即能够保证原数组的连续性，当前内存池新增一个元素也能够容得下。那就不需要重新找一块连续的内存，直接向内存池申请后面一块紧挨着的内存，用于添加新元素。</p>
-<p><img src="/images/2025/01/13/1062cab6-2128-4e15-83e6-eb97ef496bc5.png" alt="image20250113110046493.png"></p>
-<p>如果后面未分配的空间已经分配给其他人，无法保证数组的连续性，那么需要在这个内存池中重新找一块连续的内存，并且进行两倍扩容，失败就返回 NULL，表示插入失败。</p>
-<p><img src="/images/2025/01/13/735cfac9-02ce-43b9-87ab-acd1c9ca3d3b.png" alt="image20250113110749191.png"></p>
-<p>申请成功，就把原数组中的内容拷贝过来，在把新元素添加进去，并更新成员 elts 指向最新的内存。</p>
-<p><img src="/images/2025/01/13/3d72e2b3-5a57-49d1-9bf7-03cebf61cbc0.png" alt="image20250113110911815.png"></p>
-<p>ngx_array_push_n 没有什么好讲的，就是添加多个元素，添加和扩容思路同上。</p>
-<h1><span id="基本使用">基本使用</span></h1><h2><span id="添加一个元素">添加一个元素</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test_array</span><span class="hljs-params">()</span> &#123;<br>  <span class="hljs-comment">// 创建内存池</span><br>  <span class="hljs-type">ngx_pool_t</span>* ngx_pool = ngx_create_pool(<span class="hljs-number">2048</span>, <span class="hljs-literal">NULL</span>);<br><br>  <span class="hljs-comment">// 创建数组，存储 `int` 类型的元素，初始容量为 2</span><br>  <span class="hljs-type">ngx_array_t</span>* ngx_array = ngx_array_create(ngx_pool, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>), <span class="hljs-number">2</span>);<br><br>  <span class="hljs-type">int</span> num = <span class="hljs-number">10</span>;<br><br>  <span class="hljs-comment">// 分配数组的一个新元素</span><br>  <span class="hljs-type">int</span>* elem = ngx_array_push(ngx_array);<br>  <span class="hljs-keyword">if</span> (elem != <span class="hljs-literal">NULL</span>) &#123;<br>    elem[<span class="hljs-number">0</span>] = num;  <span class="hljs-comment">// 将值赋给数组中的新元素</span><br>  &#125;<br><br>  <span class="hljs-comment">// 打印数组内容</span><br>  <span class="hljs-type">int</span>* data = (<span class="hljs-type">int</span>*)ngx_array-&gt;elts;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">ngx_uint_t</span> i = <span class="hljs-number">0</span>; i &lt; ngx_array-&gt;nelts; i++) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Element %lu: %d\n&quot;</span>, (<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span>)i, data[i]);<br>  &#125;<br><br>  <span class="hljs-comment">// 清理内存池</span><br>  ngx_destroy_pool(ngx_pool);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果目标机的程序已经启动，则无法使用直接启动的方式来进行远程调试。此时需要采用附加到远程进程的方式来进行远程调试。</p>
+<h1><span id="小技巧">小技巧</span></h1><h2><span id="查看当前函数的参数">查看当前函数的参数</span></h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">info args<br></code></pre></td></tr></table></figure>
 
-<h2><span id="添加多个元素">添加多个元素</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test_multi_array</span><span class="hljs-params">()</span>&#123;<br><br>  <span class="hljs-comment">// 初始化内存池</span><br>  <span class="hljs-type">ngx_pool_t</span> *pool = ngx_create_pool(<span class="hljs-number">1024</span>, <span class="hljs-literal">NULL</span>); <span class="hljs-comment">// 创建大小为 1024 字节的内存池</span><br>  <span class="hljs-keyword">if</span> (pool == <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Failed to create memory pool\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> ;<br>  &#125;<br><br>  <span class="hljs-comment">// 创建数组</span><br>  <span class="hljs-type">ngx_array_t</span> *<span class="hljs-built_in">array</span> = ngx_array_create(pool, <span class="hljs-number">5</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">test_element_t</span>)); <span class="hljs-comment">// 初始容量为 5</span><br><br>  <span class="hljs-comment">// 批量添加元素</span><br>  <span class="hljs-type">test_element_t</span> *batch = ngx_array_push_n(<span class="hljs-built_in">array</span>, <span class="hljs-number">5</span>);<br><br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">ngx_uint_t</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;<br>    batch[i].value = <span class="hljs-number">100</span> + i;<br>  &#125;<br><br>  <span class="hljs-comment">// 打印数组中的所有元素</span><br>  <span class="hljs-type">test_element_t</span>* elem = <span class="hljs-built_in">array</span>-&gt;elts;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">ngx_uint_t</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">array</span>-&gt;nelts; i++) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Element %d: %d\n&quot;</span>, i, elem[i].value);<br>  &#125;<br><br>  <span class="hljs-comment">// 销毁数组</span><br>  ngx_array_destroy(<span class="hljs-built_in">array</span>);<br><br>  <span class="hljs-comment">// 销毁内存池</span><br>  ngx_destroy_pool(pool);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在没有进入函数内部之前，函数的参数肯定是没有实际意义的数据。</p>
+<p>step 进入函数之后，执行上面的命令就有效果了。</p>
+<h2><span id="查看x2f修改变量的值">查看&#x2F;修改变量的值</span></h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">print 变量名		查看<br><br>print 变量名=值		修改	结构体也可以修改，例如p test-&gt;x=30<br></code></pre></td></tr></table></figure>
+
+<h2><span id="自动显示变量的值">自动显示变量的值</span></h2><p>print 需要每次都输入，如果你非常关心某个变量值的变化，display 可以帮大忙。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">display 变量名			自动显示变量名的值<br><br>info display			查看已经设置的自动显示的变量信息<br><br>delete display 序号		取消指定变量的序号的自动显示<br><br>undisplay 				取消所有的自动显示<br></code></pre></td></tr></table></figure>
+
+<h2><span id="调试正在运行的程序">调试正在运行的程序</span></h2><p>如果我们的程序正在运行，你也许可以选择终止程序，再重新启动之前加上 gdb，然后进行调试。</p>
+<p>这当然是可行的，如果你有一种不关闭正在运行的程序或者你懒得不想去关闭再启动的需求，那么你按照下面这样做：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">gdb attach pid<br><br>建议用root用户去执行该命令<br></code></pre></td></tr></table></figure>
+
+<p>你知道如何查询某个程序的PID 吗？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ps aux | grep 程序名<br></code></pre></td></tr></table></figure>
+
+<h2><span id="清除断点并终止正在调试的程序">清除断点并终止正在调试的程序</span></h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">(gdb) delete<br>Delete all breakpoints? (y or n) y<br>(gdb) kill<br>Kill the program being debugged? (y or n) y<br>(gdb) quit<br></code></pre></td></tr></table></figure>
+
+<p>注意：只执行delete，程序仍然会卡住。</p>
+<h2><span id="设置观察点">设置观察点</span></h2><p>监控一个变量或者一个表达式的值，<font color="red">当这个值或者表达式的值发生变化时程序会暂停</font>，而不需要提前在某些地方设置断点。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">watch 变量或者表达式				写观察点<br><br>该变量或者表达式的值在发生变化时，程序会发生中断，并且在变量或者表达式发生改变的地方暂停<br></code></pre></td></tr></table></figure>
+
+<h2><span id="搜索源代码">搜索源代码</span></h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">search 正则表达式		正向搜索，从前往后<br><br>reverse-search 正则表达式	反向搜索，从后往前<br></code></pre></td></tr></table></figure>
+
+<h2><span id="反向执行">反向执行</span></h2><p>反向执行是真正意义上的代码”回溯”。</p>
+<p>不过有点需要提醒，对于 IO 操作的回溯无效。就比方说你执行代码后把文件写入磁盘中，你反向执行（回溯）是不可能把已经写入的文件给回收的，希望你能理解<font color="red">代码”回溯”</font>的含义。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell">record				// 开始记录程序执行过程，记录的信息包括程序的指令、寄存器的状态等。这可以帮助你在后续的调试中回溯程序的执行<br><br>reverse-next		// 在反向执行模式下执行一条指令。在反向执行模式下，程序会从当前位置往回执行一条指令<br><br>reverse-continue	// 在反向执行模式下继续执行程序，直到下一个断点或者程序结束<br><br>reverse-finish		// 在反向执行模式下执行程序，直到当前函数结束<br><br>record stop			// 停止记录程序执行过程<br></code></pre></td></tr></table></figure>
+
+<p>回溯的范围是从 record 指定开始标记。</p>
+<p>对代码的正向执行使用 next、continue、finish，当你要准备回溯之前的执行，就选择相对应的 reverse-next、reverse-continue、reverse-finish。</p>
+<p>不需要反向执行功能之后，记得 record stop 掉。</p>
+
       </div>
     </div>
     
@@ -272,23 +366,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2025/01/13/Gdb%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>Gdb基础教程</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2025/01/13/Nginx%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E5%86%85%E5%AD%98%E6%B1%A0/">
+    <a class="post-nav-item-right" href="/2025/01/13/Nginx%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E6%95%B0%E7%BB%84/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -300,7 +382,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      Nginx源码剖析之基本数据结构：内存池
+      Nginx源码剖析之基本数据结构：数组
     </a>
   
 </div>
@@ -308,12 +390,12 @@
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/Nginx/" class="post-tag">#Nginx</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag">#源码剖析</a>
+  <a href="/tags/Tools/" class="post-tag">#Tools</a>
 
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2025\01\13\Nginx源码剖析之基本数据结构：内存池\" title="Nginx源码剖析之基本数据结构：内存池" rel="bookmark">Nginx源码剖析之基本数据结构：内存池</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\10\C-内存泄露检测工具\" title="C++内存泄露检测工具" rel="bookmark">C++内存泄露检测工具</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\05\CMake-和-GTest-结合\" title="CMake 和 GTest 结合" rel="bookmark">CMake 和 GTest 结合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\28\UML绘制工具：Visual-Paradigm\" title="UML绘制工具：Visual Paradigm" rel="bookmark">UML绘制工具：Visual Paradigm</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
     
   </div>
 </div>
