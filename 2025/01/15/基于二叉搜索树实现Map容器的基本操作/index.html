@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        350. 两个数组的交集 II | 
+        基于二叉搜索树实现Map容器的基本操作 | 
       
     </title>
     <meta name="description" content="" />
@@ -155,10 +155,10 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">350. 两个数组的交集 II</div>
+        <div class="post-title">基于二叉搜索树实现Map容器的基本操作</div>
         <div class="post-info">
           
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
 
 
           <span class="post-date">2025-01-15</span>
@@ -171,11 +171,89 @@
             
           </div>
         
-        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">intersect</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums1, vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums2)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(nums<span class="hljs-number">2.</span><span class="hljs-built_in">size</span>() &gt; nums<span class="hljs-number">1.</span><span class="hljs-built_in">size</span>())&#123;<br>            <span class="hljs-built_in">swap</span>(nums1,nums2);<br>        &#125;<br><br>        <span class="hljs-comment">// 先把元素加入到 链表中</span><br>        vector&lt;<span class="hljs-type">int</span>&gt; result;<br>        list&lt;<span class="hljs-type">int</span>&gt; find_list;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; num : nums1) &#123;<br>            find_list.<span class="hljs-built_in">push_back</span>(num);<br>        &#125;<br>        <br>        <span class="hljs-comment">// 如果找到就加入 vector 中，并且从链表中移除</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; num : nums2) &#123;<br>            <span class="hljs-keyword">auto</span> it = std::<span class="hljs-built_in">find</span>(find_list.<span class="hljs-built_in">begin</span>(), find_list.<span class="hljs-built_in">end</span>(), num);<br>            <span class="hljs-keyword">if</span>(it != find_list.<span class="hljs-built_in">end</span>())&#123;<br>                result.<span class="hljs-built_in">push_back</span>(num);<br>                find_list.<span class="hljs-built_in">erase</span>(it);<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+        <!-- toc -->
 
-<p>先要保证 加入元素到链表中的数组是元素最多的，通过 swap 交换来保证。</p>
-<p>之所以选择链表，而没有选择 set，因为后者会进行去重，导致统计结果有问题。</p>
-<p>如果在 find_list 找到，就说明当前元素就是交集之一，加入 result，还要记得把 find_list 中该元素移除。重复这个操作，最终得到想要的数据。</p>
+<ul>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E5%AE%9E%E7%8E%B0-map">基于二叉搜索树实现 map</a><ul>
+<li><a href="#%E8%8A%82%E7%82%B9%E5%AE%9A%E4%B9%89">节点定义</a></li>
+<li><a href="#%E6%90%9C%E7%B4%A2">搜索</a></li>
+<li><a href="#%E6%8F%92%E5%85%A5">插入</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4%E8%80%83%E8%99%91%E4%B8%89%E7%A7%8D%E6%83%85%E5%86%B5">删除（考虑三种情况）</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%AD%E5%BA%8F%E5%90%8E%E7%BB%A7%E8%8A%82%E7%82%B9">中序后继节点</a></li>
+<li><a href="#%E6%8E%A8%E8%8D%90%E6%96%87%E7%AB%A0">推荐文章</a></li>
+</ul>
+<!-- tocstop -->
+
+<p><img src="/images/2025/01/15/88c18411-27e6-434e-8ca6-fd6e2f6a2d7a.png" alt="4d74699c20737f2b826f13ae275e31db.png"></p>
+<p>值：左子树 &lt; 父节点 &lt; 右子树</p>
+<p>完整代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%9F%BA%E4%BA%8E%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%95%B0BST%E5%AE%9E%E7%8E%B0Map/BSTSearch">基于二叉搜索数实现 map</a></p>
+<h1><span id="基于二叉搜索树实现-map">基于二叉搜索树实现 map</span></h1><p>可视化：<a target="_blank" rel="noopener" href="https://www.cs.usfca.edu/~galles/visualization/BST.html">https://www.cs.usfca.edu/~galles/visualization/BST.html</a></p>
+<h2><span id="节点定义">节点定义</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> K,<span class="hljs-keyword">typename</span> V&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">TreeNode</span><br>&#123;<br>  std::pair&lt;K,V&gt; data;<br>  TreeNode* left;	<span class="hljs-comment">// 左子树</span><br>  TreeNode* right;	<span class="hljs-comment">// 右子数</span><br>  TreeNode* parent;	<span class="hljs-comment">// 父节点</span><br>  <span class="hljs-built_in">TreeNode</span>(<span class="hljs-type">const</span> K&amp; k,<span class="hljs-type">const</span> V&amp; v,TreeNode* parent = <span class="hljs-literal">nullptr</span>)<br>      : <span class="hljs-built_in">data</span>(std::<span class="hljs-built_in">make_pair</span>(key,val))<br>      , <span class="hljs-built_in">left</span>(<span class="hljs-literal">nullptr</span>)<br>      , <span class="hljs-built_in">right</span>(<span class="hljs-literal">nullptr</span>)<br>      , <span class="hljs-built_in">parent</span>(parent) &#123;&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2><span id="搜索">搜索</span></h2><p>从 BST 的根开始，将目标值（要搜索的值 key）与根节点的值进行比较：</p>
+<ol>
+<li>如果目标值等于根节点的值，返回 data</li>
+<li>如果目标值小于根节点的值，则向左递归，因为较小的值位于 BST 的左子树上</li>
+<li>否则，如果目标值大于根节点的值，则向右递归，因为较大的值位于 BST 的右子树上</li>
+<li>重复上面的步骤，直到无法再遍历为止</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">TreeNode&lt;K, V&gt; *<span class="hljs-title">find</span><span class="hljs-params">( <span class="hljs-type">const</span> K &amp;target )</span></span><br><span class="hljs-function"></span>&#123;<br>	TreeNode&lt;K, V&gt; *find_node = root;<br>	<span class="hljs-keyword">while</span> ( find_node )<br>	&#123;<br>		<span class="hljs-keyword">auto</span> cur = find_node-&gt;data.first;<br>		<span class="hljs-keyword">if</span> ( target &lt; cur )<br>		&#123;<br>			find_node = find_node-&gt;left;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( target &gt; cur )<br>		&#123;<br>			find_node = find_node-&gt;right;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-keyword">return</span> find_node;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span>(<span class="hljs-literal">nullptr</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2><span id="插入">插入</span></h2><p>遍历树，通过将要插入的值（目标值）与当前节点的值进行比较来找到插入点：</p>
+<ol>
+<li>如果目标值小于当前节点的值，则移动到左子树</li>
+<li>如果目标值大于当前节点的值，则移动到右子树</li>
+<li>重复上述步骤，<font color="red">直到到达叶子节点</font></li>
+</ol>
+<p>插入具有目标值的新节点。如果目标值小于父节点的值，则将其插入到左侧，否则插入到右侧。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">( <span class="hljs-type">const</span> K &amp;key, <span class="hljs-type">const</span> V &amp;val )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">auto</span> new_node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">TreeNode</span>&lt;K, V&gt;( key, val );<br>	<span class="hljs-keyword">if</span> ( root == <span class="hljs-literal">nullptr</span> )<br>	&#123;<br>		root = new_node;<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	TreeNode&lt;K, V&gt;	*cur	= root;<br>	TreeNode&lt;K, V&gt;	*parent = <span class="hljs-literal">nullptr</span>;<br><br>	<span class="hljs-keyword">while</span> ( cur )<br>	&#123;<br>		<span class="hljs-keyword">auto</span> cur_key = cur-&gt;data.first;<br>		parent = cur;<br>		<span class="hljs-keyword">if</span> ( key &lt; cur_key )<br>		&#123;<br>			cur = cur-&gt;left;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( key &gt; cur_key )<br>		&#123;<br>			cur = cur-&gt;right;<br>		&#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">/* 节点已存在，更新 val 即可 */</span><br>			root-&gt;data.second = val;<br>			<span class="hljs-keyword">return</span>;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">if</span> ( key &lt; parent-&gt;data.first )<br>	&#123;<br>		parent-&gt;left = new_node;<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		parent-&gt;right = new_node;<br>	&#125;<br>	new_node-&gt;parent = parent;		<span class="hljs-comment">// 记录父节点</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2><span id="删除考虑三种情况">删除（考虑三种情况）</span></h2><p>第一种情况：删除叶子节点</p>
+<p><img src="/images/2025/01/15/dcca96ac-f9bd-45a3-b494-9952ffff92ce.png" alt="image20250114185035746.png"></p>
+<p>第二种情况：删除的节点有单个节点</p>
+<blockquote>
+<p>[!WARNING]</p>
+<p>通过更改指针的指向彻底删除节点（节点位于树中，不是单纯 delete 然后置为 nullptr），不要忘记更新相关节点的成员变量信息。</p>
+</blockquote>
+<p><img src="/images/2025/01/15/4ac513f4-80d5-4675-bd2b-0f50adc7562e.png" alt="image20250114185058590.png"></p>
+<p>第三种情况：删除的节点有两个节点</p>
+<blockquote>
+<p>[!WARNING]</p>
+<p>降级为叶子节点进行处理，不要忘记更新相关节点的成员变量信息。</p>
+</blockquote>
+<p><img src="/images/2025/01/15/62e3219d-610a-4971-85e6-5c8ca9203544.png" alt="image20250114185121141.png"></p>
+<blockquote>
+<p>[!WARNING]</p>
+<p>上面的三种删除情况，务必考虑删除节点为根节点的情况。</p>
+</blockquote>
+<p>从根节点开始，寻找目标节点（要删除的节点），如果目标节点小于当前节点则向左移动，如果目标节点大于当前节点则向右移动。重复此步骤，直到找到目标节点或到达空节点。</p>
+<p>当找到目标节点时，处理以下3种情况进行删除：</p>
+<ol>
+<li>如果目标节点是叶子节点，只需将其删除</li>
+<li>如果目标节点有 1 个子节点，则用其子节点<strong>替换</strong>目标节点并<strong>删除</strong>目标节点</li>
+<li>如果目标节点有  2  个子节点<ol>
+<li>找到目标节点的右子树中最小的节点（或左子树中最大的节点），我这里选择右子树中最小的节点 mininum</li>
+<li>将目标节点替换为 mininum</li>
+<li>已经降级为叶子节点，按照前面叶子节点方式处理即可</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">erase</span><span class="hljs-params">( <span class="hljs-type">const</span> K &amp;key )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> ( root == <span class="hljs-literal">nullptr</span> )<br>		<span class="hljs-keyword">return</span>;<br><br>	TreeNode&lt;K, V&gt; *target = <span class="hljs-built_in">find</span>( key );<br>	<span class="hljs-keyword">if</span> ( target == <span class="hljs-literal">nullptr</span> )<br>		<span class="hljs-keyword">return</span>;<br><br>	<span class="hljs-comment">/* 优先处理两个子节点的，将其降级为叶子节点 */</span><br>	<span class="hljs-keyword">if</span> ( target-&gt;left &amp;&amp; target-&gt;right )<br>	&#123;<br>		TreeNode&lt;K, V&gt; *successor = <span class="hljs-built_in">mininum</span>( target-&gt;right );<br>		target-&gt;data	= successor-&gt;data;<br>		target		= successor;<br>	&#125;<br><br>	TreeNode&lt;K, V&gt;	*child	= target-&gt;left ? target-&gt;left : target-&gt;right;<br>	TreeNode&lt;K, V&gt;	*parent = target-&gt;parent;<br><br>	<span class="hljs-comment">/* 如果是单个子节点，更新最新的 parent 节点 */</span><br>	<span class="hljs-keyword">if</span> ( child )<br>	&#123;<br>		child-&gt;parent = parent;<br>	&#125;<br><br>	<span class="hljs-comment">/* 考虑根节点的情况 */</span><br>	<span class="hljs-keyword">if</span> ( parent )<br>	&#123;<br>		parent-&gt;left == target ? parent-&gt;left = child : parent-&gt;right = child;<br>	&#125;<span class="hljs-keyword">else</span>&#123;<br>		root = child;<br>	&#125;<br><br>	<span class="hljs-keyword">delete</span> target;<br>	target = <span class="hljs-literal">nullptr</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1><span id="中序后继节点">中序后继节点</span></h1><p>首先要确定中序遍历的后继:</p>
+<ul>
+<li>如果该节点有右子节点, 那么后继是其右子节点的子树中最左端的节点（就是之前我们实现找右子树中最小值的那种方法）</li>
+<li>如果该节点没有右子节点, 那么后继是离它最近的祖先, 该节点在这个祖先的左子树内</li>
+</ul>
+<p><img src="/images/2025/01/15/8bd28bda-2d12-42ae-87ad-9332d78f5117.png" alt="b545036afb4fb8ed3d3425f287bec91.png"></p>
+<p>如图所示：8 的中序后继为 10，10 的中序后继为 12，14 的中序后继为 20。</p>
+<p>我们都知道，二叉搜索树的中序遍历是有序的：4，8，10，12，14，20，22。</p>
+<p>这时候你就明白 中序后继 的含义，你自己看，8 后面的一个节点是 10，因此我们讲 8 的中序后继为 10。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">TreeNode&lt;K, V&gt; *<span class="hljs-title">mininum</span><span class="hljs-params">( TreeNode&lt;K, V&gt; *node )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">while</span> ( node-&gt;left != <span class="hljs-literal">nullptr</span> )<br>	&#123;<br>		node = node-&gt;left;<br>	&#125;<br>	<span class="hljs-keyword">return</span> node;<br>&#125;<br><br><br><span class="hljs-function">TreeNode&lt;K, V&gt; * <span class="hljs-title">Inorder_Successor</span><span class="hljs-params">( TreeNode&lt;K, V&gt; *node )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> ( node-&gt;right ) <span class="hljs-comment">/* 存在右子树 */</span><br>	&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-built_in">mininum</span>( node-&gt;right );<br>	&#125;<br><br>	TreeNode&lt;K, V&gt; * parent = node-&gt;parent;<br>	<span class="hljs-keyword">while</span> ( parent &amp;&amp; parent-&gt;left != node )<br>	&#123;<br>		node	= parent;<br>		parent	= parent-&gt;parent;<br>	&#125;<br>	<span class="hljs-keyword">return</span> parent;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1><span id="推荐文章">推荐文章</span></h1><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/cpp-binary-search-tree/">Binary Search Tree in C++</a></p>
 
       </div>
     </div>
@@ -219,23 +297,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2025/01/15/%E5%9F%BA%E4%BA%8E%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E5%AE%9E%E7%8E%B0Map%E5%AE%B9%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>基于二叉搜索树实现Map容器的基本操作</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2025/01/13/Gdb%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/">
+    <a class="post-nav-item-right" href="/2025/01/15/350-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86-II/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -247,7 +313,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      Gdb基础教程
+      350. 两个数组的交集 II
     </a>
   
 </div>
@@ -255,12 +321,12 @@
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
 
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\26-删除有序数组中的重复项\" title="26.删除有序数组中的重复项" rel="bookmark">26.删除有序数组中的重复项</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\22\27-移除元素\" title="27.移除元素" rel="bookmark">27.移除元素</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
