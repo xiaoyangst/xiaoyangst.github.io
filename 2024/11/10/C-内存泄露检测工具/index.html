@@ -174,18 +174,20 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++">sudo apt install valgrind		<span class="hljs-comment">// 安装</span><br><br>valgrind --tool=memcheck --leak-check=full ./a.out	<span class="hljs-comment">// 使用</span><br></code></pre></td></tr></table></figure>
-
 <p>但是这么长的指令使用起来不方便，每查一次就得输入一次，可以设置一下：</p>
-<ol>
+<ol type="1">
 <li>在home目录下编辑 .bashrc 文件，改别名</li>
 </ol>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">alias memcheck=<span class="hljs-string">&#x27;valgrind --tool=memcheck --leak-check=full --show-reachable=yes&#x27;</span><br></code></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol start="2" type="1">
 <li>重新加载 source .bashrc</li>
 </ol>
-<p>改写之后，就可以直接使用 memcheck 指令查看内存泄漏情况：<code>memcheck ./a.out</code></p>
-<p><img src="/images/2024/11/10/5841fb60-9f1a-11ef-8908-41febc593dbb.png" alt="内存泄露.png"></p>
+<p>改写之后，就可以直接使用 memcheck
+指令查看内存泄漏情况：<code>memcheck ./a.out</code></p>
+<figure>
+<img src="/images/2024/11/10/5841fb60-9f1a-11ef-8908-41febc593dbb.png" alt="内存泄露.png">
+<figcaption aria-hidden="true">内存泄露.png</figcaption>
+</figure>
 <p>LEAK SUMMARY：</p>
 <p>（1）绝对泄漏了</p>
 <p>（2）间接泄漏了</p>
@@ -276,7 +278,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2025\01\08\C-死锁和数据竞争检查工具\" title="C++死锁和数据竞争检查工具" rel="bookmark">C++死锁和数据竞争检查工具</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\05\CMake-和-GTest-结合\" title="CMake 和 GTest 结合" rel="bookmark">CMake 和 GTest 结合</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\13\Gdb基础教程\" title="Gdb基础教程" rel="bookmark">Gdb基础教程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2025\01\08\C-死锁和数据竞争检查工具\" title="C++死锁和数据竞争检查工具" rel="bookmark">C++死锁和数据竞争检查工具</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\05\CMake-和-GTest-结合\" title="CMake 和 GTest 结合" rel="bookmark">CMake 和 GTest 结合</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\13\Gdb基础教程\" title="Gdb基础教程" rel="bookmark">Gdb基础教程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -808,11 +810,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

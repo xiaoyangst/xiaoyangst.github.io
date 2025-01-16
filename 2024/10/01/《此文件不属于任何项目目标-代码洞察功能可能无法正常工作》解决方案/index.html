@@ -173,10 +173,15 @@
             
           </div>
         
-        <p>我的 CMake 里面已经用 include_directories 包含头文件，按理重新加载 CMakeLists.txt 会有成效，但实际上不是缓存问题。</p>
-<p>解决链接：<a target="_blank" rel="noopener" href="https://segmentfault.com/q/1010000042694658">https://segmentfault.com/q/1010000042694658</a></p>
-<p>Clion 从 CMake 构建系统获取有关源文件的信息。当您将任何 cpp 文件添加到源列表时，CMake 会自动告知具有相同名称的标头。因此，如果 cpp&#x2F;h 名称不同（或者您根本没有 cpp 文件），您应该手动包含标题。</p>
-<p>由于我这里是只实现头文件，并且没有在任何地方包含这个头文件，所以你即便是重新加载缓存也没有用，需要你在其他地方 include 这个头文件才可以。这个时候你再重新更新缓存，Clion 就能识别到这个头文件，也不会出现那个提示了。</p>
+        <p>我的 CMake 里面已经用 include_directories 包含头文件，按理重新加载
+CMakeLists.txt 会有成效，但实际上不是缓存问题。</p>
+<p>解决链接：https://segmentfault.com/q/1010000042694658</p>
+<p>Clion 从 CMake 构建系统获取有关源文件的信息。当您将任何 cpp
+文件添加到源列表时，CMake 会自动告知具有相同名称的标头。因此，如果 cpp/h
+名称不同（或者您根本没有 cpp 文件），您应该手动包含标题。</p>
+<p>由于我这里是只实现头文件，并且没有在任何地方包含这个头文件，所以你即便是重新加载缓存也没有用，需要你在其他地方
+include 这个头文件才可以。这个时候你再重新更新缓存，Clion
+就能识别到这个头文件，也不会出现那个提示了。</p>
 
       </div>
     </div>
@@ -261,7 +266,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\01\Clion远程Linux找不到第三方库头文件？\" title="Clion远程Linux找不到第三方库头文件？" rel="bookmark">Clion远程Linux找不到第三方库头文件？</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\01\Clion远程Linux找不到第三方库头文件？\" title="Clion远程Linux找不到第三方库头文件？" rel="bookmark">Clion远程Linux找不到第三方库头文件？</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -793,11 +798,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

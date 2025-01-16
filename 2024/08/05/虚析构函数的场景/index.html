@@ -174,30 +174,39 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E4%BC%9A%E8%A2%AB%E7%BB%A7%E6%89%BF%E4%BD%86%E4%B8%8D%E9%9C%80%E8%A6%81%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0">会被继承但不需要虚析构函数</a></li>
-<li><a href="#%E4%BC%9A%E8%A2%AB%E7%BB%A7%E6%89%BF%E4%B8%94%E9%9C%80%E8%A6%81%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0">会被继承且需要虚析构函数</a></li>
-<li><a href="#%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E9%A1%BA%E5%BA%8F">析构函数的调用顺序</a></li>
-<li><a href="#%E6%9C%80%E5%90%8E%E7%9A%84%E8%AF%9D">最后的话</a></li>
+<li><a href="#会被继承但不需要虚析构函数">会被继承但不需要虚析构函数</a></li>
+<li><a href="#会被继承且需要虚析构函数">会被继承且需要虚析构函数</a></li>
+<li><a href="#析构函数的调用顺序">析构函数的调用顺序</a></li>
+<li><a href="#最后的话">最后的话</a></li>
 </ul>
 <!-- tocstop -->
-
 <p>如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？</p>
 <p><strong>通过基类的指针来删除派生类的对象时，基类的析构函数应该是虚函数</strong>。</p>
-<h2><span id="会被继承但不需要虚析构函数">会被继承但不需要虚析构函数</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">NonCopyable</span> &#123;<br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-built_in">NonCopyable</span>(<span class="hljs-type">const</span> NonCopyable &amp;) = <span class="hljs-keyword">delete</span>; <span class="hljs-comment">// 阻止拷贝</span><br>  NonCopyable &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> NonCopyable &amp;) = <span class="hljs-keyword">delete</span>;  <span class="hljs-comment">// 阻止赋值</span><br>  <span class="hljs-built_in">NonCopyable</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">NonCopyable</span>() = <span class="hljs-keyword">default</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>任何需要防止被拷贝和赋值都需要删除拷贝构造函数和赋值运算符函数，为了方便，继承 NonCopyable类 即可。既然这个类就是用来给其它类继承，为何却没有把析构函数声明为虚函数呢？因为我们不会通过 NonCopyable类 来创建对象，仅仅只是提供阻止拷贝和阻止赋值的功能给到派生类。</p>
-<h2><span id="会被继承且需要虚析构函数">会被继承且需要虚析构函数</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">public</span> NonCopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">Derived</span>() &#123;  <span class="hljs-comment">// 添加虚析构函数</span><br>        <span class="hljs-comment">// Derived 的清理代码</span><br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doSomething</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">// 示例方法</span><br>    &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MoreDerived</span> : <span class="hljs-keyword">public</span> Derived &#123;<br><span class="hljs-keyword">public</span>:<br>    ~<span class="hljs-built_in">MoreDerived</span>() <span class="hljs-keyword">override</span> &#123;<br>        <span class="hljs-comment">// MoreDerived 的清理代码</span><br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>Derived 类是 NonCopyable 的派生类，是 MoreDerived 的基类。我们前面讲过 NonCopyable 类不可能用来创建对象，现在Derived 类作为MoreDerived 的基类，当Derived 类作为MoreDerived 类对象的指针的时候，Derived 类就需要承担回收MoreDerived 类对象资源的责任（调用MoreDerived 类对象的析构函数）。基于上述分析，我们需要把Derived 类的析构函数声明为虚函数。</p>
-<h2><span id="析构函数的调用顺序">析构函数的调用顺序</span></h2><p>当删除一个基类指针指向的派生类对象时，首先调用派生类的析构函数，然后调用基类的析构函数。这是为了确保派生类的资源先被正确释放，然后再释放基类的资源。</p>
+<h2><span id="会被继承但不需要虚析构函数">会被继承但不需要虚析构函数</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">NonCopyable</span> &#123;<br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-built_in">NonCopyable</span>(<span class="hljs-type">const</span> NonCopyable &amp;) = <span class="hljs-keyword">delete</span>; <span class="hljs-comment">// 阻止拷贝</span><br>  NonCopyable &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> NonCopyable &amp;) = <span class="hljs-keyword">delete</span>;  <span class="hljs-comment">// 阻止赋值</span><br>  <span class="hljs-built_in">NonCopyable</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">NonCopyable</span>() = <span class="hljs-keyword">default</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>任何需要防止被拷贝和赋值都需要删除拷贝构造函数和赋值运算符函数，为了方便，继承
+NonCopyable类
+即可。既然这个类就是用来给其它类继承，为何却没有把析构函数声明为虚函数呢？因为我们不会通过
+NonCopyable类
+来创建对象，仅仅只是提供阻止拷贝和阻止赋值的功能给到派生类。</p>
+<h2><span id="会被继承且需要虚析构函数">会被继承且需要虚析构函数</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">public</span> NonCopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">Derived</span>() &#123;  <span class="hljs-comment">// 添加虚析构函数</span><br>        <span class="hljs-comment">// Derived 的清理代码</span><br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doSomething</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">// 示例方法</span><br>    &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MoreDerived</span> : <span class="hljs-keyword">public</span> Derived &#123;<br><span class="hljs-keyword">public</span>:<br>    ~<span class="hljs-built_in">MoreDerived</span>() <span class="hljs-keyword">override</span> &#123;<br>        <span class="hljs-comment">// MoreDerived 的清理代码</span><br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>Derived 类是 NonCopyable 的派生类，是 MoreDerived
+的基类。我们前面讲过 NonCopyable 类不可能用来创建对象，现在Derived
+类作为MoreDerived 的基类，当Derived 类作为MoreDerived
+类对象的指针的时候，Derived 类就需要承担回收MoreDerived
+类对象资源的责任（调用MoreDerived
+类对象的析构函数）。基于上述分析，我们需要把Derived
+类的析构函数声明为虚函数。</p>
+<h2><span id="析构函数的调用顺序">析构函数的调用顺序</span></h2>
+<p>当删除一个基类指针指向的派生类对象时，首先调用派生类的析构函数，然后调用基类的析构函数。这是为了确保派生类的资源先被正确释放，然后再释放基类的资源。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Base</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Base::func&quot;</span> &lt;&lt; std::endl;<br>    &#125;<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">Base</span>() &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Base destructor&quot;</span> &lt;&lt; std::endl;<br>    &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">public</span> Base &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">func</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Derived::func&quot;</span> &lt;&lt; std::endl;<br>    &#125;<br>    ~<span class="hljs-built_in">Derived</span>() <span class="hljs-keyword">override</span> &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Derived destructor&quot;</span> &lt;&lt; std::endl;<br>    &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Base* ptr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Derived</span>();<br>    ptr-&gt;<span class="hljs-built_in">func</span>(); <span class="hljs-comment">// 调用 Derived::func</span><br>    <span class="hljs-keyword">delete</span> ptr;  <span class="hljs-comment">// 确保调用 Derived 析构函数，然后调用 Base 析构函数</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>那我们就要提出一些有趣的问题：</p>
 <p>通过基类创建的派生类对象究竟是基类对象还是派生类对象？是派生类对象。</p>
 <p>既然是创建的派生类对象为什么需要调用基类的析构函数？虽然基类没有创建对象，但派生类对象不仅包含派生类的成员，还包含基类的成员。基类的成员是派生类对象的一部分，因此在创建派生类对象时，实际上包含了两个部分：基类部分和派生类部分。基类的成员只能由基类清理，不能由派生类清理。派生类的成员也只能由派生类清理，不能由基类清理。但是将基类的析构声明为虚函数会调用派生类的析构函数，否则只会调用自己的析构函数，从而造成派生类对象的内存泄漏。</p>
-<h2><span id="最后的话">最后的话</span></h2><p>只要弄清楚什么情况下把析构函数声明为虚函数，才不会盲目给任何类的析构函数声明为虚函数。因为虚函数会创建虚函数表，这个不必要的开销能避免就要避免。</p>
+<h2><span id="最后的话">最后的话</span></h2>
+<p>只要弄清楚什么情况下把析构函数声明为虚函数，才不会盲目给任何类的析构函数声明为虚函数。因为虚函数会创建虚函数表，这个不必要的开销能避免就要避免。</p>
 
       </div>
     </div>
@@ -269,7 +278,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -801,11 +810,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

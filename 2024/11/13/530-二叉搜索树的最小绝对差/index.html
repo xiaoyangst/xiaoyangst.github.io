@@ -174,17 +174,21 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">transfer</span><span class="hljs-params">(TreeNode* root)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(root == <span class="hljs-literal">nullptr</span>) <span class="hljs-keyword">return</span>;<br>        <span class="hljs-built_in">transfer</span>(root-&gt;left);<br>        data.<span class="hljs-built_in">push_back</span>(root-&gt;val);<br>        <span class="hljs-built_in">transfer</span>(root-&gt;right);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getMinimumDifference</span><span class="hljs-params">(TreeNode* root)</span> </span>&#123;<br>        <span class="hljs-built_in">transfer</span>(root);<br>        <span class="hljs-type">int</span> result = INT_MAX;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; data.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            result = <span class="hljs-built_in">min</span>(result,<span class="hljs-built_in">abs</span>(data[i] - data[i - <span class="hljs-number">1</span>]));<br>        &#125;<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    vector&lt;<span class="hljs-type">int</span>&gt; data;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>这是最容易想到的版本，但我们可以在中序遍历的时候就进行差值，这样我们就可以避免后面的遍历一次数组的行为，代码如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">transfer</span><span class="hljs-params">(TreeNode* cur)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (cur == <span class="hljs-literal">nullptr</span>)<br>            <span class="hljs-keyword">return</span>;<br>        <span class="hljs-built_in">transfer</span>(cur-&gt;left);<br>        <span class="hljs-keyword">if</span> (prev != <span class="hljs-literal">nullptr</span>) &#123;<br>            result = <span class="hljs-built_in">min</span>(result, <span class="hljs-built_in">abs</span>(prev-&gt;val - cur-&gt;val));<br>        &#125;<br>        prev = cur;<br>        <span class="hljs-built_in">transfer</span>(cur-&gt;right);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getMinimumDifference</span><span class="hljs-params">(TreeNode* root)</span> </span>&#123;<br>        <span class="hljs-built_in">transfer</span>(root);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">int</span> result = INT_MAX;<br>    TreeNode* prev = <span class="hljs-literal">nullptr</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>但是，我想讲一讲自己写代码犯下的错误，即在比较多过程中忽视掉了二叉搜索树的有序性，导致出现错误，这份错误代码核心部分如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">getMin</span><span class="hljs-params">(TreeNode * prev, TreeNode * cur)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (cur == <span class="hljs-literal">nullptr</span>) <span class="hljs-keyword">return</span>;<br>    target = <span class="hljs-built_in">min</span>(target, <span class="hljs-built_in">abs</span>(prev - &gt;val - cur - &gt;val));<br>    <span class="hljs-built_in">getMin</span>(cur, cur - &gt;left);<br>    <span class="hljs-built_in">getMin</span>(cur, cur - &gt;right);<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>它无法应对如下示例：</p>
-<p>![530. 二叉搜索树的最小绝对差](..&#x2F;images&#x2F;530. 二叉搜索树的最小绝对差.png)</p>
-<p>我的代码错就错在没有遵循二叉搜索树的有序性，让父节点和自己的子节点比较来获取最小的差值，这是错误的，如图中你无法获取 236 - 227 的差值，从而避开正确答案。</p>
-<p>但如果按照前面提供的正确答案，而是 prev 节点 和 cur 节点比较就不会出错，因为在中序遍历下是有序的。而我的这份错误的代码的虽然也是中序，但是 prev 意指 父节点，而 cur 意指 孩子节点，这就无法完全遵循二叉搜索树的有序性，从而出错。</p>
+<figure>
+<img src="../images/530.%20二叉搜索树的最小绝对差.png" alt="530. 二叉搜索树的最小绝对差">
+<figcaption aria-hidden="true">530. 二叉搜索树的最小绝对差</figcaption>
+</figure>
+<p>我的代码错就错在没有遵循二叉搜索树的有序性，让父节点和自己的子节点比较来获取最小的差值，这是错误的，如图中你无法获取
+236 - 227 的差值，从而避开正确答案。</p>
+<p>但如果按照前面提供的正确答案，而是 prev 节点 和 cur
+节点比较就不会出错，因为在中序遍历下是有序的。而我的这份错误的代码的虽然也是中序，但是
+prev 意指 父节点，而 cur 意指
+孩子节点，这就无法完全遵循二叉搜索树的有序性，从而出错。</p>
 
       </div>
     </div>
@@ -269,7 +273,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\11\226-翻转二叉树\" title="226. 翻转二叉树" rel="bookmark">226. 翻转二叉树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\11\226-翻转二叉树\" title="226. 翻转二叉树" rel="bookmark">226. 翻转二叉树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
     
   </div>
 </div>
@@ -801,11 +805,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

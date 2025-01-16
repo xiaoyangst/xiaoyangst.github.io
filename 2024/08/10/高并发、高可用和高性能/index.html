@@ -179,24 +179,33 @@
             
           </div>
         
-        <h2><span id="概述">概述</span></h2><p>（一）高并发</p>
-<p>用QPS&#x2F;TPS来衡量系统对任务的处理能力：</p>
+        <h2><span id="概述">概述</span></h2>
+<p>（一）高并发</p>
+<p>用QPS/TPS来衡量系统对任务的处理能力：</p>
 <ul>
-<li><strong>QPS</strong>（Queries Per Second）：每秒<strong>查询</strong>数，指一台服务器每秒能够响应的查询次数</li>
-<li><strong>TPS</strong>（Transactions Per Second）：每秒事务（<strong>增删改</strong>）数，可以是一个接口、多个接口、一个业务流程</li>
+<li><strong>QPS</strong>（Queries Per
+Second）：每秒<strong>查询</strong>数，指一台服务器每秒能够响应的查询次数</li>
+<li><strong>TPS</strong>（Transactions Per
+Second）：每秒事务（<strong>增删改</strong>）数，可以是一个接口、多个接口、一个业务流程</li>
 </ul>
-<p>QPS只是一个简单查询的统计，不能描述增删改等操作（TPS来描述）。如果只有查询操作，我们认为TPS &#x3D; QPS</p>
+<p>QPS只是一个简单查询的统计，不能描述增删改等操作（TPS来描述）。如果只有查询操作，我们认为TPS
+= QPS</p>
 <p>（二）高可用</p>
-<p><strong>SLA</strong>衡量一个系统可用性有多高，目标系统7 x 24不间断服务</p>
+<p><strong>SLA</strong>衡量一个系统可用性有多高，目标系统7 x
+24不间断服务</p>
 <p>大云厂商在宣传自己产品SLA时是多少个9</p>
-<p><img src="/images/2024/08/10/69949cc0-56f8-11ef-a7b6-1b323923df30.png" alt="高可用.png"></p>
+<figure>
+<img src="/images/2024/08/10/69949cc0-56f8-11ef-a7b6-1b323923df30.png" alt="高可用.png">
+<figcaption aria-hidden="true">高可用.png</figcaption>
+</figure>
 <p>9 越多代表全年服务可用时间越长服务更可靠，停机时间越短</p>
 <p>大厂多数业务 4个9是刚需，5个9是目标，6个9是理想</p>
 <p>（三）高性能</p>
 <p><strong>RT</strong>来衡量系统的响应速度，程序处理速度非常快、延迟低、所占内存少、CPU占用率低</p>
 <p>比如系统处理一个HTTP请求需要100ms，这100ms就是系统的响应时间</p>
-<h2><span id="技术方案">技术方案</span></h2><p>（一）高并发和高性能</p>
-<ol>
+<h2><span id="技术方案">技术方案</span></h2>
+<p>（一）高并发和高性能</p>
+<ol type="1">
 <li>负载均衡：常用的Nginx中间件就有实现</li>
 <li>缓存：有本地缓存和分布式缓存</li>
 <li>池化复用：线程池、连接池、内存池等</li>
@@ -205,14 +214,17 @@
 <li>分而治之：Master-Worker工作架构，可参考主从Reactor模型</li>
 </ol>
 <p>（二）高可用</p>
-<ol>
+<ol type="1">
 <li>集群架构：有节点故障会有其它节点顶替</li>
 <li>熔断降级：为了防止整个系统故障，抛弃一些非核心的接口和数据，返回兜底数据</li>
 <li>限流：访问频率或者并发请求超过承受范围，考虑限流来保证接口的可用性</li>
 <li>隔离：服务和资源相互隔离，比如网络资源、机器资源、线程资源等，不会因为某个服务的资源不足而抢占其它服务的资源</li>
 <li>多活架构：同城双活-双机房和异地多活-两地三中心</li>
 </ol>
-<p><img src="/images/2024/08/10/62a5b5c0-56f8-11ef-a7b6-1b323923df30.png" alt="高可用方案.png"></p>
+<figure>
+<img src="/images/2024/08/10/62a5b5c0-56f8-11ef-a7b6-1b323923df30.png" alt="高可用方案.png">
+<figcaption aria-hidden="true">高可用方案.png</figcaption>
+</figure>
 
       </div>
     </div>
@@ -297,7 +309,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -829,11 +841,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

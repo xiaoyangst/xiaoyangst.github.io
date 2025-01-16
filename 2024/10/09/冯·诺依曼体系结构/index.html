@@ -174,19 +174,27 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E4%B8%8D%E5%8F%AF%E7%BC%96%E7%A8%8B">不可编程</a></li>
-<li><a href="#%E4%B8%8D%E5%8F%AF%E5%AD%98%E5%82%A8">不可存储</a></li>
-<li><a href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84">冯·诺依曼体系结构</a></li>
+<li><a href="#不可编程">不可编程</a></li>
+<li><a href="#不可存储">不可存储</a></li>
+<li><a href="#冯诺依曼体系结构">冯·诺依曼体系结构</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="不可编程">不可编程</span></h2><p>计算机是由各种门电路组合而成的，然后通过组装出一个固定的电路版，来完成一个特定的计算程序。一旦需要修改功能，就要重新组装电路。这样的话，计算机就是“不可编程”的，因为程序在计算机硬件层面是“写死”的。最常见的就是<a href>老式计算器</a>，电路板设好了加减乘除，做不了任何计算逻辑固定之外的事情。</p>
-<h2><span id="不可存储">不可存储</span></h2><p>典型的就是早年的 “Plugboard” 这样的插线板式的计算机。整个计算机就是一个巨大的插线板，通过在板子上不同的插头或者接口的位置插入线路，来实现不同的功能。这样的计算机自然是“可编程”的，但是编写好的程序不能存储下来供下一次加载使用，不得不每次要用到和当前不同的“程序”的时候，重新插板子，重新“编程”。</p>
-<p><img src="/images/2024/10/09/633378f0-862e-11ef-9dc8-d75cb81020a6.jpg" alt="Plugboard.jpg"></p>
-<h2><span id="冯诺依曼体系结构">冯·诺依曼体系结构</span></h2><p>冯·诺依曼体系结构又名存储程序计算机，这里面其实暗含了两个概念，一个是“可编程”计算机，一个是“存储”计算机。</p>
-<p><img src="/images/2024/10/09/5fe5d490-862e-11ef-9dc8-d75cb81020a6.png" alt="冯诺依曼.png"></p>
+<h2><span id="不可编程">不可编程</span></h2>
+<p>计算机是由各种门电路组合而成的，然后通过组装出一个固定的电路版，来完成一个特定的计算程序。一旦需要修改功能，就要重新组装电路。这样的话，计算机就是“不可编程”的，因为程序在计算机硬件层面是“写死”的。最常见的就是<a href>老式计算器</a>，电路板设好了加减乘除，做不了任何计算逻辑固定之外的事情。</p>
+<h2><span id="不可存储">不可存储</span></h2>
+<p>典型的就是早年的 “Plugboard”
+这样的插线板式的计算机。整个计算机就是一个巨大的插线板，通过在板子上不同的插头或者接口的位置插入线路，来实现不同的功能。这样的计算机自然是“可编程”的，但是编写好的程序不能存储下来供下一次加载使用，不得不每次要用到和当前不同的“程序”的时候，重新插板子，重新“编程”。</p>
+<figure>
+<img src="/images/2024/10/09/633378f0-862e-11ef-9dc8-d75cb81020a6.jpg" alt="Plugboard.jpg">
+<figcaption aria-hidden="true">Plugboard.jpg</figcaption>
+</figure>
+<h2><span id="冯诺依曼体系结构">冯·诺依曼体系结构</span></h2>
+<p>冯·诺依曼体系结构又名存储程序计算机，这里面其实暗含了两个概念，一个是“可编程”计算机，一个是“存储”计算机。</p>
+<figure>
+<img src="/images/2024/10/09/5fe5d490-862e-11ef-9dc8-d75cb81020a6.png" alt="冯诺依曼.png">
+<figcaption aria-hidden="true">冯诺依曼.png</figcaption>
+</figure>
 <p>任何一台计算机的任何一个部件都可以归到运算器、控制器、存储器、输入设备和输出设备中，而所有的现代计算机也都是基于这个基础架构来设计开发的。而所有的计算机程序，也都可以抽象为从输入设备读取输入信息，通过运算器和控制器来执行存储在存储器里的程序，最终把结果输出到输出设备中。而我们所有撰写的无论高级还是低级语言的程序，也都是基于这样一个抽象框架来进行运作的。</p>
 <ul>
 <li>控制器：负责管理和协调计算机内部各个部件的工作。它获取指令，并决定如何执行这些指令，包括数据流的控制和指令的顺序执行。中央处理器（CPU）通常包含一个控制单元。</li>
@@ -287,7 +295,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -819,11 +827,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

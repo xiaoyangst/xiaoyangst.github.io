@@ -174,8 +174,12 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;  <br><span class="hljs-keyword">public</span>:  <br>    <span class="hljs-function">ListNode* <span class="hljs-title">removeNthFromEnd</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> n)</span> </span>&#123;  <br>        ListNode* getLen = head;  <br>  <br>        ListNode* virtualHead = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">-1</span>);  <br>        virtualHead-&gt;next = head;  <br>        ListNode* delNode = virtualHead;  <br>  <br>        <span class="hljs-type">int</span> len = <span class="hljs-number">0</span>;  <br>        <span class="hljs-keyword">while</span>(getLen)&#123;  <span class="hljs-comment">// 获取链表长度   </span><br>            getLen = getLen-&gt;next;  <br>            len++;  <br>        &#125;  <br>        len = len - n;  <br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++)&#123;   <span class="hljs-comment">// 找到需要移除节点的前一个节点  </span><br>            delNode = delNode-&gt;next;  <br>        &#125;  <br>  <br>        delNode-&gt;next = delNode-&gt;next-&gt;next;    <span class="hljs-comment">// 删除节点  </span><br>          <br>        <span class="hljs-keyword">return</span> virtualHead-&gt;next;   <span class="hljs-comment">// 返回头节点  </span><br>    &#125;  <br>&#125;; <br></code></pre></td></tr></table></figure>
-
-<p>只要明白链表的特性，以及删除的特点就很容易想到该怎么处理这道题，不会想复杂。我们要删除链表的倒数第 N 个节点，只需要找到这个节点的前一个节点，因为删除链表节点的准则就是找到待删除节点的前一个节点。由于我们是要找倒数第 N 个节点，就要先获取链表长度（只能遍历一次得到），然后<code>len = len - n</code>计算出 len ，用于找到待删除节点的前一个节点。</p>
+<p>只要明白链表的特性，以及删除的特点就很容易想到该怎么处理这道题，不会想复杂。我们要删除链表的倒数第
+N
+个节点，只需要找到这个节点的前一个节点，因为删除链表节点的准则就是找到待删除节点的前一个节点。由于我们是要找倒数第
+N
+个节点，就要先获取链表长度（只能遍历一次得到），然后<code>len = len - n</code>计算出
+len ，用于找到待删除节点的前一个节点。</p>
 
       </div>
     </div>
@@ -260,7 +264,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -792,11 +796,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

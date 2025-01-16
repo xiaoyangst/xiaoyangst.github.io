@@ -174,58 +174,91 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E5%9B%BA%E5%AE%9A%E7%BC%93%E5%86%B2%E5%8C%BA%E5%A4%A7%E5%B0%8F">固定缓冲区大小</a></li>
-<li><a href="#%E7%8E%AF%E5%BD%A2%E7%BC%93%E5%86%B2%E5%8C%BA-ringbuffer">环形缓冲区 ringBuffer</a></li>
-<li><a href="#%E4%BC%98%E5%8C%96-ringbuffer-%E4%B9%8B-chainbuffer">优化 ringBuffer 之 chainBuffer</a></li>
-<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+<li><a href="#固定缓冲区大小">固定缓冲区大小</a></li>
+<li><a href="#环形缓冲区-ringbuffer">环形缓冲区 ringBuffer</a></li>
+<li><a href="#优化-ringbuffer-之-chainbuffer">优化 ringBuffer 之
+chainBuffer</a></li>
+<li><a href="#总结">总结</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="固定缓冲区大小">固定缓冲区大小</span></h2><p>申请固定内存作为缓冲区，用一个写指针进行标识。</p>
-<p><img src="/images/2024/09/28/2eafb120-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="固定缓冲区.png"></p>
+<h2><span id="固定缓冲区大小">固定缓冲区大小</span></h2>
+<p>申请固定内存作为缓冲区，用一个写指针进行标识。</p>
+<figure>
+<img src="/images/2024/09/28/2eafb120-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="固定缓冲区.png">
+<figcaption aria-hidden="true">固定缓冲区.png</figcaption>
+</figure>
 <ul>
 <li>起始下标读取数据的起始地址，写指针是读取数据的结束地址。</li>
 <li>如果写指针已经指向缓冲区末尾，将不允许写入。</li>
-<li>读指针需要判断数据的完整性方可实际去读。通常我们采用 TLV 协议来解决网络传输中存在的<a href="https://xiaoyangst.github.io/2024/09/08/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E7%B2%98%E5%8C%85%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/#%E5%A4%84%E7%90%86%E7%BD%91%E7%BB%9C%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98">粘包问题</a>。</li>
+<li>读指针需要判断数据的完整性方可实际去读。通常我们采用 TLV
+协议来解决网络传输中存在的<a href="https://xiaoyangst.github.io/2024/09/08/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E7%B2%98%E5%8C%85%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/#%E5%A4%84%E7%90%86%E7%BD%91%E7%BB%9C%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98">粘包问题</a>。</li>
 </ul>
-<p>这种简单的方案在实际的生产中也是很常见的，如果你严格限制传输的数据大小，并且让自己的网络库足够的高性能，用户请求量不大的情况下，也是相当不错。**<code>Redis</code> 的接收缓冲区，使用的是定长 <code>buffer</code>**。</p>
+<p>这种简单的方案在实际的生产中也是很常见的，如果你严格限制传输的数据大小，并且让自己的网络库足够的高性能，用户请求量不大的情况下，也是相当不错。<strong><code>Redis</code>
+的接收缓冲区，使用的是定长 <code>buffer</code></strong>。</p>
 <p>那么它的缺点是什么？尽管这些缺点我们也有优化方案。</p>
-<ol>
+<ol type="1">
 <li><strong>需要频繁腾挪数据</strong>，只要界定成功一个完整数据包，就需要把后面的数据挪到前面，以空余更多的空间供生产者往里面填充数据。</li>
 <li><strong>需要实现扩缩容机制</strong>，如果缓冲区剩余空间不足以存放数据，需要对缓冲区进行扩容，并且将旧缓冲区中的数据挪到新缓冲区中。</li>
 </ol>
 <p>第一个缺点的解决方案在下一个缓冲区设计中可以解决，如果各位用数组写过环形队列，你应该明白我们不需要每次在界定成功一个完整数据包，就把后面的数据挪到前面。</p>
-<p>第二个缺点的解决方案在 C++ 中又有何难？vector 容器就是动态数组，但是我们通常不建议如此，因为扩容会导致数据的频繁移动，这实在是不可取。在最后一个缓冲区介绍中，我们可以利用 链表 设计出一个扩容但不必因为数据过大而频繁移动数据的缓冲区。</p>
-<h2><span id="环形缓冲区-ringbuffer">环形缓冲区 ringBuffer</span></h2><p>用数组形成的环形缓冲区只是一种抽象，本质上还是一块连续的内存空间。用读指针（read pointer）和写指针（write pointer）进行标识。</p>
+<p>第二个缺点的解决方案在 C++ 中又有何难？vector
+容器就是动态数组，但是我们通常不建议如此，因为扩容会导致数据的频繁移动，这实在是不可取。在最后一个缓冲区介绍中，我们可以利用
+链表 设计出一个扩容但不必因为数据过大而频繁移动数据的缓冲区。</p>
+<h2><span id="环形缓冲区-ringbuffer">环形缓冲区 ringBuffer</span></h2>
+<p>用数组形成的环形缓冲区只是一种抽象，本质上还是一块连续的内存空间。用读指针（read
+pointer）和写指针（write pointer）进行标识。</p>
 <p>下面简单演示环形数组如何解决固定缓冲区的第一个不足：</p>
-<p><img src="/images/2024/09/28/28c9fcc0-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="环形缓冲区1.png"></p>
+<figure>
+<img src="/images/2024/09/28/28c9fcc0-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="环形缓冲区1.png">
+<figcaption aria-hidden="true">环形缓冲区1.png</figcaption>
+</figure>
 <p>红色块代表已处理的无效数据，绿色块代表待处理的有效数据。此前的固定缓冲区会选择先清理无效数据，再把有效数据往前挪动。但是既然已经是垃圾数据，又何必管它呢？我们只需要管理好有效数据即可。</p>
 <p>接下来又有新数据到来，这个时候的指针和数据存储是怎样？</p>
-<p><img src="/images/2024/09/28/24c56470-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="环形缓冲区2.png"></p>
-<p>它无需移动任何数据，只是通过写指针指向有效数据的末尾即可。Linux 网络数据的处理就用到固定大小的环形缓冲区，名字就叫 ringBuffer。</p>
+<figure>
+<img src="/images/2024/09/28/24c56470-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="环形缓冲区2.png">
+<figcaption aria-hidden="true">环形缓冲区2.png</figcaption>
+</figure>
+<p>它无需移动任何数据，只是通过写指针指向有效数据的末尾即可。Linux
+网络数据的处理就用到固定大小的环形缓冲区，名字就叫 ringBuffer。</p>
 <p>但我们明显也看到它由于固定缓冲区大小还是面临相同的问题，如果数据量过大，将会导致之前传输过来的数据被覆盖，这是相当糟糕的。之前的固定缓冲器是容纳不下后来的数据，可以选择丢弃，至少保证之前的连接的消息能够正确处理。而环形缓冲区会导致数据混乱，即得到的数据很有可能不是自己应该处理的数据。</p>
-<p>可以考虑用 vector，只需要合理更新下标的范围，以及应该设置一个最大空间的阈值和恰当时刻的缩容机制。</p>
-<p>还有这般设计又出现另一个值得考虑的问题，即数据不再像前面的固定缓冲区那样必然连续，因为我们现在的数据有可能前面有一部分，后面有一部分，基于操作系统的空间局部性原理，这个带来的性能损失也是应当考虑的。同样地，原先只需要调用一次 read，而这次将需要调用两次 read 才可以把数据完整的读取并存储下来，系统调用多一次。</p>
-<p>可以更换系统调用函数来进行优化，即<code>readv</code> 和 <code>writev</code> 。用于处理向量 I&#x2F;O，允许一次性读写多个非连续的内存区域。尤其在网络编程中，可以减少系统调用次数，提高性能，特别是在需要处理大量小数据块时。</p>
+<p>可以考虑用
+vector，只需要合理更新下标的范围，以及应该设置一个最大空间的阈值和恰当时刻的缩容机制。</p>
+<p>还有这般设计又出现另一个值得考虑的问题，即数据不再像前面的固定缓冲区那样必然连续，因为我们现在的数据有可能前面有一部分，后面有一部分，基于操作系统的空间局部性原理，这个带来的性能损失也是应当考虑的。同样地，原先只需要调用一次
+read，而这次将需要调用两次 read
+才可以把数据完整的读取并存储下来，系统调用多一次。</p>
+<p>可以更换系统调用函数来进行优化，即<code>readv</code> 和
+<code>writev</code> 。用于处理向量
+I/O，允许一次性读写多个非连续的内存区域。尤其在网络编程中，可以减少系统调用次数，提高性能，特别是在需要处理大量小数据块时。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">readv</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> iovec *iov, <span class="hljs-type">int</span> iovcnt)</span></span>;<br><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">writev</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> iovec *iov, <span class="hljs-type">int</span> iovcnt)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>我们用核心代码简单看看两者之间的区别，这里就以 read 和 readv 来举例说明：</p>
+<p>我们用核心代码简单看看两者之间的区别，这里就以 read 和 readv
+来举例说明：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// read</span><br><br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">100</span>];<br>    <span class="hljs-type">ssize_t</span> bytesRead = <span class="hljs-built_in">read</span>(fd, buf, <span class="hljs-built_in">sizeof</span>(buf) - <span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">if</span> (bytesRead &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;read&quot;</span>);<br>        <span class="hljs-built_in">close</span>(fd);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br><br>    buf[bytesRead] = <span class="hljs-string">&#x27;\0&#x27;</span>; <span class="hljs-comment">// Null-terminate the string</span><br><br><span class="hljs-comment">// readv</span><br><br>    <span class="hljs-type">char</span> buf1[<span class="hljs-number">50</span>];<br>    <span class="hljs-type">char</span> buf2[<span class="hljs-number">50</span>];<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">iovec</span> iov[<span class="hljs-number">2</span>];<br><br>    iov[<span class="hljs-number">0</span>].iov_base = buf1;<br>    iov[<span class="hljs-number">0</span>].iov_len = <span class="hljs-built_in">sizeof</span>(buf1) - <span class="hljs-number">1</span>;<br>    iov[<span class="hljs-number">1</span>].iov_base = buf2;<br>    iov[<span class="hljs-number">1</span>].iov_len = <span class="hljs-built_in">sizeof</span>(buf2) - <span class="hljs-number">1</span>;<br><br>    <span class="hljs-type">ssize_t</span> bytesRead = <span class="hljs-built_in">readv</span>(fd, iov, <span class="hljs-number">2</span>);<br>    <span class="hljs-keyword">if</span> (bytesRead &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;readv&quot;</span>);<br>        <span class="hljs-built_in">close</span>(fd);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br><br>    buf1[iov[<span class="hljs-number">0</span>].iov_len] = <span class="hljs-string">&#x27;\0&#x27;</span>; <span class="hljs-comment">// Null-terminate buf1</span><br>    buf2[iov[<span class="hljs-number">1</span>].iov_len] = <span class="hljs-string">&#x27;\0&#x27;</span>; <span class="hljs-comment">// Null-terminate buf2</span><br></code></pre></td></tr></table></figure>
-
-<p>只不过我们这里的 Buffer 指定一个就可以，但是起始下标和实际长度要指清楚，不要让数据被污染了。</p>
-<h2><span id="优化-ringbuffer-之-chainbuffer">优化 ringBuffer 之 chainBuffer</span></h2><p>我们总是难以避免这个问题，即 vector 容器扩容导致的数据大量移动，可是我们又不得不避免固定缓冲区大小的局限。消息要尽可能多的存储起来（尽量不丢失用户的请求），需要避免固定缓冲区大小的局限，又不想承担扩容导致的数据大量移动。我们设计出下面这个缓冲区：</p>
-<p><img src="/images/2024/09/28/1e5b3dd0-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="chainBuffer.png"></p>
+<p>只不过我们这里的 Buffer
+指定一个就可以，但是起始下标和实际长度要指清楚，不要让数据被污染了。</p>
+<h2><span id="优化-ringbuffer-之chainbuffer">优化 ringBuffer 之
+chainBuffer</span></h2>
+<p>我们总是难以避免这个问题，即 vector
+容器扩容导致的数据大量移动，可是我们又不得不避免固定缓冲区大小的局限。消息要尽可能多的存储起来（尽量不丢失用户的请求），需要避免固定缓冲区大小的局限，又不想承担扩容导致的数据大量移动。我们设计出下面这个缓冲区：</p>
+<figure>
+<img src="/images/2024/09/28/1e5b3dd0-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="chainBuffer.png">
+<figcaption aria-hidden="true">chainBuffer.png</figcaption>
+</figure>
 <ul>
 <li>start 指向缓冲区的头指针，end 指向缓冲区的尾指针。</li>
-<li>next 指向下一个缓冲区的节点，home 代表数据的起始地址，offert 代表数据的长度，Buffer 代表数据。</li>
+<li>next 指向下一个缓冲区的节点，home 代表数据的起始地址，offert
+代表数据的长度，Buffer 代表数据。</li>
 <li>处理完数据更新头指针，添加新数据更新尾指针。</li>
 <li>链表既解决扩容问题，也解决缩容问题（不需要就会被移除）。</li>
 </ul>
-<p>我们的 Buffer 也是有大小限制的，如果不足以存储新来的数据就创建一个新的节点存储。在处理数据时，只有这个节点被合理的处理才可以移除，比方说当前节点的数据和下一个节点联合才是完整数据，务必处理为一个完整数据才进行移除。</p>
+<p>我们的 Buffer
+也是有大小限制的，如果不足以存储新来的数据就创建一个新的节点存储。在处理数据时，只有这个节点被合理的处理才可以移除，比方说当前节点的数据和下一个节点联合才是完整数据，务必处理为一个完整数据才进行移除。</p>
 <p>链表的扩容方式的不足就是空间不连续，这在操作系统层面确实是一个不可忽视的缺点，如果你听说过空间局部性原理的话。再者也是和环形缓冲区一样，存在多次调用系统调用的情况。可采用之前提到的优化系统调用的方案。</p>
-<h2><span id="总结">总结</span></h2><p><img src="/images/2024/09/28/1a4b5ae0-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="Buffer总结.png"></p>
+<h2><span id="总结">总结</span></h2>
+<figure>
+<img src="/images/2024/09/28/1a4b5ae0-7d4b-11ef-a6c8-3b1c773d33d6.png" alt="Buffer总结.png">
+<figcaption aria-hidden="true">Buffer总结.png</figcaption>
+</figure>
 
       </div>
     </div>
@@ -310,7 +343,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -842,11 +875,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,14 +174,13 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">TreeNode* <span class="hljs-title">build</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> start, <span class="hljs-type">int</span> end)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(start &gt; end) <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>        <span class="hljs-type">int</span> index = left + ((right - left) / <span class="hljs-number">2</span>);<br>        TreeNode* root = <span class="hljs-keyword">new</span> <span class="hljs-built_in">TreeNode</span>(nums[index]);<br>        root-&gt;left = <span class="hljs-built_in">build</span>(nums, start, index - <span class="hljs-number">1</span>);<br>        root-&gt;right = <span class="hljs-built_in">build</span>(nums, index + <span class="hljs-number">1</span>, end);<br>        <span class="hljs-keyword">return</span> root;<br>    &#125;<br><br>    <span class="hljs-function">TreeNode* <span class="hljs-title">sortedArrayToBST</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">build</span>(nums,<span class="hljs-number">0</span>,nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>数组构造二叉树，构成平衡树是自然而然的事情，因为大家默认都是从数组中间位置取值作为节点元素，一般不会随机取。<strong>所以想构成不平衡的二叉树是自找麻烦</strong>。</p>
 <p>具体来说，选择中间元素作为根节点的好处有：</p>
 <ul>
 <li><strong>平衡子树的大小</strong>：中间元素把数组分成两个大致相等的部分，确保树的左右子树的节点数量相差不大，避免出现一边深而另一边浅的情况。</li>
 <li><strong>递归构建平衡性</strong>：在递归构建树时，每次选择的中间元素作为根节点，这样每次递归的树都保持平衡。这样一来，最终构建出来的树也是平衡的。</li>
 </ul>
-<p>还有，切记越界检查，即<code> if(start &gt; end) return nullptr;</code></p>
+<p>还有，切记越界检查，即<code>if(start &gt; end) return nullptr;</code></p>
 
       </div>
     </div>
@@ -266,7 +265,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\11\226-翻转二叉树\" title="226. 翻转二叉树" rel="bookmark">226. 翻转二叉树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\13\501-二叉搜索树中的众数\" title="501. 二叉搜索树中的众数" rel="bookmark">501. 二叉搜索树中的众数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\11\226-翻转二叉树\" title="226. 翻转二叉树" rel="bookmark">226. 翻转二叉树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\13\530-二叉搜索树的最小绝对差\" title="530. 二叉搜索树的最小绝对差" rel="bookmark">530. 二叉搜索树的最小绝对差</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
     
   </div>
 </div>
@@ -798,11 +797,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

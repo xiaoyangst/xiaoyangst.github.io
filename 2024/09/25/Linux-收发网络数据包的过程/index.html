@@ -174,61 +174,116 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E5%B8%A7%E6%98%AF%E4%BB%80%E4%B9%88">网络数据帧是什么？</a></li>
-<li><a href="#dma-%E6%8A%80%E6%9C%AF">DMA 技术</a></li>
-<li><a href="#dma-%E5%92%8C-cpu%E4%B8%BB%E5%AF%BC%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8B%B7%E8%B4%9D%E5%88%B0%E5%8C%BA%E5%88%AB">DMA 和 CPU主导的数据拷贝到区别</a></li>
-<li><a href="#%E6%8E%A5%E6%94%B6%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E5%8C%85">接收网络数据包</a></li>
+<li><a href="#网络数据帧是什么">网络数据帧是什么？</a></li>
+<li><a href="#dma-技术">DMA 技术</a></li>
+<li><a href="#dma-和-cpu主导的数据拷贝到区别">DMA 和
+CPU主导的数据拷贝到区别</a></li>
+<li><a href="#接收网络数据包">接收网络数据包</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="网络数据帧是什么">网络数据帧是什么？</span></h2><p>应用层要传输的数据需要封装成网络数据帧，才可以在物理介质上传输。我们先看网络帧的模样，再谈它是如何一步一步形成这般。下图就是网络数据帧。</p>
-<p><img src="/images/2024/09/25/1fc41f00-7b0e-11ef-b257-21ef1724fa3f.png" alt="网络帧.png"></p>
+<h2><span id="网络数据帧是什么">网络数据帧是什么？</span></h2>
+<p>应用层要传输的数据需要封装成网络数据帧，才可以在物理介质上传输。我们先看网络帧的模样，再谈它是如何一步一步形成这般。下图就是网络数据帧。</p>
+<figure>
+<img src="/images/2024/09/25/1fc41f00-7b0e-11ef-b257-21ef1724fa3f.png" alt="网络帧.png">
+<figcaption aria-hidden="true">网络帧.png</figcaption>
+</figure>
 <p>用户在应用层把数据传递给其他主机，肯定不可能直接把这个数据发过去，网络传输介质都不认识这个，故对其进行封装，这个任务由网络协议栈来做，下图就是封装用户数据到网络数据帧的流程。如果网卡接收到网络数据帧，交给协议栈处理之时，协议栈会由下往上来进行拆解，从而留下应用层能够处理的用户数据。</p>
-<p><img src="/images/2024/09/25/1ccefae0-7b0e-11ef-b257-21ef1724fa3f.png" alt="封装数据为网络帧的过程.png"></p>
-<p>注：网络接口层 &#x3D; 数据链路层 + 物理层</p>
-<h2><span id="dma-技术">DMA 技术</span></h2><p>DMA 的作用就是实现数据的直接传输，而去掉了传统数据传输需要 CPU 参与的环节。下图中内存读取外设的数据，这个过程不再先之前那样需要 CPU 的参与，而是利用 DMA 这个通道，直接读取。</p>
-<p><img src="/images/2024/09/25/1923cd30-7b0e-11ef-b257-21ef1724fa3f.png" alt="DMA.png"></p>
-<ol>
-<li><strong>请求阶段</strong>: 外设发出 DMA 请求给 DMA 控制器，表明其需要进行数据传输。</li>
-<li><strong>仲裁阶段</strong>: DMA 控制器决定是否接受该请求，并与 CPU 进行总线控制权的仲裁（若 CPU 正在使用总线，则需要等待）。</li>
-<li><strong>数据传输阶段</strong>: 一旦获得总线控制权，DMA 控制器<strong>直接将数据从源地址传输到目的地址，而无需经过 CPU</strong>。</li>
-<li><strong>完成阶段</strong>: 数据传输完成后，DMA 控制器会发送传输完成信号给外设，并向 CPU 发出中断信号，通知数据传输已经完成。</li>
+<figure>
+<img src="/images/2024/09/25/1ccefae0-7b0e-11ef-b257-21ef1724fa3f.png" alt="封装数据为网络帧的过程.png">
+<figcaption aria-hidden="true">封装数据为网络帧的过程.png</figcaption>
+</figure>
+<p>注：网络接口层 = 数据链路层 + 物理层</p>
+<h2><span id="dma-技术">DMA 技术</span></h2>
+<p>DMA 的作用就是实现数据的直接传输，而去掉了传统数据传输需要 CPU
+参与的环节。下图中内存读取外设的数据，这个过程不再先之前那样需要 CPU
+的参与，而是利用 DMA 这个通道，直接读取。</p>
+<figure>
+<img src="/images/2024/09/25/1923cd30-7b0e-11ef-b257-21ef1724fa3f.png" alt="DMA.png">
+<figcaption aria-hidden="true">DMA.png</figcaption>
+</figure>
+<ol type="1">
+<li><strong>请求阶段</strong>: 外设发出 DMA 请求给 DMA
+控制器，表明其需要进行数据传输。</li>
+<li><strong>仲裁阶段</strong>: DMA 控制器决定是否接受该请求，并与 CPU
+进行总线控制权的仲裁（若 CPU 正在使用总线，则需要等待）。</li>
+<li><strong>数据传输阶段</strong>: 一旦获得总线控制权，DMA
+控制器<strong>直接将数据从源地址传输到目的地址，而无需经过
+CPU</strong>。</li>
+<li><strong>完成阶段</strong>: 数据传输完成后，DMA
+控制器会发送传输完成信号给外设，并向 CPU
+发出中断信号，通知数据传输已经完成。</li>
 </ol>
-<h2><span id="dma-和-cpu主导的数据拷贝到区别">DMA 和 CPU主导的数据拷贝到区别</span></h2><p>CPU 明显是可以进行数据拷贝，但是 DMA 设计出来就是为了接受这份“无聊”的工作，让 CPU 专注于计算相关的工作。因此，DMA 在针对数据拷贝这块的设计上，究竟有哪些优势？</p>
+<h2><span id="dma-和cpu主导的数据拷贝到区别">DMA 和
+CPU主导的数据拷贝到区别</span></h2>
+<p>CPU 明显是可以进行数据拷贝，但是 DMA
+设计出来就是为了接受这份“无聊”的工作，让 CPU
+专注于计算相关的工作。因此，DMA
+在针对数据拷贝这块的设计上，究竟有哪些优势？</p>
 <p>（一）工作方式的不同</p>
 <ul>
-<li>CPU：当没有 DMA 时，CPU 需要逐字节（或逐字）地读取数据源，然后将其写入目标地址。这种操作会消耗 CPU 的大量时钟周期，因为 CPU 需要从 I&#x2F;O 设备（如磁盘、网卡）读取数据、处理数据再写入内存，每次数据读写都涉及 CPU 指令、总线操作、缓存管理等，效率低下。</li>
-<li>DMA：DMA 控制器负责数据的传输，它可以独立于 CPU 进行内存和 I&#x2F;O 设备之间的数据搬移。</li>
+<li>CPU：当没有 DMA 时，CPU
+需要逐字节（或逐字）地读取数据源，然后将其写入目标地址。这种操作会消耗
+CPU 的大量时钟周期，因为 CPU 需要从 I/O
+设备（如磁盘、网卡）读取数据、处理数据再写入内存，每次数据读写都涉及 CPU
+指令、总线操作、缓存管理等，效率低下。</li>
+<li>DMA：DMA 控制器负责数据的传输，它可以独立于 CPU 进行内存和 I/O
+设备之间的数据搬移。</li>
 </ul>
 <p>（二）总线的利用率不同</p>
 <ul>
-<li>CPU：CPU 每次进行读写操作时都需要占用系统总线（如 PCI 总线、内存总线），每次传输的过程包括 CPU 发出指令、读取数据、写入数据等，导致总线效率较低，传输延迟较大。</li>
-<li>DMA：DMA 控制器能够<strong>直接管理总线</strong>，并且以突发模式（Burst Mode）一次性传输大量数据，从而提高总线利用率，减少 CPU 和设备之间来回切换的开销。</li>
+<li>CPU：CPU 每次进行读写操作时都需要占用系统总线（如 PCI
+总线、内存总线），每次传输的过程包括 CPU
+发出指令、读取数据、写入数据等，导致总线效率较低，传输延迟较大。</li>
+<li>DMA：DMA
+控制器能够<strong>直接管理总线</strong>，并且以突发模式（Burst
+Mode）一次性传输大量数据，从而提高总线利用率，减少 CPU
+和设备之间来回切换的开销。</li>
 </ul>
 <p>（三）传输效率和吞吐量</p>
 <ul>
-<li>CPU：数据传输速率受限于 CPU 指令处理速度、总线速度和系统中断延迟等因素。当有大量数据传输时，CPU 会被大量的中断请求打断，导致系统性能下降。</li>
-<li>DMA：DMA 传输速度通常比 CPU 主导的传输更快，因为它可以<strong>直接与内存或外设通信</strong>，并且支持大块数据一次性搬移。尤其是高速外设（如硬盘、网卡）和内存之间的传输，DMA 可以大幅提升吞吐量。</li>
+<li>CPU：数据传输速率受限于 CPU
+指令处理速度、总线速度和系统中断延迟等因素。当有大量数据传输时，CPU
+会被大量的中断请求打断，导致系统性能下降。</li>
+<li>DMA：DMA 传输速度通常比 CPU
+主导的传输更快，因为它可以<strong>直接与内存或外设通信</strong>，并且支持大块数据一次性搬移。尤其是高速外设（如硬盘、网卡）和内存之间的传输，DMA
+可以大幅提升吞吐量。</li>
 </ul>
 <p>（四）零拷贝机制的支持</p>
 <ul>
 <li>CPU：通常需要在不同存储空间（如用户空间、内核空间）之间进行多次拷贝，每次拷贝都意味着额外的内存操作和时间开销。</li>
-<li>DMA：DMA 控制器可以直接将数据从外设搬移到目标存储空间（如内核缓冲区、用户内存），甚至通过 Scatter-Gather DMA 直接分发到多个目标内存块，实现零拷贝或最小化拷贝次数的优化。</li>
+<li>DMA：DMA
+控制器可以直接将数据从外设搬移到目标存储空间（如内核缓冲区、用户内存），甚至通过
+Scatter-Gather DMA
+直接分发到多个目标内存块，实现零拷贝或最小化拷贝次数的优化。</li>
 </ul>
-<h2><span id="接收网络数据包">接收网络数据包</span></h2><p>只需要讲清楚 接受网络数据包的过程，就可以轻松理解 发送用户数据包的过程了。</p>
-<p><img src="/images/2024/09/25/14980380-7b0e-11ef-b257-21ef1724fa3f.png" alt="收发.png"></p>
-<ol>
-<li>网络数据帧到达网卡，按照 FIFO 顺序被存入网卡的接收队列。网卡通过 DMA 技术，将网络包写入到环形缓冲区（Ring Buffer）的一个空闲位置。</li>
-<li>当缓冲区中存有一定数量的网络包时，或者某个时间间隔内到达的网络包数达到阈值，网卡会触发一个硬件中断。当 CPU 收到硬件中断请求后，根据中断注册表，找到注册的中断处理函数。</li>
-<li>中断处理函数会屏蔽网卡的中断。目的是避免CPU被频繁中断而无法处理其他任务，屏蔽中断是告诉网卡已经知道内存中有数据了，下次再收到数据包直接写内存就可以了，不要再通知 CPU 了。然后发起软中断，恢复刚才屏蔽的中断。内核中的 ksoftirqd 线程收到软中断后，就会调用相应软中断的处理函数来轮询处理数据，即：从Ring Buffer 中获取一个数据帧，用 sk_buff 表示，作为一个网络包交给网络协议栈从下到上进行逐层处理。</li>
-<li>经由网络协议栈层层剥离出来的对端的用户数据给到 Socket（由四元组标识，即源端口+源IP+目标端口+目标IP） 的接收缓冲区中（内核态），应用层再从 Socket 的接收缓冲区中拷贝到应用层的接收缓冲区中（用户态），应用就从接收缓冲区中读取数据了。</li>
+<h2><span id="接收网络数据包">接收网络数据包</span></h2>
+<p>只需要讲清楚 接受网络数据包的过程，就可以轻松理解
+发送用户数据包的过程了。</p>
+<figure>
+<img src="/images/2024/09/25/14980380-7b0e-11ef-b257-21ef1724fa3f.png" alt="收发.png">
+<figcaption aria-hidden="true">收发.png</figcaption>
+</figure>
+<ol type="1">
+<li>网络数据帧到达网卡，按照 FIFO 顺序被存入网卡的接收队列。网卡通过 DMA
+技术，将网络包写入到环形缓冲区（Ring Buffer）的一个空闲位置。</li>
+<li>当缓冲区中存有一定数量的网络包时，或者某个时间间隔内到达的网络包数达到阈值，网卡会触发一个硬件中断。当
+CPU 收到硬件中断请求后，根据中断注册表，找到注册的中断处理函数。</li>
+<li>中断处理函数会屏蔽网卡的中断。目的是避免CPU被频繁中断而无法处理其他任务，屏蔽中断是告诉网卡已经知道内存中有数据了，下次再收到数据包直接写内存就可以了，不要再通知
+CPU 了。然后发起软中断，恢复刚才屏蔽的中断。内核中的 ksoftirqd
+线程收到软中断后，就会调用相应软中断的处理函数来轮询处理数据，即：从Ring
+Buffer 中获取一个数据帧，用 sk_buff
+表示，作为一个网络包交给网络协议栈从下到上进行逐层处理。</li>
+<li>经由网络协议栈层层剥离出来的对端的用户数据给到
+Socket（由四元组标识，即源端口+源IP+目标端口+目标IP）
+的接收缓冲区中（内核态），应用层再从 Socket
+的接收缓冲区中拷贝到应用层的接收缓冲区中（用户态），应用就从接收缓冲区中读取数据了。</li>
 </ol>
 <hr>
 <p>参考链接见下：</p>
 <p><a target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/04_%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98FAQ/Linux%E7%B3%BB%E7%BB%9F%E6%94%B6%E5%8F%91%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E5%8C%85%E7%9A%84%E8%BF%87%E7%A8%8B">Linux系统收发网络数据包的过程</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.xiaolincoding.com/network/1_base/how_os_deal_network_package.html#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B">Linux 系统是如何收发网络包的？</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.xiaolincoding.com/network/1_base/how_os_deal_network_package.html#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B">Linux
+系统是如何收发网络包的？</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.xudj.top/archives/linux-pkg-recv">Linux网路包收发流程</a></p>
 
       </div>
@@ -314,7 +369,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\10\epoll的使用\" title="epoll的使用" rel="bookmark">epoll的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\09\select的使用\" title="select的使用" rel="bookmark">select的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\10\epoll的使用\" title="epoll的使用" rel="bookmark">epoll的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\09\select的使用\" title="select的使用" rel="bookmark">select的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -846,11 +901,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

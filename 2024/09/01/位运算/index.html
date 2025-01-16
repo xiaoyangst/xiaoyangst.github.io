@@ -174,38 +174,58 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6">位运算符</a></li>
-<li><a href="#%E5%BC%82%E6%88%96%E8%BF%90%E7%AE%97%E5%B8%B8%E7%94%A8%E7%89%B9%E6%80%A7">异或运算常用特性</a></li>
-<li><a href="#%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E7%AE%97%E6%B3%95%E9%A2%98">常见面试算法题</a></li>
+<li><a href="#位运算符">位运算符</a></li>
+<li><a href="#异或运算常用特性">异或运算常用特性</a></li>
+<li><a href="#常见面试算法题">常见面试算法题</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="位运算符">位运算符</span></h2><p><img src="/images/2024/09/01/f915d080-6855-11ef-bc89-e5593d4b1f18.png" alt="位运算.png"></p>
-<p><code>a &gt;&gt; 1</code> 如果没有超出类型范围，代表 a &#x3D; a &#x2F; 2</p>
-<p><code>a &lt;&lt; 1</code> 如果没有超出类型范围，代表 a &#x3D; a * 2</p>
-<h2><span id="异或运算常用特性">异或运算常用特性</span></h2><p><img src="/images/2024/09/01/ffdda780-6855-11ef-bc89-e5593d4b1f18.png" alt="异或运算的性质.png"></p>
-<h2><span id="常见面试算法题">常见面试算法题</span></h2><p>（一）如何获取一个数字最右侧的 1 ？</p>
+<h2><span id="位运算符">位运算符</span></h2>
+<figure>
+<img src="/images/2024/09/01/f915d080-6855-11ef-bc89-e5593d4b1f18.png" alt="位运算.png">
+<figcaption aria-hidden="true">位运算.png</figcaption>
+</figure>
+<p><code>a &gt;&gt; 1</code> 如果没有超出类型范围，代表 a = a / 2</p>
+<p><code>a &lt;&lt; 1</code> 如果没有超出类型范围，代表 a = a * 2</p>
+<h2><span id="异或运算常用特性">异或运算常用特性</span></h2>
+<figure>
+<img src="/images/2024/09/01/ffdda780-6855-11ef-bc89-e5593d4b1f18.png" alt="异或运算的性质.png">
+<figcaption aria-hidden="true">异或运算的性质.png</figcaption>
+</figure>
+<h2><span id="常见面试算法题">常见面试算法题</span></h2>
+<p>（一）如何获取一个数字最右侧的 1 ？</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> xor = a &amp; (-a)<br></code></pre></td></tr></table></figure>
-
-<p>xor 就代表了整数 <code>a</code> 的二进制表示中最右边的 <code>1</code> 所在的位置（以二进制形式表示），其中对应的二进制中 1 所处的位置表示整数 a 最右侧的 1 的 位置，剩下的全部为 0。</p>
-<p><img src="/images/2024/09/01/067ff520-6856-11ef-bc89-e5593d4b1f18.png" alt="最右侧的1.png"></p>
+<p>xor 就代表了整数 <code>a</code> 的二进制表示中最右边的 <code>1</code>
+所在的位置（以二进制形式表示），其中对应的二进制中 1 所处的位置表示整数
+a 最右侧的 1 的 位置，剩下的全部为 0。</p>
+<figure>
+<img src="/images/2024/09/01/067ff520-6856-11ef-bc89-e5593d4b1f18.png" alt="最右侧的1.png">
+<figcaption aria-hidden="true">最右侧的1.png</figcaption>
+</figure>
 <p>注：补码即原码取反再加1，C语言中的负数就是用补码表示</p>
 <p>（二）分离奇偶数</p>
-<p>奇数和偶数的二进制特点就是，奇数必然在第一位为 1，而偶数必然在第一位为 0。</p>
+<p>奇数和偶数的二进制特点就是，奇数必然在第一位为
+1，而偶数必然在第一位为 0。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">bool</span> <span class="hljs-title function_">is_odd</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span> &#123;<br>	<span class="hljs-keyword">return</span> (num &amp; (-num)) == <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>上述函数就可以判断是否为奇数。取最右侧的数字 1 的位置，如果结果等于 1，代表这个数的二进制第一位就是标记为 1，代表必然为奇数。</p>
+<p>上述函数就可以判断是否为奇数。取最右侧的数字 1 的位置，如果结果等于
+1，代表这个数的二进制第一位就是标记为 1，代表必然为奇数。</p>
 <p>（三）如何将数组中不同的两个数找到（其余元素两两出现）？</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">get_diff_nums</span><span class="hljs-params">(<span class="hljs-type">int</span> *data,<span class="hljs-type">int</span> length)</span> &#123;<br>	<span class="hljs-type">int</span> result = <span class="hljs-number">0</span>;<br>	<span class="hljs-comment">// 得到两个数</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; length; i++) &#123;<br>		result ^= data[i];<br>	&#125;<br>	<span class="hljs-comment">// 将两个数分离出来</span><br>	<span class="hljs-type">int</span> num1 = <span class="hljs-number">0</span>;<br>	<span class="hljs-type">int</span> num2 = <span class="hljs-number">0</span>;<br>	<span class="hljs-type">int</span> xor = result &amp; (-result);<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; length; i++) &#123;<br>		<span class="hljs-keyword">if</span> (data[i] &amp; xor) &#123;<br>			num1 ^= data[i];<br>		&#125;<br>		<span class="hljs-keyword">else</span> &#123;<br>			num2 ^= data[i];<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;num1 = %d , num2 = %d\n&quot;</span>, num1, num2);<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<ol>
-<li>异或会把相同的两个数抵消，所以全部元素异或之后，result &#x3D; 3 ^ 5</li>
-<li>那我们需要想办法把两个数分离出来，两个不同的数，必然至少会有一位不同。即在这一位上，如果你是 0，那么我就是 1（不是南通，别误会）。这样的两个数异或，这个位置会被 1 标识（0 和 1 异或为 1），那就利用 <code>result &amp; (-result)</code> 找到这个位置，这是区分两个数的关键所在。</li>
-<li>xor 的二进制中，除了用以区分两个数的位置被标记为 1 ，其余全部为 0。所以我们遍历数组，和 xor 进行 &amp; 操作。相同的两个数必然会被分到一组，且会因为异或而抵消。不同的两个数，会因为 &amp; 计算分离出来。</li>
+<ol type="1">
+<li>异或会把相同的两个数抵消，所以全部元素异或之后，result = 3 ^ 5</li>
+<li>那我们需要想办法把两个数分离出来，两个不同的数，必然至少会有一位不同。即在这一位上，如果你是
+0，那么我就是 1（不是南通，别误会）。这样的两个数异或，这个位置会被 1
+标识（0 和 1 异或为 1），那就利用 <code>result &amp; (-result)</code>
+找到这个位置，这是区分两个数的关键所在。</li>
+<li>xor 的二进制中，除了用以区分两个数的位置被标记为 1 ，其余全部为
+0。所以我们遍历数组，和 xor 进行 &amp;
+操作。相同的两个数必然会被分到一组，且会因为异或而抵消。不同的两个数，会因为
+&amp; 计算分离出来。</li>
 </ol>
-<p>也许“不同的两个数，会因为 &amp; 计算分离出来”会让人不解。我们知道现在的 xor &#x3D; 0010，而 3 &#x3D; 0011，5 &#x3D; 0101。xor 与之 &amp; 得到的结果为某个数为大于 0，某个数等于0，这就将两个数分离出来了。</p>
+<p>也许“不同的两个数，会因为 &amp;
+计算分离出来”会让人不解。我们知道现在的 xor = 0010，而 3 = 0011，5 =
+0101。xor 与之 &amp; 得到的结果为某个数为大于
+0，某个数等于0，这就将两个数分离出来了。</p>
 
       </div>
     </div>
@@ -290,7 +310,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -822,11 +842,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

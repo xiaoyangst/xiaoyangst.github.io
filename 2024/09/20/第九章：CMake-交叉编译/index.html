@@ -174,21 +174,22 @@
           </div>
         
         <p>之前学习过交叉编译，但一直缺乏实践，因为我也不接触嵌入式开发。就在昨天和网络上一个朋友解决CMake相关的问题，恰好就有机会实践交叉编译。</p>
-<p>如果你在 Linux 系统上，你希望编译出的可执行程序在 Arm 系统上执行，这就需要交叉编译。</p>
-<p>整个可执行程序链接的库也必须是在 Arm 系统上的，不要编译出 Linux 系统上的库，这是不要弄混的，因为你最终要在 Arm 系统执行你的程序（通过 file 命令能够查看相关信息）。</p>
-<p>首先，需要安装适用于 ARM 的交叉编译工具链，可以根据自己的情况选择，下面简单举例：</p>
+<p>如果你在 Linux 系统上，你希望编译出的可执行程序在 Arm
+系统上执行，这就需要交叉编译。</p>
+<p>整个可执行程序链接的库也必须是在 Arm 系统上的，不要编译出 Linux
+系统上的库，这是不要弄混的，因为你最终要在 Arm 系统执行你的程序（通过
+file 命令能够查看相关信息）。</p>
+<p>首先，需要安装适用于 ARM
+的交叉编译工具链，可以根据自己的情况选择，下面简单举例：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt-get install gcc-arm-none-eabi<br></code></pre></td></tr></table></figure>
-
 <p>然后在你的根CMakeLists.txt文件中添加如下参数的配置，记得更换相关程序的路径。</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment"># 指定目标系统名称和处理器类型</span><br><span class="hljs-keyword">set</span>(CMAKE_SYSTEM_NAME Linux) <span class="hljs-comment"># 设置目标系统名称为 Linux</span><br><span class="hljs-keyword">set</span>(CMAKE_SYSTEM_PROCESSOR arm) <span class="hljs-comment"># 设置目标处理器类型为 ARM</span><br><br><span class="hljs-comment"># 设置交叉编译器路径（填绝对路径）</span><br><span class="hljs-keyword">set</span>(CMAKE_C_COMPILER /usr/bin/arm-none-eabi-gcc) <span class="hljs-comment"># 设置 C 编译器为 ARM 交叉编译器</span><br><span class="hljs-keyword">set</span>(CMAKE_CXX_COMPILER /usr/bin/arm-none-eabi-g++) <span class="hljs-comment"># 设置 C++ 编译器为 ARM 交叉编译器</span><br><br><span class="hljs-comment"># 设置交叉编译器的 sysroot 路径（填绝对路径）</span><br><span class="hljs-comment"># 假设 sysroot 位于 /path/to/arm/sysroot</span><br><span class="hljs-keyword">set</span>(CMAKE_SYSROOT /path/to/arm/sysroot) <span class="hljs-comment"># 指定交叉编译器使用的 sysroot 路径，通常包含目标系统的库和头文件</span><br><br><span class="hljs-comment"># 配置查找路径模式</span><br><span class="hljs-keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER) <span class="hljs-comment"># 指定 CMake 查找程序时不使用 sysroot 路径</span><br><span class="hljs-keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY) <span class="hljs-comment"># 指定 CMake 查找库时仅使用 sysroot 路径</span><br><span class="hljs-keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY) <span class="hljs-comment"># 指定 CMake 查找头文件时仅使用 sysroot 路径</span><br><span class="hljs-keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY) <span class="hljs-comment"># 指定 CMake 查找包时仅使用 sysroot 路径</span><br></code></pre></td></tr></table></figure>
-
-<p>当然你可以选择把这些参数单独放在一个cmake文件中（例如 <code>arm-toolchain.cmake</code>），这样你需要交叉编译的时候再指定这个文件进行交叉编译也不迟。</p>
+<p>当然你可以选择把这些参数单独放在一个cmake文件中（例如
+<code>arm-toolchain.cmake</code>），这样你需要交叉编译的时候再指定这个文件进行交叉编译也不迟。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=../arm-toolchain.cmake<br></code></pre></td></tr></table></figure>
-
 <p>最后再次强调，如果你的目标是Arm系统，那么在你本机Linux系统上编译的库必须是针对Arm架构编译得到的。</p>
 <p>这个库文件的编译也是用的交叉编译工具，你只需要在编译库文件时指定前面创建的<code>arm-toolchain.cmake</code>文件即可（在你所编译的库文件的源码下创建即可），步骤都差不多的。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=../arm-toolchain.cmake<br></code></pre></td></tr></table></figure>
-
 
       </div>
     </div>
@@ -273,7 +274,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第七章：CMake-构建-Qt-项目\" title="第七章：CMake 构建 Qt 项目" rel="bookmark">第七章：CMake 构建 Qt 项目</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第七章：CMake-构建-Qt-项目\" title="第七章：CMake 构建 Qt 项目" rel="bookmark">第七章：CMake 构建 Qt 项目</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -805,11 +806,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

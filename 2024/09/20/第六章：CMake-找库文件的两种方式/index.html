@@ -174,82 +174,136 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#find_package">find_package</a><ul>
-<li><a href="#%E5%85%B8%E5%9E%8B%E7%94%A8%E6%B3%95">典型用法</a></li>
-<li><a href="#%E6%90%9C%E7%B4%A2%E5%8C%85%E7%9A%84%E6%A8%A1%E5%BC%8F">搜索包的模式</a></li>
-<li><a href="#%E9%BB%98%E8%AE%A4%E7%9A%84%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84">默认的搜索路径</a></li>
-<li><a href="#%E9%9D%9E%E6%A0%87%E5%87%86%E8%B7%AF%E5%BE%84%E4%B8%8B%E7%9A%84%E6%90%9C%E7%B4%A2">非标准路径下的搜索</a></li>
-</ul>
-</li>
+<li><a href="#find_package">find_package</a>
+<ul>
+<li><a href="#典型用法">典型用法</a></li>
+<li><a href="#搜索包的模式">搜索包的模式</a></li>
+<li><a href="#默认的搜索路径">默认的搜索路径</a></li>
+<li><a href="#非标准路径下的搜索">非标准路径下的搜索</a></li>
+</ul></li>
 <li><a href="#find_library">find_library</a></li>
 </ul>
 <!-- tocstop -->
-
-<p>在上一小节当中，查找第三方库用到一个新语法 find_package，这个语法往往被人误解，以为只要是找第三方库就可以用，但如果你看我第三章的那种方式构建库文件，你就无法用 find_package。</p>
-<p>我们是官方的第三方库，我们可以用 find_package，因为人家已经整理好相关的文件到一个变量中，我们才可以非常方便简单设置几个参数值快速找到库文件。但如果说我们自己的或不规范的第三方库，即没提过规范的语法设置快速寻找，就只能先添加库文件的寻找路径，再一个一个寻找，这就是 find_library 命令。</p>
-<p>总之，find_package 和 find_library 都可以用于在 CMake 中查找和链接库，但 find_package 更适用于具有CMake 配置文件的库，而 find_library 则适用于没有 CMake 配置文件的库。</p>
-<h2><span id="find_package">find_package</span></h2><h3><span id="典型用法">典型用法</span></h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">find_package</span>(&lt;PackageName&gt; [&lt;version&gt;] [REQUIRED] [COMPONENTS &lt;components&gt;...])<br></code></pre></td></tr></table></figure>
-
+<p>在上一小节当中，查找第三方库用到一个新语法
+find_package，这个语法往往被人误解，以为只要是找第三方库就可以用，但如果你看我第三章的那种方式构建库文件，你就无法用
+find_package。</p>
+<p>我们是官方的第三方库，我们可以用
+find_package，因为人家已经整理好相关的文件到一个变量中，我们才可以非常方便简单设置几个参数值快速找到库文件。但如果说我们自己的或不规范的第三方库，即没提过规范的语法设置快速寻找，就只能先添加库文件的寻找路径，再一个一个寻找，这就是
+find_library 命令。</p>
+<p>总之，find_package 和 find_library 都可以用于在 CMake
+中查找和链接库，但 find_package 更适用于具有CMake 配置文件的库，而
+find_library 则适用于没有 CMake 配置文件的库。</p>
+<h2><span id="find_package">find_package</span></h2>
+<h3><span id="典型用法">典型用法</span></h3>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">find_package</span>(&lt;PackageName&gt; [&lt;version&gt;] [REQUIRED] [COMPONENTS &lt;components&gt;...])<br></code></pre></td></tr></table></figure>
 <p>&lt;PackageName&gt; 是唯一的必选参数。</p>
-<p>&lt;version&gt; 通常会被省略，如果没有软件包就无法成功配置项目，则应给出 REQUIRED。</p>
-<p>一些更复杂的软件包支持组件，可以使用 COMPONENTS 关键字来选择组件，但大多数软件包都没有这种复杂程度。</p>
+<p>&lt;version&gt;
+通常会被省略，如果没有软件包就无法成功配置项目，则应给出 REQUIRED。</p>
+<p>一些更复杂的软件包支持组件，可以使用 COMPONENTS
+关键字来选择组件，但大多数软件包都没有这种复杂程度。</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment">#查找名为 OpenCV 的包，找不到不报错，事后可以通过 $&#123;OpenCV_FOUND&#125; 查询是否找到</span><br><span class="hljs-keyword">find_package</span>(OpenCV)	<br><br><span class="hljs-comment">#查找名为 OpenCV 的包，找不到不报错，也不打印任何信息</span><br><span class="hljs-keyword">find_package</span>(OpenCV QUIET)	<br><br><span class="hljs-comment">#查找名为 OpenCV 的包，找不到就报错（并终止 cmake 进程，不再继续往下执行）</span><br><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED) <span class="hljs-comment"># 最常见用法</span><br><br><span class="hljs-comment">#查找名为 OpenCV 的包，找不到就报错，且必须具有 OpenCV::core 和 OpenCV::videoio 这两个组件，如果没有这两个组件也会报错</span><br><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED COMPONENTS core videoio)<br><br><span class="hljs-comment">#查找名为 OpenCV 的包，找不到就报错，可具有 OpenCV::core 和 OpenCV::videoio 这两个组件，没有这两组件不会报错，通过 $&#123;OpenCV_core_FOUND&#125; 查询是否找到 core 组件</span><br><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED OPTIONAL_COMPONENTS core videoio)<br></code></pre></td></tr></table></figure>
-
-<h3><span id="搜索包的模式">搜索包的模式</span></h3><p><strong>Module 模式</strong>：在这种模式下，CMake 会搜索名为 <code>Find&lt;PackageName&gt;.cmake</code> 的文件，首先在 <code>CMAKE_MODULE_PATH</code> 指定的路径中查找，则在CMake安装目录（即<strong>CMAKE_ROOT</strong>变量）下的<strong>Modules</strong>目录下查找。找到文件后，CMake 会读取并处理它，负责查找包、检查版本，并生成任何必要的消息。</p>
+<h3><span id="搜索包的模式">搜索包的模式</span></h3>
+<p><strong>Module 模式</strong>：在这种模式下，CMake 会搜索名为
+<code>Find&lt;PackageName&gt;.cmake</code> 的文件，首先在
+<code>CMAKE_MODULE_PATH</code>
+指定的路径中查找，则在CMake安装目录（即<strong>CMAKE_ROOT</strong>变量）下的<strong>Modules</strong>目录下查找。找到文件后，CMake
+会读取并处理它，负责查找包、检查版本，并生成任何必要的消息。</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment">#查找顺序</span><br>CMAKE_MODULE_PATH<br>CMAKE_ROOT<br></code></pre></td></tr></table></figure>
-
-<p><strong>Config 模式</strong>：在这种模式下，CMake 会搜索名为 <code>&lt;lowercasePackageName&gt;-config.cmake</code> 或 <code>&lt;PackageName&gt;Config.cmake</code> 的文件。如果指定了版本信息，还会查找 <code>&lt;lowercasePackageName&gt;-config-version.cmake</code> 或 <code>&lt;PackageName&gt;ConfigVersion.cmake</code>。Config 模式下，可以指定一个包名列表来搜索。CMake 搜索配置和版本文件的位置比 Module 模式复杂得多。</p>
+<p><strong>Config 模式</strong>：在这种模式下，CMake 会搜索名为
+<code>&lt;lowercasePackageName&gt;-config.cmake</code> 或
+<code>&lt;PackageName&gt;Config.cmake</code>
+的文件。如果指定了版本信息，还会查找
+<code>&lt;lowercasePackageName&gt;-config-version.cmake</code> 或
+<code>&lt;PackageName&gt;ConfigVersion.cmake</code>。Config
+模式下，可以指定一个包名列表来搜索。CMake 搜索配置和版本文件的位置比
+Module 模式复杂得多。</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment">#查找文件</span><br>&lt;lowercasePackageName&gt;-config.cmake 或 &lt;PackageName&gt;Config.cmake<br><span class="hljs-comment">#如果指定版本</span><br>&lt;lowercasePackageName&gt;-config-version.cmake` 或 `&lt;PackageName&gt;ConfigVersion.cmake<br></code></pre></td></tr></table></figure>
-
 <p>默认情况下是先 Module 模式，如果查找失败就采用 Config 模式。</p>
 <p>OpenCV 是 Config 模式，见下：</p>
-<p><img src="/images/2024/09/20/d47086c0-772e-11ef-bb33-ad22fef3cf2e.png" alt="findpackage.png"></p>
+<figure>
+<img src="/images/2024/09/20/d47086c0-772e-11ef-bb33-ad22fef3cf2e.png" alt="findpackage.png">
+<figcaption aria-hidden="true">findpackage.png</figcaption>
+</figure>
 <p>如果想让CMake找到&lt;PackageName&gt;Config.cmake文件，需要在CMakeLists.txt中设置参数&lt;PackageName&gt;_DIR来设置路径。</p>
 <p>比方说OpenCV的设置情况：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">set</span>(OpenCV_DIR <span class="hljs-string">&quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/thirdpart/opencv_x64&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p>然后你接着去设置头文件路径、库文件路径，最后把库文件链接到可执行程序中</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED)<br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)<br> <br><span class="hljs-keyword">add_executable</span>(YourProjectName main.cpp)<br><span class="hljs-keyword">target_link_libraries</span>(YourProjectName <span class="hljs-variable">$&#123;OpenCV_LIBS&#125;</span>)<br></code></pre></td></tr></table></figure>
-
-<p>因此 <code>find_package</code> 并<strong>不是直接去找具体的动态库文件和头文件</strong>。而是去找<strong>包配置文件</strong>，这个<strong>配置文件里包含了包的具体信息</strong>，包括<strong>动态库文件的位置</strong>，<strong>头文件的目录</strong>，<strong>链接时需要开启的编译选项</strong>等等。</p>
-<p>再者，不同的操作系统平台，CMake 都会有默认的搜索路径，再结合官方提供的CMake信息，以及你的 CMakeLists.txt 文件就能找到库文件。那如果你没有把这些库文件安装到 CMake 默认搜索路径呢？</p>
-<h3><span id="默认的搜索路径">默认的搜索路径</span></h3><p>Windows 和 Linux 都有自己的标准路径，这里就以 Linux 作为探讨对象。</p>
+<p>因此 <code>find_package</code>
+并<strong>不是直接去找具体的动态库文件和头文件</strong>。而是去找<strong>包配置文件</strong>，这个<strong>配置文件里包含了包的具体信息</strong>，包括<strong>动态库文件的位置</strong>，<strong>头文件的目录</strong>，<strong>链接时需要开启的编译选项</strong>等等。</p>
+<p>再者，不同的操作系统平台，CMake
+都会有默认的搜索路径，再结合官方提供的CMake信息，以及你的 CMakeLists.txt
+文件就能找到库文件。那如果你没有把这些库文件安装到 CMake
+默认搜索路径呢？</p>
+<h3><span id="默认的搜索路径">默认的搜索路径</span></h3>
+<p>Windows 和 Linux 都有自己的标准路径，这里就以 Linux
+作为探讨对象。</p>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs tex">&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/cmake/&lt;name&gt;*/<br>&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/<br>&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/cmake/<br>&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/cmake/&lt;name&gt;*/<br>&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/<br>&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/cmake/<br></code></pre></td></tr></table></figure>
-
 <ul>
-<li><code>&lt;prefix&gt;</code> 是变量 <code>$&#123;CMAKE_PREFIX_PATH&#125;</code>，Unix 平台默认为 <code>/usr</code>。</li>
-<li><code>&lt;name&gt;</code> 是你在 <code>find_package(&lt;name&gt; REQUIRED)</code> 命令中指定的包名。</li>
-<li><code>&lt;arch&gt;</code> 是系统的架构，例如 <code>x86_64-linux-gnu</code> 或 <code>i386-linux-gnu</code>。<ul>
-<li>（ Ubuntu 喜欢把库文件套娃在 <code>/usr/lib/x86_64-linux-gnu</code> 目录下）</li>
+<li><code>&lt;prefix&gt;</code> 是变量
+<code>$&#123;CMAKE_PREFIX_PATH&#125;</code>，Unix 平台默认为
+<code>/usr</code>。</li>
+<li><code>&lt;name&gt;</code> 是你在
+<code>find_package(&lt;name&gt; REQUIRED)</code> 命令中指定的包名。</li>
+<li><code>&lt;arch&gt;</code> 是系统的架构，例如
+<code>x86_64-linux-gnu</code> 或 <code>i386-linux-gnu</code>。
+<ul>
+<li>（ Ubuntu 喜欢把库文件套娃在 <code>/usr/lib/x86_64-linux-gnu</code>
+目录下）</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<p>例如你是 64 位的 Linux 系统，<code>find_package(Qt5 REQUIRED)</code> 会依次搜索：</p>
+<p>例如你是 64 位的 Linux 系统，<code>find_package(Qt5 REQUIRED)</code>
+会依次搜索：</p>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs tex">/usr/lib/cmake/Qt5/Qt5Config.cmake<br>/usr/lib/x86<span class="hljs-built_in">_</span>64-linux-gnu/cmake/Qt5/Qt5Config.cmake<br>/usr/share/cmake/Qt5/Qt5Config.cmake<br>/usr/lib/Qt5/Qt5Config.cmake<br>/usr/lib/x86<span class="hljs-built_in">_</span>64-linux-gnu/Qt5/Qt5Config.cmake<br>/usr/share/Qt5/Qt5Config.cmake<br>/usr/Qt5/lib/cmake/Qt5/Qt5Config.cmake<br>/usr/Qt5/lib/x86<span class="hljs-built_in">_</span>64-linux-gnu/cmake/Qt5/Qt5Config.cmake<br>/usr/Qt5/share/cmake/Qt5/Qt5Config.cmake<br>/usr/Qt5/lib/Qt5/Qt5Config.cmake<br>/usr/Qt5/lib/x86<span class="hljs-built_in">_</span>64-linux-gnu/Qt5/Qt5Config.cmake<br>/usr/Qt5/share/Qt5/Qt5Config.cmake<br></code></pre></td></tr></table></figure>
-
-<h3><span id="非标准路径下的搜索">非标准路径下的搜索</span></h3><p>如果你没有在前面介绍的标准路径下，你在其他地方下载并编译安装了，也没有把库文件和头文件移动到标准路径中，那该怎么办？这时你<strong>需要手动指定一个变量</strong>告诉它在哪儿。我们依旧还是以 Linux 举例。</p>
-<p>例如Qt5 安装到了<code>/opt/Qt5.12.1</code>。 首先找到它里面的 <code>Qt5Config.cmake</code> 文件所在位置。假如你找到该文件的位置是 <code>/opt/Qt5.12.1/lib/cmake/Qt5/Qt5Config.cmake</code>，那么请你设置变量 Qt5_DIR 为 <code>/opt/Qt5.12.1/lib/cmake/Qt5</code>。有三种设置方法：</p>
-<ol>
-<li>单次有效：在 configure 阶段，可以从命令行设置： <code>cmake -B build -DQt5_DIR=&quot;/opt/Qt5.12.1/lib/cmake/Qt5&quot;</code></li>
-<li>全局启用：修改你的 <code>~/.bashrc</code> 文件添加环境变量： <code>export Qt5_DIR=&quot;/opt/Qt5.12.1/lib/cmake/Qt5&quot;</code>，然后重启终端。这样以后你每次构建任何项目，find_package 都能自动找到这个路径的 Qt5 包了。</li>
-<li>单项目有效：直接在你自己项目的 CMakeLists.txt 最开头写一行： <code>set(Qt5_DIR &quot;&quot;/opt/Qt5.12.1/lib/cmake/Qt5&quot;)</code>。但是一定要写在最前面。</li>
+<h3><span id="非标准路径下的搜索">非标准路径下的搜索</span></h3>
+<p>如果你没有在前面介绍的标准路径下，你在其他地方下载并编译安装了，也没有把库文件和头文件移动到标准路径中，那该怎么办？这时你<strong>需要手动指定一个变量</strong>告诉它在哪儿。我们依旧还是以
+Linux 举例。</p>
+<p>例如Qt5 安装到了<code>/opt/Qt5.12.1</code>。 首先找到它里面的
+<code>Qt5Config.cmake</code> 文件所在位置。假如你找到该文件的位置是
+<code>/opt/Qt5.12.1/lib/cmake/Qt5/Qt5Config.cmake</code>，那么请你设置变量
+Qt5_DIR 为
+<code>/opt/Qt5.12.1/lib/cmake/Qt5</code>。有三种设置方法：</p>
+<ol type="1">
+<li>单次有效：在 configure 阶段，可以从命令行设置：
+<code>cmake -B build -DQt5_DIR="/opt/Qt5.12.1/lib/cmake/Qt5"</code></li>
+<li>全局启用：修改你的 <code>~/.bashrc</code> 文件添加环境变量：
+<code>export Qt5_DIR="/opt/Qt5.12.1/lib/cmake/Qt5"</code>，然后重启终端。这样以后你每次构建任何项目，find_package
+都能自动找到这个路径的 Qt5 包了。</li>
+<li>单项目有效：直接在你自己项目的 CMakeLists.txt 最开头写一行：
+<code>set(Qt5_DIR ""/opt/Qt5.12.1/lib/cmake/Qt5")</code>。但是一定要写在最前面。</li>
 </ol>
-<p><img src="/images/2024/09/20/c712be30-772e-11ef-bb33-ad22fef3cf2e.png" alt="利弊.png"></p>
-<p>只要不删除 build ,单次有效的方式就会一直存在，因为 CMake 会有缓存，但如果你删除 build 了，下次你还得再设置一次。</p>
-<h2><span id="find_library">find_library</span></h2><p>在 CMake 中，<code>find_library</code> 用于查找特定的库文件（如 <code>.lib</code>、<code>.a</code>、<code>.so</code> 等），并将该库的路径存储到变量中。它的功能类似于手动指定库文件路径，但通过 <code>find_library</code> 可以让 CMake 自动在系统的标准库路径或用户指定的路径中查找库。</p>
+<figure>
+<img src="/images/2024/09/20/c712be30-772e-11ef-bb33-ad22fef3cf2e.png" alt="利弊.png">
+<figcaption aria-hidden="true">利弊.png</figcaption>
+</figure>
+<p>只要不删除 build ,单次有效的方式就会一直存在，因为 CMake
+会有缓存，但如果你删除 build 了，下次你还得再设置一次。</p>
+<h2><span id="find_library">find_library</span></h2>
+<p>在 CMake 中，<code>find_library</code> 用于查找特定的库文件（如
+<code>.lib</code>、<code>.a</code>、<code>.so</code>
+等），并将该库的路径存储到变量中。它的功能类似于手动指定库文件路径，但通过
+<code>find_library</code> 可以让 CMake
+自动在系统的标准库路径或用户指定的路径中查找库。</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">find_library</span>(&lt;VAR&gt; name [PATHS paths...])<br></code></pre></td></tr></table></figure>
-
-<p><strong><code>&lt;VAR&gt;</code></strong>: 将找到的库的完整路径存储到这个变量中。</p>
-<p><strong><code>name</code></strong>: 要查找的库的名称，不需要后缀（如 <code>.a</code> 或 <code>.so</code>）。</p>
-<p><strong><code>PATHS</code></strong>: 可选，指定额外的搜索路径，CMake 会在这些路径中查找库。</p>
-<p>如果库文件已经在标准路径中，无需指定。否则，需要通过 PATH 参数指定。</p>
+<p><strong><code>&lt;VAR&gt;</code></strong>:
+将找到的库的完整路径存储到这个变量中。</p>
+<p><strong><code>name</code></strong>: 要查找的库的名称，不需要后缀（如
+<code>.a</code> 或 <code>.so</code>）。</p>
+<p><strong><code>PATHS</code></strong>: 可选，指定额外的搜索路径，CMake
+会在这些路径中查找库。</p>
+<p>如果库文件已经在标准路径中，无需指定。否则，需要通过 PATH
+参数指定。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">find_library</span>(MYLIB_LIB NAMES mylib PATHS /usr/local/lib /opt/libs)<br><br><span class="hljs-keyword">if</span>(MYLIB_LIB)<br>    <span class="hljs-built_in">message</span>(STATUS <span class="hljs-string">&quot;Found mylib: $&#123;MYLIB_LIB&#125;&quot;</span>)<br>    <span class="hljs-built_in">target_link_libraries</span>(MyExecutable $&#123;MYLIB_LIB&#125;)<br><span class="hljs-keyword">else</span>()<br>    <span class="hljs-built_in">message</span>(FATAL_ERROR <span class="hljs-string">&quot;Could not find mylib!&quot;</span>)<br><span class="hljs-built_in">endif</span>()<br></code></pre></td></tr></table></figure>
-
-<p><strong><code>find_library(MYLIB_LIB NAMES mylib)</code></strong>: 这是查找名为 <code>mylib</code> 的库文件，查找到的路径会存储在 <code>MYLIB_LIB</code> 变量中。</p>
-<p><strong><code>PATHS /usr/local/lib /opt/libs</code></strong>: 在这些路径下查找库文件。如果没有指定 <code>PATHS</code>，CMake 会默认查找系统标准的库路径，例如 <code>/usr/lib</code>、<code>/lib</code> 等。</p>
-<p><strong><code>target_link_libraries(MyExecutable $&#123;MYLIB_LIB&#125;)</code></strong>: 如果找到了库文件，将其链接到目标 <code>MyExecutable</code>。</p>
+<p><strong><code>find_library(MYLIB_LIB NAMES mylib)</code></strong>:
+这是查找名为 <code>mylib</code> 的库文件，查找到的路径会存储在
+<code>MYLIB_LIB</code> 变量中。</p>
+<p><strong><code>PATHS /usr/local/lib /opt/libs</code></strong>:
+在这些路径下查找库文件。如果没有指定 <code>PATHS</code>，CMake
+会默认查找系统标准的库路径，例如
+<code>/usr/lib</code>、<code>/lib</code> 等。</p>
+<p><strong><code>target_link_libraries(MyExecutable $&#123;MYLIB_LIB&#125;)</code></strong>:
+如果找到了库文件，将其链接到目标 <code>MyExecutable</code>。</p>
 
       </div>
     </div>
@@ -334,7 +388,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第七章：CMake-构建-Qt-项目\" title="第七章：CMake 构建 Qt 项目" rel="bookmark">第七章：CMake 构建 Qt 项目</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第七章：CMake-构建-Qt-项目\" title="第七章：CMake 构建 Qt 项目" rel="bookmark">第七章：CMake 构建 Qt 项目</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -866,11 +920,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

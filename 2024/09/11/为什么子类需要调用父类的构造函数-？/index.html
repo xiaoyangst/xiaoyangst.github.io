@@ -175,7 +175,6 @@
         
         <p>因为长时间没有写过继承相关的代码，竟然忘记子类需要给父类初始化成员，即调用父类的构造函数初始化继承过来的成员变量。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 基类</span><br>MsgNode::<span class="hljs-built_in">MsgNode</span>(<span class="hljs-type">char</span>* msg, <span class="hljs-type">int</span> max_len)<br>	: <span class="hljs-built_in">cur_len_</span>(<span class="hljs-number">0</span>)<br>	, <span class="hljs-built_in">total_len_</span>(max_len + HEAD_LENGTH)<br>&#123;<br>	data_ = <span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[total_len_ + <span class="hljs-number">1</span>]();<br>	<span class="hljs-comment">// 暂时封装为 头部+数据</span><br>	<span class="hljs-built_in">memcpy</span>(data_, &amp;max_len, HEAD_LENGTH);<br>	<span class="hljs-built_in">memcpy</span>(data_ + HEAD_LENGTH, msg, max_len);<br>	data_[total_len_] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>&#125;<br><br>MsgNode::<span class="hljs-built_in">MsgNode</span>(<span class="hljs-type">int</span> max_len)<br>	: <span class="hljs-built_in">cur_len_</span>(<span class="hljs-number">0</span>)<br>	, <span class="hljs-built_in">total_len_</span>(max_len)<br>&#123;<br>	data_ = <span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[total_len_ + <span class="hljs-number">1</span>]();<br>&#125;<br><br><span class="hljs-comment">// 派生类</span><br>RecvNode::<span class="hljs-built_in">RecvNode</span>(<span class="hljs-type">int</span> max_len, <span class="hljs-type">int</span> msgID)<br>	: <span class="hljs-built_in">MsgNode</span>(max_len)<br>	, <span class="hljs-built_in">msgID_</span>(msgID)<br>&#123;<br><br>&#125;<br><br><span class="hljs-comment">// 派生类</span><br>SendNode::<span class="hljs-built_in">SendNode</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* msg, <span class="hljs-type">short</span> max_len, <span class="hljs-type">short</span> msgID)<br>	: <span class="hljs-built_in">MsgNode</span>(max_len + HEAD_LENGTH)<br>	, <span class="hljs-built_in">msgID_</span>(msgID)<br>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>子类对象包含父类部分，必须确保父类部分被正确初始化。否则，父类的数据成员可能会处于未定义状态，从而导致程序错误或不稳定。通过调用父类构造函数，可以重用父类中已有的初始化逻辑，避免在每个子类中重复编写相同的初始化代码。如果父类的构造函数有某些重要的初始化操作，这些操作需要在任何子类对象创建时都执行，以确保一致的行为。</p>
 <ul>
 <li><strong>父类构造函数无参</strong>：如果父类提供了一个无参构造函数，子类构造函数可以不显式调用它。编译器会自动调用它</li>
@@ -265,7 +264,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\11\call-once-和-once-flag\" title="call_once 和 once_flag" rel="bookmark">call_once 和 once_flag</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\11\call-once-和-once-flag\" title="call_once 和 once_flag" rel="bookmark">call_once 和 once_flag</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -797,11 +796,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

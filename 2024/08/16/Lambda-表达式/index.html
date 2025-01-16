@@ -174,35 +174,39 @@
           </div>
         
         <!-- toc -->
-
-
-
 <!-- tocstop -->
-
 <p>任何需要可调用对象的接口，都可以传入一个lambda表达式</p>
-<p><img src="/images/2024/08/16/5a9cfd20-5b94-11ef-922f-4335b82b6d11.png" alt="lambda.png"></p>
-<p><code>捕获</code>：捕获 lambda 表达式以外的参数，可以按值捕获（不可修改外部捕获的变量或对象）或按引用捕获（可修改外部捕获的变量或对象）</p>
+<figure>
+<img src="/images/2024/08/16/5a9cfd20-5b94-11ef-922f-4335b82b6d11.png" alt="lambda.png">
+<figcaption aria-hidden="true">lambda.png</figcaption>
+</figure>
+<p><code>捕获</code>：捕获 lambda
+表达式以外的参数，可以按值捕获（不可修改外部捕获的变量或对象）或按引用捕获（可修改外部捕获的变量或对象）</p>
 <p><code>形参 和 ret</code>：lambda表达式又名匿名函数，函数当然可以有形参和返回值，这里的形参有类型并且支持默认参数</p>
 <p><code>函数体</code>：函数的功能，即实际的逻辑代码</p>
 <p>一个普通函数不仅可以没有实参，也可以无需具体的返回值类型，但是必须要有函数体。lambda表达式又名匿名函数，即没有函数名的函数，形参和返回值也可以不必有，但是函数体不能丢。至于捕获也可以不进行任何捕获，但是却必须标识它的存在。</p>
-<ol>
+<ol type="1">
 <li><code>[]</code> ：不捕捉任何变量</li>
 <li><code>[&amp;]</code> ：按引用捕获</li>
 <li><code>[=]</code>： 按值捕获</li>
-<li><code>[=, &amp;foo]</code> ： 按值捕获外部作用域中所有变量, 并按照引用捕获外部变量 foo</li>
+<li><code>[=, &amp;foo]</code> ： 按值捕获外部作用域中所有变量,
+并按照引用捕获外部变量 foo</li>
 <li><code>[bar]</code>： 按值捕获 bar 变量, 同时不捕获其他变量</li>
-<li><code>[&amp;bar]</code>： 按引用捕获 bar 变量, 同时不捕获其他变量</li>
-<li><code>[this]</code>： 捕获当前类中的this指针<ol>
+<li><code>[&amp;bar]</code>： 按引用捕获 bar 变量,
+同时不捕获其他变量</li>
+<li><code>[this]</code>： 捕获当前类中的this指针
+<ol type="1">
 <li>让lambda表达式拥有和当前类成员函数同样的访问权限</li>
-<li>如果已经使用了 &amp; 或者 &#x3D;，默认添加此选项</li>
+<li>如果已经使用了 &amp; 或者 =，默认添加此选项</li>
+</ol></li>
 </ol>
-</li>
-</ol>
-<p>关于 lambda 表达式捕获 this 需要注意的一个问题，即操作 this对象的时候，需要确保对象没有被销毁。如下由于我们已经提前把对象 e 删除，在此之前尽管已经保存其返回的lambda，但由于这个函数操作对象的成员变量，再调用就是不合法的。</p>
+<p>关于 lambda 表达式捕获 this 需要注意的一个问题，即操作
+this对象的时候，需要确保对象没有被销毁。如下由于我们已经提前把对象 e
+删除，在此之前尽管已经保存其返回的lambda，但由于这个函数操作对象的成员变量，再调用就是不合法的。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;functional&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Example</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-built_in">Example</span>() &#123;&#125;<br><br>  <span class="hljs-function">std::function&lt;<span class="hljs-title">void</span><span class="hljs-params">()</span>&gt; <span class="hljs-title">getShowLambda</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 捕获 this 指针并返回 lambda</span><br>    <span class="hljs-keyword">return</span> [<span class="hljs-keyword">this</span>]() &#123;<br>      <span class="hljs-comment">// 访问类成员</span><br>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i : data) &#123;<br>        std::cout &lt;&lt; i &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;<br>      &#125;<br>      std::cout &lt;&lt; std::endl;<br>    &#125;;<br>  &#125;<br><br> <span class="hljs-keyword">private</span>:<br>  std::vector&lt;<span class="hljs-type">int</span>&gt; data = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>  Example* e = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Example</span>();<br>  <span class="hljs-keyword">auto</span> f = e-&gt;<span class="hljs-built_in">getShowLambda</span>(); <span class="hljs-comment">// 获取 lambda</span><br><br>  <span class="hljs-keyword">delete</span> e; <span class="hljs-comment">// 销毁对象</span><br>  e = <span class="hljs-literal">nullptr</span>;<br><br>  <span class="hljs-built_in">f</span>(); <br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>lambda表达式是可调用对象，因此当你按照前面所讲的格式写出来之后，你有两种方式进行调用：原地调用和后续调用。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 原地调用</span><br>[](<span class="hljs-type">int</span> num1,<span class="hljs-type">int</span> num2) -&gt; <span class="hljs-type">int</span> &#123;<br>  <span class="hljs-keyword">return</span> num1 + num2;<br>&#125;(<span class="hljs-number">10</span>,<span class="hljs-number">20</span>);<br><br><span class="hljs-comment">// 后续调用</span><br><span class="hljs-keyword">auto</span> f1 =   [](<span class="hljs-type">int</span> num1,<span class="hljs-type">int</span> num2) -&gt; <span class="hljs-type">int</span> &#123;<br>  <span class="hljs-keyword">return</span> num1 + num2;<br>&#125;;<br><span class="hljs-built_in">f1</span>(<span class="hljs-number">10</span>,<span class="hljs-number">20</span>);<br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -286,7 +290,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\16\auto-和-decltype\" title="auto 和 decltype" rel="bookmark">auto 和 decltype</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\chrono库\" title="chrono库" rel="bookmark">chrono库</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\function-和-bind\" title="function 和 bind" rel="bookmark">function 和 bind</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\16\auto-和-decltype\" title="auto 和 decltype" rel="bookmark">auto 和 decltype</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\chrono库\" title="chrono库" rel="bookmark">chrono库</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\function-和-bind\" title="function 和 bind" rel="bookmark">function 和 bind</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -818,11 +822,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

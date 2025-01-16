@@ -174,120 +174,161 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E8%8E%B7%E5%8F%96%E5%AD%90%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%88%B6%E8%BF%9B%E7%A8%8B%E7%9A%84pid">获取子进程和父进程的PID</a></li>
-<li><a href="#fork-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AD%90%E8%BF%9B%E7%A8%8B">fork–创建一个子进程</a></li>
-<li><a href="#%E7%BB%88%E6%AD%A2%E8%BF%9B%E7%A8%8B">终止进程</a><ul>
-<li><a href="#%E6%AD%A3%E5%B8%B8%E7%BB%88%E6%AD%A2">正常终止</a></li>
-<li><a href="#%E5%BC%82%E5%B8%B8%E7%BB%88%E6%AD%A2">异常终止</a></li>
-</ul>
-</li>
-<li><a href="#%E7%9B%91%E6%8E%A7%E5%AD%90%E8%BF%9B%E7%A8%8B">监控子进程</a><ul>
-<li><a href="#wait-%E7%AD%89%E5%BE%85%E5%AD%90%E8%BF%9B%E7%A8%8B%E7%BB%88%E6%AD%A2">wait–等待子进程终止</a></li>
-<li><a href="#waitpid-%E7%AD%89%E5%BE%85%E5%AD%90%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E5%8F%91%E7%94%9F%E6%94%B9%E5%8F%98">waitpid–等待子进程状态发生改变</a></li>
-</ul>
-</li>
-<li><a href="#%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F">执行程序</a><ul>
+<li><a href="#获取子进程和父进程的pid">获取子进程和父进程的PID</a></li>
+<li><a href="#fork-创建一个子进程">fork--创建一个子进程</a></li>
+<li><a href="#终止进程">终止进程</a>
+<ul>
+<li><a href="#正常终止">正常终止</a></li>
+<li><a href="#异常终止">异常终止</a></li>
+</ul></li>
+<li><a href="#监控子进程">监控子进程</a>
+<ul>
+<li><a href="#wait-等待子进程终止">wait--等待子进程终止</a></li>
+<li><a href="#waitpid-等待子进程状态发生改变">waitpid--等待子进程状态发生改变</a></li>
+</ul></li>
+<li><a href="#执行程序">执行程序</a>
+<ul>
 <li><a href="#execve">execve()</a></li>
-<li><a href="#exec%E5%87%BD%E6%95%B0%E7%B0%87">exec函数簇</a></li>
-<li><a href="#system-%E6%89%A7%E8%A1%8C-shell-%E5%91%BD%E4%BB%A4">system–执行 shell 命令</a></li>
-</ul>
-</li>
+<li><a href="#exec函数簇">exec函数簇</a></li>
+<li><a href="#system-执行-shell-命令">system--执行 shell 命令</a></li>
+</ul></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="获取子进程和父进程的pid">获取子进程和父进程的PID</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">pid_t</span> <span class="hljs-title">getpid</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;	<span class="hljs-comment">// 当前进程 ID</span><br><br><span class="hljs-function"><span class="hljs-type">pid_t</span> <span class="hljs-title">getppid</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>; <span class="hljs-comment">// 父进程 ID</span><br></code></pre></td></tr></table></figure>
-
-<h2><span id="fork创建一个子进程">fork–创建一个子进程</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">pid_t</span> <span class="hljs-title">fork</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;<br><br><span class="hljs-comment">// 成功：父进程返回子进程的 pid；子进程返回 0</span><br><span class="hljs-comment">// 失败：父进程返回 -1，不会创建子进程，并且设置 errno</span><br></code></pre></td></tr></table></figure>
-
-<p>当 fork 成功返回，父子进程就创建成功了。但是，关于 fork 这个方法要讲得东西还是蛮多的，下面逐一介绍：</p>
+<h2><span id="获取子进程和父进程的pid">获取子进程和父进程的PID</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">pid_t</span> <span class="hljs-title">getpid</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;	<span class="hljs-comment">// 当前进程 ID</span><br><br><span class="hljs-function"><span class="hljs-type">pid_t</span> <span class="hljs-title">getppid</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>; <span class="hljs-comment">// 父进程 ID</span><br></code></pre></td></tr></table></figure>
+<h2><span id="fork-创建一个子进程">fork--创建一个子进程</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">pid_t</span> <span class="hljs-title">fork</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;<br><br><span class="hljs-comment">// 成功：父进程返回子进程的 pid；子进程返回 0</span><br><span class="hljs-comment">// 失败：父进程返回 -1，不会创建子进程，并且设置 errno</span><br></code></pre></td></tr></table></figure>
+<p>当 fork 成功返回，父子进程就创建成功了。但是，关于 fork
+这个方法要讲得东西还是蛮多的，下面逐一介绍：</p>
 <p>（一）父子进程的创建遵循写时复制</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">Demo</span><span class="hljs-params">()</span>&#123;<br>  <span class="hljs-type">int</span> public_var = <span class="hljs-number">10</span>;<br>  <span class="hljs-type">pid_t</span> pid = fork();<br>  <span class="hljs-keyword">switch</span> (pid) &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">-1</span>:<br>      perror(<span class="hljs-string">&quot;Fork failed&quot;</span>);<br>      <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <span class="hljs-comment">// Child process</span><br>      public_var = <span class="hljs-number">20</span>;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child process: public_var = %d\n&quot;</span>, public_var);<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">default</span>: <span class="hljs-comment">// Parent process</span><br>      sleep(<span class="hljs-number">3</span>);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Parent process: public_var = %d\n&quot;</span>, public_var);<br>      <span class="hljs-keyword">break</span>;<br>  &#125;<br>&#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">Child process: public_var = 20</span><br><span class="hljs-comment">Parent process: public_var = 10</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-
-<p>在这个程序中，可以让父进程睡眠 3s ，让子进程有机会修改 public_var 变量。如果父进程输出结果为 20，说明父子进程共享变量；如果父进程输出结果为 10，说明父子进程不共享变量。</p>
+<p>在这个程序中，可以让父进程睡眠 3s ，让子进程有机会修改 public_var
+变量。如果父进程输出结果为
+20，说明父子进程共享变量；如果父进程输出结果为
+10，说明父子进程不共享变量。</p>
 <p>子进程创建成功，此时父子进程是共用物理内存页的，对应下图中左半部分。可是当子进程开始修改对应物理页的数据，就会触发这块被修改的物理页写时复制机制（没有修改的物理页继续共享，谁修改谁拥有一块新的物理页并脱离原来的物理页），对应下图中右半部分。这就合理解释上述变量变与不变的现象了。</p>
-<p><img src="/images/2024/09/28/5a41a110-7d9e-11ef-b348-95e5e18530fa.png" alt="父子进程.png"></p>
+<figure>
+<img src="/images/2024/09/28/5a41a110-7d9e-11ef-b348-95e5e18530fa.png" alt="父子进程.png">
+<figcaption aria-hidden="true">父子进程.png</figcaption>
+</figure>
 <p>（二）fork 与 用户态缓冲区的数据</p>
-<p><img src="/images/2024/09/28/3834e4b0-7d9e-11ef-b348-95e5e18530fa.png" alt="fork与缓冲区.png"></p>
-<p>代码 A 和 代码 B 唯一的代码不同是 第一行的输出一个有换行符，一个没有换行符。</p>
-<p>我们前面学习到，printf 函数是行缓冲区，即遇到换行符才会清空缓冲区。由于代码 A 没有换行符，导致用户态文件缓冲区中留有数据，那么 fork() 时，这部分数据也会复制，并且父子进程各自拥有自己的副本。</p>
+<figure>
+<img src="/images/2024/09/28/3834e4b0-7d9e-11ef-b348-95e5e18530fa.png" alt="fork与缓冲区.png">
+<figcaption aria-hidden="true">fork与缓冲区.png</figcaption>
+</figure>
+<p>代码 A 和 代码 B 唯一的代码不同是
+第一行的输出一个有换行符，一个没有换行符。</p>
+<p>我们前面学习到，printf
+函数是行缓冲区，即遇到换行符才会清空缓冲区。由于代码 A
+没有换行符，导致用户态文件缓冲区中留有数据，那么 fork()
+时，这部分数据也会复制，并且父子进程各自拥有自己的副本。</p>
 <p>用两道面试题检验你：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Demo</span><span class="hljs-params">()</span></span>&#123;<br>  <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++)&#123;<br>    <span class="hljs-type">pid_t</span> pid = fork();<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a&quot;</span>);<br>  &#125;<br>&#125;<br><span class="hljs-comment">// 24 个 a，缓存到最后才会输出。缓存 3 个 a，最后有8个进程，所以 3 * 8 = 24</span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Demo</span><span class="hljs-params">()</span></span>&#123;<br>  <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++)&#123;<br>    <span class="hljs-type">pid_t</span> pid = fork();<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a\n&quot;</span>);<br>  &#125;<br>&#125;<br><br><span class="hljs-comment">// 14 个 a，直接打印。第一次有两个进程，所以打印 2 个 a；第一次有死个进程，所以打印 4 个 a；第一次有八个进程，所以打印 8 个 a；合起来，就是 14 个 a</span><br></code></pre></td></tr></table></figure>
-
 <p>（三）父子进程的文件描述符</p>
-<p>fork() 时，子进程会复制父进程的 PCB ，其中 PCB 中含有打开的文件描述符列表。因此，父子进程拥有各自的打开文件描述符列表。但是，它们共享同一个打开文件。</p>
+<p>fork() 时，子进程会复制父进程的 PCB ，其中 PCB
+中含有打开的文件描述符列表。因此，父子进程拥有各自的打开文件描述符列表。但是，它们共享同一个打开文件。</p>
 <p>所以，当你父进程修改文件偏移量，子进程同样受影响，尽管它们是不同的文件描述符，但是指向相同的文件。</p>
-<p><img src="/images/2024/09/28/f0ccb620-7d9d-11ef-b348-95e5e18530fa.png" alt="文件描述符.png"></p>
+<figure>
+<img src="/images/2024/09/28/f0ccb620-7d9d-11ef-b348-95e5e18530fa.png" alt="文件描述符.png">
+<figcaption aria-hidden="true">文件描述符.png</figcaption>
+</figure>
 <p>下面看代码示例：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Demo</span><span class="hljs-params">()</span> </span>&#123;<br>  <span class="hljs-type">int</span> fd = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;demo.txt&quot;</span>, O_RDWR | O_CREAT | O_TRUNC, <span class="hljs-number">0666</span>);<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;public pos: %ld\n&quot;</span>, <span class="hljs-built_in">lseek</span>(fd, <span class="hljs-number">0</span>, SEEK_CUR));<br><br>  <span class="hljs-type">pid_t</span> pid = fork();<br><br>  <span class="hljs-type">int</span> newfd;<br>  <span class="hljs-keyword">switch</span> (pid) &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">-1</span>:<br>      <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;Fork failed&quot;</span>);<br>      <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <span class="hljs-comment">// Child process</span><br>      <span class="hljs-built_in">write</span>(fd,<span class="hljs-string">&quot;Hello world\n&quot;</span>, <span class="hljs-number">11</span>);<br>      <span class="hljs-built_in">close</span>(STDERR_FILENO);<br>      newfd = <span class="hljs-built_in">dup</span>(fd);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child process: newfd = %d\n&quot;</span>, newfd);<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">default</span>: <span class="hljs-comment">// Parent process</span><br>      <span class="hljs-built_in">sleep</span>(<span class="hljs-number">2</span>);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;parent pos: %ld\n&quot;</span>, <span class="hljs-built_in">lseek</span>(fd, <span class="hljs-number">0</span>, SEEK_CUR));<br>      newfd = <span class="hljs-built_in">dup</span>(fd);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Parent process: newfd = %d\n&quot;</span>, newfd);<br>      <span class="hljs-keyword">break</span>;<br>  &#125;<br>&#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">public pos: 0</span><br><span class="hljs-comment">Child process: newfd = 2</span><br><span class="hljs-comment">parent pos: 11</span><br><span class="hljs-comment">Parent process: newfd = 4</span><br><span class="hljs-comment">*</span><br></code></pre></td></tr></table></figure>
-
-<p>让父进程休眠 2s，以让子进程修改偏移量。如果最后父进程文件描述符的偏移量为 0 表明不会被子进程影响，如果不是就代表子进程和父进程虽然是不同的文件描述符，但是指向同一个文件，互相影响。</p>
-<h2><span id="终止进程">终止进程</span></h2><h3><span id="正常终止">正常终止</span></h3><p>（一）_exit</p>
+<p>让父进程休眠
+2s，以让子进程修改偏移量。如果最后父进程文件描述符的偏移量为 0
+表明不会被子进程影响，如果不是就代表子进程和父进程虽然是不同的文件描述符，但是指向同一个文件，互相影响。</p>
+<h2><span id="终止进程">终止进程</span></h2>
+<h3><span id="正常终止">正常终止</span></h3>
+<p>（一）_exit</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">void</span> _exit(<span class="hljs-type">int</span> status);<br></code></pre></td></tr></table></figure>
-
 <p>status 表示程序的终止状态，父经常可以调用 wait() 获取该状态。</p>
 <p>（二）exit</p>
-<p>程序一般不会直接调用 _exit() ，而是调用库函数 exit() ，它会在调用 _exit() 前执行各种动作。</p>
+<p>程序一般不会直接调用 _exit() ，而是调用库函数 exit() ，它会在调用
+_exit() 前执行各种动作。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">exit</span><span class="hljs-params">(<span class="hljs-type">int</span> status)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>执行动作如下：</p>
-<ol>
-<li>调用退出处理程序 (通过 atexit() 和 on_exit() 注册的函数)，其执行顺序与注册顺序相反。</li>
+<ol type="1">
+<li>调用退出处理程序 (通过 atexit() 和 on_exit()
+注册的函数)，其执行顺序与注册顺序相反。</li>
 <li>刷新 stdio 流缓冲区。</li>
 <li>将 status 作为参数，调用 _exit() 系统调用。</li>
 </ol>
-<p>退出处理函数由用户事先注册，当进程调用 exit() 正常终止时，会自动执行事先注册的退出处理函数。</p>
+<p>退出处理函数由用户事先注册，当进程调用 exit()
+正常终止时，会自动执行事先注册的退出处理函数。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">atexit</span><span class="hljs-params">(<span class="hljs-type">void</span> (*function)(<span class="hljs-type">void</span>))</span></span>;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">on_exit</span><span class="hljs-params">(<span class="hljs-type">void</span> (*function)(<span class="hljs-type">int</span> , <span class="hljs-type">void</span> *), <span class="hljs-type">void</span> *arg)</span></span>;	<span class="hljs-comment">// 可以传递进程 状态（status）</span><br></code></pre></td></tr></table></figure>
-
 <p>它们的第一个参数就是用来提交的回调函数，并且可以提交多个回调函数，但是函数列表被执行是按照注册的顺序的相反顺序来执行。</p>
-<h3><span id="异常终止">异常终止</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">abort</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>会给调用进程 (自己) 发送 SIGABRT 信号，该信号会导致进程终止，并<strong>产生 core 文件</strong>。</p>
-<h2><span id="监控子进程">监控子进程</span></h2><p>孤儿进程是父进程先于子进程结束的一种状态，但是不会对操作系统造成危害，因为会有 init 进程托管。</p>
-<p>僵尸进程是子进程结束但是附近成没有感知到的一种状态，这种状态的进程不会被回收，会对操作系统造成影响，因为操作系统可以创建的进程数量是有限的。我们得确保父进程调用 wait 或 waitpid。</p>
-<h3><span id="wait等待子进程终止">wait–等待子进程终止</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">pid_t</span> <span class="hljs-title">wait</span><span class="hljs-params">(<span class="hljs-type">int</span> *status)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>调用 wait 的进程，会阻塞在 wait 方法处，直到有一个进程终止才解除阻塞，返回值是子进程的 PID。</p>
-<p>status 参数是一个传出参数，&lt;sys&#x2F;wait.h&gt; 头文件中定义了一组宏用于解析 status。</p>
+<h3><span id="异常终止">异常终止</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">abort</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>会给调用进程 (自己) 发送 SIGABRT
+信号，该信号会导致进程终止，并<strong>产生 core 文件</strong>。</p>
+<h2><span id="监控子进程">监控子进程</span></h2>
+<p>孤儿进程是父进程先于子进程结束的一种状态，但是不会对操作系统造成危害，因为会有
+init 进程托管。</p>
+<p>僵尸进程是子进程结束但是附近成没有感知到的一种状态，这种状态的进程不会被回收，会对操作系统造成影响，因为操作系统可以创建的进程数量是有限的。我们得确保父进程调用
+wait 或 waitpid。</p>
+<h3><span id="wait-等待子进程终止">wait--等待子进程终止</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">pid_t</span> <span class="hljs-title">wait</span><span class="hljs-params">(<span class="hljs-type">int</span> *status)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>调用 wait 的进程，会阻塞在 wait
+方法处，直到有一个进程终止才解除阻塞，返回值是子进程的 PID。</p>
+<p>status 参数是一个传出参数，&lt;sys/wait.h&gt;
+头文件中定义了一组宏用于解析 status。</p>
 <p><code>WIFEXITED(status)</code> 宏用于检查子进程是否正常结束。</p>
 <p><code>WEXITSTATUS(status)</code> 宏用于获取正常结束时的退出码。</p>
-<p><code>WCOREDUMP(status)</code> 宏用于检查子进程产生 core 文件。这个宏并没有在 POSIX.1- 2001 标准中规定。因此，使用的时候，应该用 #ifdef WCOREDUMP … #endif 包裹起来。</p>
+<p><code>WCOREDUMP(status)</code> 宏用于检查子进程产生 core
+文件。这个宏并没有在 POSIX.1- 2001 标准中规定。因此，使用的时候，应该用
+#ifdef WCOREDUMP ... #endif 包裹起来。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/wait.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;errno.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;error.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print_wstatus</span><span class="hljs-params">(<span class="hljs-type">int</span> status)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">WIFEXITED</span>(status)) &#123;<br>        <span class="hljs-type">int</span> exit_code = <span class="hljs-built_in">WEXITSTATUS</span>(status);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;exit_code = %d&quot;</span>, exit_code);<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">WIFSIGNALED</span>(status)) &#123;<br>        <span class="hljs-type">int</span> signo = <span class="hljs-built_in">WTERMSIG</span>(status);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;term_sig = %d&quot;</span>, signo);<br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> WCOREDUMP</span><br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">WCOREDUMP</span>(status)) &#123;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot; (core dump)&quot;</span>);<br>        &#125;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> </span>&#123;<br>    <span class="hljs-type">pid_t</span> pid = fork();<br>    <span class="hljs-keyword">switch</span> (pid) &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">-1</span>:<br>        <span class="hljs-built_in">error</span>(<span class="hljs-number">1</span>, errno, <span class="hljs-string">&quot;fork&quot;</span>);<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>        <span class="hljs-comment">// 子进程</span><br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;CHILD: pid = %d\n&quot;</span>, <span class="hljs-built_in">getpid</span>());<br>        <span class="hljs-keyword">for</span>(;;); <span class="hljs-comment">// 使子进程进入无限循环</span><br>    <span class="hljs-keyword">default</span>:<br>        <span class="hljs-comment">// 父进程</span><br>        <span class="hljs-type">int</span> status; <span class="hljs-comment">// 保存子进程的终止状态信息</span><br>        <span class="hljs-type">pid_t</span> childPid = <span class="hljs-built_in">wait</span>(&amp;status); <span class="hljs-comment">// 阻塞点：一直等待，直到有子进程终止</span><br>        <span class="hljs-keyword">if</span> (childPid &gt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;PARENT: %d terminated\n&quot;</span>, childPid);<br>            <span class="hljs-built_in">print_wstatus</span>(status);<br>        &#125;<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-
 <p>wait 存在的一些限制：</p>
 <ul>
-<li>如果有多个子进程， wait() 是无法等待某个特定子进程终止的， 只能依次等待每一个子进程终止。</li>
-<li>如果没有子进程终止， wait() 会一直阻塞。有时候会希望非阻塞的等待：如果没有子进程终止，立刻返回。</li>
-<li>只能监控子进程是否终止。对于子进程因某个信号 (如 SIGSTOP 或 SIGTTIN ) 而停止，或是已停止子进程收到 SIGCONT 信号后恢复执行， wait() 是无法监控这些情况的。</li>
+<li>如果有多个子进程， wait() 是无法等待某个特定子进程终止的，
+只能依次等待每一个子进程终止。</li>
+<li>如果没有子进程终止， wait()
+会一直阻塞。有时候会希望非阻塞的等待：如果没有子进程终止，立刻返回。</li>
+<li>只能监控子进程是否终止。对于子进程因某个信号 (如 SIGSTOP 或 SIGTTIN
+) 而停止，或是已停止子进程收到 SIGCONT 信号后恢复执行， wait()
+是无法监控这些情况的。</li>
 </ul>
-<h3><span id="waitpid等待子进程状态发生改变">waitpid–等待子进程状态发生改变</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">pid_t</span> <span class="hljs-title">waitpid</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid, <span class="hljs-type">int</span> *status, <span class="hljs-type">int</span> options)</span></span>;<br></code></pre></td></tr></table></figure>
-
+<h3><span id="waitpid-等待子进程状态发生改变">waitpid--等待子进程状态发生改变</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">pid_t</span> <span class="hljs-title">waitpid</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid, <span class="hljs-type">int</span> *status, <span class="hljs-type">int</span> options)</span></span>;<br></code></pre></td></tr></table></figure>
 <p>pid 参数：</p>
 <ul>
 <li>pid &gt; 0，表示等待进程 ID 为 pid 的子进程。</li>
-<li>pid &#x3D; 0，表示等待同进程组的所有子进程。</li>
-<li>pid &#x3D; -1，表示等待任意子进程。 wait(&amp;status) 与 waitpid(-1, &amp;status, 0) 等价。</li>
+<li>pid = 0，表示等待同进程组的所有子进程。</li>
+<li>pid = -1，表示等待任意子进程。 wait(&amp;status) 与 waitpid(-1,
+&amp;status, 0) 等价。</li>
 <li>pid &lt; -1，表示等待进程组 ID 为 |pid| 的所有子进程。</li>
 </ul>
 <p>options 参数：</p>
 <ul>
-<li>WNOHANG 不阻塞。如果参数 pid 指定的子进程没有一个发生状态改变，则立即返回， waitpid()的返回值为 0。</li>
+<li>WNOHANG 不阻塞。如果参数 pid
+指定的子进程没有一个发生状态改变，则立即返回， waitpid()的返回值为
+0。</li>
 <li>WUNTRACED 监控子进程是否因为某个信号而停止。</li>
 <li>WCONTINUED 监控已停止的子进程是否收到 SIGCONT 信号而恢复执行。</li>
 </ul>
-<p>明显看到 waitpid 要比 wait 功能丰富，它可以突破 wait 存在的一些限制。</p>
-<h2><span id="执行程序">执行程序</span></h2><h3><span id="execve">execve()</span></h3><p>可以将新程序加载到当前进程的内存空间。在这一过程中，会执行如下操作：</p>
-<ol>
-<li>清楚当前进程的代码段、数据段、堆、栈、上下文…</li>
+<p>明显看到 waitpid 要比 wait 功能丰富，它可以突破 wait
+存在的一些限制。</p>
+<h2><span id="执行程序">执行程序</span></h2>
+<h3><span id="execve">execve()</span></h3>
+<p>可以将新程序加载到当前进程的内存空间。在这一过程中，会执行如下操作：</p>
+<ol type="1">
+<li>清楚当前进程的代码段、数据段、堆、栈、上下文...</li>
 <li>加载新的可执行程序，设置代码段，数据段等</li>
 <li>从新可执行程序 main() 的第一行开始执行</li>
 </ol>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">execve</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">char</span> *<span class="hljs-type">const</span> argv[], <span class="hljs-type">char</span> *<span class="hljs-type">const</span> envp[])</span></span>;<br><br>pathname：可执行程序路径<br>argv：可执行程序的参数，记得以<span class="hljs-literal">NULL</span>结尾<br>envp：环境变量，记得以<span class="hljs-literal">NULL</span>结尾<br></code></pre></td></tr></table></figure>
+<h3><span id="exec函数簇">exec函数簇</span></h3>
+<p>下面这些库函数都是建立在系统调用 execve()
+之上的，它们为执行新可执行程序提供了多种 API
+选择。这些函数只是在指定程序名、命令行参数列表以及环境变量的方式上有所不同。</p>
+<figure>
+<img src="/images/2024/09/28/c9316610-7d9d-11ef-b348-95e5e18530fa.png" alt="execve.png">
+<figcaption aria-hidden="true">execve.png</figcaption>
+</figure>
+<h3><span id="system-执行-shell-命令">system--执行 shell 命令</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">system</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *command)</span></span>;<br></code></pre></td></tr></table></figure>
 
-<h3><span id="exec函数簇">exec函数簇</span></h3><p>下面这些库函数都是建立在系统调用 execve() 之上的，它们为执行新可执行程序提供了多种 API 选择。这些函数只是在指定程序名、命令行参数列表以及环境变量的方式上有所不同。</p>
-<p><img src="/images/2024/09/28/c9316610-7d9d-11ef-b348-95e5e18530fa.png" alt="execve.png"></p>
-<h3><span id="system执行-shell-命令">system–执行 shell 命令</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">system</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *command)</span></span>;<br></code></pre></td></tr></table></figure>
       </div>
     </div>
     
@@ -371,7 +412,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -903,11 +944,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

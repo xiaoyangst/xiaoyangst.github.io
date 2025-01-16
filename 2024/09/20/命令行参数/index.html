@@ -174,12 +174,11 @@
           </div>
         
         <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc,<span class="hljs-type">char</span>* argv[])</span>;<br></code></pre></td></tr></table></figure>
-
 <p>argc 代表参数的个数。</p>
-<p>argv 是个字符串数组，用以存储用户的输入的参数（默认第一个参数是程序本身的名称）。</p>
+<p>argv
+是个字符串数组，用以存储用户的输入的参数（默认第一个参数是程序本身的名称）。</p>
 <p>我重点要讲的是如何把获取的参数转换为实际的类型，哪怕你写的是整数参数，也会是字符串类型。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sscanf</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *str, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *format, ...)</span>;<br></code></pre></td></tr></table></figure>
-
 <p>从字符串中读取数据，并将其转换为指定的格式。常见转换格式：</p>
 <ul>
 <li><code>%d</code>：将字符串转换为整数（<code>int</code>）。</li>
@@ -188,6 +187,7 @@
 <li><code>%c</code>：将字符串的第一个字符转换为 <code>char</code>。</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> num;<br><span class="hljs-comment">// 将命令行参数 argv[1] 转换为整数</span><br><span class="hljs-keyword">if</span> (<span class="hljs-built_in">sscanf</span>(argv[<span class="hljs-number">1</span>], <span class="hljs-string">&quot;%d&quot;</span>, &amp;num) == <span class="hljs-number">1</span>) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;You entered the number: %d\n&quot;</span>, num);<br>&#125;<br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -271,7 +271,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -803,11 +803,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

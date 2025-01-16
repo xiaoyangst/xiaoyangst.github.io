@@ -174,19 +174,24 @@
           </div>
         
         <p>TCP 网络编程最本质的是处理三个半事件：</p>
-<ol>
-<li><p>连接建立：服务器 accept（被动）接受连接，客户端 connect（主动）发起连接。</p>
-</li>
-<li><p>连接断开：主动断开（close、shutdown），被动断开（read 调用返回值 等于 0）。</p>
-</li>
-<li><p>消息到达：表示有可读事件，即文件描述符可读。</p>
-</li>
-<li><p>消息发送完毕：<font color="red">半个</font>。这是因为消息发送到内核缓冲区中，就代表写事件完成，至于消息会不会最终到达对端，就不得而知。</p>
-</li>
+<ol type="1">
+<li><p>连接建立：服务器 accept（被动）接受连接，客户端
+connect（主动）发起连接。</p></li>
+<li><p>连接断开：主动断开（close、shutdown），被动断开（read 调用返回值
+等于 0）。</p></li>
+<li><p>消息到达：表示有可读事件，即文件描述符可读。</p></li>
+<li><p>消息发送完毕：<font color="red">半个</font>。这是因为消息发送到内核缓冲区中，就代表写事件完成，至于消息会不会最终到达对端，就不得而知。</p></li>
 </ol>
-<p>消息发送对于低流量的服务，倒也不必关心半事件。对于高流量的服务就不可以，因为流量太大会导致内核缓冲区满，那么用户层需要将剩余的消息暂时保存到用户自己的缓冲区中，等到文件描述符变得可写，再继续往里面写入消息。通常要我们自己设计一个 Buffer 来解决这个问题。</p>
-<p><img src="/images/2024/12/13/f2af1e20-b95b-11ef-adb1-3d4b2d9240d1.png" alt="网络编程本质.png"></p>
-<p>我们看到 TcpServer 提供的设置三个半事件的回调接口。connectionCallback_ 对应连接建立和连接断开两个事件，内部会判断对方是建立连接还是断开连接。messageCallback_ 对应消息到达事件。writeCallback_ 对应消息发送半个事件。</p>
+<p>消息发送对于低流量的服务，倒也不必关心半事件。对于高流量的服务就不可以，因为流量太大会导致内核缓冲区满，那么用户层需要将剩余的消息暂时保存到用户自己的缓冲区中，等到文件描述符变得可写，再继续往里面写入消息。通常要我们自己设计一个
+Buffer 来解决这个问题。</p>
+<figure>
+<img src="/images/2024/12/13/f2af1e20-b95b-11ef-adb1-3d4b2d9240d1.png" alt="网络编程本质.png">
+<figcaption aria-hidden="true">网络编程本质.png</figcaption>
+</figure>
+<p>我们看到 TcpServer
+提供的设置三个半事件的回调接口。connectionCallback_
+对应连接建立和连接断开两个事件，内部会判断对方是建立连接还是断开连接。messageCallback_
+对应消息到达事件。writeCallback_ 对应消息发送半个事件。</p>
 
       </div>
     </div>
@@ -271,7 +276,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\10\epoll的使用\" title="epoll的使用" rel="bookmark">epoll的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\10\epoll的使用\" title="epoll的使用" rel="bookmark">epoll的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -803,11 +808,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,75 +174,123 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E5%8F%AF%E5%8F%98%E7%8A%B6%E6%80%81%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98">可变状态带来的问题</a></li>
-<li><a href="#%E7%BA%AF%E5%87%BD%E6%95%B0%E5%92%8C%E5%BC%95%E7%94%A8%E9%80%8F%E6%98%8E">纯函数和引用透明</a></li>
-<li><a href="#%E6%97%A0%E5%89%AF%E4%BD%9C%E7%94%A8%E7%BC%96%E7%A8%8B">无副作用编程</a></li>
-<li><a href="#%E5%B9%B6%E5%8F%91%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84%E5%8F%AF%E5%8F%98%E7%8A%B6%E6%80%81%E5%92%8C%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%8A%B6%E6%80%81">并发环境中的可变状态和不可变状态</a></li>
-<li><a href="#const-%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7">const 的重要性</a><ul>
-<li><a href="#%E9%80%BB%E8%BE%91-const-%E4%B8%8E%E5%86%85%E9%83%A8-const">逻辑 const 与内部 const</a></li>
-<li><a href="#%E5%AF%B9%E4%BA%8E%E4%B8%B4%E6%97%B6%E5%80%BC%E4%BC%98%E5%8C%96%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0">对于临时值优化成员函数</a></li>
-<li><a href="#const%E7%BC%BA%E9%99%B7">const缺陷</a></li>
-</ul>
-</li>
+<li><a href="#可变状态带来的问题">可变状态带来的问题</a></li>
+<li><a href="#纯函数和引用透明">纯函数和引用透明</a></li>
+<li><a href="#无副作用编程">无副作用编程</a></li>
+<li><a href="#并发环境中的可变状态和不可变状态">并发环境中的可变状态和不可变状态</a></li>
+<li><a href="#const-的重要性">const 的重要性</a>
+<ul>
+<li><a href="#逻辑-const-与内部-const">逻辑 const 与内部 const</a></li>
+<li><a href="#对于临时值优化成员函数">对于临时值优化成员函数</a></li>
+<li><a href="#const缺陷">const缺陷</a></li>
+</ul></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="可变状态带来的问题">可变状态带来的问题</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">movie_t</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">average_score</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>    ...<br><span class="hljs-keyword">private</span>:<br>    std::string name;<br>    std::list&lt;<span class="hljs-type">int</span>&gt; scores;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">movie_t::average_score</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">accumulate</span>(scores.<span class="hljs-built_in">begin</span>(), scores.<span class="hljs-built_in">end</span>(), <span class="hljs-number">0</span>)<br>           / (<span class="hljs-type">double</span>) scores.<span class="hljs-built_in">size</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>计算某个电影的平均值，看似没有问题，但是由于 scores 容器没有大小限制，会出现如下两个问题：</p>
-<ol>
+<h2><span id="可变状态带来的问题">可变状态带来的问题</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">movie_t</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">average_score</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>    ...<br><span class="hljs-keyword">private</span>:<br>    std::string name;<br>    std::list&lt;<span class="hljs-type">int</span>&gt; scores;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">movie_t::average_score</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">accumulate</span>(scores.<span class="hljs-built_in">begin</span>(), scores.<span class="hljs-built_in">end</span>(), <span class="hljs-number">0</span>)<br>           / (<span class="hljs-type">double</span>) scores.<span class="hljs-built_in">size</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>计算某个电影的平均值，看似没有问题，但是由于 scores
+容器没有大小限制，会出现如下两个问题：</p>
+<ol type="1">
 <li>当你在求平均值的时候，可能有新的数据添加，它可能被计入总和，也可能没有被计入总和</li>
-<li>你不知道 <code> scores.size()</code> 是不是会先求值，导致 后面新添加的元素没有被视为 size 大小的一部分</li>
+<li>你不知道 <code>scores.size()</code> 是不是会先求值，导致
+后面新添加的元素没有被视为 size 大小的一部分</li>
 </ol>
-<p>那我们可以添加一个成员变量 scores_size 来记录链表中到底有多少数据（要加锁），到时候遍历的时候按照这个数量去遍历和求平均数。但是作者认为我们可能会忘记更新 scores_size 大小，那这属于代码逻辑层面的问题了，不意味着我前面这个想法有问题。</p>
-<p>作者的意思是如果 scores 和 scores_size 变量都不可变，即声明为 const，还会遇到这些问题吗?</p>
+<p>那我们可以添加一个成员变量 scores_size
+来记录链表中到底有多少数据（要加锁），到时候遍历的时候按照这个数量去遍历和求平均数。但是作者认为我们可能会忘记更新
+scores_size
+大小，那这属于代码逻辑层面的问题了，不意味着我前面这个想法有问题。</p>
+<p>作者的意思是如果 scores 和 scores_size 变量都不可变，即声明为
+const，还会遇到这些问题吗?</p>
 <ul>
 <li>第一个问题在于计算得分的平均值时，有人可能改变得分列表。如果列表是不可改变的，那么在使用它时，就不会有人改变它，这个问题就不复存在</li>
-<li>第二个问题在于如果这些变量都是不可变的，那么就需要在创建 movie_t 类时初始化它们。变量 scores_size 可能初始化为一个错误的值，但这种错误应该比较明显。如果某人忘记了更新它的值–那一定是计算代码出了问题。另外，设置了错误的值以后，它就一直是错的，但这并不难调试出来</li>
+<li>第二个问题在于如果这些变量都是不可变的，那么就需要在创建 movie_t
+类时初始化它们。变量 scores_size
+可能初始化为一个错误的值，但这种错误应该比较明显。如果某人忘记了更新它的值--那一定是计算代码出了问题。另外，设置了错误的值以后，它就一直是错的，但这并不难调试出来</li>
 </ul>
-<p>我完全没有想到作者居然要把  scores 和 scores_size 变量都不可变，这样做的意义何在？难道我的这个 movie_t 类不能添加元素？作者究竟在想什么？那就视为作者只是想表达可变状态存在的问题吧。</p>
-<h2><span id="纯函数和引用透明">纯函数和引用透明</span></h2><p>所有这些问题都源自一个设计缺陷：软件系统中多个组件负责相同的数据，而不知道另外的组件何时更改数据。修改这些问题最简单的办法就是禁止修改任何数据，所有问题都会迎刃而解。但事实是不可能没有数据被修改。</p>
+<p>我完全没有想到作者居然要把 scores 和 scores_size
+变量都不可变，这样做的意义何在？难道我的这个 movie_t
+类不能添加元素？作者究竟在想什么？那就视为作者只是想表达可变状态存在的问题吧。</p>
+<h2><span id="纯函数和引用透明">纯函数和引用透明</span></h2>
+<p>所有这些问题都源自一个设计缺陷：软件系统中多个组件负责相同的数据，而不知道另外的组件何时更改数据。修改这些问题最简单的办法就是禁止修改任何数据，所有问题都会迎刃而解。但事实是不可能没有数据被修改。</p>
 <p>现在通过称为引用透明的概念，定义更加纯洁的函数。引用透明是表达式的一个特征，而不仅仅是函数。表达式是定义了一种计算并返回结果的任何东西。如果用表达式的结果替换整个表达式，而程序不会出现不同的行为，那么就说这个表达式是引用透明的。如果表达式是引用透明的，那它就没有任何可见的副作用，因此表达式中的所有函数都是纯函数。</p>
-<p><img src="/images/2024/08/19/0d286a70-5e28-11ef-9da5-855b30face3e.png" alt="查找和记录最大值.png"></p>
-<p>max 是 引用透明的吗？如果用 max 返回值替换 max 调用，发现程序的行为没有变化，即计算出结果依旧是 6。</p>
-<p><img src="/images/2024/08/19/08f8f190-5e28-11ef-9da5-855b30face3e.png" alt="max返回值替换.png"></p>
-<p>尽管依旧有些不同，因为 max 里面会通过 cerr 输出计算的结果，但是我们可以宽松引用透明的概念。如果非要严苛一点，下面的这个就完全符合了。</p>
-<p><img src="/images/2024/08/19/f6ef2d20-5e27-11ef-9da5-855b30face3e.png" alt="引用透明.png"></p>
-<h2><span id="无副作用编程">无副作用编程</span></h2><p>在纯函数式编程中，不是去改变一个值，而是创建一个新的（值）。如果要改变对象的一个属性，就创建这个对象的副本，只不过属性的值要改变为新值。如果这样设计软件，就不会出现前面例子中的问题–当处理电影得分时，其他人改变了它。这时没人能够改变电影得分的列表，只能创建一个新的列表，插入新值。</p>
+<figure>
+<img src="/images/2024/08/19/0d286a70-5e28-11ef-9da5-855b30face3e.png" alt="查找和记录最大值.png">
+<figcaption aria-hidden="true">查找和记录最大值.png</figcaption>
+</figure>
+<p>max 是 引用透明的吗？如果用 max 返回值替换 max
+调用，发现程序的行为没有变化，即计算出结果依旧是 6。</p>
+<figure>
+<img src="/images/2024/08/19/08f8f190-5e28-11ef-9da5-855b30face3e.png" alt="max返回值替换.png">
+<figcaption aria-hidden="true">max返回值替换.png</figcaption>
+</figure>
+<p>尽管依旧有些不同，因为 max 里面会通过 cerr
+输出计算的结果，但是我们可以宽松引用透明的概念。如果非要严苛一点，下面的这个就完全符合了。</p>
+<figure>
+<img src="/images/2024/08/19/f6ef2d20-5e27-11ef-9da5-855b30face3e.png" alt="引用透明.png">
+<figcaption aria-hidden="true">引用透明.png</figcaption>
+</figure>
+<h2><span id="无副作用编程">无副作用编程</span></h2>
+<p>在纯函数式编程中，不是去改变一个值，而是创建一个新的（值）。如果要改变对象的一个属性，就创建这个对象的副本，只不过属性的值要改变为新值。如果这样设计软件，就不会出现前面例子中的问题--当处理电影得分时，其他人改变了它。这时没人能够改变电影得分的列表，只能创建一个新的列表，插入新值。</p>
 <p>大型系统有许多可改变的部分。需要创建一个巨大的、包罗万象的结构，并在每次需要改变时，重新创建它。这将产生巨大的性能开销（即使使用针对函数式编程优化的数据结构，这将在第8章介绍），并大幅增加软件的复杂性。</p>
-<p>通常会有一些可变状态，如果经常复制和传递，将影响程序的效率。可以将函数设计为返回如何改变的语句，而不是返回改变后状态的复制。这种方式带来的是系统可变部分与 pure 部分进行了明确分离。</p>
+<p>通常会有一些可变状态，如果经常复制和传递，将影响程序的效率。可以将函数设计为返回如何改变的语句，而不是返回改变后状态的复制。这种方式带来的是系统可变部分与
+pure 部分进行了明确分离。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;functional&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">State</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">int</span> value1;<br>    <span class="hljs-type">int</span> value2;<br><br>    <span class="hljs-built_in">State</span>(<span class="hljs-type">int</span> v1, <span class="hljs-type">int</span> v2) : <span class="hljs-built_in">value1</span>(v1), <span class="hljs-built_in">value2</span>(v2) &#123;&#125;<br><br>    <span class="hljs-comment">// 用于应用状态变化的函数</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">apply</span><span class="hljs-params">(<span class="hljs-type">const</span> std::function&lt;<span class="hljs-type">void</span>(State&amp;)&gt;&amp; change)</span> </span>&#123;<br>        <span class="hljs-built_in">change</span>(*<span class="hljs-keyword">this</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;State(value1: &quot;</span> &lt;&lt; value1 &lt;&lt; <span class="hljs-string">&quot;, value2: &quot;</span> &lt;&lt; value2 &lt;&lt; <span class="hljs-string">&quot;)\n&quot;</span>;<br>    &#125;<br>&#125;;<br><br><span class="hljs-comment">// 纯函数：返回一个表示状态变化的操作，而不是直接改变状态</span><br><span class="hljs-function">std::function&lt;<span class="hljs-title">void</span><span class="hljs-params">(State&amp;)</span>&gt; <span class="hljs-title">incrementValue1</span><span class="hljs-params">(<span class="hljs-type">int</span> amount)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> [amount](State&amp; state) &#123;<br>        state.value1 += amount;<br>    &#125;;<br>&#125;<br><br><span class="hljs-function">std::function&lt;<span class="hljs-title">void</span><span class="hljs-params">(State&amp;)</span>&gt; <span class="hljs-title">incrementValue2</span><span class="hljs-params">(<span class="hljs-type">int</span> amount)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> [amount](State&amp; state) &#123;<br>        state.value2 += amount;<br>    &#125;;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">State <span class="hljs-title">state</span><span class="hljs-params">(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>)</span></span>;<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Initial state: &quot;</span>;<br>    state.<span class="hljs-built_in">print</span>();<br><br>    <span class="hljs-comment">// 获取状态变化操作</span><br>    <span class="hljs-keyword">auto</span> change1 = <span class="hljs-built_in">incrementValue1</span>(<span class="hljs-number">5</span>);<br>    <span class="hljs-keyword">auto</span> change2 = <span class="hljs-built_in">incrementValue2</span>(<span class="hljs-number">10</span>);<br><br>    <span class="hljs-comment">// 应用状态变化</span><br>    state.<span class="hljs-built_in">apply</span>(change1);<br>    state.<span class="hljs-built_in">apply</span>(change2);<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Modified state: &quot;</span>;<br>    state.<span class="hljs-built_in">print</span>();<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>代码解释：</p>
-<ol>
-<li>State 类：包含两个可变的成员变量 <code>value1</code> 和 <code>value2</code>。<code>apply</code> 函数接受一个 <code>std::function&lt;void(State&amp;)&gt;</code> 类型的参数，表示对状态的某种操作。</li>
-<li>纯函数 <code>incrementValue1</code> 和 <code>incrementValue2</code>：这些函数不直接改变状态，而是返回一个 lambda 表达式，该表达式描述了如何修改状态。这些函数是纯函数，因为它们不改变任何外部状态，只生成描述状态变化的操作。</li>
-<li>应用状态变化：在 <code>main</code> 函数中，我们创建了一个 <code>State</code> 对象，并通过 <code>apply</code> 函数来应用状态变化。<code>apply</code> 函数调用传入的 lambda 表达式，从而修改 <code>State</code> 对象的状态。</li>
+<ol type="1">
+<li>State 类：包含两个可变的成员变量 <code>value1</code> 和
+<code>value2</code>。<code>apply</code> 函数接受一个
+<code>std::function&lt;void(State&amp;)&gt;</code>
+类型的参数，表示对状态的某种操作。</li>
+<li>纯函数 <code>incrementValue1</code> 和
+<code>incrementValue2</code>：这些函数不直接改变状态，而是返回一个
+lambda
+表达式，该表达式描述了如何修改状态。这些函数是纯函数，因为它们不改变任何外部状态，只生成描述状态变化的操作。</li>
+<li>应用状态变化：在 <code>main</code> 函数中，我们创建了一个
+<code>State</code> 对象，并通过 <code>apply</code>
+函数来应用状态变化。<code>apply</code> 函数调用传入的 lambda
+表达式，从而修改 <code>State</code> 对象的状态。</li>
 </ol>
-<h2><span id="并发环境中的可变状态和不可变状态">并发环境中的可变状态和不可变状态</span></h2><p>并发问题只有在并行的进程间共享可变数据才会出现。因此，一种解决方案就是不使用并行，另一种方案就是不使用可变数据。但还有第三种选择：使用可变数据，但不共享它。如果不共享数据，则不会发生在不知情的情况下数据被修改的事情。</p>
-<h2><span id="const-的重要性">const 的重要性</span></h2><p>如果希望某个对象不被修改，可以使用 const 关键字。</p>
-<h3><span id="逻辑-const-与内部-const">逻辑 const 与内部 const</span></h3><p>如果不希望修改内部类成员的数据，可以把成员变量加上 const ，甚至不需要创建访问函数，只需要加上 public 即可。</p>
+<h2><span id="并发环境中的可变状态和不可变状态">并发环境中的可变状态和不可变状态</span></h2>
+<p>并发问题只有在并行的进程间共享可变数据才会出现。因此，一种解决方案就是不使用并行，另一种方案就是不使用可变数据。但还有第三种选择：使用可变数据，但不共享它。如果不共享数据，则不会发生在不知情的情况下数据被修改的事情。</p>
+<h2><span id="const-的重要性">const 的重要性</span></h2>
+<p>如果希望某个对象不被修改，可以使用 const 关键字。</p>
+<h3><span id="逻辑-const-与内部-const">逻辑 const 与内部 const</span></h3>
+<p>如果不希望修改内部类成员的数据，可以把成员变量加上 const
+，甚至不需要创建访问函数，只需要加上 public 即可。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-type">const</span> string name_;<br>  <span class="hljs-type">const</span> <span class="hljs-type">int</span> age_;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>这种方法有个缺陷：有些编译器的优化功能将停止工作。一旦声明成员常量，就会丢失移动构造函数和移动赋值操作符。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>&#123;&#125;<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">age</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>&#123;&#125;<br> <span class="hljs-keyword">private</span>:<br>  string name_;<br>  <span class="hljs-type">int</span> age_;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>虽然这种方式中，数据成员没有声明为 const，但类的用户却不能修改它们，因为在实现的所有成员函数中，this 都指向一个 Person 的 const 实例。这不但提供了逻辑上的 const（不能修改对象中的用户可见数据），还实现了内部const（不会修改对象的内部数据）。同时，还不会丢失任何优化机会，因为编译器会产生任何必需的移动操作。</p>
+<p>虽然这种方式中，数据成员没有声明为
+const，但类的用户却不能修改它们，因为在实现的所有成员函数中，this
+都指向一个 Person 的 const 实例。这不但提供了逻辑上的
+const（不能修改对象中的用户可见数据），还实现了内部const（不会修改对象的内部数据）。同时，还不会丢失任何优化机会，因为编译器会产生任何必需的移动操作。</p>
 <p>如果需要修改，但又想保证数据的不可变性（至少对外部调用者是这样的），那就用并发编程相关的技术来做了。</p>
-<h3><span id="对于临时值优化成员函数">对于临时值优化成员函数</span></h3><p>如果类设计为不可变的，则创建 setter 函数时，需要创建一个返回对象副本的函数，以保存特定变量修改后的值。创建对象副本保存修改后的对象是十分低效的（尽管编译器在某些场合下可以对此进行优化）。对于原对象不再需要的情况，这一点也是适用的。</p>
-<p><img src="/images/2024/08/19/ea895920-5e27-11ef-9da5-855b30face3e.png" alt="普通值和临时值.png"></p>
-<p>现在声明了两个 with_name 的重载函数。正如 const 修饰符一样，给成员函数指定引用类型修饰符（&amp;）只影响this 指针的类型。第二个重载函数只适用于借用数据的对象的调用–临时对象或其他右值引用。</p>
-<p>当第一个重载函数被调用时，创建一个新的 persont 对象的副本，并由 this 指向它，设置新的 name，并返回新创建的对象实例。在第二个重载函数中，创建一个新的 persont 对象实例，并把 this 所指对象的数据移动（不是复制）到新对象实例中。</p>
-<p>注意第二个重载函数没有声明为 const。如果是，就不能把当前对象中的数据移动到新的对象中，就需要像第一个重载函数一样复制数据。</p>
-<h3><span id="const缺陷">const缺陷</span></h3><ol>
+<h3><span id="对于临时值优化成员函数">对于临时值优化成员函数</span></h3>
+<p>如果类设计为不可变的，则创建 setter
+函数时，需要创建一个返回对象副本的函数，以保存特定变量修改后的值。创建对象副本保存修改后的对象是十分低效的（尽管编译器在某些场合下可以对此进行优化）。对于原对象不再需要的情况，这一点也是适用的。</p>
+<figure>
+<img src="/images/2024/08/19/ea895920-5e27-11ef-9da5-855b30face3e.png" alt="普通值和临时值.png">
+<figcaption aria-hidden="true">普通值和临时值.png</figcaption>
+</figure>
+<p>现在声明了两个 with_name 的重载函数。正如 const
+修饰符一样，给成员函数指定引用类型修饰符（&amp;）只影响this
+指针的类型。第二个重载函数只适用于借用数据的对象的调用--临时对象或其他右值引用。</p>
+<p>当第一个重载函数被调用时，创建一个新的 persont 对象的副本，并由 this
+指向它，设置新的
+name，并返回新创建的对象实例。在第二个重载函数中，创建一个新的 persont
+对象实例，并把 this 所指对象的数据移动（不是复制）到新对象实例中。</p>
+<p>注意第二个重载函数没有声明为
+const。如果是，就不能把当前对象中的数据移动到新的对象中，就需要像第一个重载函数一样复制数据。</p>
+<h3><span id="const缺陷">const缺陷</span></h3>
+<ol type="1">
 <li>const 禁止对象移动</li>
 <li>const 可以被破坏</li>
 </ol>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">modifyConst</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">int</span>&amp; x)</span> </span>&#123;<br>    <span class="hljs-type">int</span>&amp; nonConstX = <span class="hljs-built_in">const_cast</span>&lt;<span class="hljs-type">int</span>&amp;&gt;(x);  <span class="hljs-comment">// 通过 const_cast 移除 const 性质</span><br>    nonConstX = <span class="hljs-number">42</span>;  <span class="hljs-comment">// 修改了原始的 const 对象</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> value = <span class="hljs-number">10</span>;<br>    <span class="hljs-type">const</span> <span class="hljs-type">int</span>&amp; constRef = value;<br><br>    <span class="hljs-built_in">modifyConst</span>(constRef);<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Modified value: &quot;</span> &lt;&lt; value &lt;&lt; std::endl;  <span class="hljs-comment">// 输出 42</span><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>const_cast 可以移除 const 性质，实际上还有很多方式可以移除 const 性质，就不逐一列举了，只是想说有 const 关键字并不一定始终跟随定义的对象。</p>
+<p>const_cast 可以移除 const 性质，实际上还有很多方式可以移除 const
+性质，就不逐一列举了，只是想说有 const
+关键字并不一定始终跟随定义的对象。</p>
 
       </div>
     </div>
@@ -327,7 +375,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\12\第一章：函数式编程简介\" title="第一章：函数式编程简介" rel="bookmark">第一章：函数式编程简介</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\第三章：函数对象\" title="第三章：函数对象" rel="bookmark">第三章：函数对象</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\第二章：函数式编程之旅\" title="第二章：函数式编程之旅" rel="bookmark">第二章：函数式编程之旅</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\12\第一章：函数式编程简介\" title="第一章：函数式编程简介" rel="bookmark">第一章：函数式编程简介</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\第三章：函数对象\" title="第三章：函数对象" rel="bookmark">第三章：函数对象</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\第二章：函数式编程之旅\" title="第二章：函数式编程之旅" rel="bookmark">第二章：函数式编程之旅</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -859,11 +907,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

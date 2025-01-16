@@ -174,24 +174,41 @@
           </div>
         
         <p>对象销毁，会自动调用析构函数。</p>
-<p>因此，绝不可以自行调用析构函数，因为对象还没有销毁，其他人可能还在使用该对象。再者，由于对象销毁会自动调用析构函数，这就出现了double free 错误。</p>
+<p>因此，绝不可以自行调用析构函数，因为对象还没有销毁，其他人可能还在使用该对象。再者，由于对象销毁会自动调用析构函数，这就出现了double
+free 错误。</p>
 <p>如果我们没有定义析构函数，系统默认会给此类定义一个默认的析构函数。</p>
 <p>当数据成员中有指针时，创建一个对象，会申请堆空间，销毁对象时默认析构不够用了（造成内存泄漏），此时就需要我们自定义析构函数。在析构函数中定义堆空间上内存回收的机制，就不会发生内存泄漏。</p>
-<p>如下图中 _brand 是 Computer 类的成员变量，并且在构造函数中申请堆内存初始化（图中没有体现）。等到对象销毁的时候，析构函数的工作就是要回收掉自己的成员变量的堆内存。</p>
-<p><img src="/images/2024/10/31/0968d310-974f-11ef-9d68-0f45d9d3f367.png" alt="000析构函数.png"></p>
-<ol>
+<p>如下图中 _brand 是 Computer
+类的成员变量，并且在构造函数中申请堆内存初始化（图中没有体现）。等到对象销毁的时候，析构函数的工作就是要回收掉自己的成员变量的堆内存。</p>
+<figure>
+<img src="/images/2024/10/31/0968d310-974f-11ef-9d68-0f45d9d3f367.png" alt="000析构函数.png">
+<figcaption aria-hidden="true">000析构函数.png</figcaption>
+</figure>
+<ol type="1">
 <li>对于<strong>全局对象</strong>，<strong>整个程序结束时</strong>，自动调用全局对象的析构函数。</li>
 <li>对于<strong>局部对象</strong>，在<strong>程序离开局部对象的作用域</strong>时调用对象的析构函数。</li>
 <li>对于<strong>静态对象</strong>，在<strong>整个程序结束时</strong>调用析构函数。</li>
-<li>对于<strong>堆对象</strong>，在使用 delete 删除该对象时，调用析构函数。</li>
+<li>对于<strong>堆对象</strong>，在使用 delete
+删除该对象时，调用析构函数。</li>
 </ol>
-<p>&nbsp;</p>
+<p> </p>
 <p>最后一条极其核心，重点要进行说明。</p>
-<p>我们自定义的析构函数是回收自己类中的成员变量，通过 delete 去回收 拥有堆内存的成员变量。但是它不具备 delete 自身的能力，因此我们讲 使用者创建该对象之后（堆上的对象），记得 delete 掉。</p>
-<p><img src="/images/2024/10/31/05a5feb0-974f-11ef-9d68-0f45d9d3f367.png" alt="001析构函数.png"></p>
-<p>注意看图中对 p2 指针对象的处理，由于它是堆内存，对象本身的析构函数不会销毁自己，需要生成者自行 delete。delete 之后，记得置为 nullptr。</p>
-<p><strong>那么 delete 对象究竟干了什么</strong>？调用该对象的析构函数，然后回收对象本身的内存空间。</p>
-<p>后面学习智能指针就更方便，它会自动将管理的对象，在对象销毁之后，自动 delete 掉该对象。注意析构函数不是智能指针调用的，而是对象本身销毁之后自己会调用，但是对象本身的堆内存 delete 会由智能指针完成。</p>
+<p>我们自定义的析构函数是回收自己类中的成员变量，通过 delete 去回收
+拥有堆内存的成员变量。但是它不具备 delete 自身的能力，因此我们讲
+使用者创建该对象之后（堆上的对象），记得 delete 掉。</p>
+<figure>
+<img src="/images/2024/10/31/05a5feb0-974f-11ef-9d68-0f45d9d3f367.png" alt="001析构函数.png">
+<figcaption aria-hidden="true">001析构函数.png</figcaption>
+</figure>
+<p>注意看图中对 p2
+指针对象的处理，由于它是堆内存，对象本身的析构函数不会销毁自己，需要生成者自行
+delete。delete 之后，记得置为 nullptr。</p>
+<p><strong>那么 delete
+对象究竟干了什么</strong>？调用该对象的析构函数，然后回收对象本身的内存空间。</p>
+<p>后面学习智能指针就更方便，它会自动将管理的对象，在对象销毁之后，自动
+delete
+掉该对象。注意析构函数不是智能指针调用的，而是对象本身销毁之后自己会调用，但是对象本身的堆内存
+delete 会由智能指针完成。</p>
 
       </div>
     </div>
@@ -276,7 +293,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -808,11 +825,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

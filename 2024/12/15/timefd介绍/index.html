@@ -173,11 +173,13 @@
             
           </div>
         
-        <p>使用 <code>timerfd</code> 创建出的定时器是基于文件描述符进行管理的，在达到超时时间时，描述符将置为可读，并可以从中读取到超时次数（启动定时器后或上次 <code>read</code> 之后的超时次数）。</p>
+        <p>使用 <code>timerfd</code>
+创建出的定时器是基于文件描述符进行管理的，在达到超时时间时，描述符将置为可读，并可以从中读取到超时次数（启动定时器后或上次
+<code>read</code> 之后的超时次数）。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/timerfd.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">timerfd_create</span><span class="hljs-params">(<span class="hljs-type">int</span> clockid, <span class="hljs-type">int</span> flags)</span></span>;<br> <br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">timerfd_settime</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">int</span> flags, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> itimerspec *new_value, <span class="hljs-keyword">struct</span> itimerspec *old_value)</span></span>;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">timerfd_gettime</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-keyword">struct</span> itimerspec *curr_value)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<h1><span id="接口">接口</span></h1><h2><span id="timerfd_create创建一个定时器文件描述符">timerfd_create–创建一个定时器文件描述符</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">返回值是一个新的文件描述符，失败时返回 <span class="hljs-number">-1</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">timerfd_create</span><span class="hljs-params">(<span class="hljs-type">int</span> clockid, <span class="hljs-type">int</span> flags)</span></span>;<br></code></pre></td></tr></table></figure>
-
+<h1><span id="接口">接口</span></h1>
+<h2><span id="timerfd_create-创建一个定时器文件描述符">timerfd_create--创建一个定时器文件描述符</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">返回值是一个新的文件描述符，失败时返回 <span class="hljs-number">-1</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">timerfd_create</span><span class="hljs-params">(<span class="hljs-type">int</span> clockid, <span class="hljs-type">int</span> flags)</span></span>;<br></code></pre></td></tr></table></figure>
 <p><strong><code>clockid</code></strong>: 定时器使用的时钟</p>
 <ul>
 <li><code>CLOCK_REALTIME</code>：系统的实时时钟，可被系统设置改变。</li>
@@ -186,32 +188,38 @@
 <p><strong><code>flags</code></strong>: 控制选项</p>
 <ul>
 <li><code>TFD_NONBLOCK</code>：非阻塞模式。</li>
-<li><code>TFD_CLOEXEC</code>：文件描述符在执行 <code>exec</code> 时关闭。</li>
+<li><code>TFD_CLOEXEC</code>：文件描述符在执行 <code>exec</code>
+时关闭。</li>
 </ul>
-<h2><span id="timerfd_settime配置定时器">timerfd_settime–配置定时器</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">timerfd_settime</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">int</span> flags,</span></span><br><span class="hljs-params"><span class="hljs-function">                    <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> itimerspec *new_value,</span></span><br><span class="hljs-params"><span class="hljs-function">                    <span class="hljs-keyword">struct</span> itimerspec *old_value)</span></span>;<br></code></pre></td></tr></table></figure>
-
+<h2><span id="timerfd_settime-配置定时器">timerfd_settime--配置定时器</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">timerfd_settime</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">int</span> flags,</span></span><br><span class="hljs-params"><span class="hljs-function">                    <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> itimerspec *new_value,</span></span><br><span class="hljs-params"><span class="hljs-function">                    <span class="hljs-keyword">struct</span> itimerspec *old_value)</span></span>;<br></code></pre></td></tr></table></figure>
 <p>重点看 struct itimerspec 结构体，配置定时器的核心参数：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">itimerspec</span> &#123;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">timespec</span> it_interval; <span class="hljs-comment">// 设置定时器的执行周期，也就是定时器每隔多久会触发一次</span><br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">timespec</span> it_value;    <span class="hljs-comment">// 设置定时器初始的溢出时间，也就是第一次设置后多久会触发一次</span><br>&#125;;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">timespec</span> &#123;<br>    <span class="hljs-type">time_t</span> tv_sec;    <span class="hljs-comment">// 秒</span><br>    <span class="hljs-type">long</span>   tv_nsec;   <span class="hljs-comment">// 纳秒</span><br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>然后再对其他三个参数进行说明：</p>
 <p>fd：前面 timerfd_create 创建成功的返回值。</p>
-<p>old_value：可以为 NULL；如果不是 NULL 将返回上次定时器设置的 <code>new_value</code> 参数。</p>
+<p>old_value：可以为 NULL；如果不是 NULL 将返回上次定时器设置的
+<code>new_value</code> 参数。</p>
 <p>flags：0 代表相对事件；TFD_TIMER_ABSTIME 代表绝对时间。</p>
-<h2><span id="timerfd_gettime知晓定时器的当前状态">timerfd_gettime–知晓定时器的当前状态</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">timerfd_gettime</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-keyword">struct</span> itimerspec *curr_value)</span></span>;<br></code></pre></td></tr></table></figure>
-
+<h2><span id="timerfd_gettime-知晓定时器的当前状态">timerfd_gettime--知晓定时器的当前状态</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">timerfd_gettime</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-keyword">struct</span> itimerspec *curr_value)</span></span>;<br></code></pre></td></tr></table></figure>
 <p>获取定时器的当前剩余时间（<code>it_value</code>）以及定时器的周期时间（<code>it_interval</code>）。</p>
-<h1><span id="如何把-timerfd-用起来">如何把 timerfd 用起来？</span></h1><p>前面讲 timerfd 在达到超时时间时，描述符将置为可读。那我们调用 read 接口即可。</p>
+<h1><span id="如何把-timerfd-用起来">如何把 timerfd 用起来？</span></h1>
+<p>前面讲 timerfd 在达到超时时间时，描述符将置为可读。那我们调用 read
+接口即可。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">read</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> count)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<h1><span id="阻塞和非阻塞的处理方式">阻塞和非阻塞的处理方式</span></h1><p>默认情况下，time_fd 是阻塞模式。如果要 设置为非阻塞模式，可以通过 timerfd_create 设置 flags 选项为 TFD_NONBLOCK。</p>
-<p>如果是阻塞模式下调用 read，read 调用会阻塞线程，直到定时器事件发生（不发生就一直阻塞）。</p>
-<p>如果是非阻塞模式下调用 read，read 会立即返回，如果没有事件触发，返回 <code>-1</code>，并设置 <code>errno</code> 为 <code>EAGAIN</code>。</p>
-<p>正因为 阻塞模式下必然是在 定时器有事件发生才解除阻塞，也就保证代码执行到  read 之后必然有事件发生：</p>
+<h1><span id="阻塞和非阻塞的处理方式">阻塞和非阻塞的处理方式</span></h1>
+<p>默认情况下，time_fd 是阻塞模式。如果要 设置为非阻塞模式，可以通过
+timerfd_create 设置 flags 选项为 TFD_NONBLOCK。</p>
+<p>如果是阻塞模式下调用 read，read
+调用会阻塞线程，直到定时器事件发生（不发生就一直阻塞）。</p>
+<p>如果是非阻塞模式下调用 read，read 会立即返回，如果没有事件触发，返回
+<code>-1</code>，并设置 <code>errno</code> 为 <code>EAGAIN</code>。</p>
+<p>正因为 阻塞模式下必然是在
+定时器有事件发生才解除阻塞，也就保证代码执行到 read
+之后必然有事件发生：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">while</span> ( <span class="hljs-number">1</span> )<br>&#123;<br>	<span class="hljs-type">int</span> nfds = <span class="hljs-built_in">epoll_wait</span>( epfd, events, <span class="hljs-number">10</span>, <span class="hljs-number">-1</span> );<br>	<span class="hljs-keyword">for</span> ( <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nfds; i++ )<br>	&#123;<br>		<span class="hljs-keyword">if</span> ( events[i].data.fd == tfd )<br>		&#123;<br>			<span class="hljs-type">uint64_t</span> expirations;<br>			<span class="hljs-built_in">read</span>( tfd, &amp;expirations, <span class="hljs-built_in">sizeof</span>(expirations) );<br>			<span class="hljs-built_in">printf</span>( <span class="hljs-string">&quot;Timer expired %llu times\n&quot;</span>, (<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span>) expirations );<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-
 <p>而非阻塞模式并不能保证代码往下执行是因为确保有事件发生，我们需要有判断逻辑：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">while</span> ( <span class="hljs-number">1</span> )<br>&#123;<br>	<span class="hljs-type">ssize_t</span> s = <span class="hljs-built_in">read</span>( tfd, &amp;expirations, <span class="hljs-built_in">sizeof</span>(expirations) );<br>	<span class="hljs-keyword">if</span> ( s == <span class="hljs-number">-1</span> )<br>	&#123;<br>		<span class="hljs-keyword">if</span> ( errno == EAGAIN )	<span class="hljs-comment">// 没有定时器事件发生</span><br>		&#123;<br>			<span class="hljs-built_in">printf</span>( <span class="hljs-string">&quot;No timer event yet, doing other work...\n&quot;</span> );<br>			<span class="hljs-keyword">continue</span>;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-built_in">perror</span>( <span class="hljs-string">&quot;read&quot;</span> );<br>			<span class="hljs-keyword">return</span>(<span class="hljs-number">-1</span>);<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">printf</span>( <span class="hljs-string">&quot;Timer expired %llu times\n&quot;</span>, (<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span>) expirations );<br>	<span class="hljs-keyword">break</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 
       </div>
     </div>
@@ -296,7 +304,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -828,11 +836,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,9 +174,9 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">min_max</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">int</span>* arr, <span class="hljs-type">int</span> n, <span class="hljs-type">int</span>* pmin, <span class="hljs-type">int</span>* pmax)</span> </span>&#123;<br>    *pmin = arr[<span class="hljs-number">0</span>];<br>    *pmax = arr[<span class="hljs-number">0</span>];<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; n; i++) &#123;<br>        <span class="hljs-keyword">if</span> (arr[i] &lt; *pmin) &#123;<br>            *pmin = arr[i];<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arr[i] &gt; *pmax) &#123;<br>            *pmax = arr[i];<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>传入参数，即传入的参数不会被修改，如代码中的 arr 对象。</p>
-<p>传出参数，即传出的参数意味着可以被修改，如代码中的 pmin 和 pmax 对象。</p>
+<p>传出参数，即传出的参数意味着可以被修改，如代码中的 pmin 和 pmax
+对象。</p>
 
       </div>
     </div>
@@ -261,7 +261,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -793,11 +793,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

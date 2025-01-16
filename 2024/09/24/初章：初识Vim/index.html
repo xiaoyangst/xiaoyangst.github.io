@@ -174,38 +174,63 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E8%AE%A4%E8%AF%86-%E5%91%BD%E4%BB%A4">认识 . 命令</a></li>
-<li><a href="#%E4%BB%A5%E9%80%80%E4%B8%BA%E8%BF%9B">以退为进</a></li>
-<li><a href="#%E6%89%A7%E8%A1%8C-%E9%87%8D%E5%A4%8D-%E5%9B%9E%E9%80%80">执行、重复、回退</a></li>
+<li><a href="#认识-命令">认识 . 命令</a></li>
+<li><a href="#以退为进">以退为进</a></li>
+<li><a href="#执行-重复-回退">执行、重复、回退</a></li>
 </ul>
 <!-- tocstop -->
-
-<p>有安装 Vimplus 第三方插件让 Vim 更方便运用，但我因为个人开发习惯，选择在 Clion 上安装对应的 Vim 插件：</p>
-<p><img src="/images/2024/09/24/d6279710-7a17-11ef-90be-0b70ce246133.png" alt="vim插件.png"></p>
-<h2><span id="认识-命令">认识 . 命令</span></h2><p>我们将看到 Vim 可以录制任意数目的按键操作，然后在以后重复执行它们。这让我们可以把最常重复的工作流程录制下来，并用一个按键重放它们。可以把 . 命令当成一个很小的宏。</p>
+<p>有安装 Vimplus 第三方插件让 Vim
+更方便运用，但我因为个人开发习惯，选择在 Clion 上安装对应的 Vim
+插件：</p>
+<figure>
+<img src="/images/2024/09/24/d6279710-7a17-11ef-90be-0b70ce246133.png" alt="vim插件.png">
+<figcaption aria-hidden="true">vim插件.png</figcaption>
+</figure>
+<h2><span id="认识-命令">认识 . 命令</span></h2>
+<p>我们将看到 Vim
+可以录制任意数目的按键操作，然后在以后重复执行它们。这让我们可以把最常重复的工作流程录制下来，并用一个按键重放它们。可以把
+. 命令当成一个很小的宏。</p>
 <p>总的来讲，<code>.</code> 就是重复你上次的行为：</p>
 <ul>
-<li><code>.</code> 在普通模式下的功能是重复 <strong>最后一次修改操作</strong></li>
-<li>在插入模式下，执行所有修改操作都会被记录，直到你保存并返回到普通模式。如果你这个时候执行 <code>.</code> 就会重复从进入到插入模式到退回到普通模式所有的行为（包括插入命令本身哦！）。</li>
+<li><code>.</code> 在普通模式下的功能是重复
+<strong>最后一次修改操作</strong></li>
+<li>在插入模式下，执行所有修改操作都会被记录，直到你保存并返回到普通模式。如果你这个时候执行
+<code>.</code>
+就会重复从进入到插入模式到退回到普通模式所有的行为（包括插入命令本身哦！）。</li>
 </ul>
-<p>有点需要特别说明，我们知道普通模式下 A 代表在当前行的末尾插入。那么这个命令不是单纯的插入，它实际由两部分组成，即跳转到当前行的尾部+插入。它应该被视为插入。举个例子说明：</p>
-<ol>
-<li>你在普通模式下，光标位于一行的开头，按下 <code>A</code>，跳转到行末，进入插入模式</li>
-<li>在行末插入了 “Hello”，然后按 <code>Esc</code> 回到普通模式</li>
-<li>按下 <code>.</code>，光标会移动到当前行的末尾，进入插入模式，并插入 “Hello”</li>
+<p>有点需要特别说明，我们知道普通模式下 A
+代表在当前行的末尾插入。那么这个命令不是单纯的插入，它实际由两部分组成，即跳转到当前行的尾部+插入。它应该被视为插入。举个例子说明：</p>
+<ol type="1">
+<li>你在普通模式下，光标位于一行的开头，按下
+<code>A</code>，跳转到行末，进入插入模式</li>
+<li>在行末插入了 "Hello"，然后按 <code>Esc</code> 回到普通模式</li>
+<li>按下 <code>.</code>，光标会移动到当前行的末尾，进入插入模式，并插入
+"Hello"</li>
 </ol>
-<h2><span id="以退为进">以退为进</span></h2><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs tex">var foo = &quot;method(&quot;+argument1+&quot;,&quot;+argument2+&quot;)&quot;;<br><br>vim 之后成为如下形式<br><br>var foo = &quot;method(&quot; + argument1 + &quot;,&quot; + argument2 + &quot;)&quot;;<br></code></pre></td></tr></table></figure>
-
-<p>为了应用 <code>.</code> ，我们务必使用这样一种命令，即带有某个功能的插入模式，这里选择 s，即删除一个字符并插入。执行之后，输入<code>_+_ </code>，保存并到普通模式，然后就可以找到到 + 字符那里，执行 <code>.</code> 即可。</p>
-<p>存储这系列操作之后，我们应该查找所有字符进行逐一替换，而不是进行光标移动去一个一个找。f{char} 就能查找某个字符，查找到之后，执行 <code>.</code> 即可。</p>
-<p>可是每次输入 f{char} 查找相当费时，当你第一次执行 f{char} 之后，下次输入 ; 就可以代表再次执行  f{char}。</p>
+<h2><span id="以退为进">以退为进</span></h2>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs tex">var foo = &quot;method(&quot;+argument1+&quot;,&quot;+argument2+&quot;)&quot;;<br><br>vim 之后成为如下形式<br><br>var foo = &quot;method(&quot; + argument1 + &quot;,&quot; + argument2 + &quot;)&quot;;<br></code></pre></td></tr></table></figure>
+<p>为了应用 <code>.</code>
+，我们务必使用这样一种命令，即带有某个功能的插入模式，这里选择
+s，即删除一个字符并插入。执行之后，输入<code>_+_</code>，保存并到普通模式，然后就可以找到到
++ 字符那里，执行 <code>.</code> 即可。</p>
+<p>存储这系列操作之后，我们应该查找所有字符进行逐一替换，而不是进行光标移动去一个一个找。f{char}
+就能查找某个字符，查找到之后，执行 <code>.</code> 即可。</p>
+<p>可是每次输入 f{char} 查找相当费时，当你第一次执行 f{char}
+之后，下次输入 ; 就可以代表再次执行 f{char}。</p>
 <p>注：_ 代表空格</p>
-<h2><span id="执行-重复-回退">执行、重复、回退</span></h2><p>当 Vim 让一个操作或移动可以很方便地重复时， 它总是会提供某种方式， 让我们在不小心做过头时能回退回来。 对 . 命令而言， 我们永远可以按 u 键撤销上次的修改。 如果在使用 f{char} 命令后， 不小心按了太多次 ; 键， 就会偏离我们的目标。 不过可以再按 , 键跳回去。</p>
-<p><img src="/images/2024/09/24/d24553d0-7a17-11ef-90be-0b70ce246133.png" alt="重复与回退.png"></p>
+<h2><span id="执行-重复-回退">执行、重复、回退</span></h2>
+<p>当 Vim 让一个操作或移动可以很方便地重复时， 它总是会提供某种方式，
+让我们在不小心做过头时能回退回来。 对 . 命令而言， 我们永远可以按 u
+键撤销上次的修改。 如果在使用 f{char} 命令后， 不小心按了太多次 ; 键，
+就会偏离我们的目标。 不过可以再按 , 键跳回去。</p>
+<figure>
+<img src="/images/2024/09/24/d24553d0-7a17-11ef-90be-0b70ce246133.png" alt="重复与回退.png">
+<figcaption aria-hidden="true">重复与回退.png</figcaption>
+</figure>
 <hr>
-<p>⭐️内容取自著者Drew Neil《Vim实用技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书</p>
+<p>⭐️内容取自著者Drew
+Neil《Vim实用技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书</p>
 
       </div>
     </div>
@@ -290,7 +315,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -822,11 +847,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

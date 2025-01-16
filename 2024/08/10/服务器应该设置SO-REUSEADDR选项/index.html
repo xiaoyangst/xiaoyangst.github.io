@@ -173,19 +173,41 @@
             
           </div>
         
-        <p>你可能看到过这个错误提示：Address already in use（地址已经被使用了）。往往要几分钟后才能重启，那我们如何立即重启服务器呢？在此之前，先理解如下两件事情：</p>
-<ol>
+        <p>你可能看到过这个错误提示：Address already in
+use（地址已经被使用了）。往往要几分钟后才能重启，那我们如何立即重启服务器呢？在此之前，先理解如下两件事情：</p>
+<ol type="1">
 <li>TCP 的 TIME-WAIT状态</li>
 <li>TCP 连接的四元组（本地地址、本地端口、远端地址、远端端口）</li>
 </ol>
-<p>TCP 连接中进行主动关闭（发送第一个FIN）的那一端会进入 TIME-WAIT 状态，并在此状态停留 2MSL，在此期间，该套接字的地址和端口仍然被占用，无法立即重新绑定到同样的地址和端口。这为我们在看到的行为提供了第一条线索：客户端主动关闭时，可以重启连接的任意一端，不会有什么问题，但当服务器主动关闭时，就无法重启，这是由于前一个连接仍然处于 TIME-WAIT 状态。</p>
-<p>如果服务器重启，并且有客户端连接上来，就会有一条新的连接，这条连接可能都不是连接到同一台远端主机上的。如前所述，一条 TCP 连接可以由本地和远程地址以及端口号完全指定，所以，即使来自同一台远程主机的客户端连接到服务器上，只要它使用的端口号和前一个连接不同，就不会有什么问题。这是因为 <code>TIME_WAIT</code> 状态仅影响特定的四元组（<code>&lt;源IP, 源端口, 目标IP, 目标端口&gt;</code>），而不是整个服务器或客户端。</p>
-<p>基于这些事实，重启服务器时 TCP 返回的错误就会让我们感到很疑惑。实际上问题并不在于 TCP，而是出在套接字API 上，TCP 只要求四元组是唯一的，而套接字 API 则需要两个调用才能完整地指定四元组。当 API 调用 bind 时，并不知道接下来是否会调用 connect，如果调用还需要在指定一个唯一的连接，还是尝试重用已经存在的那个连接之间作出选择。</p>
-<p>幸运的是，这个问题有一种很简单的解决方案。可以先设置套接字选项 SO_REUSEADDR，允许一个套接字在 TIME_WAIT 状态下立即重新绑定到相同的地址和端口。</p>
-<p>如果不设置 <code>SO_REUSEADDR</code>，当你尝试重新启动一个服务器程序（特别是在调试时），由于旧连接仍在 TIME_WAIT 状态，尝试绑定到相同的端口会导致 “Address already in use” 错误。这时服务器无法重新绑定到原有端口，可能会导致服务不可用。</p>
-<p>在某些情况下，多个进程可能希望绑定到相同的地址和端口进行监听。这种情况通常出现在使用 UDP 协议或多个服务进程间共享一个监听端口时。在这种情况下，<code>SO_REUSEADDR</code> 允许多个套接字绑定到相同的地址和端口（只要每个套接字的协议不同，或者每个套接字是加入了不同的多播组的 UDP 套接字）。</p>
+<p>TCP 连接中进行主动关闭（发送第一个FIN）的那一端会进入 TIME-WAIT
+状态，并在此状态停留
+2MSL，在此期间，该套接字的地址和端口仍然被占用，无法立即重新绑定到同样的地址和端口。这为我们在看到的行为提供了第一条线索：客户端主动关闭时，可以重启连接的任意一端，不会有什么问题，但当服务器主动关闭时，就无法重启，这是由于前一个连接仍然处于
+TIME-WAIT 状态。</p>
+<p>如果服务器重启，并且有客户端连接上来，就会有一条新的连接，这条连接可能都不是连接到同一台远端主机上的。如前所述，一条
+TCP
+连接可以由本地和远程地址以及端口号完全指定，所以，即使来自同一台远程主机的客户端连接到服务器上，只要它使用的端口号和前一个连接不同，就不会有什么问题。这是因为
+<code>TIME_WAIT</code>
+状态仅影响特定的四元组（<code>&lt;源IP, 源端口, 目标IP, 目标端口&gt;</code>），而不是整个服务器或客户端。</p>
+<p>基于这些事实，重启服务器时 TCP
+返回的错误就会让我们感到很疑惑。实际上问题并不在于
+TCP，而是出在套接字API 上，TCP 只要求四元组是唯一的，而套接字 API
+则需要两个调用才能完整地指定四元组。当 API 调用 bind
+时，并不知道接下来是否会调用
+connect，如果调用还需要在指定一个唯一的连接，还是尝试重用已经存在的那个连接之间作出选择。</p>
+<p>幸运的是，这个问题有一种很简单的解决方案。可以先设置套接字选项
+SO_REUSEADDR，允许一个套接字在 TIME_WAIT
+状态下立即重新绑定到相同的地址和端口。</p>
+<p>如果不设置
+<code>SO_REUSEADDR</code>，当你尝试重新启动一个服务器程序（特别是在调试时），由于旧连接仍在
+TIME_WAIT 状态，尝试绑定到相同的端口会导致 "Address already in use"
+错误。这时服务器无法重新绑定到原有端口，可能会导致服务不可用。</p>
+<p>在某些情况下，多个进程可能希望绑定到相同的地址和端口进行监听。这种情况通常出现在使用
+UDP
+协议或多个服务进程间共享一个监听端口时。在这种情况下，<code>SO_REUSEADDR</code>
+允许多个套接字绑定到相同的地址和端口（只要每个套接字的协议不同，或者每个套接字是加入了不同的多播组的
+UDP 套接字）。</p>
 <hr>
-<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
+<p>⭐️内容取自译者陈涓、赵振平《TCP/IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
 
       </div>
     </div>
@@ -270,7 +292,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -802,11 +824,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,21 +174,24 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC">面向对象编程风格</a></li>
-<li><a href="#%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC">基于对象编程风格</a></li>
+<li><a href="#面向对象编程风格">面向对象编程风格</a></li>
+<li><a href="#基于对象编程风格">基于对象编程风格</a></li>
 </ul>
 <!-- tocstop -->
-
 <p>面向对象的编程风格会暴露抽象类，基于对象的编程风格不是暴露抽象类。</p>
 <p>面向对象的编程风格会让用户定义一个类继承抽象类来重写虚函数，进而利用多态的特性实现回调。基于对象的编程风格会让用户定义一个类包含一个提供给用户的类（此类虽然不是抽象类，功能目的却和面向对象编程风格的抽象类一样），通过调用此类提供的设置回调函数的接口来处理用户需要此类内部调用的函数。</p>
 <p>我们就以网络库中的 TcpServer 举例。</p>
-<h2><span id="面向对象编程风格">面向对象编程风格</span></h2><p>EchoServer 继承 TcpServer 这个抽象类，用户重写提供的虚函数，从而利用多态调用派生类重写的虚函数（调用的过程这里没有实际写出来）。</p>
+<h2><span id="面向对象编程风格">面向对象编程风格</span></h2>
+<p>EchoServer 继承 TcpServer
+这个抽象类，用户重写提供的虚函数，从而利用多态调用派生类重写的虚函数（调用的过程这里没有实际写出来）。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">TcpServer</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">TcpServer</span>()			= <span class="hljs-keyword">default</span>;<br>	<span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">TcpServer</span>()		= <span class="hljs-keyword">default</span>;<br>  <br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">OnConnection</span><span class="hljs-params">()</span>	</span>= <span class="hljs-number">0</span>;<br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">OnMessage</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">OnClose</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">EchoServer</span> : <span class="hljs-keyword">public</span> TcpServer &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">EchoServer</span>()	= <span class="hljs-keyword">default</span>;<br>	~<span class="hljs-built_in">EchoServer</span>()	= <span class="hljs-keyword">default</span>;<br>  <span class="hljs-comment">// 重写</span><br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">OnConnection</span><span class="hljs-params">()</span> </span>&#123;&#125;<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">OnMessage</span><span class="hljs-params">()</span> </span>&#123;&#125;<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">OnClose</span><span class="hljs-params">()</span> </span>&#123;&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<h2><span id="基于对象编程风格">基于对象编程风格</span></h2><p>EchoServer 包含一个 TcpServer（具体类）对象，在构造函数中调用 TcpServer 对象提供的设置回调函数的接口，并结合 bind 注册如下三个回调函数，这三个回调函数的具体逻辑由用户自己实现。</p>
+<h2><span id="基于对象编程风格">基于对象编程风格</span></h2>
+<p>EchoServer 包含一个 TcpServer（具体类）对象，在构造函数中调用
+TcpServer 对象提供的设置回调函数的接口，并结合 bind
+注册如下三个回调函数，这三个回调函数的具体逻辑由用户自己实现。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">EchoServer</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">EchoServer</span>() &#123;	<span class="hljs-comment">// 设置回调</span><br>        server.<span class="hljs-built_in">SetConnectionCallback</span>(boost::<span class="hljs-built_in">bind</span>(&amp;EchoServer::OnConnection, <span class="hljs-keyword">this</span>));<br>        server.<span class="hljs-built_in">SetConnectionCallback</span>(boost::<span class="hljs-built_in">bind</span>(&amp;EchoServer::OnMessage, <span class="hljs-keyword">this</span>));<br>        server.<span class="hljs-built_in">SetConnectionCallback</span>(boost::<span class="hljs-built_in">bind</span>(&amp;EchoServer::OnClose, <span class="hljs-keyword">this</span>));<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">OnConnection</span><span class="hljs-params">()</span> </span>&#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">OnMessage</span><span class="hljs-params">()</span> </span>&#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">OnClose</span><span class="hljs-params">()</span> </span>&#123;&#125;<br><br><span class="hljs-keyword">private</span>:<br>    TcpServer server; <span class="hljs-comment">// TcpServer 是网络库已经封装的 TCP 服务器类</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -272,7 +275,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\28\UML类图绘制\" title="UML类图绘制" rel="bookmark">UML类图绘制</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\29\代理模式\" title="代理模式" rel="bookmark">代理模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\11\单例模式\" title="单例模式" rel="bookmark">单例模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\28\UML类图绘制\" title="UML类图绘制" rel="bookmark">UML类图绘制</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\29\代理模式\" title="代理模式" rel="bookmark">代理模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\11\单例模式\" title="单例模式" rel="bookmark">单例模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -804,11 +807,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

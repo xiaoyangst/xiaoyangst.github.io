@@ -174,29 +174,46 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E6%89%A9%E5%B1%95%E7%AB%8B%E6%96%B9%E4%BD%93%E6%A8%A1%E5%9E%8B">分布式架构扩展立方体模型</a></li>
-<li><a href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E6%BC%94%E5%8C%96%E8%BF%87%E7%A8%8B">分布式架构演化过程</a></li>
-<li><a href="#%E5%A6%82%E4%BD%95%E8%AF%84%E4%BC%B0%E7%B3%BB%E7%BB%9F%E6%B5%81%E9%87%8F">如何评估系统流量</a></li>
-<li><a href="#%E5%A6%82%E4%BD%95%E5%8F%91%E7%8E%B0%E4%B8%8E%E5%88%86%E6%9E%90%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E5%A4%8D%E6%9D%82%E5%BA%A6">如何发现与分析架构核心复杂度</a></li>
-<li><a href="#%E4%BC%98%E7%A7%80%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%8C%87%E5%AF%BC%E5%8E%9F%E5%88%99">优秀架构设计的指导原则</a></li>
+<li><a href="#分布式架构扩展立方体模型">分布式架构扩展立方体模型</a></li>
+<li><a href="#分布式架构演化过程">分布式架构演化过程</a></li>
+<li><a href="#如何评估系统流量">如何评估系统流量</a></li>
+<li><a href="#如何发现与分析架构核心复杂度">如何发现与分析架构核心复杂度</a></li>
+<li><a href="#优秀架构设计的指导原则">优秀架构设计的指导原则</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="分布式架构扩展立方体模型">分布式架构扩展立方体模型</span></h2><p><img src="/images/2024/10/03/ef748a60-8125-11ef-b7ac-25da9940d0fb.png" alt="立方体模型.png"></p>
+<h2><span id="分布式架构扩展立方体模型">分布式架构扩展立方体模型</span></h2>
+<figure>
+<img src="/images/2024/10/03/ef748a60-8125-11ef-b7ac-25da9940d0fb.png" alt="立方体模型.png">
+<figcaption aria-hidden="true">立方体模型.png</figcaption>
+</figure>
 <p>扩展立方体模型从三个维度对分布式系统架构提出具体的要求，下面我们详细讲一讲：</p>
-<p>（一）X轴扩展–水平复制</p>
-<p><img src="/images/2024/10/03/ea468d40-8125-11ef-b7ac-25da9940d0fb.png" alt="X.png"></p>
-<p>性能不够，设备来凑。通过 Nginx 负载均衡实现服务器集群，提高系统的高可用。因为其中任何一个服务器宕机，会有其他可用的服务器顶上，继续提供服务。</p>
-<p>（二）Z轴扩展–数据分区</p>
-<p><img src="/images/2024/10/03/e660c790-8125-11ef-b7ac-25da9940d0fb.png" alt="Z.png"></p>
-<p>按照用户属性对应用&#x2F;数据进行分组，比方说深圳的用户发起服务请求，经过网关路由器，网关路由器会优先选择将其转发到深圳应用实例，因为我们提前把深圳用户的信息存储到深圳应用实例当中，数据的访问和服务的处理速度会得到提升，提高了吞吐量。</p>
-<p>（三）Y轴扩展–功能性分解</p>
-<p><img src="/images/2024/10/03/e1c6cd10-8125-11ef-b7ac-25da9940d0fb.png" alt="Y.png"></p>
-<p>将单体应用拆分层一个一个独立的功能模块，耦合性降低，各小组维护好自己的功能模块即可。这些拆出来的功能模块可以在单独的服务器上运行，再结合利用前面的 XZ 轴提高 高可用&#x2F;高并发。</p>
-<h2><span id="分布式架构演化过程">分布式架构演化过程</span></h2><p>（一）单点式架构</p>
-<p><img src="/images/2024/10/03/dd38e080-8125-11ef-b7ac-25da9940d0fb.png" alt="单点.png"></p>
+<p>（一）X轴扩展--水平复制</p>
+<figure>
+<img src="/images/2024/10/03/ea468d40-8125-11ef-b7ac-25da9940d0fb.png" alt="X.png">
+<figcaption aria-hidden="true">X.png</figcaption>
+</figure>
+<p>性能不够，设备来凑。通过 Nginx
+负载均衡实现服务器集群，提高系统的高可用。因为其中任何一个服务器宕机，会有其他可用的服务器顶上，继续提供服务。</p>
+<p>（二）Z轴扩展--数据分区</p>
+<figure>
+<img src="/images/2024/10/03/e660c790-8125-11ef-b7ac-25da9940d0fb.png" alt="Z.png">
+<figcaption aria-hidden="true">Z.png</figcaption>
+</figure>
+<p>按照用户属性对应用/数据进行分组，比方说深圳的用户发起服务请求，经过网关路由器，网关路由器会优先选择将其转发到深圳应用实例，因为我们提前把深圳用户的信息存储到深圳应用实例当中，数据的访问和服务的处理速度会得到提升，提高了吞吐量。</p>
+<p>（三）Y轴扩展--功能性分解</p>
+<figure>
+<img src="/images/2024/10/03/e1c6cd10-8125-11ef-b7ac-25da9940d0fb.png" alt="Y.png">
+<figcaption aria-hidden="true">Y.png</figcaption>
+</figure>
+<p>将单体应用拆分层一个一个独立的功能模块，耦合性降低，各小组维护好自己的功能模块即可。这些拆出来的功能模块可以在单独的服务器上运行，再结合利用前面的
+XZ 轴提高 高可用/高并发。</p>
+<h2><span id="分布式架构演化过程">分布式架构演化过程</span></h2>
+<p>（一）单点式架构</p>
+<figure>
+<img src="/images/2024/10/03/dd38e080-8125-11ef-b7ac-25da9940d0fb.png" alt="单点.png">
+<figcaption aria-hidden="true">单点.png</figcaption>
+</figure>
 <p>所有服务全部在一台服务器上，耦合度极高。</p>
 <table>
 <thead>
@@ -205,7 +222,8 @@
 <th>缺点</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>开发迅速，成本低廉</td>
 <td>性能差，并发量低</td>
 </tr>
@@ -217,18 +235,28 @@
 <td>事务强一致性</td>
 <td>功能模块耦合严重</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>（二）应用集群架构</p>
-<p><img src="/images/2024/10/03/d8542160-8125-11ef-b7ac-25da9940d0fb.png" alt="集群.png"></p>
-<p>集群的后端服务器和集群的数据库解耦，我们还可以利用 MySQL 主从复制以及读写分离来提高数据一致性和性能提升，再不济还可以进行分库分表处理。这的确突破了单体服务架构的不可用性，引出的数据库相关问题也有对应的解决方案。</p>
+<figure>
+<img src="/images/2024/10/03/d8542160-8125-11ef-b7ac-25da9940d0fb.png" alt="集群.png">
+<figcaption aria-hidden="true">集群.png</figcaption>
+</figure>
+<p>集群的后端服务器和集群的数据库解耦，我们还可以利用 MySQL
+主从复制以及读写分离来提高数据一致性和性能提升，再不济还可以进行分库分表处理。这的确突破了单体服务架构的不可用性，引出的数据库相关问题也有对应的解决方案。</p>
 <table>
+<colgroup>
+<col style="width: 21%">
+<col style="width: 78%">
+</colgroup>
 <thead>
 <tr>
 <th>优点</th>
 <th>缺点</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>突破单点性能瓶颈</td>
 <td>功能模块耦合严重，即所有功能全部部署在一个服务器上，每个服务器都是如此</td>
 </tr>
@@ -244,15 +272,21 @@
 <td>事务强一致性</td>
 <td></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>痛点 1：代码难以复制、难以同步</p>
 <p>痛点 2：过分关注细节、开发复杂性过高</p>
 <p>痛点 3：SQL 质量无法保证</p>
 <p>痛点 4：基础数据与业务数据耦合严重</p>
 <p>将功能进行模块划分，分散给各小组负责，同事每个功能模块维护自己的数据库，可以对上述问题进行应对。</p>
 <p>（三）服务化架构</p>
-<p><img src="/images/2024/10/03/d07e35c0-8125-11ef-b7ac-25da9940d0fb.png" alt="服务化.png"></p>
-<p>服务化架构单独剥离出服务层， 将上层应用抽象出可通用的功能、数据模型与储存设施， 使应用模块间实现彻底解耦。</p>
+<figure>
+<img src="/images/2024/10/03/d07e35c0-8125-11ef-b7ac-25da9940d0fb.png" alt="服务化.png">
+<figcaption aria-hidden="true">服务化.png</figcaption>
+</figure>
+<p>服务化架构单独剥离出服务层，
+将上层应用抽象出可通用的功能、数据模型与储存设施，
+使应用模块间实现彻底解耦。</p>
 <ul>
 <li>消除代码级别重用，改用远程调用（RPC）</li>
 <li>屏蔽实现细节，让业务开发更简单</li>
@@ -260,40 +294,81 @@
 <li>分工明确，数据解耦</li>
 </ul>
 <p>那服务化架构就没有它的问题？按照当前发展，服务化架构的下一个发展就是微服务化，微服务的整体架构就是为了应对服务化架构引入更多服务存在的问题。</p>
-<p><img src="/images/2024/10/03/cc328250-8125-11ef-b7ac-25da9940d0fb.png" alt="也有缺陷.png"></p>
-<h2><span id="如何评估系统流量">如何评估系统流量</span></h2><p>哪些指标需要进行容量评估？</p>
-<p><img src="/images/2024/10/03/c7926d50-8125-11ef-b7ac-25da9940d0fb.png" alt="容量.png"></p>
+<figure>
+<img src="/images/2024/10/03/cc328250-8125-11ef-b7ac-25da9940d0fb.png" alt="也有缺陷.png">
+<figcaption aria-hidden="true">也有缺陷.png</figcaption>
+</figure>
+<h2><span id="如何评估系统流量">如何评估系统流量</span></h2>
+<p>哪些指标需要进行容量评估？</p>
+<figure>
+<img src="/images/2024/10/03/c7926d50-8125-11ef-b7ac-25da9940d0fb.png" alt="容量.png">
+<figcaption aria-hidden="true">容量.png</figcaption>
+</figure>
 <p>不同的服务容量评估方向不同，要发觉系统的复杂性和主要矛盾。比方说某鱼与某牙直播核心就是用户流畅观察直播，重点关注对象就是活动带宽；外贸交易系统核心就是资金的转移，核心就是交易的安全性和实时性。</p>
 <p>下面用一个具体的案例进行分析：</p>
-<p><img src="/images/2024/10/03/c2fd2dc0-8125-11ef-b7ac-25da9940d0fb.png" alt="案例.png"></p>
-<p>因此，我们需要评估 QPS 即可。我们可以从产品经理那里拿到过往的业务访问趋势图，来看看哪个时间段是 QPS 最高，最高到多少。如果没有这份资料，可以根据二八原则。</p>
-<p><img src="/images/2024/10/03/bd9709a0-8125-11ef-b7ac-25da9940d0fb.png" alt="28.png"></p>
-<p>计算出 QPS 峰值之后，需要对单机的能力进行测试，用压力测试工具，再进行必要的调整，有时候不一定就是服务器本身的局限性。</p>
-<p><img src="/images/2024/10/03/b9a1daa0-8125-11ef-b7ac-25da9940d0fb.png" alt="压力测试.png"></p>
+<figure>
+<img src="/images/2024/10/03/c2fd2dc0-8125-11ef-b7ac-25da9940d0fb.png" alt="案例.png">
+<figcaption aria-hidden="true">案例.png</figcaption>
+</figure>
+<p>因此，我们需要评估 QPS
+即可。我们可以从产品经理那里拿到过往的业务访问趋势图，来看看哪个时间段是
+QPS 最高，最高到多少。如果没有这份资料，可以根据二八原则。</p>
+<figure>
+<img src="/images/2024/10/03/bd9709a0-8125-11ef-b7ac-25da9940d0fb.png" alt="28.png">
+<figcaption aria-hidden="true">28.png</figcaption>
+</figure>
+<p>计算出 QPS
+峰值之后，需要对单机的能力进行测试，用压力测试工具，再进行必要的调整，有时候不一定就是服务器本身的局限性。</p>
+<figure>
+<img src="/images/2024/10/03/b9a1daa0-8125-11ef-b7ac-25da9940d0fb.png" alt="压力测试.png">
+<figcaption aria-hidden="true">压力测试.png</figcaption>
+</figure>
 <p>对此，我们评估计算如下：</p>
 <ul>
 <li>无历史数据，按二八定理，预期QPS峰值不低于 2220</li>
 <li>单点设备QPS极限为 400</li>
 <li>假设采用IDC LBS负载均衡，不考虑带宽等因素</li>
 <li>假设生产性能基线为80%</li>
-<li>服务器应准备 2220 &#x2F; (400 * 80%) ≈ 6.93</li>
+<li>服务器应准备 2220 / (400 * 80%) ≈ 6.93</li>
 <li>为此准备7台应用服务器即可</li>
 </ul>
-<h2><span id="如何发现与分析架构核心复杂度">如何发现与分析架构核心复杂度</span></h2><p>（一）案例一：公司内部推行物联网建设</p>
-<p><img src="/images/2024/10/03/b4223b10-8125-11ef-b7ac-25da9940d0fb.png" alt="e1.png"></p>
+<h2><span id="如何发现与分析架构核心复杂度">如何发现与分析架构核心复杂度</span></h2>
+<p>（一）案例一：公司内部推行物联网建设</p>
+<figure>
+<img src="/images/2024/10/03/b4223b10-8125-11ef-b7ac-25da9940d0fb.png" alt="e1.png">
+<figcaption aria-hidden="true">e1.png</figcaption>
+</figure>
 <p>（二）案例二：X电商门户</p>
-<p><img src="/images/2024/10/03/b0b59d00-8125-11ef-b7ac-25da9940d0fb.png" alt="e2.png"></p>
-<p>数字 16 代表一个每天可能的访问时间为 16 小时，排除 8 小时睡眠之后的结果。</p>
-<p>计算出平均 QPS 为 694，但是电商访问有高峰期，我们 乘以 4 来应对这种情况。然后 除以 1000 * 0.8，这 0.8 代表单台服务器的极限，我们不希望服务器的极限是 满的，不然服务器随时处在崩溃边缘并不好。</p>
-<p>最终计算出结果为部署 3 台。实际情况中，我们还会额外提供 1~2台备用，来提高高可用性。</p>
+<figure>
+<img src="/images/2024/10/03/b0b59d00-8125-11ef-b7ac-25da9940d0fb.png" alt="e2.png">
+<figcaption aria-hidden="true">e2.png</figcaption>
+</figure>
+<p>数字 16 代表一个每天可能的访问时间为 16 小时，排除 8
+小时睡眠之后的结果。</p>
+<p>计算出平均 QPS 为 694，但是电商访问有高峰期，我们 乘以 4
+来应对这种情况。然后 除以 1000 * 0.8，这 0.8
+代表单台服务器的极限，我们不希望服务器的极限是
+满的，不然服务器随时处在崩溃边缘并不好。</p>
+<p>最终计算出结果为部署 3 台。实际情况中，我们还会额外提供
+1~2台备用，来提高高可用性。</p>
 <p>（三）案例三：联通系统与XX银行平台问题</p>
-<p><img src="/images/2024/10/03/acb21620-8125-11ef-b7ac-25da9940d0fb.png" alt="e3.png"></p>
+<figure>
+<img src="/images/2024/10/03/acb21620-8125-11ef-b7ac-25da9940d0fb.png" alt="e3.png">
+<figcaption aria-hidden="true">e3.png</figcaption>
+</figure>
 <p>可见有时候不单是技术上的问题，架构设计是一个全局的考量，人员也在考量以内。</p>
 <p>（四）思考题</p>
-<p><img src="/images/2024/10/03/a83d2fd0-8125-11ef-b7ac-25da9940d0fb.png" alt="e4.png"></p>
+<figure>
+<img src="/images/2024/10/03/a83d2fd0-8125-11ef-b7ac-25da9940d0fb.png" alt="e4.png">
+<figcaption aria-hidden="true">e4.png</figcaption>
+</figure>
 <p>（五）常见核心复杂性总结</p>
-<p><img src="/images/2024/10/03/a4501720-8125-11ef-b7ac-25da9940d0fb.png" alt="核心复杂性.png"></p>
-<h2><span id="优秀架构设计的指导原则">优秀架构设计的指导原则</span></h2><ul>
+<figure>
+<img src="/images/2024/10/03/a4501720-8125-11ef-b7ac-25da9940d0fb.png" alt="核心复杂性.png">
+<figcaption aria-hidden="true">核心复杂性.png</figcaption>
+</figure>
+<h2><span id="优秀架构设计的指导原则">优秀架构设计的指导原则</span></h2>
+<ul>
 <li>没有<strong>场景</strong>的架构设计就是耍流氓</li>
 <li>发现<strong>问题的复杂性</strong>是根本，这些包含在用户关键需求中</li>
 <li><strong>“解耦”</strong>是架构设计无时无刻考虑的事情</li>
@@ -388,7 +463,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2025\01\06\CAP-与-BASE-理论\" title="CAP 与 BASE 理论" rel="bookmark">CAP 与 BASE 理论</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2025\01\06\CAP-与-BASE-理论\" title="CAP 与 BASE 理论" rel="bookmark">CAP 与 BASE 理论</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -920,11 +995,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

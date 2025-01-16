@@ -174,63 +174,73 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%A8%A1%E6%9D%BF-%E5%85%83%E7%BC%96%E7%A8%8B%E5%92%8C%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B">模板、元编程和泛型编程</a></li>
-<li><a href="#%E6%A8%A1%E6%9D%BF-%E5%AE%8F%E5%92%8C%E9%87%8D%E8%BD%BD">模板、宏和重载</a></li>
-<li><a href="#%E9%9D%A2%E5%90%91%E8%BF%87%E7%A8%8B%E7%BC%96%E7%A8%8B-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%92%8C%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B">面向过程编程、面向对象编程和模板元编程</a></li>
-<li><a href="#%E6%A8%A1%E6%9D%BF%E5%87%BD%E6%95%B0%E5%92%8C%E6%A8%A1%E6%9D%BF%E7%B1%BB%E7%9A%84%E8%AF%AD%E6%B3%95">模板函数和模板类的语法</a></li>
+<li><a href="#模板-元编程和泛型编程">模板、元编程和泛型编程</a></li>
+<li><a href="#模板-宏和重载">模板、宏和重载</a></li>
+<li><a href="#面向过程编程-面向对象编程和模板元编程">面向过程编程、面向对象编程和模板元编程</a></li>
+<li><a href="#模板函数和模板类的语法">模板函数和模板类的语法</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="模板-元编程和泛型编程">模板、元编程和泛型编程</span></h2><p><strong>模板</strong>是一种能够产生代码的代码，本身不进入程序中</p>
+<h2><span id="模板-元编程和泛型编程">模板、元编程和泛型编程</span></h2>
+<p><strong>模板</strong>是一种能够产生代码的代码，本身不进入程序中</p>
 <p><strong>元编程</strong>意味着你撰写一段程序A（前面提到的模板），程序A会运行后生成另外一个程序B，程序B才是真正实现功能的程序。那么这个时候程序A可以称作程序B的元程序，撰写程序A的过程，就称之为“元编程”</p>
 <p>如果元编程中所有的变化的量（或者说元编程的参数）都是类型，那么这样的编程，我们称为<strong>泛型编程</strong></p>
 <p>区分泛型编程和元编程，可参考王建伟老师的区分：</p>
 <ul>
-<li>泛型编程：重点突出的是“通用”的概念，这个“泛”字就是通用的意思。例如函数模板、类模板代码，这些代码很多都以类型作为模板参数进行传递，程序员不需要关心具体的类型，编译器会进行相关的类模板或函数模板的实例化工作。模板的设计初衷也是用于泛型编程–对数据类型和算法等进行抽象</li>
+<li>泛型编程：重点突出的是“通用”的概念，这个“泛”字就是通用的意思。例如函数模板、类模板代码，这些代码很多都以类型作为模板参数进行传递，程序员不需要关心具体的类型，编译器会进行相关的类模板或函数模板的实例化工作。模板的设计初衷也是用于泛型编程--对数据类型和算法等进行抽象</li>
 <li>元编程：重点突出的是一种程序设计技巧，达到用常规的编程手段难以达到的效果。这种程序设计技巧非常注重模板在实例化过程中的一些推导过程，而这些推导过程恰恰是解决问题和体现程序设计技巧的过程</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-function">T <span class="hljs-type">const</span>&amp; <span class="hljs-title">Max</span> <span class="hljs-params">(T <span class="hljs-type">const</span>&amp; a, T <span class="hljs-type">const</span>&amp; b)</span> </span><br><span class="hljs-function"></span>&#123; <br>    <span class="hljs-keyword">return</span> a &lt; b ? b:a; <br>&#125; <br></code></pre></td></tr></table></figure>
-
-<p>如上是函数模板，但它并不算是代码，而是用来生成代码（实例化的时候会生成对应的代码），假定你调用如下方法（<code>Max(3,5)</code> 和 <code>Max(1.2,3.1)</code>）</p>
-<p>那么你的程序中只有两部分代码（函数代码 A 和函数代码 B），函数模板并不在其中</p>
+<p>如上是函数模板，但它并不算是代码，而是用来生成代码（实例化的时候会生成对应的代码），假定你调用如下方法（<code>Max(3,5)</code>
+和 <code>Max(1.2,3.1)</code>）</p>
+<p>那么你的程序中只有两部分代码（函数代码 A 和函数代码
+B），函数模板并不在其中</p>
 <p>从这点我们就明白，模板会在编译期间帮我们把代码生成，而不是在运行时（说此是为了强调和多态机制的不同）</p>
 <p><strong>模板本身并不是最终可执行代码的一部分，而是用于生成最终可执行代码的“蓝图”。模板定义了一个通用的模式，但真正的代码是在模板实例化时生成的</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">Max</span>(<span class="hljs-number">3</span>,<span class="hljs-number">5</span>);<br><br><span class="hljs-comment">//生成函数代码 A</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-type">const</span>&amp; <span class="hljs-title">Max</span> <span class="hljs-params">(<span class="hljs-type">int</span> <span class="hljs-type">const</span>&amp; a, <span class="hljs-type">int</span> <span class="hljs-type">const</span>&amp; b)</span> </span><br><span class="hljs-function"></span>&#123; <br>    <span class="hljs-keyword">return</span> a &lt; b ? b:a; <br>&#125; <br><br><span class="hljs-built_in">Max</span>(<span class="hljs-number">1.2</span>,<span class="hljs-number">3.1</span>);<br><br><span class="hljs-comment">//生成函数代码 B</span><br><br><span class="hljs-function"><span class="hljs-type">float</span> <span class="hljs-type">const</span>&amp; <span class="hljs-title">Max</span> <span class="hljs-params">(<span class="hljs-type">float</span> <span class="hljs-type">const</span>&amp; a, <span class="hljs-type">float</span> <span class="hljs-type">const</span>&amp; b)</span> </span><br><span class="hljs-function"></span>&#123; <br>    <span class="hljs-keyword">return</span> a &lt; b ? b:a; <br>&#125; <br></code></pre></td></tr></table></figure>
-
 <p>通过模板，我们可以将形形色色的堆栈代码分为两个部分，一个部分是不变的接口，以及近乎相同的实现；另外一部分是元素的类型，它们是需要变化的。因此同函数类似，需要变化的部分，由模板参数来反应；不变的部分，则是模板内的代码。可以看到，使用模板的代码，要比不使用模板的代码简洁许多</p>
-<h2><span id="模板-宏和重载">模板、宏和重载</span></h2><p>宏只是替换，没有类型安全检查，代码永远只有一份</p>
+<h2><span id="模板-宏和重载">模板、宏和重载</span></h2>
+<p>宏只是替换，没有类型安全检查，代码永远只有一份</p>
 <p>模板用来生成代码，编译期间就确定程序所需的代码并实际产生</p>
 <p>宏既然是替换，意味着是在运行期间运作，如果暂时不考虑安全问题，效率问题也是不可忽视（通常宏用于短小代码）。函数重载倒是可以编译期间确定，却也因为不具备模板“变化莫测”的特性，略输一筹。这样看来，模板倒是非常强大了，既是在编译期间确定且能应对变化</p>
 <blockquote>
 <p>编译期间确定（编译期决策）通常比运行时确定（运行时决策）效率更高。这主要是因为编译期决策在程序运行之前已经确定好了具体的操作，而运行时决策需要在程序执行时进行额外的计算和判断</p>
-<p>比方说 if 判断语句，编译期间就已经判断完成，而运行期间会在运行时才去做这个判断</p>
+<p>比方说 if
+判断语句，编译期间就已经判断完成，而运行期间会在运行时才去做这个判断</p>
 </blockquote>
-<h2><span id="面向过程编程-面向对象编程和模板元编程">面向过程编程、面向对象编程和模板元编程</span></h2><p>以牲口圈舍举例谈三种编程，即有三种动物（马羊猪），要给它们分别搭建一个棚（马棚、羊圈、猪圈）</p>
+<h2><span id="面向过程编程-面向对象编程和模板元编程">面向过程编程、面向对象编程和模板元编程</span></h2>
+<p>以牲口圈舍举例谈三种编程，即有三种动物（马羊猪），要给它们分别搭建一个棚（马棚、羊圈、猪圈）</p>
 <p>（1）面向过程</p>
 <p>一种动物一个棚，种类越多类越多，代码量增多（关键是得自己一个一个写）</p>
 <p>但不得不承认，这种编程符合现实世界，即每种动物放在各自的棚里面</p>
-<p><img src="/images/2024/08/05/ffded890-5323-11ef-8091-ed2d3d2eaedb.png" alt="面向过程.png"></p>
+<figure>
+<img src="/images/2024/08/05/ffded890-5323-11ef-8091-ed2d3d2eaedb.png" alt="面向过程.png">
+<figcaption aria-hidden="true">面向过程.png</figcaption>
+</figure>
 <p>（2）面向对象</p>
 <p>把棚抽象为一个类，所有动物都放在一个棚里面，继承者只需要实现抽象基类的虚函数即可</p>
 <p>相对于面向过程，尽管方法getHeight依旧需要实现，但是无需每次都创建一个棚了，代码量明显减少</p>
 <p>可是这脱离现实了，因为没人会把所有动物放在一个棚里面管理（这个棚也是不存在的，是虚拟的）</p>
-<p><img src="/images/2024/08/05/f8511980-5323-11ef-8091-ed2d3d2eaedb.png" alt="面向对象.png"></p>
+<figure>
+<img src="/images/2024/08/05/f8511980-5323-11ef-8091-ed2d3d2eaedb.png" alt="面向对象.png">
+<figcaption aria-hidden="true">面向对象.png</figcaption>
+</figure>
 <p>（3）模板元编程</p>
 <p>面向过程要手写很多代码，因为每个动物的类型不同</p>
 <p>面向对象又不符合现实情况，按理改为每种动物在不同的棚中，而不是放在一个棚中管理</p>
 <p>模板元编程可以只需要设计一份代码，传入不同的类型并生成实际的代码，完美解决面向过程和面向对象的不足</p>
-<p><img src="/images/2024/08/05/f249fa70-5323-11ef-8091-ed2d3d2eaedb.png" alt="模板元编程.png"></p>
-<h2><span id="模板函数和模板类的语法">模板函数和模板类的语法</span></h2><p>（1）函数模板</p>
+<figure>
+<img src="/images/2024/08/05/f249fa70-5323-11ef-8091-ed2d3d2eaedb.png" alt="模板元编程.png">
+<figcaption aria-hidden="true">模板元编程.png</figcaption>
+</figure>
+<h2><span id="模板函数和模板类的语法">模板函数和模板类的语法</span></h2>
+<p>（1）函数模板</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> type&gt; <br>ret-type func-<span class="hljs-built_in">name</span>(parameter list)<br>&#123;<br>   <span class="hljs-comment">// 函数的主体</span><br>&#125;<br><br><span class="hljs-comment">// 举例</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> T <span class="hljs-type">const</span>&amp; <span class="hljs-title">Max</span> <span class="hljs-params">(T <span class="hljs-type">const</span>&amp; a, T <span class="hljs-type">const</span>&amp; b)</span> </span><br><span class="hljs-function"></span>&#123; <br>    <span class="hljs-keyword">return</span> a &lt; b ? b:a; <br>&#125; <br></code></pre></td></tr></table></figure>
-
 <p>（2）类模板</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">type</span>&gt; <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">class</span>-name <br>&#123;<br>	<span class="hljs-comment">//成员变量、成员方法</span><br>&#125;<br><br><span class="hljs-comment">// 举例</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Stack</span> &#123; <br>  <span class="hljs-keyword">private</span>: <br>    vector&lt;T&gt; elems;     <span class="hljs-comment">// 元素 </span><br> <br>  <span class="hljs-keyword">public</span>: <br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(T <span class="hljs-type">const</span>&amp;)</span></span>;  		<span class="hljs-comment">// 入栈</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span></span>;                 <span class="hljs-comment">// 出栈</span><br>    <span class="hljs-function">T <span class="hljs-title">top</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;             <span class="hljs-comment">// 返回栈顶元素</span><br>&#125;; <br></code></pre></td></tr></table></figure>
-
 <hr>
 <p>参考链接</p>
-<p><a target="_blank" rel="noopener" href="https://sg-first.gitbooks.io/cpp-template-tutorial/content/TMP_ji_chu_md.html">https://sg-first.gitbooks.io/cpp-template-tutorial/content/TMP_ji_chu_md.html</a></p>
+<p>https://sg-first.gitbooks.io/cpp-template-tutorial/content/TMP_ji_chu_md.html</p>
 
       </div>
     </div>
@@ -315,7 +325,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -847,11 +857,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

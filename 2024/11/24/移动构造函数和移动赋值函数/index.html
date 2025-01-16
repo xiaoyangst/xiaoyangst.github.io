@@ -174,26 +174,32 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0">移动构造函数</a></li>
-<li><a href="#%E7%A7%BB%E5%8A%A8%E8%B5%8B%E5%80%BC%E5%87%BD%E6%95%B0">移动赋值函数</a></li>
-<li><a href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E5%92%8C%E5%A4%8D%E5%88%B6%E8%AF%AD%E4%B9%89%E7%9A%84%E6%A0%B9%E6%9C%AC%E4%B8%8D%E5%90%8C">移动语义和复制语义的根本不同</a></li>
+<li><a href="#移动构造函数">移动构造函数</a></li>
+<li><a href="#移动赋值函数">移动赋值函数</a></li>
+<li><a href="#移动语义和复制语义的根本不同">移动语义和复制语义的根本不同</a></li>
 </ul>
 <!-- tocstop -->
-
-<h1><span id="移动构造函数">移动构造函数</span></h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">MyClass</span>( MyClass &amp;&amp; other ) <span class="hljs-keyword">noexcept</span><br>: <span class="hljs-built_in">data</span>( other.data ), <span class="hljs-built_in">size</span>( other.size )        <span class="hljs-comment">/* 转移资源，浅拷贝 */</span><br>&#123; <br>    other.data	= <span class="hljs-literal">nullptr</span>;                      <span class="hljs-comment">/* 防止源对象析构时释放资源 */</span><br>    other.size	= <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
+<h1><span id="移动构造函数">移动构造函数</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">MyClass</span>( MyClass &amp;&amp; other ) <span class="hljs-keyword">noexcept</span><br>: <span class="hljs-built_in">data</span>( other.data ), <span class="hljs-built_in">size</span>( other.size )        <span class="hljs-comment">/* 转移资源，浅拷贝 */</span><br>&#123; <br>    other.data	= <span class="hljs-literal">nullptr</span>;                      <span class="hljs-comment">/* 防止源对象析构时释放资源 */</span><br>    other.size	= <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>我们之前学习过拷贝构造函数，并且还深刻去讨论为什么这样写拷贝构造函数的原因。</p>
-<p>相比拷贝构造函数，移动构造函数的参数是类型为<code>&amp;&amp;</code>是可以理解的，因为移动语义接受右值，但是为什么没有 const 属性了？</p>
-<p>在移动构造或移动赋值操作中，通常会从源对象中“移动”资源（例如指针或文件句柄等），然后将源对象置于一种安全的状态（例如将指针设为 <code>nullptr</code> 或将资源句柄重置）。如果参数为 <code>const Type&amp;&amp;</code>，那么在移动构造中就无法修改源对象的状态，这样移动的语义就无法实现。</p>
+<p>相比拷贝构造函数，移动构造函数的参数是类型为<code>&amp;&amp;</code>是可以理解的，因为移动语义接受右值，但是为什么没有
+const 属性了？</p>
+<p>在移动构造或移动赋值操作中，通常会从源对象中“移动”资源（例如指针或文件句柄等），然后将源对象置于一种安全的状态（例如将指针设为
+<code>nullptr</code> 或将资源句柄重置）。如果参数为
+<code>const Type&amp;&amp;</code>，那么在移动构造中就无法修改源对象的状态，这样移动的语义就无法实现。</p>
 <p>移动构造函数中 data 指向 临时资源 <code>other.data</code></p>
-<h1><span id="移动赋值函数">移动赋值函数</span></h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++">MyClass &amp; <span class="hljs-keyword">operator</span>=( MyClass &amp;&amp; other ) <span class="hljs-keyword">noexcept</span><br>&#123;<br>	<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span> != &amp;other )   <span class="hljs-comment">/* 防止自我赋值 */</span><br>	&#123;<br>		<span class="hljs-keyword">delete</span>[] data;  <span class="hljs-comment">/* 释放当前对象的资源，用以接收 other 的 data 资源 */</span><br><br>		<span class="hljs-comment">/* 转移资源 */</span><br>		data	= other.data;<br>		size	= other.size;<br><br>		<span class="hljs-comment">/* 置空源对象的资源 */</span><br>		other.data	= <span class="hljs-literal">nullptr</span>;<br>		other.size	= <span class="hljs-number">0</span>;<br>	&#125;<br>	<span class="hljs-keyword">return</span>(*<span class="hljs-keyword">this</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<h1><span id="移动语义和复制语义的根本不同">移动语义和复制语义的根本不同</span></h1><p>移动语义内部是不会 new 新对象的，这也是为什么它比复制语义高效的缘故。</p>
-<p>移动构造的成员变量赋值是浅拷贝（把堆空间由相应的成员变量指向，自己不会 new 的），而拷贝构造是深拷贝（堆空间需要自己 new，然后把数据全部拷贝出来）。</p>
+<h1><span id="移动赋值函数">移动赋值函数</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++">MyClass &amp; <span class="hljs-keyword">operator</span>=( MyClass &amp;&amp; other ) <span class="hljs-keyword">noexcept</span><br>&#123;<br>	<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span> != &amp;other )   <span class="hljs-comment">/* 防止自我赋值 */</span><br>	&#123;<br>		<span class="hljs-keyword">delete</span>[] data;  <span class="hljs-comment">/* 释放当前对象的资源，用以接收 other 的 data 资源 */</span><br><br>		<span class="hljs-comment">/* 转移资源 */</span><br>		data	= other.data;<br>		size	= other.size;<br><br>		<span class="hljs-comment">/* 置空源对象的资源 */</span><br>		other.data	= <span class="hljs-literal">nullptr</span>;<br>		other.size	= <span class="hljs-number">0</span>;<br>	&#125;<br>	<span class="hljs-keyword">return</span>(*<span class="hljs-keyword">this</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1><span id="移动语义和复制语义的根本不同">移动语义和复制语义的根本不同</span></h1>
+<p>移动语义内部是不会 new
+新对象的，这也是为什么它比复制语义高效的缘故。</p>
+<p>移动构造的成员变量赋值是浅拷贝（把堆空间由相应的成员变量指向，自己不会
+new 的），而拷贝构造是深拷贝（堆空间需要自己
+new，然后把数据全部拷贝出来）。</p>
 <p>移动赋值也是一样的，只不过它需要先把自己的资源释放掉，因为赋值发生在两个已存在的对象之间，然后接下来的操作就和移动构造没有什么区别。</p>
-<p>看来移动语义和复制语义的根本不同点就是，移动语义是浅拷贝（改变指向），复制语义是深拷贝（重新 new）。</p>
+<p>看来移动语义和复制语义的根本不同点就是，移动语义是浅拷贝（改变指向），复制语义是深拷贝（重新
+new）。</p>
 
       </div>
     </div>
@@ -278,7 +284,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -810,11 +816,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

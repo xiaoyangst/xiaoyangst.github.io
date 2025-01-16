@@ -173,12 +173,23 @@
             
           </div>
         
-        <p>Clion 远程连接 Linux没有问题，并且早先已经在 Linux编译安装 Boost 库，但是 Clion 这边没有代码提示，原因是没有找到头文件。也就是 Clion 没有把 远端的 Boost 库的头文件下载下来，但明显我们的 Boost 库的头文件就是在 &#x2F;usr&#x2F;include 下面的。</p>
-<p>解决方案：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/ryzemagic/p/16930646.html">https://www.cnblogs.com/ryzemagic/p/16930646.html</a></p>
-<h2><span id="找不到头文件-但是可以编译-但不能补全代码">找不到头文件 但是可以编译 但不能补全代码</span></h2><p>尝试 Tools（工具） | Resync with Remote Hosts（与远程主机重新同步） </p>
-<p><img src="/images/2024/10/01/9d545e00-7fa8-11ef-a78b-0f8f664f475f.png" alt="boostHead.png"></p>
-<h2><span id="远程运行程序时提示找不到库文件并且不能编译">远程运行程序时提示找不到库文件，并且不能编译</span></h2><p>查看 CMakeList.txt 文件中链接库是否配置正确。</p>
-<p>关于如何找到库文件，请看此文：<a href="https://xiaoyangst.github.io/2024/09/20/%E7%AC%AC%E5%85%AD%E7%AB%A0%EF%BC%9ACMake-%E6%89%BE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/">CMake 找库文件的两种方式</a></p>
+        <p>Clion 远程连接 Linux没有问题，并且早先已经在 Linux编译安装 Boost
+库，但是 Clion 这边没有代码提示，原因是没有找到头文件。也就是 Clion
+没有把 远端的 Boost 库的头文件下载下来，但明显我们的 Boost
+库的头文件就是在 /usr/include 下面的。</p>
+<p>解决方案：https://www.cnblogs.com/ryzemagic/p/16930646.html</p>
+<h2><span id="找不到头文件但是可以编译-但不能补全代码">找不到头文件
+但是可以编译 但不能补全代码</span></h2>
+<p>尝试 Tools（工具） | Resync with Remote
+Hosts（与远程主机重新同步）</p>
+<figure>
+<img src="/images/2024/10/01/9d545e00-7fa8-11ef-a78b-0f8f664f475f.png" alt="boostHead.png">
+<figcaption aria-hidden="true">boostHead.png</figcaption>
+</figure>
+<h2><span id="远程运行程序时提示找不到库文件并且不能编译">远程运行程序时提示找不到库文件，并且不能编译</span></h2>
+<p>查看 CMakeList.txt 文件中链接库是否配置正确。</p>
+<p>关于如何找到库文件，请看此文：<a href="https://xiaoyangst.github.io/2024/09/20/第六章：CMake-找库文件的两种方式/">CMake
+找库文件的两种方式</a></p>
 
       </div>
     </div>
@@ -263,7 +274,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\01\《此文件不属于任何项目目标-代码洞察功能可能无法正常工作》解决方案\" title="《此文件不属于任何项目目标 代码洞察功能可能无法正常工作》解决方案" rel="bookmark">《此文件不属于任何项目目标 代码洞察功能可能无法正常工作》解决方案</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\01\《此文件不属于任何项目目标-代码洞察功能可能无法正常工作》解决方案\" title="《此文件不属于任何项目目标 代码洞察功能可能无法正常工作》解决方案" rel="bookmark">《此文件不属于任何项目目标 代码洞察功能可能无法正常工作》解决方案</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -795,11 +806,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,53 +174,59 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E5%B7%A6%E5%80%BC%E5%92%8C%E5%8F%B3%E5%80%BC%E7%9A%84%E5%8C%BA%E5%88%86">左值和右值的区分</a></li>
-<li><a href="#%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8">左值引用和右值引用</a></li>
-<li><a href="#%E8%BD%AC%E6%8D%A2">转换</a><ul>
-<li><a href="#%E5%8F%B3%E5%80%BC%E5%88%B0%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8%E7%9A%84%E7%BB%91%E5%AE%9A">右值到左值引用的绑定</a></li>
-<li><a href="#%E5%B7%A6%E5%80%BC%E5%88%B0%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E7%9A%84%E8%BD%AC%E6%8D%A2">左值到右值引用的转换</a></li>
-</ul>
-</li>
-<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%87%BA%E7%8E%B0%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89">为什么出现右值引用和移动语义？</a></li>
+<li><a href="#左值和右值的区分">左值和右值的区分</a></li>
+<li><a href="#左值引用和右值引用">左值引用和右值引用</a></li>
+<li><a href="#转换">转换</a>
+<ul>
+<li><a href="#右值到左值引用的绑定">右值到左值引用的绑定</a></li>
+<li><a href="#左值到右值引用的转换">左值到右值引用的转换</a></li>
+</ul></li>
+<li><a href="#为什么出现右值引用和移动语义">为什么出现右值引用和移动语义？</a></li>
 </ul>
 <!-- tocstop -->
-
-<h1><span id="左值和右值的区分">左值和右值的区分</span></h1><p>左值是取地址，代表持续存活之物</p>
+<h1><span id="左值和右值的区分">左值和右值的区分</span></h1>
+<p>左值是取地址，代表持续存活之物</p>
 <p>右值不可以取地址，代表即将消亡之物</p>
 <p>示例见下：num 是左值，3 是右值。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> num = <span class="hljs-number">3</span>;<br></code></pre></td></tr></table></figure>
-
-<h1><span id="左值引用和右值引用">左值引用和右值引用</span></h1><p>无论左值引用还是右值引用，本质都是引用，即都是给对象取别名。</p>
-<p>传统的 C++ 语法中就存在引用语法，而 C++11 标准中新增了右值引用的语法特性，因此为了区分两者，将 C++11 标准出现之前的引用称为左值引用。</p>
+<h1><span id="左值引用和右值引用">左值引用和右值引用</span></h1>
+<p>无论左值引用还是右值引用，本质都是引用，即都是给对象取别名。</p>
+<p>传统的 C++ 语法中就存在引用语法，而 C++11
+标准中新增了右值引用的语法特性，因此为了区分两者，将 C++11
+标准出现之前的引用称为左值引用。</p>
 <p>左值引用就是对左值的引用，给左值取别名。<strong>主要作用是避免对象拷贝。</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> x = <span class="hljs-number">10</span>;<br><span class="hljs-type">int</span> &amp;ref = x; <span class="hljs-comment">// 左值引用，绑定到变量x</span><br></code></pre></td></tr></table></figure>
-
 <p>右值引用就是对右值的引用，给右值取别名。<strong>主要作用是延长对象的生命周期，一般是延长到作用域之外</strong>。广泛用于实现<strong>移动语义</strong>和<strong>完美转发</strong>。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> &amp;&amp;rref = <span class="hljs-number">10</span>; <span class="hljs-comment">// 右值引用，绑定到临时对象10</span><br></code></pre></td></tr></table></figure>
-
-<p>&nbsp;</p>
+<p> </p>
 <p>代码示例：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">MyClass</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;Constructor\n&quot;</span>; &#125;<br>    <span class="hljs-built_in">MyClass</span>(<span class="hljs-type">const</span> MyClass &amp;) &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;Copy Constructor\n&quot;</span>; &#125;<br>    <span class="hljs-built_in">MyClass</span>(MyClass &amp;&amp;) &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;Move Constructor\n&quot;</span>; &#125;<br>&#125;;<br><br><span class="hljs-function">MyClass <span class="hljs-title">createObject</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">MyClass</span>(); <span class="hljs-comment">// 返回一个右值（临时对象）</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    MyClass obj1;              		             <span class="hljs-comment">// 调用默认构造函数</span><br>    MyClass obj2 = obj1;      			 <span class="hljs-comment">// 调用拷贝构造函数（左值引用）</span><br><br>    MyClass obj3 = <span class="hljs-built_in">createObject</span>(); 		<span class="hljs-comment">// 调用移动构造函数（右值引用）</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<h1><span id="转换">转换</span></h1><p>此前我们说左值引用绑定左值，右值引用绑定右值。</p>
+<h1><span id="转换">转换</span></h1>
+<p>此前我们说左值引用绑定左值，右值引用绑定右值。</p>
 <p>那么，左值引用可以绑定右值吗？右值引用可以绑定左值吗？</p>
-<h2><span id="右值到左值引用的绑定">右值到左值引用的绑定</span></h2><p>右值可以通过<strong>const 左值引用</strong>进行绑定，虽然右值通常没有持久的地址，但 C++ 允许我们使用 <code>const</code> 左值引用来绑定一个右值。这种绑定可以使临时对象的生命周期延长至引用的作用域结束。</p>
+<h2><span id="右值到左值引用的绑定">右值到左值引用的绑定</span></h2>
+<p>右值可以通过<strong>const
+左值引用</strong>进行绑定，虽然右值通常没有持久的地址，但 C++
+允许我们使用 <code>const</code>
+左值引用来绑定一个右值。这种绑定可以使临时对象的生命周期延长至引用的作用域结束。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">int</span>&amp; ref = <span class="hljs-number">10</span>; <span class="hljs-comment">// 右值 10 被绑定到 const 左值引用 ref 上</span><br></code></pre></td></tr></table></figure>
-
-<p>这里，右值 <code>10</code> 可以通过 <code>const int&amp;</code> 绑定到 <code>ref</code>，从而延长了 <code>10</code> 的生命周期。在这种情况下，<code>ref</code> 只能被读取，不能被修改。</p>
-<h2><span id="左值到右值引用的转换">左值到右值引用的转换</span></h2><p>左值可以通过 <code>std::move</code> 显式地转换成右值引用，这使得一个本来是左值的对象可以被移动语义所使用。例如在移动构造函数和移动赋值运算符中，使用 <code>std::move</code> 将左值转为右值引用以实现高效的资源转移。</p>
+<p>这里，右值 <code>10</code> 可以通过 <code>const int&amp;</code>
+绑定到 <code>ref</code>，从而延长了 <code>10</code>
+的生命周期。在这种情况下，<code>ref</code> 只能被读取，不能被修改。</p>
+<h2><span id="左值到右值引用的转换">左值到右值引用的转换</span></h2>
+<p>左值可以通过 <code>std::move</code>
+显式地转换成右值引用，这使得一个本来是左值的对象可以被移动语义所使用。例如在移动构造函数和移动赋值运算符中，使用
+<code>std::move</code> 将左值转为右值引用以实现高效的资源转移。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">process</span><span class="hljs-params">(<span class="hljs-type">int</span>&amp;&amp; x)</span> </span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Right value: &quot;</span> &lt;&lt; x &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br>    <span class="hljs-built_in">process</span>(std::<span class="hljs-built_in">move</span>(a)); <span class="hljs-comment">// std::move 将 a 转换为右值引用</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>这里 <code>std::move(a)</code> 将左值 <code>a</code> 转为右值引用，因此可以传递给 <code>process</code> 函数。需要注意，使用 <code>std::move</code> 后，<code>a</code> 的状态可能变成“未定义”，通常在此之后不应再直接使用 <code>a</code>，除非它被重新赋值。</p>
-<h1><span id="为什么出现右值引用和移动语义">为什么出现右值引用和移动语义？</span></h1><p>因为有个问题，左值引用解决不了，见下：</p>
+<p>这里 <code>std::move(a)</code> 将左值 <code>a</code>
+转为右值引用，因此可以传递给 <code>process</code> 函数。需要注意，使用
+<code>std::move</code> 后，<code>a</code>
+的状态可能变成“未定义”，通常在此之后不应再直接使用
+<code>a</code>，除非它被重新赋值。</p>
+<h1><span id="为什么出现右值引用和移动语义">为什么出现右值引用和移动语义？</span></h1>
+<p>因为有个问题，左值引用解决不了，见下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++">string <span class="hljs-keyword">operator</span>+(<span class="hljs-type">const</span> string&amp; s, <span class="hljs-type">char</span> ch)<br>&#123;<br><span class="hljs-function">string <span class="hljs-title">ret</span><span class="hljs-params">(s)</span></span>;<br>ret.<span class="hljs-built_in">push_back</span>(ch);<br><span class="hljs-keyword">return</span> ret;<br>&#125;<br><br><span class="hljs-comment">// 拿现在这个函数来举例：ret是函数内的局部对象，出了函数作用域后会被析构，即被销毁了</span><br><span class="hljs-comment">// 若此时再返回它的别名（左值引用），也就是再拿这个对象来用，就会出问题</span><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">①：不能返回局部变量的引用。局部变量会在函数返回后被销毁，此时对 局部变量的引用就会成为“无所指”的引用，程序会进入未知状态。</span><br><span class="hljs-comment">②：不能返回函数内部通过 new 分配的内存的引用。虽然不存在局部变量的被动销毁问题，但如果被返回的函数的引用只是作为一个临时变量出现，而没有将其赋值给一个实际的变量，    那么就可能造成这个引用所指向的空间（有 new 分配）无法释放的情况（由于没有具体的变量名，故无法用 delete 手动释放该内存），从而造成内存泄漏。</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-
-
-
-
-
 
       </div>
     </div>
@@ -305,7 +311,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -837,11 +843,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

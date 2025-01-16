@@ -174,24 +174,40 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#shutdown%E8%B0%83%E7%94%A8">shutdown调用</a></li>
-<li><a href="#%E6%9C%89%E5%BA%8F%E9%87%8A%E6%94%BE">有序释放</a></li>
+<li><a href="#shutdown调用">shutdown调用</a></li>
+<li><a href="#有序释放">有序释放</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="shutdown调用">shutdown调用</span></h2><p>close 函数会关闭读写，但如果你想控制关闭读端、关闭写端或者全部关闭，那么 shutdown 可以做到。</p>
+<h2><span id="shutdown调用">shutdown调用</span></h2>
+<p>close
+函数会关闭读写，但如果你想控制关闭读端、关闭写端或者全部关闭，那么
+shutdown 可以做到。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">shutdown</span><span class="hljs-params">(<span class="hljs-type">int</span> sockfd, <span class="hljs-type">int</span> how)</span></span>;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">sockfd: 套接字描述符，表示要操作的连接</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">how: 指定如何关闭连接，可以取以下三个值：</span><br><span class="hljs-comment">	SHUT_RD (0): 关闭读取功能。该套接字不再接收数据，任何到达的数据包将被丢弃。如果有未处理的接收数据，会继续保留，直到被读取完毕</span><br><span class="hljs-comment">	SHUT_WR (1): 关闭写入功能。该套接字不再允许发送数据。此时，TCP 会发送一个 FIN 包，告诉对端本地已完成数据发送，但仍可以接收数据</span><br><span class="hljs-comment">	SHUT_RDWR (2): 关闭读写功能。相当于同时执行 SHUT_RD 和 SHUT_WR，既不能发送数据，也不能接收数据</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-
-<p>关闭套接字和调用 shutdown 之间有很大的区别。首先，即使将 how 设置为 2 来调用 shutdown，实际上也并没有“关闭”套接字。也就是说，并没有释放套接字及其资源（how 被设置为 0 或 2 时可能会将接收缓冲区释放掉）。</p>
-<p>同时还要注意，调用 shutdow 时，会影响到所有打开了那个套接字的进程。比如，将 how 设置为 1 调用 shutdow 会使套接字的所有持有者都无法对其进行写操作。相反，如果调用 close 或 closesocket，套接字的其他持有者仍然能够像什么事情都没有发生一样使用它。</p>
-<p>最后这一点通常可以为我们提供一些便利。用 how &#x3D; 1 来调用shutdow 时，不管其他进程是否打开了这个套接字，都可以保证对等实体会收到一个EOF。调用 close 或 closesocket 就无法确保这一点，因为在套接字的引用计数减少到 0 之前，它都不会将 FIN 发送给对等实体。也就是说，所有进程关闭套接字后，它才将 FIN 发送给对等实体。</p>
-<h2><span id="有序释放">有序释放</span></h2><p>有序释放的目的是确保两端都能在连接拆除之前收到所有来自其对等实体的数据。</p>
-<p>在需要通知对端自己已经完成发送但仍希望接收对端的数据时，可以使用 <code>shutdown(sockfd, SHUT_WR)</code>，这种方式可以实现连接的有序释放，而不是突然中断连接。因为立即关闭连接是非常粗暴的，对于想要关闭连接的一方，可以选择仅关闭当前套接字的写入功能，读取功能依旧还在，这是为了防止对等实体发送的数据丢失。</p>
-<p>对等实体收到 EOF，会关闭连接。在知道我这边已经关闭写入功能，就明白我后续不会发送任何数据了，这是要断开连接的意思，而我这边读取功能还没有关闭，所以对等实体会把所有消息和一个FIN一起发给我。我这边把对等实体发送过来的数据处理之后，收到 EOF，就知道我已经收到对等实体所有的数据，也就关闭连接了。</p>
+<p>关闭套接字和调用 shutdown 之间有很大的区别。首先，即使将 how 设置为 2
+来调用
+shutdown，实际上也并没有“关闭”套接字。也就是说，并没有释放套接字及其资源（how
+被设置为 0 或 2 时可能会将接收缓冲区释放掉）。</p>
+<p>同时还要注意，调用 shutdow
+时，会影响到所有打开了那个套接字的进程。比如，将 how 设置为 1 调用
+shutdow 会使套接字的所有持有者都无法对其进行写操作。相反，如果调用 close
+或
+closesocket，套接字的其他持有者仍然能够像什么事情都没有发生一样使用它。</p>
+<p>最后这一点通常可以为我们提供一些便利。用 how = 1 来调用shutdow
+时，不管其他进程是否打开了这个套接字，都可以保证对等实体会收到一个EOF。调用
+close 或 closesocket 就无法确保这一点，因为在套接字的引用计数减少到 0
+之前，它都不会将 FIN
+发送给对等实体。也就是说，所有进程关闭套接字后，它才将 FIN
+发送给对等实体。</p>
+<h2><span id="有序释放">有序释放</span></h2>
+<p>有序释放的目的是确保两端都能在连接拆除之前收到所有来自其对等实体的数据。</p>
+<p>在需要通知对端自己已经完成发送但仍希望接收对端的数据时，可以使用
+<code>shutdown(sockfd, SHUT_WR)</code>，这种方式可以实现连接的有序释放，而不是突然中断连接。因为立即关闭连接是非常粗暴的，对于想要关闭连接的一方，可以选择仅关闭当前套接字的写入功能，读取功能依旧还在，这是为了防止对等实体发送的数据丢失。</p>
+<p>对等实体收到
+EOF，会关闭连接。在知道我这边已经关闭写入功能，就明白我后续不会发送任何数据了，这是要断开连接的意思，而我这边读取功能还没有关闭，所以对等实体会把所有消息和一个FIN一起发给我。我这边把对等实体发送过来的数据处理之后，收到
+EOF，就知道我已经收到对等实体所有的数据，也就关闭连接了。</p>
 <hr>
-<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
+<p>⭐️内容取自译者陈涓、赵振平《TCP/IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
 
       </div>
     </div>
@@ -276,7 +292,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -808,11 +824,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,36 +174,52 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88">常量指针</a></li>
-<li><a href="#%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F">指针常量</a></li>
-<li><a href="#%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F">常量指针常量</a></li>
+<li><a href="#常量指针">常量指针</a></li>
+<li><a href="#指针常量">指针常量</a></li>
+<li><a href="#常量指针常量">常量指针常量</a></li>
 </ul>
 <!-- tocstop -->
-
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> i = <span class="hljs-number">10</span>;<br><span class="hljs-type">int</span>* p = &amp;i;<br></code></pre></td></tr></table></figure>
-
-<p>指针是用来存储地址的，我们用指针 p 指向一个变量 i ，即存储该变量的地址。其中 &amp; 意味着取地址符，* 意味着解引用。所以，当我们想要获取变量 i 存储的实际数据，可以选择直接输出 变量 i ，或者选择 *p 解引用来获取变量 i 存储的实际数据。两个的区别就是，变量 i 直接访问到内存，而 *p 需要先读取到 指针 p 指向的内存，然后再访问内存。因此，我们讲 变量 i 是直接访问，指针 p 是间接访问。</p>
+<p>指针是用来存储地址的，我们用指针 p 指向一个变量 i
+，即存储该变量的地址。其中 &amp; 意味着取地址符，*
+意味着解引用。所以，当我们想要获取变量 i
+存储的实际数据，可以选择直接输出 变量 i ，或者选择 <em>p
+解引用来获取变量 i 存储的实际数据。两个的区别就是，变量 i
+直接访问到内存，而 </em>p 需要先读取到 指针 p
+指向的内存，然后再访问内存。因此，我们讲 变量 i 是直接访问，指针 p
+是间接访问。</p>
 <p>你要知道 p 等价于 变量 i 的内存地址，*p 就等于于 i。</p>
-<p><img src="/images/2024/09/03/3e5038c0-69fa-11ef-b30d-bbd8f07aedd3.png" alt="指针.png"></p>
-<p>此刻的指针 p 对指向的内存有读和写的权限，即读取指向内存的数据和修改指向内存的数据。</p>
+<figure>
+<img src="/images/2024/09/03/3e5038c0-69fa-11ef-b30d-bbd8f07aedd3.png" alt="指针.png">
+<figcaption aria-hidden="true">指针.png</figcaption>
+</figure>
+<p>此刻的指针 p
+对指向的内存有读和写的权限，即读取指向内存的数据和修改指向内存的数据。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br><br>	<span class="hljs-type">int</span> i = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span>* p = &amp;i;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d\n&quot;</span>, *p);<br>	*p = <span class="hljs-number">20</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d\n&quot;</span>, *p);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>输出结果：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">p = <span class="hljs-number">10</span><br>p = <span class="hljs-number">20</span><br></code></pre></td></tr></table></figure>
-
-<h2><span id="常量指针">常量指针</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br><br>	<span class="hljs-type">int</span> i = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> j = <span class="hljs-number">20</span>;<br>	<span class="hljs-type">const</span> <span class="hljs-type">int</span>* p = &amp;i;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d\n&quot;</span>, p);<br><br>	p = &amp;j;<br><br>	*p = <span class="hljs-number">10</span>;	<span class="hljs-comment">// 报错</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d\n&quot;</span>, *p);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
+<h2><span id="常量指针">常量指针</span></h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br><br>	<span class="hljs-type">int</span> i = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> j = <span class="hljs-number">20</span>;<br>	<span class="hljs-type">const</span> <span class="hljs-type">int</span>* p = &amp;i;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d\n&quot;</span>, p);<br><br>	p = &amp;j;<br><br>	*p = <span class="hljs-number">10</span>;	<span class="hljs-comment">// 报错</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d\n&quot;</span>, *p);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>从左往右看，常量（const）+ 指针（*）。</p>
-<p>从报错情况来看，*p 对于指向内存的数据有读的权限，但是没有写的权限。p对于指向内存的数据有读的权限，也有写的权限。即常量指针能改变所指的对象，但是不可以改变所指对象的数据。</p>
-<p><img src="/images/2024/09/03/38bbffc0-69fa-11ef-b30d-bbd8f07aedd3.png" alt="常量指针.png"></p>
-<h2><span id="指针常量">指针常量</span></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br><br>	<span class="hljs-type">int</span> i = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> j = <span class="hljs-number">20</span>;<br>	<span class="hljs-type">int</span>* <span class="hljs-type">const</span> p = &amp;i;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d\n&quot;</span>, p);<br><br>	p = &amp;j;		<span class="hljs-comment">// 报错</span><br><br>	*p = <span class="hljs-number">10</span>;	<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d\n&quot;</span>, *p);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
+<p>从报错情况来看，*p
+对于指向内存的数据有读的权限，但是没有写的权限。p对于指向内存的数据有读的权限，也有写的权限。即常量指针能改变所指的对象，但是不可以改变所指对象的数据。</p>
+<figure>
+<img src="/images/2024/09/03/38bbffc0-69fa-11ef-b30d-bbd8f07aedd3.png" alt="常量指针.png">
+<figcaption aria-hidden="true">常量指针.png</figcaption>
+</figure>
+<h2><span id="指针常量">指针常量</span></h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br><br>	<span class="hljs-type">int</span> i = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> j = <span class="hljs-number">20</span>;<br>	<span class="hljs-type">int</span>* <span class="hljs-type">const</span> p = &amp;i;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d\n&quot;</span>, p);<br><br>	p = &amp;j;		<span class="hljs-comment">// 报错</span><br><br>	*p = <span class="hljs-number">10</span>;	<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d\n&quot;</span>, *p);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>从左往右看，指针（*）+ 常量（const）。</p>
-<p>从报错情况来看，*p 对于指向内存的数据有读的权限，也有写的权限。p对于指向内存的数据有读的权限，但是没有写的权限。即常量指针不能改变所指的对象，但是可以改变所指对象的数据。</p>
-<p><img src="/images/2024/09/03/33771f40-69fa-11ef-b30d-bbd8f07aedd3.png" alt="指针常量.png"></p>
-<h2><span id="常量指针常量">常量指针常量</span></h2><p>const int* const 变量名。不必多说，既不能修改所指的对象，还不可以修改所指对象的数据。</p>
+<p>从报错情况来看，*p
+对于指向内存的数据有读的权限，也有写的权限。p对于指向内存的数据有读的权限，但是没有写的权限。即常量指针不能改变所指的对象，但是可以改变所指对象的数据。</p>
+<figure>
+<img src="/images/2024/09/03/33771f40-69fa-11ef-b30d-bbd8f07aedd3.png" alt="指针常量.png">
+<figcaption aria-hidden="true">指针常量.png</figcaption>
+</figure>
+<h2><span id="常量指针常量">常量指针常量</span></h2>
+<p>const int* const
+变量名。不必多说，既不能修改所指的对象，还不可以修改所指对象的数据。</p>
 
       </div>
     </div>
@@ -288,7 +304,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -820,11 +836,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

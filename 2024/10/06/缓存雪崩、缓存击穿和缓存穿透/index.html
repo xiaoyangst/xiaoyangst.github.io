@@ -174,65 +174,98 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9">缓存雪崩</a><ul>
-<li><a href="#%E5%A4%A7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%90%8C%E6%97%B6%E5%A4%B1%E6%95%88">大量数据同时失效</a></li>
-<li><a href="#redis-%E5%AE%95%E6%9C%BA">Redis 宕机</a></li>
-</ul>
-</li>
-<li><a href="#%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF">缓存击穿</a></li>
-<li><a href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F">缓存穿透</a></li>
+<li><a href="#缓存雪崩">缓存雪崩</a>
+<ul>
+<li><a href="#大量数据同时失效">大量数据同时失效</a></li>
+<li><a href="#redis-宕机">Redis 宕机</a></li>
+</ul></li>
+<li><a href="#缓存击穿">缓存击穿</a></li>
+<li><a href="#缓存穿透">缓存穿透</a></li>
 </ul>
 <!-- tocstop -->
-
-<p>Redis 缓存的数据来源于 MySQL数据库，前者作用于内存，后者作用于磁盘，内存访问比磁盘快很多。</p>
+<p>Redis 缓存的数据来源于
+MySQL数据库，前者作用于内存，后者作用于磁盘，内存访问比磁盘快很多。</p>
 <p>那么会出现哪些故障或问题？我们的应对策略是什么？继续往下读吧。</p>
-<p><img src="/images/2024/10/06/e0bbbeb0-83e3-11ef-9c4b-5b387296a9ff.png" alt="读取缓存流程.png"></p>
-<h2><span id="缓存雪崩">缓存雪崩</span></h2><p>Redis 是为了方便快速访问从而缓存的 MySQL 数据库中的数据，那么数据的更新是在 MySQL 数据库中，所以 Redis 要对缓存的数据设置一个过期时间。如果缓存数据过期就会从缓存中移除，用户来访问数据就无法立即命中，会直接访问 MySQL 数据库获得最新数据。最新的数据会缓存到 Redis 中，好让用户下次访问直接命中，这样就让用户既可以快速访问数据，还可以访问到最新的数据。</p>
-<p><img src="/images/2024/10/06/dd75bb70-83e3-11ef-9c4b-5b387296a9ff.png" alt="缓存同步.png"></p>
-<p>那如果 Redis 缓存全部失效呢？大量请求访问 MySQL 数据库，不但速度慢，而且还会因为大量请求而崩溃。</p>
+<figure>
+<img src="/images/2024/10/06/e0bbbeb0-83e3-11ef-9c4b-5b387296a9ff.png" alt="读取缓存流程.png">
+<figcaption aria-hidden="true">读取缓存流程.png</figcaption>
+</figure>
+<h2><span id="缓存雪崩">缓存雪崩</span></h2>
+<p>Redis 是为了方便快速访问从而缓存的 MySQL
+数据库中的数据，那么数据的更新是在 MySQL 数据库中，所以 Redis
+要对缓存的数据设置一个过期时间。如果缓存数据过期就会从缓存中移除，用户来访问数据就无法立即命中，会直接访问
+MySQL 数据库获得最新数据。最新的数据会缓存到 Redis
+中，好让用户下次访问直接命中，这样就让用户既可以快速访问数据，还可以访问到最新的数据。</p>
+<figure>
+<img src="/images/2024/10/06/dd75bb70-83e3-11ef-9c4b-5b387296a9ff.png" alt="缓存同步.png">
+<figcaption aria-hidden="true">缓存同步.png</figcaption>
+</figure>
+<p>那如果 Redis 缓存全部失效呢？大量请求访问 MySQL
+数据库，不但速度慢，而且还会因为大量请求而崩溃。</p>
 <p>我们称之为 缓存雪崩。</p>
-<p><img src="/images/2024/10/06/d9aea150-83e3-11ef-9c4b-5b387296a9ff.png" alt="缓存雪崩.png"></p>
+<figure>
+<img src="/images/2024/10/06/d9aea150-83e3-11ef-9c4b-5b387296a9ff.png" alt="缓存雪崩.png">
+<figcaption aria-hidden="true">缓存雪崩.png</figcaption>
+</figure>
 <p>那有哪些情况会导致大量请求绕过 Redis 缓存而来到 MySQL 数据库？</p>
-<ol>
+<ol type="1">
 <li>Redis 缓存大量失效。</li>
 <li>Redis 缓存没有失效，但是宕机导致无法提供服务。</li>
 </ol>
-<h3><span id="大量数据同时失效">大量数据同时失效</span></h3><p>（一）随机设置过期时间</p>
+<h3><span id="大量数据同时失效">大量数据同时失效</span></h3>
+<p>（一）随机设置过期时间</p>
 <p>避免将大量数据设置相同的过期时间，采用随机数，这可避免大量数据同时失效问题。</p>
 <p>（二）互斥锁</p>
-<p>如果缓存中的数据有效，但是用户需要的数据不在其中，也就无法命中缓冲，依旧可能会导致大量的请求到 MySQL 数据。为了避免这个问题发生，可以选择加互斥锁。</p>
-<p>但业务线程在处理用户请求时，<strong>如果发现访问的数据不在 Redis 中，就加个互斥锁，保证同一时间内只有一个请求来构建缓存</strong>（从数据库读取数据，再将数据更新到 Redis 里），当缓存构建完后，再释放锁。</p>
+<p>如果缓存中的数据有效，但是用户需要的数据不在其中，也就无法命中缓冲，依旧可能会导致大量的请求到
+MySQL 数据。为了避免这个问题发生，可以选择加互斥锁。</p>
+<p>但业务线程在处理用户请求时，<strong>如果发现访问的数据不在 Redis
+中，就加个互斥锁，保证同一时间内只有一个请求来构建缓存</strong>（从数据库读取数据，再将数据更新到
+Redis 里），当缓存构建完后，再释放锁。</p>
 <p>实现互斥锁的时候，最好设置<strong>超时时间</strong>，不然第一个请求拿到了锁，然后这个请求发生了某种意外而一直阻塞，一直不释放锁，这时其他请求也一直拿不到锁，整个系统就会出现无响应的现象。</p>
 <p>（三）后台更新缓存</p>
 <p>业务线程不再负责更新缓存，缓存也不设置有效期，即“永久有效”，并将更新缓存的工作交由后台行程定时更新。</p>
 <p>事实上，缓存数据不设置有效期，并不是意味着数据一直能在内存里，因为当系统内存紧张的时候，有些缓存数据会被“淘汰”，而在缓存被“淘汰”到下一次后台定时更新缓存的这段时间内，业务线程读取缓存失败就返回空值，业务的视角就以为是数据丢失了。</p>
 <p>解决上面问题的方式：</p>
-<ol>
+<ol type="1">
 <li>后台线程不仅负责定时更新缓存，而且也负责<strong>频繁地检测缓存是否有效</strong>，检测到缓存失效，原因可能是系统紧张而被淘汰，于是马上从数据库读取数据，并更新到缓存。这种方式检测时间不能太长，太长会导致用户获取的数据是一个空值而不是真正的数据，所以检测间隔最好是毫秒级，但是总归是有个间隔时间，用户体验一般。</li>
 <li>业务线程发现缓存数据失效后，通过消息队列发送一条消息通知后台线程更新缓存，后台线程收到消息后，在更新缓存前可以判断缓存是否存在，存在就不执行更新缓存操作；不存在就读取数据库数据，并将数据加载到缓存。这种方式想必第一种方式缓存的更新会更及时，用户体验也比较好。</li>
 </ol>
-<h3><span id="redis-宕机">Redis 宕机</span></h3><p>（一）服务熔断或请求限流机制</p>
-<p>服务熔断就是暂停业务应用对缓存服务的访问，直接返回错误，不用再继续访问数据库。等到 Redis 恢复，再允许业务应用访问缓存服务。</p>
-<p>但如果就这样处理，会对业务有影响，为避免如此，可以开启请求限流机制，只处理少量的请求，直到 Redis 恢复正常并且预热完后，再解除请求限流的机制。</p>
+<h3><span id="redis-宕机">Redis 宕机</span></h3>
+<p>（一）服务熔断或请求限流机制</p>
+<p>服务熔断就是暂停业务应用对缓存服务的访问，直接返回错误，不用再继续访问数据库。等到
+Redis 恢复，再允许业务应用访问缓存服务。</p>
+<p>但如果就这样处理，会对业务有影响，为避免如此，可以开启请求限流机制，只处理少量的请求，直到
+Redis 恢复正常并且预热完后，再解除请求限流的机制。</p>
 <p>（二）构建 Redis 缓存高可用集群</p>
-<p>如果访问的 Redis 宕机，可以立即选择其他有效的 Redis 服务器进行替代，保证服务不会中断。</p>
-<h2><span id="缓存击穿">缓存击穿</span></h2><p><img src="/images/2024/10/06/d3b2f3f0-83e3-11ef-9c4b-5b387296a9ff.png" alt="缓存击穿.png"></p>
-<p>如果某个热点数据过期，此时大量请求来访问（比方说秒杀活动），却无法命中缓存，导致大量请求去到 MySQL 数据库，MySQL 数据库很容易崩溃，这就是缓存击穿。</p>
-<p>解决方案可以参考之前的，你可以认为 缓存击穿是 缓存雪崩的一个子集。</p>
+<p>如果访问的 Redis 宕机，可以立即选择其他有效的 Redis
+服务器进行替代，保证服务不会中断。</p>
+<h2><span id="缓存击穿">缓存击穿</span></h2>
+<figure>
+<img src="/images/2024/10/06/d3b2f3f0-83e3-11ef-9c4b-5b387296a9ff.png" alt="缓存击穿.png">
+<figcaption aria-hidden="true">缓存击穿.png</figcaption>
+</figure>
+<p>如果某个热点数据过期，此时大量请求来访问（比方说秒杀活动），却无法命中缓存，导致大量请求去到
+MySQL 数据库，MySQL 数据库很容易崩溃，这就是缓存击穿。</p>
+<p>解决方案可以参考之前的，你可以认为 缓存击穿是
+缓存雪崩的一个子集。</p>
 <p>互斥锁方案：保证同一时间只有一个业务线程更新缓存，未能获取互斥锁的请求，要么等待锁释放后重新读取缓存，要么就返回空值或者默认值。</p>
 <p>不给热点数据设置过期时间：由后台异步更新缓存，或者在热点数据准备要过期前，提前通知后台线程更新缓存以及重新设置过期时间。</p>
-<h2><span id="缓存穿透">缓存穿透</span></h2><p>当用户访问的数据，<strong>既不在缓存中，也不在数据库中</strong>（前面的讨论至少保证数据库是有有效数据，但这里不再是），导致请求在访问缓存时，发现缓存缺失，再去访问数据库时，发现数据库中也有没有要访问的数据，没办法构建缓存数据，来服务后续的请求。那么当有大量这样的请求到来时，数据库的压力骤增，这就是缓存穿透问题。</p>
-<p><img src="/images/2024/10/06/cee4a300-83e3-11ef-9c4b-5b387296a9ff.png" alt="缓存穿透.png"></p>
+<h2><span id="缓存穿透">缓存穿透</span></h2>
+<p>当用户访问的数据，<strong>既不在缓存中，也不在数据库中</strong>（前面的讨论至少保证数据库是有有效数据，但这里不再是），导致请求在访问缓存时，发现缓存缺失，再去访问数据库时，发现数据库中也有没有要访问的数据，没办法构建缓存数据，来服务后续的请求。那么当有大量这样的请求到来时，数据库的压力骤增，这就是缓存穿透问题。</p>
+<figure>
+<img src="/images/2024/10/06/cee4a300-83e3-11ef-9c4b-5b387296a9ff.png" alt="缓存穿透.png">
+<figcaption aria-hidden="true">缓存穿透.png</figcaption>
+</figure>
 <p>缓存穿透的发生一般有两种情况：</p>
 <ul>
 <li>业务误操作，缓存中的数据和数据库中的数据都被误删，导致缓存和数据库中都没有数据。</li>
 <li>黑客恶意攻击，故意大量访问本不存在数据的业务。</li>
 </ul>
 <p>解决方案：</p>
-<ol>
-<li>非法请求的限制： API 入口处判断请求参数是否合理，是否还有非法数据等，如果存在就直接拒绝接下来的访问。</li>
+<ol type="1">
+<li>非法请求的限制： API
+入口处判断请求参数是否合理，是否还有非法数据等，如果存在就直接拒绝接下来的访问。</li>
 <li>缓存空值或默认值：出现缓存穿透现象，可以针对查询的数据设置一个空值或者默认值，这样后续请求就可以从缓存中读取到控制或者默认值并返回给应用，而不会继续查询数据库。</li>
 <li><strong>布隆过滤器</strong>：快速判断数据是否存在，避免通过查询数据库来判断数据是否存在。</li>
 </ol>
@@ -322,7 +355,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\01\RDB-持久化\" title="RDB 持久化" rel="bookmark">RDB 持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\17\Redis主从复制\" title="Redis主从复制" rel="bookmark">Redis主从复制</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\01\RDB-持久化\" title="RDB 持久化" rel="bookmark">RDB 持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\17\Redis哨兵\" title="Redis哨兵" rel="bookmark">Redis哨兵</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
     
   </div>
 </div>
@@ -854,11 +887,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

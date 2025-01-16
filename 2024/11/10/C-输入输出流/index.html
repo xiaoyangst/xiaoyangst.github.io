@@ -174,163 +174,219 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%B5%81%E7%9A%84%E5%9B%9B%E7%A7%8D%E7%8A%B6%E6%80%81">流的四种状态</a></li>
-<li><a href="#%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81">标准输入输出流</a><ul>
-<li><a href="#%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E6%B5%81">标准输入流</a></li>
-<li><a href="#%E7%BC%93%E5%86%B2%E6%9C%BA%E5%88%B6">缓冲机制</a><ul>
-<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BC%95%E5%85%A5%E7%BC%93%E5%86%B2%E5%8C%BA"><strong>为什么要引入缓冲区？</strong></a></li>
-<li><a href="#%E7%BC%93%E5%86%B2%E5%8C%BA%E8%A6%81%E5%81%9A%E5%93%AA%E4%BA%9B%E5%B7%A5%E4%BD%9C"><strong>缓冲区要做哪些工作？</strong></a></li>
-<li><a href="#%E7%BC%93%E5%86%B2%E6%9C%BA%E5%88%B6"><strong>缓冲机制</strong></a></li>
-</ul>
-</li>
-<li><a href="#%E6%A0%87%E5%87%86%E8%BE%93%E5%87%BA%E6%B5%81">标准输出流</a></li>
-</ul>
-</li>
-<li><a href="#%E6%96%87%E4%BB%B6%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81">文件输入输出流</a><ul>
-<li><a href="#%E6%96%87%E4%BB%B6%E8%BE%93%E5%85%A5%E6%B5%81">文件输入流</a><ul>
-<li><a href="#%E6%96%87%E4%BB%B6%E8%BE%93%E5%85%A5%E6%B5%81%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA">文件输入流对象的创建</a></li>
-<li><a href="#%E6%8C%89%E8%A1%8C%E8%AF%BB%E5%8F%96">按行读取</a></li>
-<li><a href="#%E8%AF%BB%E5%8F%96%E6%8C%87%E5%AE%9A%E5%AD%97%E8%8A%82%E6%95%B0">读取指定字节数</a></li>
-</ul>
-</li>
-<li><a href="#%E6%96%87%E4%BB%B6%E8%BE%93%E5%87%BA%E6%B5%81">文件输出流</a><ul>
-<li><a href="#%E6%96%87%E4%BB%B6%E8%BE%93%E5%87%BA%E6%B5%81%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA">文件输出流对象的创建</a></li>
-<li><a href="#%E9%80%9A%E8%BF%87%E8%BE%93%E5%87%BA%E6%B5%81%E8%BF%90%E7%AE%97%E7%AC%A6%E5%86%99%E5%86%85%E5%AE%B9">通过输出流运算符写内容</a></li>
-<li><a href="#%E9%80%9A%E8%BF%87write%E5%87%BD%E6%95%B0%E5%86%99%E5%86%85%E5%AE%B9">通过write函数写内容</a></li>
-<li><a href="#%E5%B7%A5%E5%85%B7%E5%8A%A8%E6%80%81%E6%9F%A5%E7%9C%8B%E6%8C%87%E4%BB%A4">工具：动态查看指令</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81">字符串输入输出流</a><ul>
-<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BE%93%E5%85%A5%E6%B5%81">字符串输入流</a></li>
-<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BE%93%E5%87%BA%E6%B5%81">字符串输出流</a></li>
-</ul>
-</li>
+<li><a href="#流的四种状态">流的四种状态</a></li>
+<li><a href="#标准输入输出流">标准输入输出流</a>
+<ul>
+<li><a href="#标准输入流">标准输入流</a></li>
+<li><a href="#缓冲机制">缓冲机制</a>
+<ul>
+<li><a href="#为什么要引入缓冲区"><strong>为什么要引入缓冲区？</strong></a></li>
+<li><a href="#缓冲区要做哪些工作"><strong>缓冲区要做哪些工作？</strong></a></li>
+<li><a href="#缓冲机制"><strong>缓冲机制</strong></a></li>
+</ul></li>
+<li><a href="#标准输出流">标准输出流</a></li>
+</ul></li>
+<li><a href="#文件输入输出流">文件输入输出流</a>
+<ul>
+<li><a href="#文件输入流">文件输入流</a>
+<ul>
+<li><a href="#文件输入流对象的创建">文件输入流对象的创建</a></li>
+<li><a href="#按行读取">按行读取</a></li>
+<li><a href="#读取指定字节数">读取指定字节数</a></li>
+</ul></li>
+<li><a href="#文件输出流">文件输出流</a>
+<ul>
+<li><a href="#文件输出流对象的创建">文件输出流对象的创建</a></li>
+<li><a href="#通过输出流运算符写内容">通过输出流运算符写内容</a></li>
+<li><a href="#通过write函数写内容">通过write函数写内容</a></li>
+<li><a href="#工具动态查看指令">工具：动态查看指令</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#字符串输入输出流">字符串输入输出流</a>
+<ul>
+<li><a href="#字符串输入流">字符串输入流</a></li>
+<li><a href="#字符串输出流">字符串输出流</a></li>
+</ul></li>
 </ul>
 <!-- tocstop -->
-
-<h1><span id="流的四种状态">流的四种状态</span></h1><p>IO 操作与生俱来的一个问题是可能会发生错误，一些错误是可以恢复的，另一些是不可以的。在C++ 标准库中，用 iostate 来表示流的状态，不同的编译器 iostate 的实现可能不一样，不过都有四种状态：</p>
+<h1><span id="流的四种状态">流的四种状态</span></h1>
+<p>IO
+操作与生俱来的一个问题是可能会发生错误，一些错误是可以恢复的，另一些是不可以的。在C++
+标准库中，用 iostate 来表示流的状态，不同的编译器 iostate
+的实现可能不一样，不过都有四种状态：</p>
 <ul>
-<li><p>badbit <strong>系统级的错误</strong>，如不可恢复的读写错误。通常情况下一旦 badbit 被置位，流就无法再使用了。</p>
-</li>
-<li><p>failbit 表示发生<strong>可恢复的错误</strong>，如期望读取一个int数值，却读出一个字符串等错误。这种问题通常是可以修改的，流还可以继续使用。</p>
-</li>
-<li><p>eofbit 表示<strong>到达流结尾位置</strong>， 流在正常输入输出的情况下结束，会被置为eofbit状态。</p>
-</li>
-<li><p>goodbit 表示流处于<strong>有效状态</strong>。流在有效状态下，才能正常使用。如果 badbit 、 failbit 和 eofbit 任何一个被置位，则流无法正常使用。</p>
-</li>
+<li><p>badbit
+<strong>系统级的错误</strong>，如不可恢复的读写错误。通常情况下一旦
+badbit 被置位，流就无法再使用了。</p></li>
+<li><p>failbit
+表示发生<strong>可恢复的错误</strong>，如期望读取一个int数值，却读出一个字符串等错误。这种问题通常是可以修改的，流还可以继续使用。</p></li>
+<li><p>eofbit 表示<strong>到达流结尾位置</strong>，
+流在正常输入输出的情况下结束，会被置为eofbit状态。</p></li>
+<li><p>goodbit
+表示流处于<strong>有效状态</strong>。流在有效状态下，才能正常使用。如果
+badbit 、 failbit 和 eofbit 任何一个被置位，则流无法正常使用。</p></li>
 </ul>
-<h1><span id="标准输入输出流">标准输入输出流</span></h1><p>对系统指定的标准设备的输入和输出。即从键盘输入数据，输出到显示器屏幕。这种输入输出称为标准输入输出，简称<strong>标准</strong> I&#x2F;O。</p>
-<p>C++标准库定义了三个预定义的标准输入输出流对象，分别是 <code>std::cin</code>、<code>std::cout</code> 和 <code>std::cerr</code>。它们分别对应于标准输入设备（通常是键盘）、标准输出设备（通常是显示器）和标准错误设备（通常是显示器）。</p>
-<h2><span id="标准输入流">标准输入流</span></h2><p>istream 类定义了一个全局输入流对象，即 cin , 代表的是<strong>标准输入</strong>，它从标准输入设备（键盘）获取数据，程序中的变量通过流提取符 <code>&gt;&gt;</code>（输入流符号） 从流中提取数据。</p>
-<p>流提取符 <code>&gt;&gt;</code> 从流中提取数据时通常跳过输入流中的空格、 tab 键、换行符等空白字符。只有在输入完数据再按回车键后，该行数据才被送入键盘<font color="red"><strong>缓冲区</strong></font>，形成输入流，提取运算符 <code>&gt;&gt;</code> 才能从中提取数据。需要注意保证从流中读取数据能正常进行。</p>
+<h1><span id="标准输入输出流">标准输入输出流</span></h1>
+<p>对系统指定的标准设备的输入和输出。即从键盘输入数据，输出到显示器屏幕。这种输入输出称为标准输入输出，简称<strong>标准</strong>
+I/O。</p>
+<p>C++标准库定义了三个预定义的标准输入输出流对象，分别是
+<code>std::cin</code>、<code>std::cout</code> 和
+<code>std::cerr</code>。它们分别对应于标准输入设备（通常是键盘）、标准输出设备（通常是显示器）和标准错误设备（通常是显示器）。</p>
+<h2><span id="标准输入流">标准输入流</span></h2>
+<p>istream 类定义了一个全局输入流对象，即 cin ,
+代表的是<strong>标准输入</strong>，它从标准输入设备（键盘）获取数据，程序中的变量通过流提取符
+<code>&gt;&gt;</code>（输入流符号） 从流中提取数据。</p>
+<p>流提取符 <code>&gt;&gt;</code>
+从流中提取数据时通常跳过输入流中的空格、 tab
+键、换行符等空白字符。只有在输入完数据再按回车键后，该行数据才被送入键盘<font color="red"><strong>缓冲区</strong></font>，形成输入流，提取运算符
+<code>&gt;&gt;</code>
+才能从中提取数据。需要注意保证从流中读取数据能正常进行。</p>
 <p>下面来看一个例子，每次从 cin 中获取一个字符：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printStreamStatus</span><span class="hljs-params">(std::istream &amp; is)</span></span>&#123; <br>    cout &lt;&lt; <span class="hljs-string">&quot;is&#x27;s goodbit:&quot;</span> &lt;&lt; is.<span class="hljs-built_in">good</span>() &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">&quot;is&#x27;s badbit:&quot;</span> &lt;&lt; is.<span class="hljs-built_in">bad</span>() &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">&quot;is&#x27;s failbit:&quot;</span> &lt;&lt; is.<span class="hljs-built_in">fail</span>() &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">&quot;is&#x27;s eofbit:&quot;</span> &lt;&lt; is.<span class="hljs-built_in">eof</span>() &lt;&lt; endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test0</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-built_in">printStreamStatus</span>(cin);  <span class="hljs-comment">//goodbit状态</span><br>    <span class="hljs-type">int</span> num = <span class="hljs-number">0</span>;    <br>    cin &gt;&gt; num;   <br>    cout &lt;&lt; <span class="hljs-string">&quot;num:&quot;</span> &lt;&lt; num &lt;&lt; endl;<br>    <span class="hljs-built_in">printStreamStatus</span>(cin);  <span class="hljs-comment">//进行一次输入后再检查cin的状态</span><br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>如果没有进行正确的输入，输入流会进入 failbit 的状态，无法正常工作，需要恢复流的状态。</p>
-<p>查看C++参考文档，需要利用 <code>clear 和 ignore</code> 函数配合，实现这个过程：</p>
+<p>如果没有进行正确的输入，输入流会进入 failbit
+的状态，无法正常工作，需要恢复流的状态。</p>
+<p>查看C++参考文档，需要利用 <code>clear 和 ignore</code>
+函数配合，实现这个过程：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">if</span>(!cin.<span class="hljs-built_in">good</span>())&#123;<br>    <span class="hljs-comment">//恢复流的状态</span><br>    cin.<span class="hljs-built_in">clear</span>();<br>    <span class="hljs-comment">//清空缓冲区，才能继续使用</span><br>    cin.<span class="hljs-built_in">ignore</span>(std::numeric_limits&lt;std::streamsize&gt;::<span class="hljs-built_in">max</span>(),<span class="hljs-string">&#x27;\n&#x27;</span>);<br>    cout &lt;&lt; endl;<br>    <span class="hljs-built_in">printStreamStatus</span>(cin);<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<h2><span id="缓冲机制">缓冲机制</span></h2><p>在标准输入输出流的测试中发现，流有着缓冲机制。<strong>缓冲区</strong>又称为缓存，它是内存空间的一部分。也就是说，在内存空间中预留了一定的存储空间，这些存储空间用来缓冲输入或输出的数据，这部分预留的空间就叫做缓冲区。缓冲区根据其对应的是输入设备还是输出设备，分为<strong>输入缓冲区</strong>和<strong>输出缓冲区</strong>。</p>
+<h2><span id="缓冲机制">缓冲机制</span></h2>
+<p>在标准输入输出流的测试中发现，流有着缓冲机制。<strong>缓冲区</strong>又称为缓存，它是内存空间的一部分。也就是说，在内存空间中预留了一定的存储空间，这些存储空间用来缓冲输入或输出的数据，这部分预留的空间就叫做缓冲区。缓冲区根据其对应的是输入设备还是输出设备，分为<strong>输入缓冲区</strong>和<strong>输出缓冲区</strong>。</p>
 <p>输入或输出的内容会存在流对象对应的缓冲区，在特定情景下会从缓冲区释出。</p>
-<h3><span id="为什么要引入缓冲区"><strong>为什么要引入缓冲区？</strong></span></h3><p>比如我们从磁盘里取信息，我们先把读出的数据放在缓冲区，计算机再直接从缓冲区中取数据，等缓冲区的数据取完后再去磁盘中读取，这样就可以减少磁盘的读写次数，再加上计算机对缓冲区的操作大大快于对磁盘的操作，故应用缓冲区可大大提高计算机的运行速度。</p>
-<p>又比如，我们使用打印机打印文档，由于打印机的打印速度相对较慢，我们先把文档输出到打印机相应的缓冲区，打印机再自行逐步打印，这时我们的 CPU 可以处理别的事情。因此缓冲区就是一块内存区，它用在输入输出设备和 CPU 之间，用来缓存数据。它使得低速的输入输出设备和高速的CPU 能够协调工作，避免低速的输入输出设备占用 CPU，解放出 CPU，使其能够高效率工作。</p>
-<h3><span id="缓冲区要做哪些工作"><strong>缓冲区要做哪些工作？</strong></span></h3><p>从上面的描述中，不难发现缓冲区向上连接了程序的输入输出请求，向下连接了真实的 I&#x2F;O 操作。作为中间层，必然需要分别处理好与上下两层之间的接口，以及要处理好上下两层之间的协作。</p>
+<h3><span id="为什么要引入缓冲区"><strong>为什么要引入缓冲区？</strong></span></h3>
+<p>比如我们从磁盘里取信息，我们先把读出的数据放在缓冲区，计算机再直接从缓冲区中取数据，等缓冲区的数据取完后再去磁盘中读取，这样就可以减少磁盘的读写次数，再加上计算机对缓冲区的操作大大快于对磁盘的操作，故应用缓冲区可大大提高计算机的运行速度。</p>
+<p>又比如，我们使用打印机打印文档，由于打印机的打印速度相对较慢，我们先把文档输出到打印机相应的缓冲区，打印机再自行逐步打印，这时我们的
+CPU 可以处理别的事情。因此缓冲区就是一块内存区，它用在输入输出设备和 CPU
+之间，用来缓存数据。它使得低速的输入输出设备和高速的CPU
+能够协调工作，避免低速的输入输出设备占用 CPU，解放出
+CPU，使其能够高效率工作。</p>
+<h3><span id="缓冲区要做哪些工作"><strong>缓冲区要做哪些工作？</strong></span></h3>
+<p>从上面的描述中，不难发现缓冲区向上连接了程序的输入输出请求，向下连接了真实的
+I/O
+操作。作为中间层，必然需要分别处理好与上下两层之间的接口，以及要处理好上下两层之间的协作。</p>
 <p>输入或输出的内容会存在流对象对应的缓冲区，在特定情景下会从缓冲区释出。</p>
-<h3><span id="缓冲机制"><strong>缓冲机制</strong></span></h3><p>缓冲机制分为三种类型：<strong>全缓冲、行缓冲和不带缓冲</strong>。</p>
+<h3><span id="缓冲机制"><strong>缓冲机制</strong></span></h3>
+<p>缓冲机制分为三种类型：<strong>全缓冲、行缓冲和不带缓冲</strong>。</p>
 <ul>
-<li>全缓冲：在这种情况下，当<strong>填满缓冲区后才进行实际 I&#x2F;O 操作</strong>。全缓冲的典型代表是对磁盘文件的读写。</li>
-<li>行缓冲：在这种情况下，当<strong>在输入和输出中遇到换行符时，执行真正的 I&#x2F;O 操作</strong>。这时，我们输入的字符先存放在缓冲区，等按下回车键换行时才进行实际的 I&#x2F;O 操作。典型代表是 cin。</li>
-<li>不带缓冲：也就是<strong>不进行缓冲，有多少数据就刷新多少</strong>。标准错误输出 cerr 是典型代表，这使得出错信息可以直接尽快地显示出来。</li>
+<li>全缓冲：在这种情况下，当<strong>填满缓冲区后才进行实际 I/O
+操作</strong>。全缓冲的典型代表是对磁盘文件的读写。</li>
+<li>行缓冲：在这种情况下，当<strong>在输入和输出中遇到换行符时，执行真正的
+I/O
+操作</strong>。这时，我们输入的字符先存放在缓冲区，等按下回车键换行时才进行实际的
+I/O 操作。典型代表是 cin。</li>
+<li>不带缓冲：也就是<strong>不进行缓冲，有多少数据就刷新多少</strong>。标准错误输出
+cerr 是典型代表，这使得出错信息可以直接尽快地显示出来。</li>
 </ul>
-<h2><span id="标准输出流">标准输出流</span></h2><p>如下几种情况会导致输出缓冲区内容被刷新：</p>
-<ol>
+<h2><span id="标准输出流">标准输出流</span></h2>
+<p>如下几种情况会导致输出缓冲区内容被刷新：</p>
+<ol type="1">
 <li><strong>程序正常结束</strong></li>
 </ol>
 <p>马上输出了 1025 个 a</p>
-<p><img src="/images/2024/11/10/2c6a9500-9f2a-11ef-82c8-9594288e4933.png" alt="cout1.png"></p>
-<ol start="2">
+<figure>
+<img src="/images/2024/11/10/2c6a9500-9f2a-11ef-82c8-9594288e4933.png" alt="cout1.png">
+<figcaption aria-hidden="true">cout1.png</figcaption>
+</figure>
+<ol start="2" type="1">
 <li><strong>缓冲区满</strong></li>
 </ol>
 <p>马上输出了 1024 个 a，等待2秒后输出了最后一个 a</p>
-<p>（在实验环境中 cout 对象的默认缓冲区大小是 1024 个字节，缓冲区满了还继续传输内容，就会刷新出了当前缓冲区中所有内容，后面还有一个字符，就要等程序正常结束时刷新出来）</p>
-<p><img src="/images/2024/11/10/30606040-9f2a-11ef-82c8-9594288e4933.png" alt="cout2.png"></p>
-<ol start="3">
+<p>（在实验环境中 cout 对象的默认缓冲区大小是 1024
+个字节，缓冲区满了还继续传输内容，就会刷新出了当前缓冲区中所有内容，后面还有一个字符，就要等程序正常结束时刷新出来）</p>
+<figure>
+<img src="/images/2024/11/10/30606040-9f2a-11ef-82c8-9594288e4933.png" alt="cout2.png">
+<figcaption aria-hidden="true">cout2.png</figcaption>
+</figure>
+<ol start="3" type="1">
 <li>使用<strong>操纵符</strong>显式地刷新输出缓冲区，如 endl</li>
 </ol>
-<p>加上 endl 这种操作符，直接输出了 5 个 a，等待 2 秒程序结束；如果不加 endl，等待 2 秒程序结束时才会输出 5 个 a</p>
-<p><img src="/images/2024/11/10/344f74c0-9f2a-11ef-82c8-9594288e4933.png" alt="cout3.png"></p>
-<p>&nbsp;</p>
+<p>加上 endl 这种操作符，直接输出了 5 个 a，等待 2 秒程序结束；如果不加
+endl，等待 2 秒程序结束时才会输出 5 个 a</p>
+<figure>
+<img src="/images/2024/11/10/344f74c0-9f2a-11ef-82c8-9594288e4933.png" alt="cout3.png">
+<figcaption aria-hidden="true">cout3.png</figcaption>
+</figure>
+<p> </p>
 <p>endl : 用来完成换行，并刷新缓冲区</p>
 <p>flush : 用来直接刷新缓冲区的，cout.flush()</p>
-<h1><span id="文件输入输出流">文件输入输出流</span></h1><h2><span id="文件输入流">文件输入流</span></h2><h3><span id="文件输入流对象的创建">文件输入流对象的创建</span></h3><p>首先我们要明确使用文件输入流的信息传输方向：<strong>文件 –》 文件输入流对象的缓冲区 –》 程序中的数据结构</strong></p>
+<h1><span id="文件输入输出流">文件输入输出流</span></h1>
+<h2><span id="文件输入流">文件输入流</span></h2>
+<h3><span id="文件输入流对象的创建">文件输入流对象的创建</span></h3>
+<p>首先我们要明确使用文件输入流的信息传输方向：<strong>文件 --》
+文件输入流对象的缓冲区 --》 程序中的数据结构</strong></p>
 <p>根据上述的说明，我们可以将输入流对象的创建分为两类：</p>
-<ol>
+<ol type="1">
 <li>可以使用无参构造创建ifstream对象，再使用open函数将这个文件输入流对象与文件绑定（<strong>若文件不存在，则文件输入流进入failbit状态</strong>）</li>
 </ol>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span></span><br><br>ifstream ifs;<br>ifs.<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;path.txt&quot;</span>);<br></code></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol start="2" type="1">
 <li>也可以使用有参构造创建ifstream对象，在创建时就将流对象与文件绑定，后续操作这个流对象就可以对文件进行相应操作</li>
 </ol>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">ifstream <span class="hljs-title">ifs2</span><span class="hljs-params">(<span class="hljs-string">&quot;path.txt&quot;</span>)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>&nbsp;</p>
+<p> </p>
 <p>用这个输入流去读取文件中的内容，默认以换行符或空格作为间隔符，一次读取一个字符串。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">string word;<br><span class="hljs-keyword">while</span>(ifs &gt;&gt; word)&#123;<br>	cout&lt;&lt; word &lt;&lt; endl;<br>&#125;<br>ifs.<span class="hljs-built_in">close</span>();<br></code></pre></td></tr></table></figure>
-
-<p>&nbsp;</p>
+<p> </p>
 <p>根据不同的情况，对文件的读写操作，可以采用不同的文件打开模式。文件模式一共有六种，它们分别是:</p>
 <p>in : 输入，文件将允许做读操作；如果文件不存在，打开失败</p>
 <p>out : 输出，文件将允许做写操作；如果文件不存在，则直接创建一个</p>
 <p>app : 追加，写入将始终发生在文件的末尾</p>
 <p>ate : 末尾，写入最初在文件的末尾</p>
-<p>trunc : 截断，如果打开的文件存在，其内容将被丢弃，其大小被截断为零</p>
+<p>trunc :
+截断，如果打开的文件存在，其内容将被丢弃，其大小被截断为零</p>
 <p>binary : 二进制，读取或写入文件的数据为二进制形式</p>
-<h3><span id="按行读取">按行读取</span></h3><p>使用 ifstream 类中的成员函数 getline，这种方式是兼容 C 的写法，但我们通常不推荐，而是采用 &lt;string&gt; 提供的 getline 方法，<strong>工作中更常用</strong>。</p>
+<h3><span id="按行读取">按行读取</span></h3>
+<p>使用 ifstream 类中的成员函数 getline，这种方式是兼容 C
+的写法，但我们通常不推荐，而是采用 &lt;string&gt; 提供的 getline
+方法，<strong>工作中更常用</strong>。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">istream&amp; <span class="hljs-title">getline</span> <span class="hljs-params">(istream&amp; is, string&amp; str, <span class="hljs-type">char</span> delim)</span></span>;<br><br><span class="hljs-function">istream&amp; <span class="hljs-title">getline</span> <span class="hljs-params">(istream&amp; is, string&amp; str)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>默认是换行符分割，你可以通过第三个参数指定分隔符。下面看看常见使用方法：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">string line;<br><span class="hljs-keyword">while</span>(<span class="hljs-built_in">getline</span>(ifs,line))&#123;<br>    cout &lt;&lt; line &lt;&lt; endl;<br>&#125;<br>ifs.<span class="hljs-built_in">close</span>();<br></code></pre></td></tr></table></figure>
-
-<h3><span id="读取指定字节数">读取指定字节数</span></h3><p>read函数 + seekg函数 + tellg函数 组合起来实现。</p>
+<h3><span id="读取指定字节数">读取指定字节数</span></h3>
+<p>read函数 + seekg函数 + tellg函数 组合起来实现。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++">read 函数：用于从文件中读取指定数量的字节，常用于二进制文件读取<br>    <br><span class="hljs-function">istream&amp; <span class="hljs-title">read</span><span class="hljs-params">(<span class="hljs-type">char</span>* s, streamsize n)</span></span>;<br>参数：<br>s：目标缓冲区指针，用于存储读取的数据。<br>n：要读取的字节数。<br>    <br>                       ------------------------------------------------------------------------------------<br>    <br>seekg 函数：用于在文件中移动读取位置（文件指针），可以从文件头、当前位置、或文件末尾进行定位<br><br><span class="hljs-function">istream&amp; <span class="hljs-title">seekg</span><span class="hljs-params">(streampos pos)</span></span>;<br><span class="hljs-function">istream&amp; <span class="hljs-title">seekg</span><span class="hljs-params">(streamoff off, ios_base::seekdir dir)</span></span>;<br>参数：<br>pos：绝对位置（以字节为单位）<br>off：相对偏移量（可以是正数或负数）<br>dir：偏移的参考点，可取值为 ios::beg（文件头）、ios::cur（当前位置）、ios::end（文件尾）<br>    <br>                           ------------------------------------------------------------------------------------<br>    <br>tellg 函数：用于获取当前的文件读取位置<br>    <br><span class="hljs-function">streampos <span class="hljs-title">tellg</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>我们有这样一种应用场景，就是希望知道文件的字节大小，好让我们一下子申请对应空间大小的数组，而不需要返回申请空间，而是一下子就申请完成。我们的做法如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++">string filename = <span class="hljs-string">&quot;test.cc&quot;</span>;<br><span class="hljs-function">ifstream <span class="hljs-title">ifs</span><span class="hljs-params">(filename)</span></span>;<br><br><span class="hljs-comment">// 读取一个文件的所有内容先要获取文件的大小，将游标放到了文件的最后（尾后）</span><br>ifs.<span class="hljs-built_in">seekg</span>(<span class="hljs-number">0</span>, std: :ios: :end);<br><span class="hljs-type">long</span> length = ifs.<span class="hljs-built_in">tellg</span>();  <span class="hljs-comment">// 获取尾后下标，实际就是总的字符数</span><br><br><span class="hljs-type">char</span> * pdata = <span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[length + <span class="hljs-number">1</span>]();<br><br><span class="hljs-comment">// 需要将游标再放置到文件开头</span><br>ifs.<span class="hljs-built_in">seekg</span>(<span class="hljs-number">0</span>, std: :ios: :beg);<br>ifs.<span class="hljs-built_in">read</span>(pdata, length);<br><br><span class="hljs-comment">// content包含了文件的所有内容，包括空格、换行</span><br><span class="hljs-function">string <span class="hljs-title">content</span><span class="hljs-params">(pdata)</span></span>;<br>cout &lt;&lt; <span class="hljs-string">&quot;content:&quot;</span> &lt;&lt; content &lt;&lt; endl;<br><br><span class="hljs-keyword">delete</span>[] pdata;<br>ifs.<span class="hljs-built_in">close</span>();<br></code></pre></td></tr></table></figure>
-
-<h2><span id="文件输出流">文件输出流</span></h2><h3><span id="文件输出流对象的创建">文件输出流对象的创建</span></h3><p>文件输出流的作用是将流对象保存的内容传输给文件，ofstream 对象的创建与 ifstream 对象的创建类似。</p>
+<h2><span id="文件输出流">文件输出流</span></h2>
+<h3><span id="文件输出流对象的创建">文件输出流对象的创建</span></h3>
+<p>文件输出流的作用是将流对象保存的内容传输给文件，ofstream 对象的创建与
+ifstream 对象的创建类似。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt; fstream &gt;</span></span><br><br>ofstream ofs;	<span class="hljs-comment">//  无参构造</span><br>ofs.<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;testA.cc&quot;</span>);<br><br><span class="hljs-function">ofstream <span class="hljs-title">ofs2</span><span class="hljs-params">(<span class="hljs-string">&quot;testB.cc&quot;</span>)</span></span>;	<span class="hljs-comment">// 有参构造</span><br></code></pre></td></tr></table></figure>
-
-<h3><span id="通过输出流运算符写内容">通过输出流运算符写内容</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++">string filename = <span class="hljs-string">&quot;test3.cc&quot;</span>;<br><span class="hljs-function">ofstream <span class="hljs-title">ofs3</span><span class="hljs-params">(filename，std::ios::app)</span></span>;<br><br><span class="hljs-function">string <span class="hljs-title">line</span><span class="hljs-params">(<span class="hljs-string">&quot;hello,world!\n&quot;</span>)</span></span>;<br>ofs &lt;&lt; line; 	<span class="hljs-comment">// 写入文件</span><br><br>ofs.<span class="hljs-built_in">close</span>();<br></code></pre></td></tr></table></figure>
-
-<p>特别注意：为了实现在文件流结尾追加写入内容的效果，可以在创建流对象时指定打开模式为 <code>std::ios::app</code>。因为默认情况不是追加模式，创建方式会使打开模式默认为 <code>std::ios::out</code>，<font color="red"><strong>每次都会清空文件的内容</strong></font>。</p>
-<h3><span id="通过write函数写内容">通过write函数写内容</span></h3><p>除了使用输出流运算符&lt;&lt; 将内容传输给文件输出流对象（传给 ofstream 对象就是将内容传到其绑定的文件中），还可以使用write函数进行传输。</p>
+<h3><span id="通过输出流运算符写内容">通过输出流运算符写内容</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++">string filename = <span class="hljs-string">&quot;test3.cc&quot;</span>;<br><span class="hljs-function">ofstream <span class="hljs-title">ofs3</span><span class="hljs-params">(filename，std::ios::app)</span></span>;<br><br><span class="hljs-function">string <span class="hljs-title">line</span><span class="hljs-params">(<span class="hljs-string">&quot;hello,world!\n&quot;</span>)</span></span>;<br>ofs &lt;&lt; line; 	<span class="hljs-comment">// 写入文件</span><br><br>ofs.<span class="hljs-built_in">close</span>();<br></code></pre></td></tr></table></figure>
+<p>特别注意：为了实现在文件流结尾追加写入内容的效果，可以在创建流对象时指定打开模式为
+<code>std::ios::app</code>。因为默认情况不是追加模式，创建方式会使打开模式默认为
+<code>std::ios::out</code>，<font color="red"><strong>每次都会清空文件的内容</strong></font>。</p>
+<h3><span id="通过write函数写内容">通过write函数写内容</span></h3>
+<p>除了使用输出流运算符&lt;&lt; 将内容传输给文件输出流对象（传给
+ofstream
+对象就是将内容传到其绑定的文件中），还可以使用write函数进行传输。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">char</span> buff[<span class="hljs-number">100</span>] = <span class="hljs-string">&quot;hello,world!&quot;</span>;<br>ofs.<span class="hljs-built_in">write</span>(buff,<span class="hljs-built_in">strlen</span>(buff));<br></code></pre></td></tr></table></figure>
-
-<h3><span id="工具动态查看指令">工具：动态查看指令</span></h3><p>为了更方便地查看多次写入的效果（动态查看文件的内容）可以使用指令</p>
+<h3><span id="工具动态查看指令">工具：动态查看指令</span></h3>
+<p>为了更方便地查看多次写入的效果（动态查看文件的内容）可以使用指令</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++">tail 文件名 -F   <span class="hljs-comment">//动态查看文件内容</span><br><br>ctrl + c        <span class="hljs-comment">//退出查看</span><br></code></pre></td></tr></table></figure>
-
-<h1><span id="字符串输入输出流">字符串输入输出流</span></h1><p>通常就是用来进行类型转换，其他类型转换为字符串（输出流），字符串转换为其他类型（输入流）。</p>
-<p>C++ 对字符串进行操作的流类型有三个: </p>
+<h1><span id="字符串输入输出流">字符串输入输出流</span></h1>
+<p>通常就是用来进行类型转换，其他类型转换为字符串（输出流），字符串转换为其他类型（输入流）。</p>
+<p>C++ 对字符串进行操作的流类型有三个:</p>
 <p>istringstream （字符串输入流）</p>
 <p>ostringstream （字符串输出流）</p>
 <p>stringstream （字符串输入输出流）</p>
 <p>它们的构造函数形式都很类似:</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">istringstream</span>(): <span class="hljs-built_in">istringstream</span>(ios_base::in) &#123; &#125;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">istringstream</span><span class="hljs-params">(openmode mode = ios_base::in)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">istringstream</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; str, openmode mode = ios_base::in)</span></span>;<br><br><span class="hljs-built_in">ostringstream</span>(): <span class="hljs-built_in">ostringstream</span>(ios_base::out) &#123; &#125;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">ostringstream</span><span class="hljs-params">(openmode mode = ios_base::out)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">ostringstream</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; str, openmode mode = ios_base::out)</span></span>;<br><br><span class="hljs-built_in">stringstream</span>(): <span class="hljs-built_in">stringstream</span>(in|out) &#123; &#125;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">stringstream</span><span class="hljs-params">(openmode mode = ios_base::in|ios_base::out)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">stringstream</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; str, openmode mode = ios_base::in|ios_base::out)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<h2><span id="字符串输入流">字符串输入流</span></h2><p><strong>将字符串的内容传输给字符串输入流对象，再通过这个对象进行字符串的处理（解析）</strong></p>
-<p>创建字符串输入流对象时传入 C++ 字符串，字符串的内容就被保存在了输出流对象的缓冲区中。之后可以通过输入流运算符将字符串内容输出给不同的变量，起到了字符串分隔的作用。</p>
+<h2><span id="字符串输入流">字符串输入流</span></h2>
+<p><strong>将字符串的内容传输给字符串输入流对象，再通过这个对象进行字符串的处理（解析）</strong></p>
+<p>创建字符串输入流对象时传入 C++
+字符串，字符串的内容就被保存在了输出流对象的缓冲区中。之后可以通过输入流运算符将字符串内容输出给不同的变量，起到了字符串分隔的作用。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-function">string <span class="hljs-title">s</span><span class="hljs-params">(<span class="hljs-string">&quot;123 456&quot;</span>)</span></span>;<br>    <span class="hljs-type">int</span> num = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> num2 = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">//将字符串内容传递给了字符串输入流对象  </span><br>    <span class="hljs-function">istringstream <span class="hljs-title">iss</span><span class="hljs-params">(s)</span></span>;<br>    iss &gt;&gt; num &gt;&gt; num2;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>因为输入流运算符会默认以空格符作为分隔符，字符串<code>123 456</code>中含有一个空格符，那么传输时会将空格前的 123 传给 num，空格后的 456 传给 num2，因为 num 和 num2 是 int 型数据，所以编译器会以 int 型数据来理解缓冲区释出的内容，将 num 和 num2 赋值为 123 和 456。</p>
-<h2><span id="字符串输出流">字符串输出流</span></h2><p>通常的用途就是将各种类型的数据转换成字符串类型。</p>
+<p>因为输入流运算符会默认以空格符作为分隔符，字符串<code>123 456</code>中含有一个空格符，那么传输时会将空格前的
+123 传给 num，空格后的 456 传给 num2，因为 num 和 num2 是 int
+型数据，所以编译器会以 int 型数据来理解缓冲区释出的内容，将 num 和 num2
+赋值为 123 和 456。</p>
+<h2><span id="字符串输出流">字符串输出流</span></h2>
+<p>通常的用途就是将各种类型的数据转换成字符串类型。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test0</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">int</span> num = <span class="hljs-number">123</span>, num2 = <span class="hljs-number">456</span>;<br>    ostringstream oss;<br>    <span class="hljs-comment">//把所有的内容都传给了字符串输出流对象</span><br>    oss &lt;&lt; <span class="hljs-string">&quot;num = &quot;</span> &lt;&lt; num &lt;&lt; <span class="hljs-string">&quot; , num2 = &quot;</span> &lt;&lt; num2 &lt;&lt; endl;<br>    cout &lt;&lt; oss.<span class="hljs-built_in">str</span>() &lt;&lt; endl;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>将字符串、int 型数据、字符串、int 型数据统统传给了字符串输出流对象，存在其缓冲区中，利用它的 str 函数，全部转为 string 类型并完成拼接。</p>
+<p>将字符串、int 型数据、字符串、int
+型数据统统传给了字符串输出流对象，存在其缓冲区中，利用它的 str
+函数，全部转为 string 类型并完成拼接。</p>
 
       </div>
     </div>
@@ -415,7 +471,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -947,11 +1003,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

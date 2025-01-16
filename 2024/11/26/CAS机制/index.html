@@ -174,38 +174,62 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%82%B2%E8%A7%82%E9%94%81%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81">悲观锁和乐观锁</a></li>
-<li><a href="#%E4%B8%8D%E8%B6%B3">不足</a><ul>
-<li><a href="#aba%E9%97%AE%E9%A2%98">ABA问题</a></li>
-<li><a href="#%E5%8F%AF%E8%83%BD%E4%BC%9A%E6%B6%88%E8%80%97%E8%BE%83%E9%AB%98%E7%9A%84cpu">可能会消耗较高的CPU</a></li>
-<li><a href="#%E4%B8%8D%E8%83%BD%E4%BF%9D%E8%AF%81%E4%BB%A3%E7%A0%81%E5%9D%97%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7">不能保证代码块的原子性</a></li>
-</ul>
-</li>
-<li><a href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5">参考链接</a></li>
+<li><a href="#悲观锁和乐观锁">悲观锁和乐观锁</a></li>
+<li><a href="#不足">不足</a>
+<ul>
+<li><a href="#aba问题">ABA问题</a></li>
+<li><a href="#可能会消耗较高的cpu">可能会消耗较高的CPU</a></li>
+<li><a href="#不能保证代码块的原子性">不能保证代码块的原子性</a></li>
+</ul></li>
+<li><a href="#参考链接">参考链接</a></li>
 </ul>
 <!-- tocstop -->
-
-<h1><span id="悲观锁和乐观锁">悲观锁和乐观锁</span></h1><p>悲观锁认为访问的资源肯定会被别人访问，为了保险起见，会对访问的资源先加锁，等到不再访问的时候再解锁。</p>
+<h1><span id="悲观锁和乐观锁">悲观锁和乐观锁</span></h1>
+<p>悲观锁认为访问的资源肯定会被别人访问，为了保险起见，会对访问的资源先加锁，等到不再访问的时候再解锁。</p>
 <p>乐观锁却不这么想，但是资源只有一份，你乐观锁不加锁操作并不代表就可以直接访问资源而不管有没有人访问，所以乐观锁也有“加锁”机制，但是和悲观锁的行为不同。悲观锁是实际加锁和解锁来达到原子性，而乐观锁在正式更新数据之前会检查数据是否被其他线程改变过，如果未被其他线程改变过就将共享变量更新成最新值，如果发现共享变量已经被其他线程更新过了，就重试，直到成功为止。整个过程不涉及加锁和解锁操作，但却已实现原子性。</p>
 <p>原子锁的优点：</p>
 <ul>
 <li>可以保证<strong>变量操作</strong>的原子性</li>
-<li><strong>并发量不是很高</strong>的情况下，使用 CAS 机制比使用锁机制效率更高</li>
-<li>在线程<strong>对共享资源占用时间较短</strong>的情况下，使用 CAS 机制效率也会较高</li>
+<li><strong>并发量不是很高</strong>的情况下，使用 CAS
+机制比使用锁机制效率更高</li>
+<li>在线程<strong>对共享资源占用时间较短</strong>的情况下，使用 CAS
+机制效率也会较高</li>
 </ul>
-<p><img src="/images/2024/11/26/e6b85f20-abf3-11ef-852d-e7432d078b51.jpg" alt="CAS.jpg"></p>
-<p>如上图中，主存中保存 V 值，线程中要使用 V 值要先从主存中读取V值到线程的工作内存 A 中，然后计算后变成 B 值，最后再把B值写回到内存 V 值中。多个线程共用 V 值都是如此操作。CAS 的核心是在将 B 值写入到 V 之前要比较 A 值和 V 值是否相同，如果不相同证明此时 V 值已经被其他线程改变，重新将 V 值赋给 A，并重新计算得到 B，如果相同，则将 B 值赋给 V。</p>
+<figure>
+<img src="/images/2024/11/26/e6b85f20-abf3-11ef-852d-e7432d078b51.jpg" alt="CAS.jpg">
+<figcaption aria-hidden="true">CAS.jpg</figcaption>
+</figure>
+<p>如上图中，主存中保存 V 值，线程中要使用 V
+值要先从主存中读取V值到线程的工作内存 A 中，然后计算后变成 B
+值，最后再把B值写回到内存 V 值中。多个线程共用 V 值都是如此操作。CAS
+的核心是在将 B 值写入到 V 之前要比较 A 值和 V
+值是否相同，如果不相同证明此时 V 值已经被其他线程改变，重新将 V 值赋给
+A，并重新计算得到 B，如果相同，则将 B 值赋给 V。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">compare_exchange_strong</span> <span class="hljs-params">(T&amp; expected, T val, memory_order sync = memory_order_seq_cst)</span></span><br></code></pre></td></tr></table></figure>
-
 <p>expected 是期望值，val 是打算替换的值。</p>
-<p>调用 compare_exchange_strong 者的值如果和 期望值相同（返回 true），就把调用者的值替换为 val。</p>
+<p>调用 compare_exchange_strong 者的值如果和 期望值相同（返回
+true），就把调用者的值替换为 val。</p>
 <p>否则，就把调用者的值替换为 期望值。</p>
-<h1><span id="不足">不足</span></h1><h2><span id="aba问题">ABA问题</span></h2><p>CAS 在操作的时候会检查变量的值是否被更改过，如果没有则更新值，但是带来一个问题，最开始的值是 A，接着变成B，最后又变成了 A。经过检查这个值确实没有修改过，因为最后的值还是 A，但是实际上这个值确实已经被修改过了。为了解决这个问题，在每次进行操作的时候加上一个版本号，每次操作的就是两个值，一个版本号和某个值，A——&gt;B——&gt;A 问题就变成了 1A——&gt;2B——&gt;3A。</p>
-<h2><span id="可能会消耗较高的cpu">可能会消耗较高的CPU</span></h2><p>看起来 CAS 比锁的效率高，从阻塞机制变成了非阻塞机制，减少了线程之间等待的时间。每个方法不能绝对的比另一个好，在线程之间竞争程度大的时候，如果使用 CAS，每次都有很多的线程在竞争，也就是说 CAS 机制不能更新成功。这种情况下 CAS 机制会一直重试，这样就会比较耗费 CPU。<strong>因此可以看出，如果线程之间竞争程度小，使用 CAS 是一个很好的选择；但是如果竞争很大，使用锁可能是个更好的选择</strong>。</p>
-<h2><span id="不能保证代码块的原子性">不能保证代码块的原子性</span></h2><p>只能保证原子变量操作的原子性，可不能保证代码块的原子性（锁是可以做到的，而且随意块的大小都可以做到）。</p>
-<h1><span id="参考链接">参考链接</span></h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/54chensongxia/p/12160085.html">并发编程的基石——CAS机制</a></p>
+<h1><span id="不足">不足</span></h1>
+<h2><span id="aba问题">ABA问题</span></h2>
+<p>CAS
+在操作的时候会检查变量的值是否被更改过，如果没有则更新值，但是带来一个问题，最开始的值是
+A，接着变成B，最后又变成了
+A。经过检查这个值确实没有修改过，因为最后的值还是
+A，但是实际上这个值确实已经被修改过了。为了解决这个问题，在每次进行操作的时候加上一个版本号，每次操作的就是两个值，一个版本号和某个值，A——&gt;B——&gt;A
+问题就变成了 1A——&gt;2B——&gt;3A。</p>
+<h2><span id="可能会消耗较高的cpu">可能会消耗较高的CPU</span></h2>
+<p>看起来 CAS
+比锁的效率高，从阻塞机制变成了非阻塞机制，减少了线程之间等待的时间。每个方法不能绝对的比另一个好，在线程之间竞争程度大的时候，如果使用
+CAS，每次都有很多的线程在竞争，也就是说 CAS 机制不能更新成功。这种情况下
+CAS 机制会一直重试，这样就会比较耗费
+CPU。<strong>因此可以看出，如果线程之间竞争程度小，使用 CAS
+是一个很好的选择；但是如果竞争很大，使用锁可能是个更好的选择</strong>。</p>
+<h2><span id="不能保证代码块的原子性">不能保证代码块的原子性</span></h2>
+<p>只能保证原子变量操作的原子性，可不能保证代码块的原子性（锁是可以做到的，而且随意块的大小都可以做到）。</p>
+<h1><span id="参考链接">参考链接</span></h1>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/54chensongxia/p/12160085.html">并发编程的基石——CAS机制</a></p>
 
       </div>
     </div>
@@ -290,7 +314,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -822,11 +846,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,53 +174,65 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6">什么是文件描述符？</a></li>
-<li><a href="#%E5%AF%B9%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E6%93%8D%E4%BD%9C">对文件描述符的操作</a><ul>
-<li><a href="#open-%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6">open–打开文件描述符</a></li>
-<li><a href="#close-%E5%85%B3%E9%97%AD%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6">close–关闭文件描述符</a></li>
-<li><a href="#read-%E8%AF%BB%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6">read–读文件描述符</a></li>
-<li><a href="#write-%E5%86%99%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6">write–写文件描述符</a></li>
-<li><a href="#lseek-%E7%A7%BB%E5%8A%A8%E6%96%87%E4%BB%B6%E4%BD%8D%E7%BD%AE">lseek–移动文件位置</a></li>
-<li><a href="#fsync-%E6%8C%81%E4%B9%85%E5%8C%96%E5%88%B0%E7%A3%81%E7%9B%98">fsync–持久化到磁盘</a></li>
-<li><a href="#ftruncate-%E6%88%AA%E6%96%AD%E6%96%87%E4%BB%B6">ftruncate–截断文件</a></li>
-<li><a href="#fstat-%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E7%9A%84%E5%85%83%E6%95%B0%E6%8D%AE">fstat–获取文件的元数据</a></li>
-<li><a href="#dup2-%E5%A4%8D%E5%88%B6%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6">dup2–复制文件描述符</a></li>
-</ul>
-</li>
-<li><a href="#%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%92%8C%E6%96%87%E4%BB%B6%E6%B5%81">文件描述符和文件流</a></li>
-<li><a href="#%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84io">内存映射I&#x2F;O</a><ul>
-<li><a href="#mmap-%E5%88%9B%E5%BB%BA%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84">mmap–创建内存映射</a></li>
-<li><a href="#munmap-%E8%A7%A3%E9%99%A4%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84">munmap–解除内存映射</a></li>
-<li><a href="#%E5%AE%9E%E6%88%98%E4%B8%A4%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84%E9%9B%B6%E6%8B%B7%E8%B4%9D">实战：两个文件的零拷贝</a></li>
-</ul>
-</li>
+<li><a href="#什么是文件描述符">什么是文件描述符？</a></li>
+<li><a href="#对文件描述符的操作">对文件描述符的操作</a>
+<ul>
+<li><a href="#open-打开文件描述符">open--打开文件描述符</a></li>
+<li><a href="#close-关闭文件描述符">close--关闭文件描述符</a></li>
+<li><a href="#read-读文件描述符">read--读文件描述符</a></li>
+<li><a href="#write-写文件描述符">write--写文件描述符</a></li>
+<li><a href="#lseek-移动文件位置">lseek--移动文件位置</a></li>
+<li><a href="#fsync-持久化到磁盘">fsync--持久化到磁盘</a></li>
+<li><a href="#ftruncate-截断文件">ftruncate--截断文件</a></li>
+<li><a href="#fstat-获取文件的元数据">fstat--获取文件的元数据</a></li>
+<li><a href="#dup2-复制文件描述符">dup2--复制文件描述符</a></li>
+</ul></li>
+<li><a href="#文件描述符和文件流">文件描述符和文件流</a></li>
+<li><a href="#内存映射io">内存映射I/O</a>
+<ul>
+<li><a href="#mmap-创建内存映射">mmap--创建内存映射</a></li>
+<li><a href="#munmap-解除内存映射">munmap--解除内存映射</a></li>
+<li><a href="#实战两个文件的零拷贝">实战：两个文件的零拷贝</a></li>
+</ul></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="什么是文件描述符">什么是文件描述符？</span></h2><p><img src="/images/2024/09/26/bf6616d0-7b9f-11ef-bdbc-45eba982e11c.png" alt="fd.png"></p>
-<p>open 的返回值就是一个文件描述符，没有对文件进行任何操作，只是建立上面的三个数据结构。后续只需要拿文件描述符就等价于操作文件，从磁盘读入到内存的数据（这个动作不是 open做的）。</p>
+<h2><span id="什么是文件描述符">什么是文件描述符？</span></h2>
+<figure>
+<img src="/images/2024/09/26/bf6616d0-7b9f-11ef-bdbc-45eba982e11c.png" alt="fd.png">
+<figcaption aria-hidden="true">fd.png</figcaption>
+</figure>
+<p>open
+的返回值就是一个文件描述符，没有对文件进行任何操作，只是建立上面的三个数据结构。后续只需要拿文件描述符就等价于操作文件，从磁盘读入到内存的数据（这个动作不是
+open做的）。</p>
 <ul>
 <li>进程级 <strong>文件描述符表</strong> ( file descriptor table )</li>
 <li>系统级 <strong>打开文件表</strong> ( open file table )</li>
 <li>文件系统 <strong>i-node表</strong> ( i-node table )</li>
 </ul>
 <p>（一）文件描述符表</p>
-<p>内核为每个进程维护一个 <strong>文件描述符表</strong> ，该表每一条目都记录了单个文件描述符的相关信息，包括：</p>
+<p>内核为每个进程维护一个 <strong>文件描述符表</strong>
+，该表每一条目都记录了单个文件描述符的相关信息，包括：</p>
 <ul>
-<li><strong>控制标志</strong> ( flags )，目前内核仅定义了一个，即 <code>close-on-exec</code></li>
+<li><strong>控制标志</strong> ( flags )，目前内核仅定义了一个，即
+<code>close-on-exec</code></li>
 <li><strong>打开文件描述体指针</strong></li>
 </ul>
 <p>（二）打开文件表</p>
-<p>内核对所有打开的文件维护一个系统级别的 <strong>打开文件描述表</strong> ，简称 <strong>打开文件表</strong> 。 表中条目称为 <strong>打开文件描述体</strong>，存储了与一个打开文件相关的全部信息，包括：</p>
+<p>内核对所有打开的文件维护一个系统级别的
+<strong>打开文件描述表</strong> ，简称 <strong>打开文件表</strong> 。
+表中条目称为
+<strong>打开文件描述体</strong>，存储了与一个打开文件相关的全部信息，包括：</p>
 <ul>
-<li><strong>文件偏移量</strong>，调用 read() 和 write() 更新，调用 lseek() 直接修改</li>
-<li><strong>访问模式</strong> ，由 open() 调用设置，例如：只读、只写或读写等</li>
+<li><strong>文件偏移量</strong>，调用 read() 和 write() 更新，调用
+lseek() 直接修改</li>
+<li><strong>访问模式</strong> ，由 open()
+调用设置，例如：只读、只写或读写等</li>
 <li><strong>i-node 对象指针</strong></li>
 </ul>
 <p>（三）i-node表</p>
-<p>每个文件系统会为存储于其上的所有文件(包括目录)维护一个 i-node 表，单个 i-node 包含以下信息：</p>
+<p>每个文件系统会为存储于其上的所有文件(包括目录)维护一个 i-node
+表，单个 i-node 包含以下信息：</p>
 <ul>
 <li><strong>文件类型</strong>，可以是常规文件、目录、套接字或 FIFO</li>
 <li><strong>访问权限</strong></li>
@@ -228,99 +240,170 @@
 <li><strong>文件大小</strong></li>
 <li>等等</li>
 </ul>
-<p>i-node 存储在磁盘设备上，内核在内存中维护了一个副本，这里的 i-node 表为后者。 副本除了原有信息，还包括： <strong>引用计数</strong> (从打开文件描述体)、所在 <strong>设备号</strong> 以及一些临时属性，例如文件锁。</p>
-<h2><span id="对文件描述符的操作">对文件描述符的操作</span></h2><h3><span id="open打开文件描述符">open–打开文件描述符</span></h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">open</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">int</span> flags)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">open</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">int</span> flags, <span class="hljs-type">mode_t</span> mode)</span>;<br></code></pre></td></tr></table></figure>
-
+<p>i-node 存储在磁盘设备上，内核在内存中维护了一个副本，这里的 i-node
+表为后者。 副本除了原有信息，还包括： <strong>引用计数</strong>
+(从打开文件描述体)、所在 <strong>设备号</strong>
+以及一些临时属性，例如文件锁。</p>
+<h2><span id="对文件描述符的操作">对文件描述符的操作</span></h2>
+<h3><span id="open-打开文件描述符">open--打开文件描述符</span></h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">open</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">int</span> flags)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">open</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">int</span> flags, <span class="hljs-type">mode_t</span> mode)</span>;<br></code></pre></td></tr></table></figure>
 <p>flags 是标志位，常见如下：</p>
-<p><img src="/images/2024/09/26/b65d2970-7b9f-11ef-bdbc-45eba982e11c.png" alt="文件标志位.png"></p>
+<figure>
+<img src="/images/2024/09/26/b65d2970-7b9f-11ef-bdbc-45eba982e11c.png" alt="文件标志位.png">
+<figcaption aria-hidden="true">文件标志位.png</figcaption>
+</figure>
 <p>O_RDONLY、O_WRONLY、O_RDWR 中必须选择一个，且只能选择一个。</p>
-<p>如果有 O_CREAT 标志位，必须填写第三个参数 mode。mode 用来指定文件的权限，会受 umask 的影响，实际权限为 （mode &amp; ~umask）。</p>
+<p>如果有 O_CREAT 标志位，必须填写第三个参数 mode。mode
+用来指定文件的权限，会受 umask 的影响，实际权限为 （mode &amp;
+~umask）。</p>
 <p>打开文件成功之后，得到文件描述符，后续利用该文件描述符就可以对文件进行操作了</p>
-<h3><span id="close关闭文件描述符">close–关闭文件描述符</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">close</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<h3><span id="read读文件描述符">read–读文件描述符</span></h3><p>把文件描述符 fd 中的数据读取到 buf 中，预读取长度为 count。</p>
+<h3><span id="close-关闭文件描述符">close--关闭文件描述符</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">close</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span></span>;<br></code></pre></td></tr></table></figure>
+<h3><span id="read-读文件描述符">read--读文件描述符</span></h3>
+<p>把文件描述符 fd 中的数据读取到 buf 中，预读取长度为 count。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">read</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> count)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>实际读取的数据长度为 read 调用成功的返回值。</p>
-<h3><span id="write写文件描述符">write–写文件描述符</span></h3><p>把文件描述符 fd 中的数据写入到 buf 中，预写入长度为 count。</p>
+<h3><span id="write-写文件描述符">write--写文件描述符</span></h3>
+<p>把文件描述符 fd 中的数据写入到 buf 中，预写入长度为 count。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">write</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> count)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>实际写入的数据长度为 write 调用成功的返回值。</p>
-<h3><span id="lseek移动文件位置">lseek–移动文件位置</span></h3><p>offset 代表移动的偏移量，就是你实际想要移动的长度</p>
+<h3><span id="lseek-移动文件位置">lseek--移动文件位置</span></h3>
+<p>offset 代表移动的偏移量，就是你实际想要移动的长度</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">off_t</span> <span class="hljs-title">lseek</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">off_t</span> offset, <span class="hljs-type">int</span> whence)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>whence 是参照点，有三个取值：</p>
-<p><img src="/images/2024/09/26/aed5d300-7b9f-11ef-bdbc-45eba982e11c.png" alt="文件参照点.png"></p>
+<figure>
+<img src="/images/2024/09/26/aed5d300-7b9f-11ef-bdbc-45eba982e11c.png" alt="文件参照点.png">
+<figcaption aria-hidden="true">文件参照点.png</figcaption>
+</figure>
 <p>调用成功的返回值代表 移动后文件的位置。</p>
-<h3><span id="fsync持久化到磁盘">fsync–持久化到磁盘</span></h3><p>前面调用 write 之后，并不会立即写入磁盘，写入的数据会由内核管理，由内核决定何时写入磁盘。</p>
+<h3><span id="fsync-持久化到磁盘">fsync--持久化到磁盘</span></h3>
+<p>前面调用 write
+之后，并不会立即写入磁盘，写入的数据会由内核管理，由内核决定何时写入磁盘。</p>
 <p>如果你想立即写入，调用 fsync 即可。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fsync</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>这里要把 fsync 和 fflush 做个区分。fflush 是把用户态缓冲区数据 刷入到 内核缓冲区中，至于何时写入磁盘由内核决定。fsync 会把内核缓存区的数据立即写入磁盘。</p>
-<p><img src="/images/2024/09/26/a57e5070-7b9f-11ef-bdbc-45eba982e11c.png" alt="fflsh和fsync区别.png"></p>
-<h3><span id="ftruncate截断文件">ftruncate–截断文件</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">ftruncate</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">off_t</span> length)</span></span>;<br></code></pre></td></tr></table></figure>
-
+<p>这里要把 fsync 和 fflush 做个区分。fflush 是把用户态缓冲区数据 刷入到
+内核缓冲区中，至于何时写入磁盘由内核决定。fsync
+会把内核缓存区的数据立即写入磁盘。</p>
+<figure>
+<img src="/images/2024/09/26/a57e5070-7b9f-11ef-bdbc-45eba982e11c.png" alt="fflsh和fsync区别.png">
+<figcaption aria-hidden="true">fflsh和fsync区别.png</figcaption>
+</figure>
+<h3><span id="ftruncate-截断文件">ftruncate--截断文件</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">ftruncate</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">off_t</span> length)</span></span>;<br></code></pre></td></tr></table></figure>
 <p>将文件截断为指定长度。分两种情况讨论：</p>
 <ul>
 <li>如果 length &lt; 源文件大小，那么超出部分的数据会丢失。</li>
-<li>如果 length &gt; 源文件大小，那么扩展的部分会填充空字符，甚至可能出现文件空洞。</li>
+<li>如果 length &gt;
+源文件大小，那么扩展的部分会填充空字符，甚至可能出现文件空洞。</li>
 </ul>
-<p><img src="/images/2024/09/26/9e3bcb30-7b9f-11ef-bdbc-45eba982e11c.png" alt="截断.png"></p>
-<h3><span id="fstat获取文件的元数据">fstat–获取文件的元数据</span></h3><p>可以获取文件的元数据信息，这些信息来自于 i-node。我们也可以利用 stat 命令查看文件的元数据信息。</p>
+<figure>
+<img src="/images/2024/09/26/9e3bcb30-7b9f-11ef-bdbc-45eba982e11c.png" alt="截断.png">
+<figcaption aria-hidden="true">截断.png</figcaption>
+</figure>
+<h3><span id="fstat-获取文件的元数据">fstat--获取文件的元数据</span></h3>
+<p>可以获取文件的元数据信息，这些信息来自于 i-node。我们也可以利用 stat
+命令查看文件的元数据信息。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fstat</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-keyword">struct</span> stat *statbuf)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>先创建结构体 struct stat，调用 fstat 成功之后，元数据信息就会存储在 stat 结构体中。</p>
+<p>先创建结构体 struct stat，调用 fstat 成功之后，元数据信息就会存储在
+stat 结构体中。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">stat</span> <span class="hljs-title">sb</span>;</span> <span class="hljs-comment">// 存储文件元数据信息</span><br><span class="hljs-keyword">if</span> (fstat(fd, &amp;sb) == <span class="hljs-number">-1</span>) &#123;<br>	error(<span class="hljs-number">1</span>, errno, <span class="hljs-string">&quot;fstat %d&quot;</span>, fd);<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>那么结构体 stat 存储哪些信息呢 ？</p>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs tex">st<span class="hljs-built_in">_</span>dev: 文件所在设备的ID<br>st<span class="hljs-built_in">_</span>ino: 文件的inode号码<br>st<span class="hljs-built_in">_</span>mode: 文件的类型和权限信息（如文件类型、读/写/执行权限）<br>st<span class="hljs-built_in">_</span>nlink: 文件的硬链接数量<br>st<span class="hljs-built_in">_</span>uid: 文件所有者的用户ID<br>st<span class="hljs-built_in">_</span>gid: 文件所属组的组ID<br>st<span class="hljs-built_in">_</span>rdev: 设备文件的设备ID（对于设备文件）<br>st<span class="hljs-built_in">_</span>size: 文件大小（以字节为单位）<br>st<span class="hljs-built_in">_</span>atime: 文件最后访问时间<br>st<span class="hljs-built_in">_</span>mtime: 文件最后修改时间<br>st<span class="hljs-built_in">_</span>ctime: 文件状态最后更改时间（包括文件元数据的修改）<br></code></pre></td></tr></table></figure>
-
-<h3><span id="dup2复制文件描述符">dup2–复制文件描述符</span></h3><p>不建议使用 dup，因为它不是原子操作，我们直接学 dup2 即可。</p>
+<h3><span id="dup2-复制文件描述符">dup2--复制文件描述符</span></h3>
+<p>不建议使用 dup，因为它不是原子操作，我们直接学 dup2 即可。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">dup2</span><span class="hljs-params">(<span class="hljs-type">int</span> oldfd, <span class="hljs-type">int</span> newfd)</span>;<br></code></pre></td></tr></table></figure>
-
 <p>从参数就能看出来，就是把 oldfd 复制给 newfd。</p>
-<h2><span id="文件描述符和文件流">文件描述符和文件流</span></h2><p>文件流是库函数，可移植性强；文件描述符是操作系统的系统调用，可移植性差。</p>
-<p><img src="/images/2024/09/26/97083a10-7b9f-11ef-bdbc-45eba982e11c.png" alt="文件流和文件描述符.png"></p>
+<h2><span id="文件描述符和文件流">文件描述符和文件流</span></h2>
+<p>文件流是库函数，可移植性强；文件描述符是操作系统的系统调用，可移植性差。</p>
+<figure>
+<img src="/images/2024/09/26/97083a10-7b9f-11ef-bdbc-45eba982e11c.png" alt="文件流和文件描述符.png">
+<figcaption aria-hidden="true">文件流和文件描述符.png</figcaption>
+</figure>
 <p>文件流有用户态缓冲区，而文件描述符没有用户态缓冲区，所以文件流比文件描述符多复制一次。那么它们各自的应用场景呢？</p>
 <ul>
 <li>如果我们对文本操作，可以选择文件流进行操作，它更适合以人类的方式读写数据。</li>
 <li>如果我们需要传输文件，可以选择文件描述符，它更适合以机器的方式读写数据。</li>
 </ul>
 <p>特别是涉及大文件操作，必然要用文件描述符，毕竟要少拷贝一次。如果文件小用文本操作就方便，因为代码写起来比文件描述符容易。</p>
-<h2><span id="内存映射ix2fo">内存映射I&#x2F;O</span></h2><p>内存映射可以将文件内容直接映射到进程的虚拟地址空间。当警察访问映射区域时，操作系统会负责将相应的文件部分加载到内存中。这种机制利用了操作系统的页面管理技术，可以高效管理内存和文件I&#x2F;O。</p>
+<h2><span id="内存映射io">内存映射I/O</span></h2>
+<p>内存映射可以将文件内容直接映射到进程的虚拟地址空间。当警察访问映射区域时，操作系统会负责将相应的文件部分加载到内存中。这种机制利用了操作系统的页面管理技术，可以高效管理内存和文件I/O。</p>
 <p>内存映射的主要区别在于这两种类型：</p>
-<ol>
+<ol type="1">
 <li><strong>MAP_PRIVATE</strong>：创建一个私有的映射，任何对映射区域的修改不会影响到原始文件，也不会被其他进程看到。</li>
 <li><strong>MAP_SHARED</strong>：创建一个共享的映射，任何对映射区域的修改会直接反映到原始文件，并且其他进程可以看到这些修改。</li>
 </ol>
-<p>MAP_SHARED 状态下，两个进程共享同一块物理内存，即两个进程各自的虚拟内存映射到相同的物理内存。这两个进程在读写操作的情况下，都是直接作用于这块物理内存的（通过虚拟内存访问）。</p>
-<p><img src="/images/2024/09/26/9014e640-7b9f-11ef-bdbc-45eba982e11c.png" alt="shared.png"></p>
-<p>MAP_PRIVATE 状态下，依旧是和上面的情景一致，但如果有任意一个进程发生写操作，操作系统就会为这个经常重新分配一块内存（拷贝原来的内容，再让其修改），让其不对之前共享的内存进行操作，从此这个进程拥有这块属于自己的独立的物理内存，不与任何进程共享。</p>
-<p><img src="/images/2024/09/26/8aa83270-7b9f-11ef-bdbc-45eba982e11c.png" alt="private.png"></p>
-<p>你可能会问，那么当进程 B 对其修改，操作系统会为其重新分配一块内存吗？不会，因为这块之前的共享内存知道只有一个进程指向它了，也就直接让它操作了。</p>
-<h3><span id="mmap创建内存映射">mmap–创建内存映射</span></h3><p><code>mmap</code> 函数的返回值是一个指向映射区域的指针，如果映射成功，则返回指向映射区域的起始地址。如果映射失败，则返回 <code>MAP_FAILED</code>。</p>
+<p>MAP_SHARED
+状态下，两个进程共享同一块物理内存，即两个进程各自的虚拟内存映射到相同的物理内存。这两个进程在读写操作的情况下，都是直接作用于这块物理内存的（通过虚拟内存访问）。</p>
+<figure>
+<img src="/images/2024/09/26/9014e640-7b9f-11ef-bdbc-45eba982e11c.png" alt="shared.png">
+<figcaption aria-hidden="true">shared.png</figcaption>
+</figure>
+<p>MAP_PRIVATE
+状态下，依旧是和上面的情景一致，但如果有任意一个进程发生写操作，操作系统就会为这个经常重新分配一块内存（拷贝原来的内容，再让其修改），让其不对之前共享的内存进行操作，从此这个进程拥有这块属于自己的独立的物理内存，不与任何进程共享。</p>
+<figure>
+<img src="/images/2024/09/26/8aa83270-7b9f-11ef-bdbc-45eba982e11c.png" alt="private.png">
+<figcaption aria-hidden="true">private.png</figcaption>
+</figure>
+<p>你可能会问，那么当进程 B
+对其修改，操作系统会为其重新分配一块内存吗？不会，因为这块之前的共享内存知道只有一个进程指向它了，也就直接让它操作了。</p>
+<h3><span id="mmap-创建内存映射">mmap--创建内存映射</span></h3>
+<p><code>mmap</code>
+函数的返回值是一个指向映射区域的指针，如果映射成功，则返回指向映射区域的起始地址。如果映射失败，则返回
+<code>MAP_FAILED</code>。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> *<span class="hljs-title">mmap</span><span class="hljs-params">(<span class="hljs-type">void</span> *addr, <span class="hljs-type">size_t</span> length, <span class="hljs-type">int</span> prot, <span class="hljs-type">int</span> flags,</span></span><br><span class="hljs-params"><span class="hljs-function">                  <span class="hljs-type">int</span> fd, <span class="hljs-type">off_t</span> offset)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p><strong>addr</strong>：建议的映射起始地址（通常为 <code>NULL</code>，这样内核会为我们自动找到合适的地址）。</p>
+<p><strong>addr</strong>：建议的映射起始地址（通常为
+<code>NULL</code>，这样内核会为我们自动找到合适的地址）。</p>
 <p><strong>length</strong>：映射区域的大小，以字节为单位。</p>
 <p><strong>prot</strong>：映射区的访问权限。</p>
-<p><img src="/images/2024/10/12/dbd6f4a0-887a-11ef-939c-5b7b2e2f646d.png" alt="权限.png"></p>
-<p><strong>flags</strong>：映射的类型和选项，如 <code>MAP_PRIVATE</code> 或 <code>MAP_SHARED</code>。</p>
+<figure>
+<img src="/images/2024/10/12/dbd6f4a0-887a-11ef-939c-5b7b2e2f646d.png" alt="权限.png">
+<figcaption aria-hidden="true">权限.png</figcaption>
+</figure>
+<p><strong>flags</strong>：映射的类型和选项，如 <code>MAP_PRIVATE</code>
+或 <code>MAP_SHARED</code>。</p>
 <p><strong>fd</strong>：要映射的文件描述符。</p>
 <p><strong>offset</strong>：文件中开始映射的偏移量，它必须是页大小的整数倍。</p>
-<h3><span id="munmap解除内存映射">munmap–解除内存映射</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">munmap</span><span class="hljs-params">(<span class="hljs-type">void</span> *addr, <span class="hljs-type">size_t</span> length)</span></span>;<br></code></pre></td></tr></table></figure>
-
+<h3><span id="munmap-解除内存映射">munmap--解除内存映射</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">munmap</span><span class="hljs-params">(<span class="hljs-type">void</span> *addr, <span class="hljs-type">size_t</span> length)</span></span>;<br></code></pre></td></tr></table></figure>
 <p>对于共享映射，数据在解除映射时会被写入文件（磁盘）；对于私有映射，数据则不会被保存，即不会持久化到文件中（磁盘）。</p>
-<h3><span id="实战两个文件的零拷贝">实战：两个文件的零拷贝</span></h3><p>文件从磁盘拷贝到内核缓冲区，是DMA操作：当从磁盘读取数据时，磁盘控制器通常会使用直接内存访问（DMA）技术，将数据从磁盘直接传输到内核缓冲区中，而无需 CPU 介入。这样做的好处是可以释放 CPU 去处理其他任务，提高系统的整体效率。</p>
-<p>从内核缓冲区拷贝到用户缓冲区，是CPU操作： 从内核缓冲区将数据传输到用户空间缓冲区时，需要 CPU 介入。这个过程通常涉及系统调用（比如 <code>read()</code>），在内核态和用户态之间进行数据拷贝。这一步之所以需要 CPU 是因为内核需要进行内存访问权限的检查，并确保内核空间数据的安全性。</p>
-<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%20read%20%20%E5%92%8C%20write%20%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E7%9A%84%E5%A4%8D%E5%88%B6">系统调用 read 和 write 实现文件的复制</a></p>
-<p><img src="/images/2024/09/26/826b2090-7b9f-11ef-bdbc-45eba982e11c.png" alt="writereadProcess.png"></p>
-<p>传统的 IO 读写方式，如上图中把 src 文件 读取并写入到 dst 文件中，整个过程就包括了四次用户态&#x2F;内核态的上下文切换，四次数据的拷贝（DMA拷贝是读写，CPU拷贝是复制）。</p>
-<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E4%BD%BF%E7%94%A8%20mmap%20%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E7%9A%84%E5%A4%8D%E5%88%B6">使用 mmap 实现文件的复制</a></p>
-<p><img src="/images/2024/09/26/7a340220-7b9f-11ef-bdbc-45eba982e11c.png" alt="mmapProcess.png"></p>
-<p>mmap 将用户空间的虚拟地址和内核空间的虚拟地址映射成同一个物理地址。调用 mmap 的时候，也就是开始把磁盘中的数据 DMA 拷贝到内核缓冲区，通过内核态的虚拟内存地址可以访问到这块物理内存。然后 mmap 成功之后，就是把 用户态的虚拟地址（你问它从何而来？第一个参数为NULL，操作系统会自动帮我们找好，最后映射物理内存的首地址作为返回值）和 内核态的虚拟内存地址 映射到同一个物理地址，这样通过用户态的虚拟地址访问物理内存，就等价于原先通过内核态的虚拟地址访问物理内存。</p>
-<p>至此，我们不需要把内核缓冲区的数据拷贝到用户态的 Buffer 中。因为用户态的虚拟内存地址和内核态的虚拟内存地址是指向同一块物理内存的，那通过 memcpy 操作用户态的两个虚拟内存地址，就是将实际指向的物理内存 src 拷贝到 物理内存 dst。以此实现文件拷贝。</p>
-<p>我们创建的映射是有大小的，所以是先映射文件的一部分（mmap 第三个参数 length），完成拷贝之后，接着继续映射下一部分。图中没有体现，而是直接映射整个完整的文件了，实际并非如此。</p>
+<h3><span id="实战两个文件的零拷贝">实战：两个文件的零拷贝</span></h3>
+<p>文件从磁盘拷贝到内核缓冲区，是DMA操作：当从磁盘读取数据时，磁盘控制器通常会使用直接内存访问（DMA）技术，将数据从磁盘直接传输到内核缓冲区中，而无需
+CPU 介入。这样做的好处是可以释放 CPU
+去处理其他任务，提高系统的整体效率。</p>
+<p>从内核缓冲区拷贝到用户缓冲区，是CPU操作：
+从内核缓冲区将数据传输到用户空间缓冲区时，需要 CPU
+介入。这个过程通常涉及系统调用（比如
+<code>read()</code>），在内核态和用户态之间进行数据拷贝。这一步之所以需要
+CPU
+是因为内核需要进行内存访问权限的检查，并确保内核空间数据的安全性。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%20read%20%20%E5%92%8C%20write%20%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E7%9A%84%E5%A4%8D%E5%88%B6">系统调用
+read 和 write 实现文件的复制</a></p>
+<figure>
+<img src="/images/2024/09/26/826b2090-7b9f-11ef-bdbc-45eba982e11c.png" alt="writereadProcess.png">
+<figcaption aria-hidden="true">writereadProcess.png</figcaption>
+</figure>
+<p>传统的 IO 读写方式，如上图中把 src 文件 读取并写入到 dst
+文件中，整个过程就包括了四次用户态/内核态的上下文切换，四次数据的拷贝（DMA拷贝是读写，CPU拷贝是复制）。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E4%BD%BF%E7%94%A8%20mmap%20%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E7%9A%84%E5%A4%8D%E5%88%B6">使用
+mmap 实现文件的复制</a></p>
+<figure>
+<img src="/images/2024/09/26/7a340220-7b9f-11ef-bdbc-45eba982e11c.png" alt="mmapProcess.png">
+<figcaption aria-hidden="true">mmapProcess.png</figcaption>
+</figure>
+<p>mmap
+将用户空间的虚拟地址和内核空间的虚拟地址映射成同一个物理地址。调用 mmap
+的时候，也就是开始把磁盘中的数据 DMA
+拷贝到内核缓冲区，通过内核态的虚拟内存地址可以访问到这块物理内存。然后
+mmap 成功之后，就是把
+用户态的虚拟地址（你问它从何而来？第一个参数为NULL，操作系统会自动帮我们找好，最后映射物理内存的首地址作为返回值）和
+内核态的虚拟内存地址
+映射到同一个物理地址，这样通过用户态的虚拟地址访问物理内存，就等价于原先通过内核态的虚拟地址访问物理内存。</p>
+<p>至此，我们不需要把内核缓冲区的数据拷贝到用户态的 Buffer
+中。因为用户态的虚拟内存地址和内核态的虚拟内存地址是指向同一块物理内存的，那通过
+memcpy 操作用户态的两个虚拟内存地址，就是将实际指向的物理内存 src 拷贝到
+物理内存 dst。以此实现文件拷贝。</p>
+<p>我们创建的映射是有大小的，所以是先映射文件的一部分（mmap 第三个参数
+length），完成拷贝之后，接着继续映射下一部分。图中没有体现，而是直接映射整个完整的文件了，实际并非如此。</p>
 <hr>
 <p>参考链接见下：</p>
 <p><a target="_blank" rel="noopener" href="https://colobu.com/2022/11/19/zero-copy-and-how-to-use-it-in-go/">零拷贝技术第一篇：综述</a></p>
@@ -409,7 +492,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -941,11 +1024,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

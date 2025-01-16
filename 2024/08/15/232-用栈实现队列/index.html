@@ -174,11 +174,12 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyQueue</span> &#123;  <br><span class="hljs-keyword">public</span>:  <br>    <span class="hljs-built_in">MyQueue</span>() &#123;&#125;  <br>      <br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> </span>&#123;   <span class="hljs-comment">// 将元素 x 推到队列的末尾  </span><br>        dataSrc.<span class="hljs-built_in">push</span>(x);  <br>    &#125;  <br>      <br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 从队列的开头移除并返回元素  </span><br>        <span class="hljs-type">int</span> val = <span class="hljs-built_in">peek</span>();  <br>        dataTop.<span class="hljs-built_in">pop</span>();  <br>        <span class="hljs-keyword">return</span> val;  <br>    &#125;  <br>      <br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">peek</span><span class="hljs-params">()</span> </span>&#123;    <span class="hljs-comment">// 返回队首元素  </span><br>  <br>        <span class="hljs-keyword">if</span>(dataTop.<span class="hljs-built_in">empty</span>())&#123;  <br>            <span class="hljs-keyword">while</span>(!dataSrc.<span class="hljs-built_in">empty</span>())&#123;  <br>                dataTop.<span class="hljs-built_in">push</span>(dataSrc.<span class="hljs-built_in">top</span>());  <br>                dataSrc.<span class="hljs-built_in">pop</span>();  <br>            &#125;  <br>        &#125;  <br>  <br>        <span class="hljs-keyword">return</span> dataTop.<span class="hljs-built_in">top</span>();  <br>    &#125;  <br>      <br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> </span>&#123;  <br>        <span class="hljs-keyword">if</span>(dataTop.<span class="hljs-built_in">empty</span>() &amp;&amp; dataSrc.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;  <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;  <br>    &#125;  <br><span class="hljs-keyword">private</span>:  <br>    stack&lt;<span class="hljs-type">int</span>&gt; dataSrc;  <br>    stack&lt;<span class="hljs-type">int</span>&gt; dataTop;  <br>&#125;; <br></code></pre></td></tr></table></figure>
-
 <p>这里面巧妙的地方在于，返回队首元素时：</p>
 <ul>
 <li>如果 dataTop 不为空就返回对应的 top 即可</li>
-<li>如果 dataTop 为空，就把 dataSrc 全部转移到 dataTop  中即可，返回对应的 top 之后，并不需要把 dataTop 中的元素返回到 dataSrc 中（我记得第一次做这道题是这么搞的，其实可以被这样优化）</li>
+<li>如果 dataTop 为空，就把 dataSrc 全部转移到 dataTop
+中即可，返回对应的 top 之后，并不需要把 dataTop 中的元素返回到 dataSrc
+中（我记得第一次做这道题是这么搞的，其实可以被这样优化）</li>
 </ul>
 
       </div>
@@ -264,7 +265,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\15\155-最小栈\" title="155.最小栈" rel="bookmark">155.最小栈</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\20-有效的括号\" title="20.有效的括号" rel="bookmark">20.有效的括号</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\739-每日温度\" title="739.每日温度" rel="bookmark">739.每日温度</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\15\155-最小栈\" title="155.最小栈" rel="bookmark">155.最小栈</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\20-有效的括号\" title="20.有效的括号" rel="bookmark">20.有效的括号</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\739-每日温度\" title="739.每日温度" rel="bookmark">739.每日温度</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -796,11 +797,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

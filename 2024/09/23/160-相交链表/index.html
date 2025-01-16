@@ -174,10 +174,9 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">getIntersectionNode</span><span class="hljs-params">(ListNode* headA, ListNode* headB)</span> </span>&#123;<br>        <span class="hljs-comment">// 求两个链表长度的差 len</span><br>        ListNode* Aindex = headA;<br>        <span class="hljs-type">int</span> ALen = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span> (Aindex) &#123;<br>            ALen++;<br>            Aindex = Aindex-&gt;next;<br>        &#125;<br>        ListNode* Bindex = headB;<br>        <span class="hljs-type">int</span> BLen = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span> (Bindex) &#123;<br>            BLen++;<br>            Bindex = Bindex-&gt;next;<br>        &#125;<br><br>        <span class="hljs-comment">// 让最长的链表 移动 len</span><br>        <span class="hljs-type">int</span> len = <span class="hljs-built_in">abs</span>(ALen - BLen);<br>        Aindex = headA;<br>        Bindex = headB;<br>        <span class="hljs-keyword">if</span>(ALen &lt; BLen)&#123;<br>            <span class="hljs-built_in">swap</span>(Aindex,Bindex);<br>        &#125;<br><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++)&#123;<br>            Aindex = Aindex-&gt;next;<br>        &#125;<br><br>        <span class="hljs-comment">// 齐头并进，地址相等即为第一次交汇点</span><br>        <span class="hljs-keyword">while</span>(Aindex)&#123;<br>            <span class="hljs-keyword">if</span>(Aindex == Bindex)&#123;<br>                <span class="hljs-keyword">return</span> Aindex;<br>            &#125;<br>            Aindex = Aindex-&gt;next;<br>            Bindex = Bindex-&gt;next;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>交互点指的是比较两个节点的地址是否相等，而不是元素相等，务必弄清楚。</p>
 <p>解此题的步骤：</p>
-<ol>
+<ol type="1">
 <li>求两个链表长度的差 len</li>
 <li>让最长的链表 移动 len</li>
 <li>齐头并进，地址相等即为第一次交汇点</li>
@@ -266,7 +265,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -798,11 +797,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

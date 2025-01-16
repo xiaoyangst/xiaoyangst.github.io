@@ -174,15 +174,15 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;  <br><span class="hljs-keyword">public</span>:  <br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isValid</span><span class="hljs-params">(string s)</span> </span>&#123;  <br>        stack&lt;<span class="hljs-type">char</span>&gt; data;  <br>        <span class="hljs-type">int</span> len = s.<span class="hljs-built_in">size</span>();  <br>  <br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++)&#123;  <br>            <span class="hljs-keyword">if</span>(data.<span class="hljs-built_in">empty</span>())&#123;  <br>                data.<span class="hljs-built_in">push</span>(s[i]);  <br>                <span class="hljs-keyword">continue</span>;  <br>            &#125;  <br>  <br>            <span class="hljs-keyword">if</span>((data.<span class="hljs-built_in">top</span>() != s[i]) &amp;&amp; ((data.<span class="hljs-built_in">top</span>() == <span class="hljs-string">&#x27;(&#x27;</span> &amp;&amp; s[i] == <span class="hljs-string">&#x27;)&#x27;</span>) || (data.<span class="hljs-built_in">top</span>() == <span class="hljs-string">&#x27;[&#x27;</span> &amp;&amp; s[i] == <span class="hljs-string">&#x27;]&#x27;</span>) || (data.<span class="hljs-built_in">top</span>() == <span class="hljs-string">&#x27;&#123;&#x27;</span> &amp;&amp; s[i] == <span class="hljs-string">&#x27;&#125;&#x27;</span>)))&#123; <span class="hljs-comment">// 有希望  </span><br>                data.<span class="hljs-built_in">pop</span>();  <br>            &#125;<span class="hljs-keyword">else</span>&#123;  <br>                data.<span class="hljs-built_in">push</span>(s[i]);  <br>            &#125;  <br>        &#125;  <br>  <br>        <span class="hljs-keyword">if</span>(data.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;  <br>  <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;  <br>    &#125;  <br>&#125;;  <br></code></pre></td></tr></table></figure>
-
 <p>逐一从字符串 s 中取字符：</p>
-<ol>
+<ol type="1">
 <li>如果 data 栈为空，直接加入其中</li>
-<li>如果 data 栈不为空，即将加入的字符 s[i] 与 栈中的顶部元素比较<ol>
-<li>如果不相等【data.top() !&#x3D; s[i]】，表明<strong>有希望</strong>匹配</li>
+<li>如果 data 栈不为空，即将加入的字符 s[i] 与 栈中的顶部元素比较
+<ol type="1">
+<li>如果不相等【data.top() !=
+s[i]】，表明<strong>有希望</strong>匹配</li>
 <li>如果相等，必然不可能匹配，将其加入栈中即可</li>
-</ol>
-</li>
+</ol></li>
 </ol>
 <p>栈 适合解决对称性问题，这也是栈的一个特点</p>
 
@@ -269,7 +269,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\15\155-最小栈\" title="155.最小栈" rel="bookmark">155.最小栈</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\232-用栈实现队列\" title="232.用栈实现队列" rel="bookmark">232.用栈实现队列</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\739-每日温度\" title="739.每日温度" rel="bookmark">739.每日温度</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\15\155-最小栈\" title="155.最小栈" rel="bookmark">155.最小栈</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\232-用栈实现队列\" title="232.用栈实现队列" rel="bookmark">232.用栈实现队列</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\15\739-每日温度\" title="739.每日温度" rel="bookmark">739.每日温度</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -801,11 +801,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

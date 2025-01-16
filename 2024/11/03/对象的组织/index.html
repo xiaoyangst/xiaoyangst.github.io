@@ -174,64 +174,81 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#const-%E5%AF%B9%E8%B1%A1">const 对象</a></li>
-<li><a href="#%E6%8C%87%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%8C%87%E9%92%88">指向对象的指针</a></li>
-<li><a href="#%E5%AF%B9%E8%B1%A1%E6%95%B0%E7%BB%84">对象数组</a></li>
-<li><a href="#%E5%A0%86%E5%AF%B9%E8%B1%A1">堆对象</a></li>
+<li><a href="#const-对象">const 对象</a></li>
+<li><a href="#指向对象的指针">指向对象的指针</a></li>
+<li><a href="#对象数组">对象数组</a></li>
+<li><a href="#堆对象">堆对象</a></li>
 </ul>
 <!-- tocstop -->
-
-<h1><span id="const-对象">const 对象</span></h1><p>类对象也可以声明为 const 对象，一般来说，能作用于 const 对象的成员函数除了构造函数和析构函数，就只有 const 成员函数了。因为 const 对象只能被创建、撤销和只读访问，写操作是不允许的。</p>
+<h1><span id="const-对象">const 对象</span></h1>
+<p>类对象也可以声明为 const 对象，一般来说，能作用于 const
+对象的成员函数除了构造函数和析构函数，就只有 const 成员函数了。因为
+const 对象只能被创建、撤销和只读访问，写操作是不允许的。</p>
 <p><strong>const 对象与 const 成员函数的规则：</strong></p>
-<ol>
-<li>当类中有 const 成员函数和非 const 成员函数重载时，const 对象会调用 const 成员函数，非 const 对象会调用非 const 成员函数。</li>
-<li>当类中只有一个 const 成员函数时，无论 const 对象还是非 const 对象都可以调用这个版本。</li>
-<li>当类中只有一个非 const 成员函数时，const 对象就不能调用非 const 版本。</li>
+<ol type="1">
+<li>当类中有 const 成员函数和非 const 成员函数重载时，const 对象会调用
+const 成员函数，非 const 对象会调用非 const 成员函数。</li>
+<li>当类中只有一个 const 成员函数时，无论 const 对象还是非 const
+对象都可以调用这个版本。</li>
+<li>当类中只有一个非 const 成员函数时，const 对象就不能调用非 const
+版本。</li>
 </ol>
-<p>&nbsp;</p>
-<p><strong>思考1：</strong>一个类中可以有参数形式“完全相同”的两个成员函数（ const 版本与非 const 版本），既然没有报错重定义，那么它们必然是构成了重载，为什么它们能构成重载呢？</p>
+<p> </p>
+<p><strong>思考1：</strong>一个类中可以有参数形式“完全相同”的两个成员函数（
+const 版本与非 const
+版本），既然没有报错重定义，那么它们必然是构成了重载，为什么它们能构成重载呢？</p>
 <p>参数（ this 指针 ）的类型是不同的。</p>
-<p>&nbsp;</p>
-<p><strong>思考2：</strong>const 成员函数中不允许修改数据成员，const 数据成员初始化后不允许修改，其效果是否相同？</p>
+<p> </p>
+<p><strong>思考2：</strong>const 成员函数中不允许修改数据成员，const
+数据成员初始化后不允许修改，其效果是否相同？</p>
 <p><strong>不可修改的范围不同</strong>：</p>
 <ul>
-<li><code>const</code> 成员函数保护<strong>整个对象</strong>，防止成员变量在函数调用期间被修改。</li>
-<li><code>const</code> 数据成员则是特定成员变量一旦初始化后保持不变，不依赖于 <code>const</code> 成员函数。</li>
+<li><code>const</code>
+成员函数保护<strong>整个对象</strong>，防止成员变量在函数调用期间被修改。</li>
+<li><code>const</code>
+数据成员则是特定成员变量一旦初始化后保持不变，不依赖于
+<code>const</code> 成员函数。</li>
 </ul>
 <p><strong>修改权限不同</strong>：</p>
 <ul>
-<li><code>const</code> 成员函数不允许修改任何非 <code>mutable</code> 成员变量，但不要求成员变量必须为 <code>const</code>。</li>
-<li><code>const</code> 数据成员在对象生命周期内完全不可修改，不管在 <code>const</code> 成员函数还是非 <code>const</code> 成员函数中。</li>
+<li><code>const</code> 成员函数不允许修改任何非 <code>mutable</code>
+成员变量，但不要求成员变量必须为 <code>const</code>。</li>
+<li><code>const</code> 数据成员在对象生命周期内完全不可修改，不管在
+<code>const</code> 成员函数还是非 <code>const</code> 成员函数中。</li>
 </ul>
 <p><strong>用途不同</strong>：</p>
 <ul>
-<li><code>const</code> 成员函数适用于需要承诺“只读”访问的函数，使代码更具安全性。</li>
-<li><code>const</code> 数据成员适用于逻辑上恒定不变的数据，比如对象创建后就不会改变的配置或标识符。</li>
+<li><code>const</code>
+成员函数适用于需要承诺“只读”访问的函数，使代码更具安全性。</li>
+<li><code>const</code>
+数据成员适用于逻辑上恒定不变的数据，比如对象创建后就不会改变的配置或标识符。</li>
 </ul>
-<h1><span id="指向对象的指针">指向对象的指针</span></h1><p>对象占据一定的内存空间，和普通变量一致， C++ 程序中采用如下形式声明指向对象的指针：</p>
+<h1><span id="指向对象的指针">指向对象的指针</span></h1>
+<p>对象占据一定的内存空间，和普通变量一致， C++
+程序中采用如下形式声明指向对象的指针：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">类名 * 指针名 [=初始化表达式];<br></code></pre></td></tr></table></figure>
-
-<p>初始化表达式是可选的，既可以通过取地址（&amp;对象名）给指针初始化，也可以通过申请动态内存给指针初始化，或者干脆不初始化（比如置为 nullptr ），在程序中再对该指针赋值。指针中存储的是对象所占内存空间的首地址。针对上述定义，则下列形式都是合法的：</p>
+<p>初始化表达式是可选的，既可以通过取地址（&amp;对象名）给指针初始化，也可以通过申请动态内存给指针初始化，或者干脆不初始化（比如置为
+nullptr
+），在程序中再对该指针赋值。指针中存储的是对象所占内存空间的首地址。针对上述定义，则下列形式都是合法的：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">Point <span class="hljs-title">pt</span><span class="hljs-params">(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)</span></span>;<br>Point * p1 = <span class="hljs-literal">nullptr</span>;<br>Point * p2 = &amp;pt;<br>Point * p3 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Point</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>);<br></code></pre></td></tr></table></figure>
-
-<h1><span id="对象数组">对象数组</span></h1><p>对象数组和标准类型数组的使用方法并没有什么不同，也有声明、初始化和使用等步骤。</p>
+<h1><span id="对象数组">对象数组</span></h1>
+<p>对象数组和标准类型数组的使用方法并没有什么不同，也有声明、初始化和使用等步骤。</p>
 <ul>
 <li>对象数组的声明</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">Point pts[<span class="hljs-number">2</span>];<br></code></pre></td></tr></table></figure>
-
 <p>这种格式会自动调用默认构造函数或所有参数都是缺省值的构造函数。</p>
 <ul>
 <li>对象数组的初始化（可以在声明时进行初始化）</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++">Point pts[<span class="hljs-number">2</span>] = &#123;<span class="hljs-built_in">Point</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), <span class="hljs-built_in">Point</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)&#125;;<br>Point pts[] = &#123;<span class="hljs-built_in">Point</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), <span class="hljs-built_in">Point</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)&#125;;<br>Point pts[<span class="hljs-number">5</span>] = &#123;<span class="hljs-built_in">Point</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), <span class="hljs-built_in">Point</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)&#125;;<br><span class="hljs-comment">//或者</span><br>Point pts[<span class="hljs-number">2</span>] = &#123;&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;&#125;;<br>pts-&gt;<span class="hljs-built_in">print</span>();  <span class="hljs-comment">// 第一个对象（1,2）</span><br>(pts + <span class="hljs-number">1</span>)-&gt;<span class="hljs-built_in">print</span>(); <span class="hljs-comment">// 第二个对象 (3,4)</span><br>Point pts[] = &#123;&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;&#125;;<br>Point pts[<span class="hljs-number">5</span>] = &#123;&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>这里最后一点需要提及，我们的对象数组是 5 个大小，但是只有前 2 个是有参，对于后 3 个位置，默认就是调用无参构造函数。</p>
-<h1><span id="堆对象">堆对象</span></h1><p>和把一个简单变量创建在动态存储区一样，可以用 new 和 delete 表达式为对象分配动态存储区，在拷贝构造函数一节中已经介绍了为类内的指针成员分配动态内存的相关范例，这里主要讨论如何为对象和对象数组动态分配内存。如：</p>
+<p>这里最后一点需要提及，我们的对象数组是 5 个大小，但是只有前 2
+个是有参，对于后 3 个位置，默认就是调用无参构造函数。</p>
+<h1><span id="堆对象">堆对象</span></h1>
+<p>和把一个简单变量创建在动态存储区一样，可以用 new 和 delete
+表达式为对象分配动态存储区，在拷贝构造函数一节中已经介绍了为类内的指针成员分配动态内存的相关范例，这里主要讨论如何为对象和对象数组动态分配内存。如：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	Point * pt1 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Point</span>(<span class="hljs-number">11</span>, <span class="hljs-number">12</span>);<br>	pt1-&gt;<span class="hljs-built_in">print</span>();<br>	<span class="hljs-keyword">delete</span> pt1;<br>	pt1 = <span class="hljs-literal">nullptr</span>;<br>    <br>	Point * pt2 = <span class="hljs-keyword">new</span> Point[<span class="hljs-number">5</span>]();<span class="hljs-comment">//注意</span><br>	pt2-&gt;<span class="hljs-built_in">print</span>();<br>	(pt2 + <span class="hljs-number">1</span>)-&gt;<span class="hljs-built_in">print</span>();<br>	<span class="hljs-keyword">delete</span> [] pt2;<br>    pt2 = <span class="hljs-literal">nullptr</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 
       </div>
     </div>
@@ -316,7 +333,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -848,11 +865,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,8 +174,10 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;  <br><span class="hljs-keyword">public</span>:  <br>    <span class="hljs-function">ListNode* <span class="hljs-title">deleteDuplicates</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;  <br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">nullptr</span> || head-&gt;next == <span class="hljs-literal">nullptr</span>)&#123;  <br>             <span class="hljs-keyword">return</span> head;  <br>        &#125;  <br>  <br>        ListNode* slow = head;  <br>        ListNode* fast = head-&gt;next;  <br>  <br>        <span class="hljs-keyword">while</span> (fast) &#123;  <br>            <span class="hljs-comment">// 由于 fast 进入循环，需要时刻检测 fast 不为空  </span><br>            <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; slow-&gt;val == fast-&gt;val) &#123;  <br>                fast = fast-&gt;next;  <br>                slow-&gt;next = fast;  <br>            &#125;  <br>            <span class="hljs-comment">// 前面如果 fast 为空会退出循环，因此移动前需要检查是否是因为 fast为空退出  </span><br>            <span class="hljs-keyword">if</span> (fast != <span class="hljs-literal">nullptr</span>) &#123;  <br>                slow = fast;  <br>                fast = fast-&gt;next;  <br>            &#125;  <br>        &#125;  <br>  <br>        <span class="hljs-keyword">return</span> head;  <br>    &#125;  <br>&#125;;  <br></code></pre></td></tr></table></figure>
-
-<p>这道题主要强调 while 循环，由于 fast 检测是否为空在最外层 while 中检测，但它只能保证当前这次循环不为空，所以 fast 如果进入下一个 while 循环（代码中内存 while 循环），记得要继续检测是否为空，不然出现未定义错误。之所以强调，是这种错误容易犯。</p>
+<p>这道题主要强调 while 循环，由于 fast 检测是否为空在最外层 while
+中检测，但它只能保证当前这次循环不为空，所以 fast 如果进入下一个 while
+循环（代码中内存 while
+循环），记得要继续检测是否为空，不然出现未定义错误。之所以强调，是这种错误容易犯。</p>
 
       </div>
     </div>
@@ -260,7 +262,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -792,11 +794,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

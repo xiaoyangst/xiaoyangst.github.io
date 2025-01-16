@@ -174,39 +174,81 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E9%98%BB%E5%A1%9E-io-%E6%A8%A1%E5%9E%8B">阻塞 IO 模型</a></li>
-<li><a href="#%E9%9D%9E%E9%98%BB%E5%A1%9E-io-%E6%A8%A1%E5%9E%8B">非阻塞 IO 模型</a></li>
-<li><a href="#io-%E5%A4%8D%E7%94%A8%E6%A8%A1%E5%9E%8B">IO 复用模型</a></li>
-<li><a href="#%E4%BF%A1%E5%8F%B7%E9%A9%B1%E5%8A%A8-io-%E6%A8%A1%E5%9E%8B">信号驱动 IO 模型</a></li>
-<li><a href="#%E5%BC%82%E6%AD%A5-io-%E6%A8%A1%E5%9E%8B">异步 IO 模型</a></li>
+<li><a href="#阻塞-io-模型">阻塞 IO 模型</a></li>
+<li><a href="#非阻塞-io-模型">非阻塞 IO 模型</a></li>
+<li><a href="#io-复用模型">IO 复用模型</a></li>
+<li><a href="#信号驱动-io-模型">信号驱动 IO 模型</a></li>
+<li><a href="#异步-io-模型">异步 IO 模型</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="阻塞-io-模型">阻塞 IO 模型</span></h2><p><img src="/images/2024/09/27/32b9ce80-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="同步IO.png"></p>
+<h2><span id="阻塞-io-模型">阻塞 IO 模型</span></h2>
+<figure>
+<img src="/images/2024/09/27/32b9ce80-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="同步IO.png">
+<figcaption aria-hidden="true">同步IO.png</figcaption>
+</figure>
 <p>注：网上的经典图是从左往右，但是不容易理解，特画此图，但后续的几张图就还是得借用了。</p>
-<p>用户发起系统调用 recvform 进入内核，直到内核把数据拷贝到用户态为止才解除阻塞。进入内核之后，内核还没有数据也不会把数据拷贝到用户态去，既然该进程已阻塞，操作系统就会把 CPU 分配给其他进程。等到内核得到数据，并拷贝到用户态去，即 recvform 成功返回之后，CPU 又返回到当前进程，解除阻塞，继续往下执行业务代码。</p>
-<h2><span id="非阻塞-io-模型">非阻塞 IO 模型</span></h2><p><img src="/images/2024/09/27/369e0d90-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="非阻塞IO.png"></p>
-<p>与阻塞 IO 不同的是，非阻塞 IO 调用 recvfrom 之后立即返回，没过多久又去探测内核是否已经有数据了。如果没有，当前进程继续往下执行代码；如果有，就会阻塞并等待内核把数据拷贝到用户态，即 recvform 成功返回之后，解除阻塞，继续往下执行业务代码。</p>
-<h2><span id="io-复用模型">IO 复用模型</span></h2><p><img src="/images/2024/09/27/3adc5380-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="IO多路复用.png"></p>
-<p>前面的阻塞 IO 和 非阻塞 IO 都只可以监听 1 个文件描述符，而 IO 多路复用可以监听多个文件描述符的状态。但凡有一个 fd 有关注的事件发生，就会直接返回，返回值是同一时刻触发的被内核监视的那些文件描述符的个数。这个时候，程序才发起真正的 IO 操作，直接阻塞在等待内核把数据拷贝到用户态，即 recvform 成功返回之后，解除阻塞，继续往下执行业务代码。</p>
-<p>这么看来我们的 select（暂时以它举例） IO 多路复用并没有那么 NB？从 select 把感兴趣的事件注册到内核之后，就一直阻塞，直到有哪怕一个感兴趣的事件返回才进入下一阶段。下一阶段就是真正开始发起 IO 操作，早前的阻塞 IO 与非阻塞 IO 是直接发起 IO 操作，这点二者有些不同之处。可是不管怎样，select 依旧是阻塞在事件返回阶段和内核把数据拷贝到用户态阶段。</p>
+<p>用户发起系统调用 recvform
+进入内核，直到内核把数据拷贝到用户态为止才解除阻塞。进入内核之后，内核还没有数据也不会把数据拷贝到用户态去，既然该进程已阻塞，操作系统就会把
+CPU 分配给其他进程。等到内核得到数据，并拷贝到用户态去，即 recvform
+成功返回之后，CPU 又返回到当前进程，解除阻塞，继续往下执行业务代码。</p>
+<h2><span id="非阻塞-io-模型">非阻塞 IO 模型</span></h2>
+<figure>
+<img src="/images/2024/09/27/369e0d90-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="非阻塞IO.png">
+<figcaption aria-hidden="true">非阻塞IO.png</figcaption>
+</figure>
+<p>与阻塞 IO 不同的是，非阻塞 IO 调用 recvfrom
+之后立即返回，没过多久又去探测内核是否已经有数据了。如果没有，当前进程继续往下执行代码；如果有，就会阻塞并等待内核把数据拷贝到用户态，即
+recvform 成功返回之后，解除阻塞，继续往下执行业务代码。</p>
+<h2><span id="io-复用模型">IO 复用模型</span></h2>
+<figure>
+<img src="/images/2024/09/27/3adc5380-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="IO多路复用.png">
+<figcaption aria-hidden="true">IO多路复用.png</figcaption>
+</figure>
+<p>前面的阻塞 IO 和 非阻塞 IO 都只可以监听 1 个文件描述符，而 IO
+多路复用可以监听多个文件描述符的状态。但凡有一个 fd
+有关注的事件发生，就会直接返回，返回值是同一时刻触发的被内核监视的那些文件描述符的个数。这个时候，程序才发起真正的
+IO 操作，直接阻塞在等待内核把数据拷贝到用户态，即 recvform
+成功返回之后，解除阻塞，继续往下执行业务代码。</p>
+<p>这么看来我们的 select（暂时以它举例） IO 多路复用并没有那么 NB？从
+select
+把感兴趣的事件注册到内核之后，就一直阻塞，直到有哪怕一个感兴趣的事件返回才进入下一阶段。下一阶段就是真正开始发起
+IO 操作，早前的阻塞 IO 与非阻塞 IO 是直接发起 IO
+操作，这点二者有些不同之处。可是不管怎样，select
+依旧是阻塞在事件返回阶段和内核把数据拷贝到用户态阶段。</p>
 <p>那么 select IO 多路复用究竟有哪些提升？</p>
-<ol>
-<li>可以监听多个文件描述符，阻塞 IO 与非阻塞 IO 只可以监听一个文件描述符。</li>
-<li>监听多个文件描述符的事件，但凡有一个就会直接返回，往往就要比 阻塞 IO 与非阻塞 IO 快，因为更容易快速返回。毕竟，人多中奖的概率更大，但凡一个中奖就会解除阻塞了。</li>
-<li>接着处理文件描述符对应的业务代码，这个期间，这些文件描述符如果继续触发事件，内核帮我们监视着，只要后面这边业务处理完，我们又可以继续处理了。但是 阻塞 IO 与非阻塞 IO 就不行，必须等到业务完成，才可以继续等待内核有数据并拷贝到用户态为止，这在效率上就拉开了。</li>
+<ol type="1">
+<li>可以监听多个文件描述符，阻塞 IO 与非阻塞 IO
+只可以监听一个文件描述符。</li>
+<li>监听多个文件描述符的事件，但凡有一个就会直接返回，往往就要比 阻塞 IO
+与非阻塞 IO
+快，因为更容易快速返回。毕竟，人多中奖的概率更大，但凡一个中奖就会解除阻塞了。</li>
+<li>接着处理文件描述符对应的业务代码，这个期间，这些文件描述符如果继续触发事件，内核帮我们监视着，只要后面这边业务处理完，我们又可以继续处理了。但是
+阻塞 IO 与非阻塞 IO
+就不行，必须等到业务完成，才可以继续等待内核有数据并拷贝到用户态为止，这在效率上就拉开了。</li>
 </ol>
-<h2><span id="信号驱动-io-模型">信号驱动 IO 模型</span></h2><p><img src="/images/2024/09/27/3f820dd0-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="信号IO.png"></p>
-<p>发起信号之后，不会阻塞，直到内核有数据才会继续阻塞，阻塞在等待内核把数据拷贝到用户态，即 recvform 成功返回之后，解除阻塞，继续往下执行业务代码。</p>
-<h2><span id="异步-io-模型">异步 IO 模型</span></h2><p><img src="/images/2024/09/27/432a5550-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="异步IO.png"></p>
-<p>发起异步请求之后，前面介绍的两个阶段都不会阻塞，即等到 recvform 成功返回之后才回来继续处理。</p>
-<p>早前我用送外卖来形容同步IO ，信号驱动 IO 和 异步 IO 。放到这里记录：</p>
-<ol>
+<h2><span id="信号驱动-io-模型">信号驱动 IO 模型</span></h2>
+<figure>
+<img src="/images/2024/09/27/3f820dd0-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="信号IO.png">
+<figcaption aria-hidden="true">信号IO.png</figcaption>
+</figure>
+<p>发起信号之后，不会阻塞，直到内核有数据才会继续阻塞，阻塞在等待内核把数据拷贝到用户态，即
+recvform 成功返回之后，解除阻塞，继续往下执行业务代码。</p>
+<h2><span id="异步-io-模型">异步 IO 模型</span></h2>
+<figure>
+<img src="/images/2024/09/27/432a5550-7cd9-11ef-a65d-c764aa3c1fbb.png" alt="异步IO.png">
+<figcaption aria-hidden="true">异步IO.png</figcaption>
+</figure>
+<p>发起异步请求之后，前面介绍的两个阶段都不会阻塞，即等到 recvform
+成功返回之后才回来继续处理。</p>
+<p>早前我用送外卖来形容同步IO ，信号驱动 IO 和 异步 IO
+。放到这里记录：</p>
+<ol type="1">
 <li>同步IO：我本来在打电动，顿感饥饿，就决定打电话点外卖，点完就一直等外卖，啥事也不干。</li>
-<li>信号驱动 IO：我本来在打电动，顿感饥饿，就决定打电话点外卖，点完继续打电动。直到外卖员打电话说外卖送到楼下门口了，我就在家门口等待外卖员把外卖送上来。</li>
-<li>信号驱动 IO：我本来在打电动，顿感饥饿，就决定打电话点外卖，点完继续打电动。直到外卖员打电话说外卖送到楼下门口了，我继续打电动。最后外卖员把外卖送到家门口，我才停止打电动，开始吃外卖。</li>
+<li>信号驱动
+IO：我本来在打电动，顿感饥饿，就决定打电话点外卖，点完继续打电动。直到外卖员打电话说外卖送到楼下门口了，我就在家门口等待外卖员把外卖送上来。</li>
+<li>信号驱动
+IO：我本来在打电动，顿感饥饿，就决定打电话点外卖，点完继续打电动。直到外卖员打电话说外卖送到楼下门口了，我继续打电动。最后外卖员把外卖送到家门口，我才停止打电动，开始吃外卖。</li>
 </ol>
 <p>明显看到，发起点外卖这个命令，我只关心外卖本身，这个过程与我无关，哪怕这个过程出现问题，也与我无关，外卖什么时候亲手送到我的手里我才吃，否则我就继续干其他任务。</p>
 
@@ -293,7 +335,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\26\Linux目录操作\" title="Linux目录操作" rel="bookmark">Linux目录操作</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\26\Linux文件操作\" title="Linux文件操作" rel="bookmark">Linux文件操作</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -825,11 +867,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

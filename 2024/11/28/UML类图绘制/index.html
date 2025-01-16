@@ -174,78 +174,127 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E7%B1%BB%E7%9A%84-uml-%E7%94%BB%E6%B3%95">类的 UML 画法</a><ul>
-<li><a href="#%E6%99%AE%E9%80%9A%E7%B1%BB">普通类</a></li>
-<li><a href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB">抽象类</a></li>
-</ul>
-</li>
-<li><a href="#%E7%B1%BB%E4%B8%8E%E7%B1%BB%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB">类与类之间的关系</a><ul>
-<li><a href="#%E7%BB%A7%E6%89%BF">继承</a></li>
-<li><a href="#%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB">关联关系</a><ul>
-<li><a href="#%E5%8D%95%E5%90%91%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB">单向关联关系</a></li>
-<li><a href="#%E5%8F%8C%E5%90%91%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB">双向关联关系</a></li>
-<li><a href="#%E8%87%AA%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB">自关联关系</a></li>
-</ul>
-</li>
-<li><a href="#%E8%81%9A%E5%90%88%E5%85%B3%E7%B3%BB">聚合关系</a></li>
-<li><a href="#%E7%BB%84%E5%90%88%E5%85%B3%E7%B3%BB">组合关系</a></li>
-<li><a href="#%E8%81%9A%E5%90%88%E5%85%B3%E7%B3%BB%E5%92%8C%E7%BB%84%E5%90%88%E5%85%B3%E7%B3%BB%E7%9A%84%E5%8C%BA%E5%88%86">聚合关系和组合关系的区分</a></li>
-<li><a href="#%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB">依赖关系</a></li>
-<li><a href="#%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB-%E8%81%9A%E5%90%88%E5%85%B3%E7%B3%BB-%E7%BB%84%E5%90%88%E5%85%B3%E7%B3%BB%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB">关联关系、聚合关系、组合关系之间的区别</a></li>
-<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
-</ul>
-</li>
+<li><a href="#类的-uml-画法">类的 UML 画法</a>
+<ul>
+<li><a href="#普通类">普通类</a></li>
+<li><a href="#抽象类">抽象类</a></li>
+</ul></li>
+<li><a href="#类与类之间的关系">类与类之间的关系</a>
+<ul>
+<li><a href="#继承">继承</a></li>
+<li><a href="#关联关系">关联关系</a>
+<ul>
+<li><a href="#单向关联关系">单向关联关系</a></li>
+<li><a href="#双向关联关系">双向关联关系</a></li>
+<li><a href="#自关联关系">自关联关系</a></li>
+</ul></li>
+<li><a href="#聚合关系">聚合关系</a></li>
+<li><a href="#组合关系">组合关系</a></li>
+<li><a href="#聚合关系和组合关系的区分">聚合关系和组合关系的区分</a></li>
+<li><a href="#依赖关系">依赖关系</a></li>
+<li><a href="#关联关系-聚合关系-组合关系之间的区别">关联关系、聚合关系、组合关系之间的区别</a></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
 </ul>
 <!-- tocstop -->
-
-<h1><span id="类的-uml-画法">类的 UML 画法</span></h1><p>从上至下每一方块分别代表类名、属性、方法。</p>
-<h2><span id="普通类">普通类</span></h2><p><img src="/images/2024/11/28/635af1c0-ad78-11ef-a750-77d4b648f2f9.png" alt="01.png"></p>
-<p>可见性：<code>+</code> 表示public、<code>#</code> 表示protected、<code>-</code> 表示private</p>
-<p>属性（成员变量）表示方式：【可见性】【属性名称】:【属性类型】&#x3D;{属性默认值，为可选}</p>
-<p>方法（成员方法）表示方式：【可见性】【方法名称】（【参数名：参数类型，……】）: 返回值类型</p>
-<h2><span id="抽象类">抽象类</span></h2><p>与普通类的不同是，抽象类的类名需要用<font style="color:#DF2A3F;">斜体</font>表示，其<font style="color:#DF2A3F;">虚函数也需要用斜体</font>表示。</p>
-<p><img src="/images/2024/11/28/691bb900-ad78-11ef-a750-77d4b648f2f9.png" alt="02.png"></p>
-<h1><span id="类与类之间的关系">类与类之间的关系</span></h1><h2><span id="继承">继承</span></h2><p>用于描述父子类之间的关系，父类又名基类，子类又名派生类。</p>
+<h1><span id="类的-uml-画法">类的 UML 画法</span></h1>
+<p>从上至下每一方块分别代表类名、属性、方法。</p>
+<h2><span id="普通类">普通类</span></h2>
+<figure>
+<img src="/images/2024/11/28/635af1c0-ad78-11ef-a750-77d4b648f2f9.png" alt="01.png">
+<figcaption aria-hidden="true">01.png</figcaption>
+</figure>
+<p>可见性：<code>+</code> 表示public、<code>#</code>
+表示protected、<code>-</code> 表示private</p>
+<p>属性（成员变量）表示方式：【可见性】【属性名称】:【属性类型】={属性默认值，为可选}</p>
+<p>方法（成员方法）表示方式：【可见性】【方法名称】（【参数名：参数类型，......】）:
+返回值类型</p>
+<h2><span id="抽象类">抽象类</span></h2>
+<p>与普通类的不同是，抽象类的类名需要用<font style="color:#DF2A3F;">斜体</font>表示，其<font style="color:#DF2A3F;">虚函数也需要用斜体</font>表示。</p>
+<figure>
+<img src="/images/2024/11/28/691bb900-ad78-11ef-a750-77d4b648f2f9.png" alt="02.png">
+<figcaption aria-hidden="true">02.png</figcaption>
+</figure>
+<h1><span id="类与类之间的关系">类与类之间的关系</span></h1>
+<h2><span id="继承">继承</span></h2>
+<p>用于描述父子类之间的关系，父类又名基类，子类又名派生类。</p>
 <p>在语义层面上：A is B，即 HR、Sale、Manager is Employee。</p>
-<p>UML 中用<font style="color:#DF2A3F;">带空心三角形的实线</font>来表示。</p>
-<p><img src="/images/2024/11/28/6ff14ba0-ad78-11ef-a750-77d4b648f2f9.png" alt="03.png"></p>
-<h2><span id="关联关系">关联关系</span></h2><p>表示一个对象与另一个对象之间有联系。</p>
-<p><strong><font style="color:#DF2A3F;">在 C++ 中这种关联关系在类中是这样体现的，即将一个类的对象作为另一个类的成员变量。</font></strong></p>
-<h3><span id="单向关联关系">单向关联关系</span></h3><p>如果是单向关联，使用的连接线是带单向箭头的实线, 哪个类作为了当前类的成员变量，那么箭头就指向哪个类。</p>
-<p>对应图中就是，Condition 知道 MutexLock 的存在，但是 MutexLock 并不知道 Condition 的存在，<strong>彼此并不负责对方的生命周期</strong>。</p>
+<p>UML
+中用<font style="color:#DF2A3F;">带空心三角形的实线</font>来表示。</p>
+<figure>
+<img src="/images/2024/11/28/6ff14ba0-ad78-11ef-a750-77d4b648f2f9.png" alt="03.png">
+<figcaption aria-hidden="true">03.png</figcaption>
+</figure>
+<h2><span id="关联关系">关联关系</span></h2>
+<p>表示一个对象与另一个对象之间有联系。</p>
+<p><strong><font style="color:#DF2A3F;">在 C++
+中这种关联关系在类中是这样体现的，即将一个类的对象作为另一个类的成员变量。</font></strong></p>
+<h3><span id="单向关联关系">单向关联关系</span></h3>
+<p>如果是单向关联，使用的连接线是带单向箭头的实线,
+哪个类作为了当前类的成员变量，那么箭头就指向哪个类。</p>
+<p>对应图中就是，Condition 知道 MutexLock 的存在，但是 MutexLock
+并不知道 Condition
+的存在，<strong>彼此并不负责对方的生命周期</strong>。</p>
 <p>在语义层面上：A has B ，即 Condition has MutexLock。</p>
 <p>在代码层面上：使用指针或者引用。</p>
-<p><img src="/images/2024/11/28/7cdf6270-ad78-11ef-a750-77d4b648f2f9.png" alt="04.png"></p>
-<h3><span id="双向关联关系">双向关联关系</span></h3><p>如果两个类<strong>互有</strong>对方的成员变量，那就用一条直线连接代表双向关系。</p>
-<p>对应图中就是，Cumtomer 知道 Order 的存在，但是 Order 也知道 Cumtomer 的存在，<strong>彼此并不负责对方的生命周期</strong>。</p>
+<figure>
+<img src="/images/2024/11/28/7cdf6270-ad78-11ef-a750-77d4b648f2f9.png" alt="04.png">
+<figcaption aria-hidden="true">04.png</figcaption>
+</figure>
+<h3><span id="双向关联关系">双向关联关系</span></h3>
+<p>如果两个类<strong>互有</strong>对方的成员变量，那就用一条直线连接代表双向关系。</p>
+<p>对应图中就是，Cumtomer 知道 Order 的存在，但是 Order 也知道 Cumtomer
+的存在，<strong>彼此并不负责对方的生命周期</strong>。</p>
 <p>在语义层面上：A has B ，即 Cumtomer has Order。</p>
 <p>在代码层面上：使用指针或者引用。</p>
-<p><img src="/images/2024/11/28/87105510-ad78-11ef-a750-77d4b648f2f9.png" alt="05.png"></p>
-<h3><span id="自关联关系">自关联关系</span></h3><p>自关联指的就是当前类中包含一个自身类型的对象成员，这在链表中非常常见，单向链表中都会有一个指向自身节点类型的后继指针成员，而双向链表中会包含一个指向自身节点类型的前驱指针和一个指向自身节点类型的后继指针</p>
-<p><img src="/images/2024/11/28/8cad1990-ad78-11ef-a750-77d4b648f2f9.png" alt="06.png"></p>
-<h2><span id="聚合关系">聚合关系</span></h2><p>表示整体与部分的关系。在聚合关系中，成员对象是整体的一部分，但是成员对象可以脱离整体对象独立存在。</p>
+<figure>
+<img src="/images/2024/11/28/87105510-ad78-11ef-a750-77d4b648f2f9.png" alt="05.png">
+<figcaption aria-hidden="true">05.png</figcaption>
+</figure>
+<h3><span id="自关联关系">自关联关系</span></h3>
+<p>自关联指的就是当前类中包含一个自身类型的对象成员，这在链表中非常常见，单向链表中都会有一个指向自身节点类型的后继指针成员，而双向链表中会包含一个指向自身节点类型的前驱指针和一个指向自身节点类型的后继指针</p>
+<figure>
+<img src="/images/2024/11/28/8cad1990-ad78-11ef-a750-77d4b648f2f9.png" alt="06.png">
+<figcaption aria-hidden="true">06.png</figcaption>
+</figure>
+<h2><span id="聚合关系">聚合关系</span></h2>
+<p>表示整体与部分的关系。在聚合关系中，成员对象是整体的一部分，但是成员对象可以脱离整体对象独立存在。</p>
 <p>表现为整体与局部的关系，但是整体也不会负责局部的销毁。</p>
 <p>在语义层面上：A has B ，即 Cumputer has CPU、Memory、MainBoard。</p>
 <p>在代码层面上：使用指针或者引用。</p>
-<p><img src="/images/2024/11/28/9168f3f0-ad78-11ef-a750-77d4b648f2f9.png" alt="07.png"></p>
-<h2><span id="组合关系">组合关系</span></h2><p>表示的是一种整体和部分的关系，但是在组合关系中整体对象可以控制成员对象的生命周期，一旦整体对象不存在，成员对象也不存在，整体对象和成员对象之间具有同生共死的关系。</p>
-<p>在语义层面上：A has B ，即 Company has HRDepartment、DevelopDepartment、SaleDepartment。</p>
+<figure>
+<img src="/images/2024/11/28/9168f3f0-ad78-11ef-a750-77d4b648f2f9.png" alt="07.png">
+<figcaption aria-hidden="true">07.png</figcaption>
+</figure>
+<h2><span id="组合关系">组合关系</span></h2>
+<p>表示的是一种整体和部分的关系，但是在组合关系中整体对象可以控制成员对象的生命周期，一旦整体对象不存在，成员对象也不存在，整体对象和成员对象之间具有同生共死的关系。</p>
+<p>在语义层面上：A has B ，即 Company has
+HRDepartment、DevelopDepartment、SaleDepartment。</p>
 <p>在代码层面上：局部对象。</p>
-<p><img src="/images/2024/11/28/95724730-ad78-11ef-a750-77d4b648f2f9.png" alt="08.png"></p>
-<h2><span id="聚合关系和组合关系的区分">聚合关系和组合关系的区分</span></h2><p>聚合关系的成员对象（局部）的生命周期不归当前类（整体）管，所以采用指针和引用声明成员对象。但是组合关系就不同，当前类（整体）死去会一并带走成员对象（局部），所以这些成员对象也就是属于这个类的局部对象，生命周期和当前类保持一致。</p>
+<figure>
+<img src="/images/2024/11/28/95724730-ad78-11ef-a750-77d4b648f2f9.png" alt="08.png">
+<figcaption aria-hidden="true">08.png</figcaption>
+</figure>
+<h2><span id="聚合关系和组合关系的区分">聚合关系和组合关系的区分</span></h2>
+<p>聚合关系的成员对象（局部）的生命周期不归当前类（整体）管，所以采用指针和引用声明成员对象。但是组合关系就不同，当前类（整体）死去会一并带走成员对象（局部），所以这些成员对象也就是属于这个类的局部对象，生命周期和当前类保持一致。</p>
 <p>一般来说被组合对象不能脱离组合对象独立存在，而且也只能属于一个组合对象，聚合则不一样，被聚合的对象可以属于多个聚合对象（因为它是引用和指针嘛，但这样我们关系它本身的生命周期问题，因为它具有不确定性了）。</p>
-<h2><span id="依赖关系">依赖关系</span></h2><p>特定事物的改变有可能会影响到使用该事物的其他事物，在需要表示一个事物使用另一个事物时使用依赖关系，大多数情况下依赖关系体现在某个类的方法使用另一个类的对象作为参数。</p>
-<p>语义上是一种：A use B 的关系，对应图中的 Tree use Soil Air Water。</p>
+<h2><span id="依赖关系">依赖关系</span></h2>
+<p>特定事物的改变有可能会影响到使用该事物的其他事物，在需要表示一个事物使用另一个事物时使用依赖关系，大多数情况下依赖关系体现在某个类的方法使用另一个类的对象作为参数。</p>
+<p>语义上是一种：A use B 的关系，对应图中的 Tree use Soil Air
+Water。</p>
 <p>在代码上表现为：</p>
 <ul>
 <li>B 作为 A 的成员函数参数</li>
 <li>B 作为 A 的成员函数的局部变量（ B 作为 A 的成员函数的返回值）</li>
 <li>A 的成员函数调用 B 的静态方法</li>
 </ul>
-<p><img src="/images/2024/11/28/9a463d70-ad78-11ef-a750-77d4b648f2f9.png" alt="09.png"></p>
-<h2><span id="关联关系-聚合关系-组合关系之间的区别">关联关系、聚合关系、组合关系之间的区别</span></h2><p>聚合和组合的区别我们前面已经讲过，这里我们只要讲清楚聚合和关联的区别即可。</p>
+<figure>
+<img src="/images/2024/11/28/9a463d70-ad78-11ef-a750-77d4b648f2f9.png" alt="09.png">
+<figcaption aria-hidden="true">09.png</figcaption>
+</figure>
+<h2><span id="关联关系-聚合关系-组合关系之间的区别">关联关系、聚合关系、组合关系之间的区别</span></h2>
+<p>聚合和组合的区别我们前面已经讲过，这里我们只要讲清楚聚合和关联的区别即可。</p>
 <p>关联的两个对象之间一般是平等的，聚合则一般是不平等的。</p>
 <p>最后，再举例子来描述一下这三种关系：</p>
 <ul>
@@ -253,11 +302,13 @@
 <li>图书馆看书的时候，人和书属于聚合关系。书是可以独立存在的，而且书不仅可以属于自己，也可以属于别人。</li>
 <li>人和自己的心脏属于组合关系，因为心脏不能脱离人体而独自存在。</li>
 </ul>
-<h2><span id="总结">总结</span></h2><ol>
+<h2><span id="总结">总结</span></h2>
+<ol type="1">
 <li>继承关系是一个垂直的关系，其他四种是横向关系</li>
 <li>从语义层面：继承 is；依赖：use；关联、聚合、组合：has</li>
 <li>耦合程度： 依赖 &lt; 关联 &lt; 聚合 &lt; 组合 &lt; 继承</li>
-<li>代码层面：依赖：关注的是成员函数；关联、聚合、组合：关注的是数据成员； 继承：既有数据成员也有成员函数。</li>
+<li>代码层面：依赖：关注的是成员函数；关联、聚合、组合：关注的是数据成员；
+继承：既有数据成员也有成员函数。</li>
 </ol>
 
       </div>
@@ -343,7 +394,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\29\代理模式\" title="代理模式" rel="bookmark">代理模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\11\单例模式\" title="单例模式" rel="bookmark">单例模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\04\命令模式\" title="命令模式" rel="bookmark">命令模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\29\代理模式\" title="代理模式" rel="bookmark">代理模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\11\单例模式\" title="单例模式" rel="bookmark">单例模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\04\命令模式\" title="命令模式" rel="bookmark">命令模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -875,11 +926,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

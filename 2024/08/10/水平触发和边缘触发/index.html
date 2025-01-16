@@ -174,31 +174,47 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%B0%B4%E5%B9%B3%E8%A7%A6%E5%8F%91">水平触发</a></li>
-<li><a href="#%E8%BE%B9%E7%BC%98%E8%A7%A6%E5%8F%91">边缘触发</a></li>
-<li><a href="#%E5%AE%9E%E4%BE%8B%E8%AF%B4%E6%98%8E">实例说明</a></li>
+<li><a href="#水平触发">水平触发</a></li>
+<li><a href="#边缘触发">边缘触发</a></li>
+<li><a href="#实例说明">实例说明</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="水平触发">水平触发</span></h2><ul>
-<li>读事件：如果 epoll_wait 触发了读事件，表示有数据可读，如果程序没有把数据读完，再次调用 epoll_wait 的时候，将立即再次触发读事件。</li>
+<h2><span id="水平触发">水平触发</span></h2>
+<ul>
+<li>读事件：如果 epoll_wait
+触发了读事件，表示有数据可读，如果程序没有把数据读完，再次调用
+epoll_wait 的时候，将立即再次触发读事件。</li>
 <li>写事件：如果发生缓冲区没有满，表示可以写入数据，只要缓冲区没有被写满，再次调用epoll_wait的时候，将立即再次触发写事件。</li>
 </ul>
-<h2><span id="边缘触发">边缘触发</span></h2><ul>
-<li>读事件：如果 epoll_wait 触发了读事件，不管程序有没有处理读事件，epoll_wait 都不会再触发读事件，只有当新的数据到达时，才再次触发读事件。</li>
-<li>写事件：epoll_wait 触发写事件之后，如果发送缓冲区任可以写（发送缓冲区没有满），epoll_wait 不会再次触发写事件，只有当发送缓冲区由 满 变成 不满 时，才再次触发写事件。</li>
+<h2><span id="边缘触发">边缘触发</span></h2>
+<ul>
+<li>读事件：如果 epoll_wait
+触发了读事件，不管程序有没有处理读事件，epoll_wait
+都不会再触发读事件，只有当新的数据到达时，才再次触发读事件。</li>
+<li>写事件：epoll_wait
+触发写事件之后，如果发送缓冲区任可以写（发送缓冲区没有满），epoll_wait
+不会再次触发写事件，只有当发送缓冲区由 满 变成 不满
+时，才再次触发写事件。</li>
 </ul>
-<h2><span id="实例说明">实例说明</span></h2><p>这里就以读事件举例，客户端发生长度为 6 的字符串sssbbb，服务器这边一次读只能读取长度为 3 的字符串。下面看看水平触发和边缘触发的现象：</p>
+<h2><span id="实例说明">实例说明</span></h2>
+<p>这里就以读事件举例，客户端发生长度为 6
+的字符串sssbbb，服务器这边一次读只能读取长度为 3
+的字符串。下面看看水平触发和边缘触发的现象：</p>
 <p>水平触发：epoll_wait触发读事件，读取字符串sss，epoll_wait再次触发读事件，读取字符串bbb</p>
 <p>边缘触发：epoll_wait触发读事件，读取字符串sss</p>
 <p>客户端再次发送长度为6的字符串sssbbb：</p>
 <p>水平触发：epoll_wait触发读事件，读取字符串sss，epoll_wait再次触发读事件，读取字符串bbb</p>
 <p>边缘触发：epoll_wait触发读事件，读取字符串bbb（把之前没读完的字符串读完）</p>
 <p>实践效果图如下：</p>
-<p><img src="/images/2024/08/10/0ab7cab0-56f8-11ef-a7b6-1b323923df30.png" alt="水平触发.png"></p>
-<p><img src="/images/2024/08/10/10951aa0-56f8-11ef-a7b6-1b323923df30.png" alt="边缘触发.png"></p>
+<figure>
+<img src="/images/2024/08/10/0ab7cab0-56f8-11ef-a7b6-1b323923df30.png" alt="水平触发.png">
+<figcaption aria-hidden="true">水平触发.png</figcaption>
+</figure>
+<figure>
+<img src="/images/2024/08/10/10951aa0-56f8-11ef-a7b6-1b323923df30.png" alt="边缘触发.png">
+<figcaption aria-hidden="true">边缘触发.png</figcaption>
+</figure>
 
       </div>
     </div>
@@ -283,7 +299,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -815,11 +831,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

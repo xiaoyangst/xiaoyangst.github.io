@@ -179,27 +179,29 @@
 <table>
 <thead>
 <tr>
-<th>面向连接&#x2F;无连接</th>
-<th align="center">具体协议</th>
-<th>可靠&#x2F;不可靠</th>
+<th>面向连接/无连接</th>
+<th style="text-align: center;">具体协议</th>
+<th>可靠/不可靠</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>面向连接</td>
-<td align="center">TCP</td>
+<td style="text-align: center;">TCP</td>
 <td>可靠传输</td>
 </tr>
 <tr>
 <td>面向无连接</td>
-<td align="center">UDP</td>
+<td style="text-align: center;">UDP</td>
 <td>不可靠传输</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><strong>无连接协议</strong>中的分组被称为数据报（datagram），每个分组都是独立寻址，并由应用程序发送的。从协议的角度来看，<strong>每个数据报都是一个独立的实体，与在两个相同的对等实体之间传送的任何其他数据报都没有关系</strong>，这就意味着协议很可能是不可靠的。也就是说，网络会尽最大努力传送每一个数据报，但并不保证数据报不丢失、不延迟或者不错序传输。</p>
 <p>另一方面，<strong>面向连接的协议</strong>则<strong>维护了分组之间的状态</strong>，使用这种协议的应用程序通常都会进行长期的对话。记住这些状态，协议就可以提供可靠的传输。比如，发送端可以记住哪些数据已经发送出去了但还未被确认，以及数据是什么时候发送的。如果在某段时间间隔内没有收到确认，发送端可以重传数据。接收端可以记住已经收到了哪些数据，并将重复的数据丢弃。如果分组不是按序到达的，接收端可以将其保存下来，直到逻辑上先于它的分组到达为止。</p>
 <p>使用无连接协议就像寄信，而使用面向连接的协议就像打电话。前者不管对方是否已经和自己连接成功，直接把数据发送出去，也就不关心数据是否真的到达了。后者和对方发送数据之前务必保证连接已经成功，通过三次握手来确保双方发送和接受能力以及连接成功，后续的数据发送也有相应的防丢失机制，比方说重传机制等。</p>
 <hr>
-<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
+<p>⭐️内容取自译者陈涓、赵振平《TCP/IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
 
       </div>
     </div>
@@ -284,7 +286,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -816,11 +818,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

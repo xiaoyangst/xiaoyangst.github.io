@@ -174,12 +174,26 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">plusOne</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; digits)</span> </span>&#123;<br>        <span class="hljs-type">bool</span> flag = <span class="hljs-literal">true</span>;   <span class="hljs-comment">// 存在进位</span><br>        vector&lt;<span class="hljs-type">int</span>&gt; data;<br>        <span class="hljs-keyword">if</span>(digits[digits.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>] + <span class="hljs-number">1</span> != <span class="hljs-number">10</span>)&#123;    <span class="hljs-comment">// 如果加1不会进位，返回最后一个元素加1的原数组</span><br>            digits[digits.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>]++;<br>            <span class="hljs-keyword">return</span> digits;<br>        &#125;<br><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = digits.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--)&#123;<br>            <span class="hljs-keyword">if</span>(flag)&#123;<br>                <span class="hljs-keyword">if</span>(digits[i] + <span class="hljs-number">1</span> != <span class="hljs-number">10</span>)&#123;    <span class="hljs-comment">// 后续不会有进位，flag = false;</span><br>                    data.<span class="hljs-built_in">push_back</span>(digits[i] + <span class="hljs-number">1</span>);<br>                    flag = <span class="hljs-literal">false</span>;<br>                &#125;<span class="hljs-keyword">else</span>&#123;  <span class="hljs-comment">// 后续还有进位，flag保持不变</span><br>                    data.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">0</span>);<br>                &#125;<br>            &#125;<span class="hljs-keyword">else</span>&#123;  <span class="hljs-comment">// 没有进位，添加原数组元素即可</span><br>                data.<span class="hljs-built_in">push_back</span>(digits[i]);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(flag)&#123;   <span class="hljs-comment">// 如果有进位，代表这个数是 N 个 9组成，所以添加元素 1</span><br>            data.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">1</span>);<br>        &#125;<br>        <span class="hljs-built_in">reverse</span>(data.<span class="hljs-built_in">begin</span>(),data.<span class="hljs-built_in">end</span>());   <span class="hljs-comment">// 反转</span><br>        <span class="hljs-keyword">return</span> data;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>这道题容易让人误解，应该把题意讲得清楚些。有一个自然数，被拆分成个位数存储在数组中，对这个自然数进行加 1 操作。很明显，如果我们的自然是99，那么加 1 的结果就是 100，显然原数组是存储不下的，因为vector容器不支持头部插入元素。</p>
-<p>如果数组中的末尾元素 加 1 之后不存在进位，只需要把原数组的末尾元素加 1 之后返回即可。</p>
-<p>如果存在进位，就需要声明一个新的容器 data 来存储元素，避免原数组因为进位操作导致无法存储超过原长度的元素个数。基于存在进位的这种情况开始对原数组进行计算，第一次进入 for 循环中肯定是存在进位的情况。如果当前元素加 1 依旧满足进位，那么 flag 保持不变，添加元素 0 到 data 容器中。如果当前元素 加 1 不满足进位，flag 设置为 false，添加当前元素 加 1 之后的结果到 data容器中。</p>
-<p>前面讲，进入 for 循环的第一次必然存在进位，那么此后就会出现两种情况：如果 flag 为 false ，后续的原数组元素添加到 data 容器中即可。如果 flag 依旧为 true，那不过是重复上面的逻辑，直到 flag 为 false 才进入到”原数组元素添加到 data 容器中即可“阶段。</p>
-<p>如果 flag 始终为 true ，那么还需要添加元素 1 到 data 容器中。假定自然数为99，那么上面的逻辑执行下来，数组中存储的元素是 0 0。所以，如果 flag 依旧为 true，我们需要继续添加 元素 1 进来，否则不进行新的元素添加。然后就可以 data 容器反转之后进行返回，得到符合题意的结果。</p>
+<p>这道题容易让人误解，应该把题意讲得清楚些。有一个自然数，被拆分成个位数存储在数组中，对这个自然数进行加
+1 操作。很明显，如果我们的自然是99，那么加 1 的结果就是
+100，显然原数组是存储不下的，因为vector容器不支持头部插入元素。</p>
+<p>如果数组中的末尾元素 加 1 之后不存在进位，只需要把原数组的末尾元素加
+1 之后返回即可。</p>
+<p>如果存在进位，就需要声明一个新的容器 data
+来存储元素，避免原数组因为进位操作导致无法存储超过原长度的元素个数。基于存在进位的这种情况开始对原数组进行计算，第一次进入
+for 循环中肯定是存在进位的情况。如果当前元素加 1 依旧满足进位，那么 flag
+保持不变，添加元素 0 到 data 容器中。如果当前元素 加 1 不满足进位，flag
+设置为 false，添加当前元素 加 1 之后的结果到 data容器中。</p>
+<p>前面讲，进入 for
+循环的第一次必然存在进位，那么此后就会出现两种情况：如果 flag 为 false
+，后续的原数组元素添加到 data 容器中即可。如果 flag 依旧为
+true，那不过是重复上面的逻辑，直到 flag 为 false
+才进入到”原数组元素添加到 data 容器中即可“阶段。</p>
+<p>如果 flag 始终为 true ，那么还需要添加元素 1 到 data
+容器中。假定自然数为99，那么上面的逻辑执行下来，数组中存储的元素是 0
+0。所以，如果 flag 依旧为 true，我们需要继续添加 元素 1
+进来，否则不进行新的元素添加。然后就可以 data
+容器反转之后进行返回，得到符合题意的结果。</p>
 
       </div>
     </div>
@@ -264,7 +278,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\26-删除有序数组中的重复项\" title="26.删除有序数组中的重复项" rel="bookmark">26.删除有序数组中的重复项</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\22\27-移除元素\" title="27.移除元素" rel="bookmark">27.移除元素</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\08\26-删除有序数组中的重复项\" title="26.删除有序数组中的重复项" rel="bookmark">26.删除有序数组中的重复项</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\22\27-移除元素\" title="27.移除元素" rel="bookmark">27.移除元素</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
     
   </div>
 </div>
@@ -796,11 +810,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

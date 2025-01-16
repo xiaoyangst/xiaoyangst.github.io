@@ -174,18 +174,28 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%8C%85%E8%A3%85%E5%99%A8">操作符包装器</a></li>
-<li><a href="#stdfunction%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E5%92%8C%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98">std::function的性能问题和并发安全问题</a></li>
+<li><a href="#操作符包装器">操作符包装器</a></li>
+<li><a href="#stdfunction的性能问题和并发安全问题">std::function的性能问题和并发安全问题</a></li>
 </ul>
 <!-- tocstop -->
-
-<p><strong>注意</strong>：此文介绍很多<a href="https://xiaoyangst.github.io/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/">C++11新特性</a>的知识（auto 关键字、Lambda 表达式、function 包装器），这不会在此读书笔记中记录，可以在我的其它地方找到相关的笔记，或者你可以自行去学习，毕竟，C++11 是现在 C++ 学习者必备的语法。</p>
-<h2><span id="操作符包装器">操作符包装器</span></h2><p><img src="/images/2024/08/16/d632a100-5bc2-11ef-a253-abb20d863bc2.png" alt="操作符包装器.png"></p>
-<p>C++11 使用操作符包装器需要指明类型，如greater&lt;int&gt;()。但是 C++14 之后就可以不用了，如greater&lt;&gt;()。</p>
-<h2><span id="stdfunction的性能问题和并发安全问题">std::function的性能问题和并发安全问题</span></h2><p>虽然前面的内容都证明 std::function 很有用，但不能滥用，因为它有明显的性能问题。为了隐藏包含的类型并提供一个对所有可调用类型的通用接口，std::function 使用类型擦除的技术。本书并不打算深入研究这个问题，只需要知道它是基于虚成员函数调用就足够了。因为虚调用是在运行时进行的，编译器不能在线调用，所以也就失去了优化的机会。</p>
-<p>std::function 另一个需要注意的是，虽然它的调用操作符限定为 const，但它可以调用非const对象。在多线程代码中，容易导致各种问题。</p>
+<p><strong>注意</strong>：此文介绍很多<a href="https://xiaoyangst.github.io/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/">C++11新特性</a>的知识（auto
+关键字、Lambda 表达式、function
+包装器），这不会在此读书笔记中记录，可以在我的其它地方找到相关的笔记，或者你可以自行去学习，毕竟，C++11
+是现在 C++ 学习者必备的语法。</p>
+<h2><span id="操作符包装器">操作符包装器</span></h2>
+<figure>
+<img src="/images/2024/08/16/d632a100-5bc2-11ef-a253-abb20d863bc2.png" alt="操作符包装器.png">
+<figcaption aria-hidden="true">操作符包装器.png</figcaption>
+</figure>
+<p>C++11 使用操作符包装器需要指明类型，如greater&lt;int&gt;()。但是
+C++14 之后就可以不用了，如greater&lt;&gt;()。</p>
+<h2><span id="stdfunction的性能问题和并发安全问题">std::function的性能问题和并发安全问题</span></h2>
+<p>虽然前面的内容都证明 std::function
+很有用，但不能滥用，因为它有明显的性能问题。为了隐藏包含的类型并提供一个对所有可调用类型的通用接口，std::function
+使用类型擦除的技术。本书并不打算深入研究这个问题，只需要知道它是基于虚成员函数调用就足够了。因为虚调用是在运行时进行的，编译器不能在线调用，所以也就失去了优化的机会。</p>
+<p>std::function 另一个需要注意的是，虽然它的调用操作符限定为
+const，但它可以调用非const对象。在多线程代码中，容易导致各种问题。</p>
 <hr>
 <p>⭐️内容取自译者程继洪、孙玉梅、娄山佑《函数式编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
 
@@ -272,7 +282,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\12\第一章：函数式编程简介\" title="第一章：函数式编程简介" rel="bookmark">第一章：函数式编程简介</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\第二章：函数式编程之旅\" title="第二章：函数式编程之旅" rel="bookmark">第二章：函数式编程之旅</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\19\第五章：纯洁性-避免可变状态\" title="第五章：纯洁性--避免可变状态" rel="bookmark">第五章：纯洁性--避免可变状态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\12\第一章：函数式编程简介\" title="第一章：函数式编程简介" rel="bookmark">第一章：函数式编程简介</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\第二章：函数式编程之旅\" title="第二章：函数式编程之旅" rel="bookmark">第二章：函数式编程之旅</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\19\第五章：纯洁性-避免可变状态\" title="第五章：纯洁性--避免可变状态" rel="bookmark">第五章：纯洁性--避免可变状态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -804,11 +814,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

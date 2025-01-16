@@ -173,49 +173,80 @@
             
           </div>
         
-        <p>为什么要单独讲这个？我在导入第三方依赖库时遇到很多曲折，且不说那些没有被 CMake 管理的第三方库。综合考虑选择编译安装 OpenCV，因为它本身还依赖其它第三方库，特别适合做为本节内容演示。</p>
-<p>现在你已经下载并解压 OpenCV 的源码，进入文件夹之后你会看到根 CMakeLists.txt 文件。</p>
+        <p>为什么要单独讲这个？我在导入第三方依赖库时遇到很多曲折，且不说那些没有被
+CMake 管理的第三方库。综合考虑选择编译安装
+OpenCV，因为它本身还依赖其它第三方库，特别适合做为本节内容演示。</p>
+<p>现在你已经下载并解压 OpenCV 的源码，进入文件夹之后你会看到根
+CMakeLists.txt 文件。</p>
 <p>打开你的 cmake-gui 程序：</p>
-<ol>
-<li>点击右侧 Browse Source 指定源文件路径，即根CMakeLists.txt文件存在的路径</li>
-<li>点击右侧 Browse Build 指定 build 输出路径，可以自行创建或者 cmake-gui 帮我们自动创建</li>
+<ol type="1">
+<li>点击右侧 Browse Source
+指定源文件路径，即根CMakeLists.txt文件存在的路径</li>
+<li>点击右侧 Browse Build 指定 build 输出路径，可以自行创建或者
+cmake-gui 帮我们自动创建</li>
 <li>点击左下角 Configure，会让你选择编译的环境</li>
 </ol>
-<p><img src="/images/2024/09/20/cfc0f780-7725-11ef-bb33-ad22fef3cf2e.png" alt="cmakegui.png"></p>
-<p>接下来就关注图中的红色区域的内容，这些都是参数，通常我们需要配置的参数是安装路径 CMAKE_INSTALL_PREFIX。</p>
-<p><img src="/images/2024/09/20/d35a23d0-7725-11ef-bb33-ad22fef3cf2e.png" alt="安装路径.png"></p>
-<p>设置好对应的参数之后，再次点击 Configure 对设置的参数进行更新，没有出错之后（会出错，这个后面单独拎出来谈）点击 Generate 即可。</p>
-<p>退出 cmake-gui 程序，我们来到终端（ OpenCV 源码的 build 目录下，这个 build 文件夹前面我们就创建的，即 Browse Build 指定 build 输出路径），通过命令继续编译。</p>
+<figure>
+<img src="/images/2024/09/20/cfc0f780-7725-11ef-bb33-ad22fef3cf2e.png" alt="cmakegui.png">
+<figcaption aria-hidden="true">cmakegui.png</figcaption>
+</figure>
+<p>接下来就关注图中的红色区域的内容，这些都是参数，通常我们需要配置的参数是安装路径
+CMAKE_INSTALL_PREFIX。</p>
+<figure>
+<img src="/images/2024/09/20/d35a23d0-7725-11ef-bb33-ad22fef3cf2e.png" alt="安装路径.png">
+<figcaption aria-hidden="true">安装路径.png</figcaption>
+</figure>
+<p>设置好对应的参数之后，再次点击 Configure
+对设置的参数进行更新，没有出错之后（会出错，这个后面单独拎出来谈）点击
+Generate 即可。</p>
+<p>退出 cmake-gui 程序，我们来到终端（ OpenCV 源码的 build 目录下，这个
+build 文件夹前面我们就创建的，即 Browse Build 指定 build
+输出路径），通过命令继续编译。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">mingw32-make -j6<br>    <br>mingw32-make install<br></code></pre></td></tr></table></figure>
-
-<p>然后把我们编译成功之后 OpenCV 的 bin 文件目录加入到环境变量中，重启电脑即可。</p>
+<p>然后把我们编译成功之后 OpenCV 的 bin
+文件目录加入到环境变量中，重启电脑即可。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">D:\opencv<span class="hljs-number">-4.10</span><span class="hljs-number">.0</span>\opencv_x64\x64\mingw\bin<br></code></pre></td></tr></table></figure>
-
 <hr>
-<p>前面有个地方说明，即点击 Configure 对设置的参数进行更新会出错，这是因为 OpenCV 需要去远端下载文件，往往下载失败。</p>
-<p>当然，这不是我要讲的主题，我要说的是 OpenCV 依赖 ffmpeg，不在编译 OpenCV 指定 ffmpeg 第三方库，OpenCV 将无法处理视频。</p>
-<p>现在我假定你已经编译安装 ffmpeg 了，你如何为 OpenCV  指定 ffmpeg 的安装路径 ？点击 Configure 对设置的参数进行更新会出错，这里面的出错信息就包含让你如何通过设置参数指定 ffmpeg 的安装路径。</p>
+<p>前面有个地方说明，即点击 Configure
+对设置的参数进行更新会出错，这是因为 OpenCV
+需要去远端下载文件，往往下载失败。</p>
+<p>当然，这不是我要讲的主题，我要说的是 OpenCV 依赖 ffmpeg，不在编译
+OpenCV 指定 ffmpeg 第三方库，OpenCV 将无法处理视频。</p>
+<p>现在我假定你已经编译安装 ffmpeg 了，你如何为 OpenCV 指定 ffmpeg
+的安装路径 ？点击 Configure
+对设置的参数进行更新会出错，这里面的出错信息就包含让你如何通过设置参数指定
+ffmpeg 的安装路径。</p>
 <p>在系统环境变量中配置之后，记得重启电脑才能生效。</p>
-<p><img src="/images/2024/09/20/d8548dd0-7725-11ef-bb33-ad22fef3cf2e.png" alt="ffmpeg.png"></p>
-<p>往后，如果你想要在你的项目中使用 OpenCV ，只需要把之前配置的安装路径下的文件拷贝过去即可。</p>
-<p>但这通常还不够，因为需要配置我们项目的 CMakeLists.txt 文件来找到第三方库。</p>
+<figure>
+<img src="/images/2024/09/20/d8548dd0-7725-11ef-bb33-ad22fef3cf2e.png" alt="ffmpeg.png">
+<figcaption aria-hidden="true">ffmpeg.png</figcaption>
+</figure>
+<p>往后，如果你想要在你的项目中使用 OpenCV
+，只需要把之前配置的安装路径下的文件拷贝过去即可。</p>
+<p>但这通常还不够，因为需要配置我们项目的 CMakeLists.txt
+文件来找到第三方库。</p>
 <p>关于如何找到第三方库，学习上节内容之后，各位不会陌生，但是我们上节的文件结构相当简单，如果面对那种文件结构层级很多的怎么办？尽管用上节的内容也可以解决，但非常的麻烦。</p>
-<p>我想一个好的库文件（用 CMake 管理）应该只需要几个语法就能找到并导入，这通常也是存在的。</p>
-<p><img src="/images/2024/09/20/dc8ae480-7725-11ef-bb33-ad22fef3cf2e.png" alt="findpackage.png"></p>
-<p>在我们的安装路径中找到 .cmake 配置文件（通常命名为<strong>库名称+Config.cmake</strong>），里面就会有如何帮我们导入第三方库的方式，打开看看里面前面注释的部分的核心内容。</p>
+<p>我想一个好的库文件（用 CMake
+管理）应该只需要几个语法就能找到并导入，这通常也是存在的。</p>
+<figure>
+<img src="/images/2024/09/20/dc8ae480-7725-11ef-bb33-ad22fef3cf2e.png" alt="findpackage.png">
+<figcaption aria-hidden="true">findpackage.png</figcaption>
+</figure>
+<p>在我们的安装路径中找到 .cmake
+配置文件（通常命名为<strong>库名称+Config.cmake</strong>），里面就会有如何帮我们导入第三方库的方式，打开看看里面前面注释的部分的核心内容。</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">FIND_PACKAGE</span>(OpenCV REQUIRED)	<span class="hljs-comment">#找到库文件</span><br><span class="hljs-keyword">TARGET_LINK_LIBRARIES</span>(MY_TARGET_NAME <span class="hljs-variable">$&#123;OpenCV_LIBS&#125;</span>)	<span class="hljs-comment">#链接到库文件</span><br></code></pre></td></tr></table></figure>
-
-<p>还有一个参数 OpenCV_INCLUDE_DIRS 提供给我们，这里包含所有头文件，我们只需要通过 include_directories 将其导入即可，这样就找到所有头文件了。</p>
+<p>还有一个参数 OpenCV_INCLUDE_DIRS
+提供给我们，这里包含所有头文件，我们只需要通过 include_directories
+将其导入即可，这样就找到所有头文件了。</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)<br></code></pre></td></tr></table></figure>
-
 <p>为了让如上内容都生效，我们就需要设置这个 .cmake 文件的路径。</p>
-<p>而且你会发现OpenCV_DIR这个参数好像在 .cmake 文件中没有说明，我猜想它的构成应该是FIND_PACKAGE中的库名称，然后加上下划线和DIR构成，即<strong>库名称_DIR</strong>（官网有说明，也就不是猜想了）。</p>
+<p>而且你会发现OpenCV_DIR这个参数好像在 .cmake
+文件中没有说明，我猜想它的构成应该是FIND_PACKAGE中的库名称，然后加上下划线和DIR构成，即<strong>库名称_DIR</strong>（官网有说明，也就不是猜想了）。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">set</span>(OpenCV_DIR <span class="hljs-string">&quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/thirdpart/opencv_x64&quot;</span>)<br></code></pre></td></tr></table></figure>
-
 <p>下面，就看看完整版的 CMakeLists.txt 文件：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.17</span>)<br><span class="hljs-keyword">project</span>(YourProjectName)<br><br><span class="hljs-keyword">set</span>(CMAKE_CXX_STANDARD <span class="hljs-number">14</span>)<br><br><span class="hljs-comment"># 设置 OpenCV 的路径</span><br><span class="hljs-keyword">set</span>(OpenCV_DIR <span class="hljs-string">&quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/thirdpart/opencv_x64&quot;</span>)<br><br><span class="hljs-keyword">find_package</span>(OpenCV REQUIRED)<br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)<br><br><span class="hljs-keyword">add_executable</span>(YourProjectName main.cpp)<br><span class="hljs-keyword">target_link_libraries</span>(YourProjectName <span class="hljs-variable">$&#123;OpenCV_LIBS&#125;</span>)<br></code></pre></td></tr></table></figure>
-
-<p>这里面有个新语法 FIND_PACKAGE，会在下节介绍，如何把我们的库文件也能像这样让用户轻松找到呢？下节就要见分晓。</p>
+<p>这里面有个新语法
+FIND_PACKAGE，会在下节介绍，如何把我们的库文件也能像这样让用户轻松找到呢？下节就要见分晓。</p>
 <p>注：<strong>库名称+Config.cmake</strong>文件在build目录下也存在，而且也更详细，建议参考。</p>
 
       </div>
@@ -301,7 +332,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第七章：CMake-构建-Qt-项目\" title="第七章：CMake 构建 Qt 项目" rel="bookmark">第七章：CMake 构建 Qt 项目</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第七章：CMake-构建-Qt-项目\" title="第七章：CMake 构建 Qt 项目" rel="bookmark">第七章：CMake 构建 Qt 项目</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -833,11 +864,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

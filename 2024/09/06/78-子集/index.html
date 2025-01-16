@@ -174,9 +174,11 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++">从图中红线部分，可以看出遍历这个树的时候，把所有节点都记录下来，就是要求的子集集合。<span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; result;<br>    vector&lt;<span class="hljs-type">int</span>&gt; path;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtrace</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> cur)</span></span>&#123;<br><br>        result.<span class="hljs-built_in">push_back</span>(path);<br><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = cur; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            path.<span class="hljs-built_in">push_back</span>(nums[i]);<br>            <span class="hljs-built_in">backtrace</span>(nums,i + <span class="hljs-number">1</span>);<br>            path.<span class="hljs-built_in">pop_back</span>();<br>        &#125;<br>    &#125;<br><br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">subsets</span>(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums) &#123;<br>        <span class="hljs-built_in">backtrace</span>(nums,<span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>子集问题是把树所有的节点收集起来，见下图：</p>
-<p><img src="/images/2024/09/06/6feda540-6c55-11ef-a49b-a5cc0f1e27e0.png" alt="78.子集.png"></p>
+<figure>
+<img src="/images/2024/09/06/6feda540-6c55-11ef-a49b-a5cc0f1e27e0.png" alt="78.子集.png">
+<figcaption aria-hidden="true">78.子集.png</figcaption>
+</figure>
 <p>从图中红线部分，可以看出<strong>遍历这个树的时候，把所有节点都记录下来，就是要求的子集集合</strong>。</p>
 
       </div>
@@ -262,7 +264,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\27\131-分割回文串\" title="131.分割回文串" rel="bookmark">131.分割回文串</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\17-电话号码的字母组合\" title="17.电话号码的字母组合" rel="bookmark">17.电话号码的字母组合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\218-组合III\" title="218.组合III" rel="bookmark">218.组合III</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\27\131-分割回文串\" title="131.分割回文串" rel="bookmark">131.分割回文串</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\17-电话号码的字母组合\" title="17.电话号码的字母组合" rel="bookmark">17.电话号码的字母组合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\218-组合III\" title="218.组合III" rel="bookmark">218.组合III</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -794,11 +796,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,43 +174,52 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E5%AE%8F%E5%AE%9A%E4%B9%89">宏定义</a></li>
-<li><a href="#%E5%AE%8F%E5%87%BD%E6%95%B0">宏函数</a></li>
+<li><a href="#宏定义">宏定义</a></li>
+<li><a href="#宏函数">宏函数</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="宏定义">宏定义</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 5</span><br></code></pre></td></tr></table></figure>
-
+<h2><span id="宏定义">宏定义</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 5</span><br></code></pre></td></tr></table></figure>
 <p>切记，宏定义的后面没有<code>;</code></p>
-<p>实际上任何以 # 开头的预定义后面都不能有分号，毕竟文本替换会把这个分号一并带过去，那么必然照成错误。</p>
+<p>实际上任何以 #
+开头的预定义后面都不能有分号，毕竟文本替换会把这个分号一并带过去，那么必然照成错误。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 5;		<span class="hljs-comment">// 测试如果添加 分号 会造成什么错误</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num = N * N;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>测试结果：</p>
-<p><img src="/images/2024/08/28/6c504320-6516-11ef-b96b-3728f540b1e8.png" alt="宏定义.png"></p>
-<h2><span id="宏函数">宏函数</span></h2><p>宏函数要注意的地方就是，一定要学会添加括号<code>()</code></p>
-<ol>
+<figure>
+<img src="/images/2024/08/28/6c504320-6516-11ef-b96b-3728f540b1e8.png" alt="宏定义.png">
+<figcaption aria-hidden="true">宏定义.png</figcaption>
+</figure>
+<h2><span id="宏函数">宏函数</span></h2>
+<p>宏函数要注意的地方就是，一定要学会添加括号<code>()</code></p>
+<ol type="1">
 <li>参数要加括号</li>
 <li>整个表达式要加括号</li>
 <li>左括号要紧靠宏函数名称</li>
 </ol>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FUN(x) x * x</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br>	<span class="hljs-type">int</span> x = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> y = <span class="hljs-number">20</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;x * x = %d&quot;</span>, <span class="hljs-built_in">FUN</span>(x + y));<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>查看预编译情况：</p>
-<p><img src="/images/2024/08/28/67877070-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数1.png"></p>
+<figure>
+<img src="/images/2024/08/28/67877070-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数1.png">
+<figcaption aria-hidden="true">宏函数1.png</figcaption>
+</figure>
 <p>预处理语句就是单纯的文本替换，所有对于宏函数务必严格添加合适的括号来保证语句逻辑的合理性。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> FUN(x) ((x) * (x))</span><br></code></pre></td></tr></table></figure>
-
 <p>再次查看预编译情况：</p>
-<p><img src="/images/2024/08/28/632cc8e0-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数2.png"></p>
+<figure>
+<img src="/images/2024/08/28/632cc8e0-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数2.png">
+<figcaption aria-hidden="true">宏函数2.png</figcaption>
+</figure>
 <p>如果左括号没有紧靠宏函数，会如何？这其实很容易被人忽视，还是先看看现象：</p>
-<p><img src="/images/2024/08/28/5ee7f340-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数3.png"></p>
+<figure>
+<img src="/images/2024/08/28/5ee7f340-6516-11ef-b96b-3728f540b1e8.png" alt="宏函数3.png">
+<figcaption aria-hidden="true">宏函数3.png</figcaption>
+</figure>
 <p>没错，如果你左括号没有紧靠宏函数，那么这将是宏定义，而非一个宏函数了。</p>
 <p>当然，前面写的宏函数都是一行代码，如果是多行的那种代码，注意分行。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> MAX(a, b) \</span><br><span class="hljs-meta">    (&#123; \</span><br><span class="hljs-meta">        typeof(a) _a = (a); \</span><br><span class="hljs-meta">        typeof(b) _b = (b); \</span><br><span class="hljs-meta">        _a &gt; _b ? _a : _b; \</span><br><span class="hljs-meta">    &#125;)</span><br></code></pre></td></tr></table></figure>
-
-<p>除了最后一行不用添加 <code>\</code>，其余行都要添加。宏的每一行都以反斜杠（<code>\</code>）结尾，以指示宏定义的行继续到下一行。在宏定义的最后一行，反斜杠并不需要，因为没有更多的行继续定义宏。如果在最后一行添加反斜杠，它实际上是多余的，因为宏定义已经结束。</p>
+<p>除了最后一行不用添加
+<code>\</code>，其余行都要添加。宏的每一行都以反斜杠（<code>\</code>）结尾，以指示宏定义的行继续到下一行。在宏定义的最后一行，反斜杠并不需要，因为没有更多的行继续定义宏。如果在最后一行添加反斜杠，它实际上是多余的，因为宏定义已经结束。</p>
 
       </div>
     </div>
@@ -295,7 +304,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -827,11 +836,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

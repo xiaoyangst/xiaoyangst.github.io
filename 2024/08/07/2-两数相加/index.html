@@ -174,17 +174,19 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">addTwoNumbers</span><span class="hljs-params">(ListNode* l1, ListNode* l2)</span> </span>&#123;<br>        <span class="hljs-type">bool</span> note = <span class="hljs-literal">false</span>;<br>        ListNode* head = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">-1</span>);<br>        ListNode* rehead = head;<br>        <span class="hljs-keyword">while</span> (l1 != <span class="hljs-literal">nullptr</span> &amp;&amp; l2 != <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-type">int</span> num = l1-&gt;val + l2-&gt;val;<br>            <span class="hljs-keyword">if</span> (note) &#123;<br>                num++;<br>                note = <span class="hljs-literal">false</span>;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (num &gt;= <span class="hljs-number">10</span>) &#123;<br>                num = num % <span class="hljs-number">10</span>;<br>                note = <span class="hljs-literal">true</span>;<br>            &#125;<br>            ListNode* tmp = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(num);<br>            rehead-&gt;next = tmp;<br>            rehead = rehead-&gt;next;<br>            l1 = l1-&gt;next;<br>            l2 = l2-&gt;next;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (l2) &#123;<br>            <span class="hljs-built_in">swap</span>(l1, l2);<br>        &#125;<br>        <span class="hljs-keyword">while</span> (l1 != <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-type">int</span> num = l1-&gt;val;<br>            <span class="hljs-keyword">if</span> (note) &#123;<br>                num++;<br>                note = <span class="hljs-literal">false</span>;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (num &gt;= <span class="hljs-number">10</span>) &#123;<br>                num = num % <span class="hljs-number">10</span>;<br>                note = <span class="hljs-literal">true</span>;<br>            &#125;<br>            ListNode* tmp = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(num);<br>            rehead-&gt;next = tmp;<br>            rehead = rehead-&gt;next;<br>            l1 = l1-&gt;next;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (note) &#123;<br>            ListNode* tmp = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">1</span>);<br>            rehead-&gt;next = tmp;<br>        &#125;<br>        <span class="hljs-keyword">return</span> head-&gt;next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>还是要看懂题目，实际上就是将两个链表从头到尾取相同位置的节点相加，这可能出现以下情况：</p>
 <ul>
 <li>两个链表长度相同且最后没有产生进位，返回 head-&gt;next 即可</li>
-<li>两个链表长度相同且最后有产生进位，创建一个值为 1 的新节点 tmp，然后 rehead-&gt;next 指向 tmp节点，最后返回 head-&gt;next 即可</li>
-<li>两个链表长度不同，那么对于没有处理完的链表中的节点逐一移动到 rehead 节点之后，接着进入上述的两种情况中继续处理</li>
+<li>两个链表长度相同且最后有产生进位，创建一个值为 1 的新节点 tmp，然后
+rehead-&gt;next 指向 tmp节点，最后返回 head-&gt;next 即可</li>
+<li>两个链表长度不同，那么对于没有处理完的链表中的节点逐一移动到 rehead
+节点之后，接着进入上述的两种情况中继续处理</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">输入：l1 = [5,6,4,9], l2 = [2,4,9]<br>输出：[7,0,4,0,1]<br>解释：9465 + 942 = 10407<br></code></pre></td></tr></table></figure>
-
-<p>当然，还有就是关于进位的处理，这并不难，只需要用一个标记位 note 来标识是否有进位，还有要记得正确更新 note 的情况。</p>
+<p>当然，还有就是关于进位的处理，这并不难，只需要用一个标记位 note
+来标识是否有进位，还有要记得正确更新 note 的情况。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (note) &#123;<br>      num++;<br>      note = <span class="hljs-literal">false</span>;<br> &#125;<br><span class="hljs-keyword">if</span> (num &gt;= <span class="hljs-number">10</span>) &#123;<br>      num = num % <span class="hljs-number">10</span>;<br>      note = <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -268,7 +270,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -800,11 +802,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

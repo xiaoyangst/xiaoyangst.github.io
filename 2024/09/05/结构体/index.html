@@ -174,40 +174,43 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E5%A3%B0%E6%98%8E%E6%96%B9%E5%BC%8F">声明方式</a></li>
-<li><a href="#%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90">字节对齐</a></li>
-<li><a href="#%E6%93%8D%E4%BD%9C">操作</a></li>
+<li><a href="#声明方式">声明方式</a></li>
+<li><a href="#字节对齐">字节对齐</a></li>
+<li><a href="#操作">操作</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="声明方式">声明方式</span></h2><p>结构体常见的两种声明方式，其余稀奇古怪的皆不谈。</p>
+<h2><span id="声明方式">声明方式</span></h2>
+<p>结构体常见的两种声明方式，其余稀奇古怪的皆不谈。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Node</span> &#123;</span><br>	<span class="hljs-type">int</span> data;<br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Node</span>* <span class="hljs-title">next</span>;</span><br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>上面这种方式最为常见，在创建结构体的时候，必须是 struct Node 才能创建。如果你觉得每次创建都要加上 struct 关键字很麻烦，那可以起别名，就像下面这样。</p>
+<p>上面这种方式最为常见，在创建结构体的时候，必须是 struct Node
+才能创建。如果你觉得每次创建都要加上 struct
+关键字很麻烦，那可以起别名，就像下面这样。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span><br>	<span class="hljs-type">int</span> data;<br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span>* <span class="hljs-title">next</span>;</span><br>&#125; Node;<br></code></pre></td></tr></table></figure>
-
 <p>这其中的原理是什么呢 ？</p>
-<p>typedef 是给类型起别名的，因此我们的下面这部分其实代表的是一个自定义类型，因此为这个自定义类型取名为 Node，方便以后使用。</p>
+<p>typedef
+是给类型起别名的，因此我们的下面这部分其实代表的是一个自定义类型，因此为这个自定义类型取名为
+Node，方便以后使用。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span><br>	<span class="hljs-type">int</span> data;<br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span>* <span class="hljs-title">next</span>;</span><br>&#125;<br></code></pre></td></tr></table></figure>
-
-<h2><span id="字节对齐">字节对齐</span></h2><p>这个已在其他文章中讲过，不必多言，这里重点说一说结构体字节对齐的特点：</p>
-<ol>
+<h2><span id="字节对齐">字节对齐</span></h2>
+<p>这个已在其他文章中讲过，不必多言，这里重点说一说结构体字节对齐的特点：</p>
+<ol type="1">
 <li>一片连续的内存空间</li>
 <li>成员是按声明的顺序依次存放</li>
 <li>在结构体的中间或者后面可能会存在填充</li>
 <li>填充的目的是为了对齐，对齐的目的是为了更快的访问数据项</li>
 </ol>
-<h2><span id="操作">操作</span></h2><p>如果想把 一个结构体所有的数据全部 复制给另一个数据，只需要通过 &#x3D; 赋值即可，而数组就做不到了。</p>
+<h2><span id="操作">操作</span></h2>
+<p>如果想把 一个结构体所有的数据全部 复制给另一个数据，只需要通过 =
+赋值即可，而数组就做不到了。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">Node node1 = &#123; <span class="hljs-number">12</span>,<span class="hljs-literal">NULL</span> &#125;;<br>Node node2 = &#123; <span class="hljs-number">13</span>,<span class="hljs-literal">NULL</span> &#125;;<br><br>node2 = node1;<br></code></pre></td></tr></table></figure>
-
 <p>那我们如何访问结构体的数据呢？</p>
 <ul>
 <li>如果值访问，那就是 <code>.</code></li>
 <li>如果是指针访问，那就是 <code>-&gt;</code></li>
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c">Node node1 = &#123; <span class="hljs-number">12</span>,<span class="hljs-literal">NULL</span> &#125;;<br>node1.data = <span class="hljs-number">14</span>;	<span class="hljs-comment">// 值访问</span><br><br>Node* node2 = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(Node));<br>node2-&gt;data = <span class="hljs-number">17</span>;	<span class="hljs-comment">// 指针访问</span><br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -291,7 +294,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -823,11 +826,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

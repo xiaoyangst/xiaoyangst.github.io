@@ -174,34 +174,68 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#rod-%E5%8E%9F%E7%90%86">ROD 原理</a></li>
-<li><a href="#%E6%89%A7%E8%A1%8C%E5%BF%AB%E7%85%A7%E6%97%B6%E6%95%B0%E6%8D%AE%E8%83%BD%E5%90%A6%E8%A2%AB%E4%BF%AE%E6%94%B9">执行快照时，数据能否被修改？</a></li>
-<li><a href="#rod-%E5%92%8C-aof-%E6%B7%B7%E5%90%88">ROD 和 AOF 混合</a></li>
+<li><a href="#rod-原理">ROD 原理</a></li>
+<li><a href="#执行快照时数据能否被修改">执行快照时，数据能否被修改？</a></li>
+<li><a href="#rod-和-aof-混合">ROD 和 AOF 混合</a></li>
 </ul>
 <!-- tocstop -->
-
 <p>前面介绍的 AOF 是存储操作指令，而 RDB 是存储二进制数据。</p>
-<p>我不知道你有没有使用过 Vmware 的虚拟机快照，它就是记录一瞬间的状态，从这个瞬间到此前的所有全部都保存下来。尽管这是一瞬间的定格，但是占用的空间也是相当不小，所以拍摄的快照越多，占用的磁盘空间也会很大，但是却不会比虚拟机本身大，甚至要小很多。</p>
-<p>所以，RDB 快照就是记录某一个瞬间的内存数据，记录的是实际数据，而 AOF 文件记录的是命令操作的日志，而不是实际的数据。</p>
-<p>因此，在 Redis 恢复数据时，RDB 恢复数据的效率会比 AOF 高些，因为直接将 RDB 文件读入内存就可以，不用像 AOF 那样通过执行命令来恢复数据，明显多个步骤。</p>
-<h2><span id="rod-原理">ROD 原理</span></h2><p>Redis 提供两个命令来生成 RDB 文件，分别是 save 和 bgsave，区别就在于是否在【主线程】执行：</p>
+<p>我不知道你有没有使用过 Vmware
+的虚拟机快照，它就是记录一瞬间的状态，从这个瞬间到此前的所有全部都保存下来。尽管这是一瞬间的定格，但是占用的空间也是相当不小，所以拍摄的快照越多，占用的磁盘空间也会很大，但是却不会比虚拟机本身大，甚至要小很多。</p>
+<p>所以，RDB 快照就是记录某一个瞬间的内存数据，记录的是实际数据，而 AOF
+文件记录的是命令操作的日志，而不是实际的数据。</p>
+<p>因此，在 Redis 恢复数据时，RDB 恢复数据的效率会比 AOF
+高些，因为直接将 RDB 文件读入内存就可以，不用像 AOF
+那样通过执行命令来恢复数据，明显多个步骤。</p>
+<h2><span id="rod-原理">ROD 原理</span></h2>
+<p>Redis 提供两个命令来生成 RDB 文件，分别是 save 和
+bgsave，区别就在于是否在【主线程】执行：</p>
 <ul>
-<li>save 会在主线程执行，由于 Redis 执行命令也是在主线程，save 就会阻塞主线程，这并不好。</li>
-<li>bgsave 不会在主线程，而是会创建一个子进程去生成 RDB 文件，这样就可以避免阻塞主线程。</li>
+<li>save 会在主线程执行，由于 Redis 执行命令也是在主线程，save
+就会阻塞主线程，这并不好。</li>
+<li>bgsave 不会在主线程，而是会创建一个子进程去生成 RDB
+文件，这样就可以避免阻塞主线程。</li>
 </ul>
-<p>Redis 是【全量快照】，也就是说每次执行快照，都是把内存中【所有数据】都记录到磁盘中，这就和前面我讲虚拟机快照一个道理。</p>
-<p>所以可以认为，执行快照是一个比较重的操作（因为内存中的命令越来越多），如果频率太频繁，可能会对 Redis 性能产生影响。如果频率太低，服务器故障时，丢失的数据会更多。通常可能设置至少5分钟才保存一次快照，这时如果 Redis 出现宕机等情况，则意味着最多可能丢失5分钟数据。</p>
-<p>这就是 RDB 快照的缺点，在服务器发生故障时，丢失的数据会比 AOF 持久化的方式更多，因为 RDB 快照是全量快照的方式，因此执行的频率不能太频繁，否则会影响 Redis 性能，而 AOF 日志可以以秒级的方式记录操作命令，所以丢失的数据就相对更少。</p>
-<h2><span id="执行快照时数据能否被修改">执行快照时，数据能否被修改？</span></h2><p>执行 bgsave 过程中，Redis 依然可以继续处理操作命令，毕竟主线程也没有被阻塞，还是可以修改数据的（执行写命令）。</p>
-<p>如果共享的数据（父子进程没有修改数据，会共享同一块物理内存）没有被修改，那么正常写入到 RDB 文件中。如果有修改，修改者重新分配一块物理内存，这块被修改的物理内存的数据将不会被写入 RDB 文件中，只能等到下一次 启动 bgsave 才有机会写入 RDB 文件中了。</p>
-<p>如果机器突然崩溃，内存的数据全部丢失，意味着最新的数据没有被保存到 RDB 文件中，我们还指望下一次再把最新的数据写入 到 RDB 文件中，也成一场幻梦了。</p>
-<p>再有，父子进程共享同一块物理内存时，父进程把这些物理内存的数据全修改了，那么内存就是原先的两倍（父子各占一份）。而这些内容又不会在本次写入 RDB 文件中，如果反复如此，没有一次会写入 RDB 文件中，这是一种极端情况的考虑。</p>
-<h2><span id="rod-和-aof-混合">ROD 和 AOF 混合</span></h2><p>ROD 和 AOF 各有优缺点，如果能将两个优点结合将再好不过了。</p>
-<p><img src="/images/2024/10/01/22153b90-7f9b-11ef-ae18-0f309765e4c5.png" alt="混合.png"></p>
-<p>当开启混合持久化，在 AOF 重写日志时，fork 出来的重写子进程会先将与主线程共享的内存数据以 RDB 方式写入到 AOF 文件，然后主线程处理的操作命令会被记录到重写缓冲区，重写缓冲区的增量命令会以 AOF 方式写入到 AOF 文件，写入完成后通知主进程将新的含有 RDB 格式和 AOF 格式的 AOF 文件替换旧的 AOF 文件。</p>
-<p>前半部分是 RDB 格式的全量数据，后半部分是 AOF 格式的增量数据。当 Redis 重启加载数据时，先加载 RDB 内容，这个地方会很快。后续的内容是后台子进程重写 AOF 期间主线程执行的写命令，可以使得数据更少的丢失。</p>
+<p>Redis
+是【全量快照】，也就是说每次执行快照，都是把内存中【所有数据】都记录到磁盘中，这就和前面我讲虚拟机快照一个道理。</p>
+<p>所以可以认为，执行快照是一个比较重的操作（因为内存中的命令越来越多），如果频率太频繁，可能会对
+Redis
+性能产生影响。如果频率太低，服务器故障时，丢失的数据会更多。通常可能设置至少5分钟才保存一次快照，这时如果
+Redis 出现宕机等情况，则意味着最多可能丢失5分钟数据。</p>
+<p>这就是 RDB 快照的缺点，在服务器发生故障时，丢失的数据会比 AOF
+持久化的方式更多，因为 RDB
+快照是全量快照的方式，因此执行的频率不能太频繁，否则会影响 Redis
+性能，而 AOF
+日志可以以秒级的方式记录操作命令，所以丢失的数据就相对更少。</p>
+<h2><span id="执行快照时数据能否被修改">执行快照时，数据能否被修改？</span></h2>
+<p>执行 bgsave 过程中，Redis
+依然可以继续处理操作命令，毕竟主线程也没有被阻塞，还是可以修改数据的（执行写命令）。</p>
+<p>如果共享的数据（父子进程没有修改数据，会共享同一块物理内存）没有被修改，那么正常写入到
+RDB
+文件中。如果有修改，修改者重新分配一块物理内存，这块被修改的物理内存的数据将不会被写入
+RDB 文件中，只能等到下一次 启动 bgsave 才有机会写入 RDB 文件中了。</p>
+<p>如果机器突然崩溃，内存的数据全部丢失，意味着最新的数据没有被保存到
+RDB 文件中，我们还指望下一次再把最新的数据写入 到 RDB
+文件中，也成一场幻梦了。</p>
+<p>再有，父子进程共享同一块物理内存时，父进程把这些物理内存的数据全修改了，那么内存就是原先的两倍（父子各占一份）。而这些内容又不会在本次写入
+RDB 文件中，如果反复如此，没有一次会写入 RDB
+文件中，这是一种极端情况的考虑。</p>
+<h2><span id="rod-和-aof-混合">ROD 和 AOF 混合</span></h2>
+<p>ROD 和 AOF 各有优缺点，如果能将两个优点结合将再好不过了。</p>
+<figure>
+<img src="/images/2024/10/01/22153b90-7f9b-11ef-ae18-0f309765e4c5.png" alt="混合.png">
+<figcaption aria-hidden="true">混合.png</figcaption>
+</figure>
+<p>当开启混合持久化，在 AOF 重写日志时，fork
+出来的重写子进程会先将与主线程共享的内存数据以 RDB 方式写入到 AOF
+文件，然后主线程处理的操作命令会被记录到重写缓冲区，重写缓冲区的增量命令会以
+AOF 方式写入到 AOF 文件，写入完成后通知主进程将新的含有 RDB 格式和 AOF
+格式的 AOF 文件替换旧的 AOF 文件。</p>
+<p>前半部分是 RDB 格式的全量数据，后半部分是 AOF 格式的增量数据。当
+Redis 重启加载数据时，先加载 RDB
+内容，这个地方会很快。后续的内容是后台子进程重写 AOF
+期间主线程执行的写命令，可以使得数据更少的丢失。</p>
 <hr>
 <p>⭐️内容取自《小林Coding》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议访问<a target="_blank" rel="noopener" href="https://xiaolincoding.com/">官方网站</a>。</p>
 
@@ -288,7 +322,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\17\Redis主从复制\" title="Redis主从复制" rel="bookmark">Redis主从复制</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\17\Redis哨兵\" title="Redis哨兵" rel="bookmark">Redis哨兵</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\17\Redis哨兵\" title="Redis哨兵" rel="bookmark">Redis哨兵</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\17\Redis主从复制\" title="Redis主从复制" rel="bookmark">Redis主从复制</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
     
   </div>
 </div>
@@ -820,11 +854,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

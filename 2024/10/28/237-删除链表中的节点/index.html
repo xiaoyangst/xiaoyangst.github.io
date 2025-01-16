@@ -174,12 +174,13 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">deleteNode</span><span class="hljs-params">(ListNode* node)</span> </span>&#123;<br>        ListNode* prev = node;<br>        <span class="hljs-keyword">while</span>(node-&gt;next)&#123;<br>            <span class="hljs-type">int</span> val = node-&gt;next-&gt;val;<br>            node-&gt;val = val;<br>            prev = node;<br>            node = node-&gt;next;<br>        &#125;  <span class="hljs-comment">// 最后一个节点</span><br>        prev-&gt;next = <span class="hljs-literal">NULL</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>即便如此，这份代码还是过于冗余，这本质上还是将待删除的节点的值改为下一个节点的值，然后指向下一个节点的指向。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 题目已保证不是链表最后一个节点</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">deleteNode</span><span class="hljs-params">(ListNode* node)</span> </span>&#123;<br>        node-&gt;val = node-&gt;next-&gt;val;<br>        node-&gt;next = node-&gt;next-&gt;next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>示意图如下：</p>
-<p><img src="/images/2024/10/28/588c7e40-951c-11ef-af2f-5fe05fafe1d8.png" alt="237. 删除链表中的节点.png"></p>
+<figure>
+<img src="/images/2024/10/28/588c7e40-951c-11ef-af2f-5fe05fafe1d8.png" alt="237. 删除链表中的节点.png">
+<figcaption aria-hidden="true">237. 删除链表中的节点.png</figcaption>
+</figure>
 
       </div>
     </div>
@@ -264,7 +265,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -796,11 +797,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,90 +174,132 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%8E%A5%E5%8F%A3">接口</a><ul>
-<li><a href="#message-containershttpswwwboostorgdoclibsmasterlibsbeastdochtmlbeastusing_httpmessage_containershtml">Message Containers</a></li>
-<li><a href="#message-stream-operationshttpswwwboostorgdoclibsmasterlibsbeastdochtmlbeastusing_httpmessage_stream_operationshtml">Message Stream Operations</a></li>
+<li><a href="#接口">接口</a>
+<ul>
+<li><a href="#message-containershttpswwwboostorgdoclibsmasterlibsbeastdochtmlbeastusing_httpmessage_containershtml">Message
+Containers</a></li>
+<li><a href="#message-stream-operationshttpswwwboostorgdoclibsmasterlibsbeastdochtmlbeastusing_httpmessage_stream_operationshtml">Message
+Stream Operations</a></li>
 <li><a href="#serialization">Serialization</a></li>
 <li><a href="#parsing">Parsing</a></li>
-</ul>
-</li>
-<li><a href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%92%8C%E6%B5%8B%E8%AF%95">代码实现和测试</a></li>
+</ul></li>
+<li><a href="#代码实现和测试">代码实现和测试</a></li>
 </ul>
 <!-- tocstop -->
-
-<p>经过前面几章节的训练，<a target="_blank" rel="noopener" href="https://llfc.club/category?catid=225RaiVNI8pFDD5L4m807g7ZwmF#!aid/2RbaWyENb1b1trG4KoWHtScUHri">基于 Asio 实现HTTP服务器</a>也不难，但是这种造轮子行为还是不推荐的，下面就介绍如何基于 Beast 库实现 HTTP 和 WebSocket 服务器。</p>
-<p>Boost.Beast 是基于 Boost.Asio 的 C++ 网络库，用于处理 HTTP 和 WebSocket 协议。它简化了处理 HTTP 和 WebSocket 请求与响应的过程，同时提供高效的异步操作，广泛用于开发高性能网络应用。</p>
+<p>经过前面几章节的训练，<a target="_blank" rel="noopener" href="https://llfc.club/category?catid=225RaiVNI8pFDD5L4m807g7ZwmF#!aid/2RbaWyENb1b1trG4KoWHtScUHri">基于
+Asio
+实现HTTP服务器</a>也不难，但是这种造轮子行为还是不推荐的，下面就介绍如何基于
+Beast 库实现 HTTP 和 WebSocket 服务器。</p>
+<p>Boost.Beast 是基于 Boost.Asio 的 C++ 网络库，用于处理 HTTP 和
+WebSocket 协议。它简化了处理 HTTP 和 WebSocket
+请求与响应的过程，同时提供高效的异步操作，广泛用于开发高性能网络应用。</p>
 <p>文档地址：<a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/master/libs/beast/doc/html/index.html">Beast官方文档</a></p>
-<h2><span id="接口">接口</span></h2><h3><span id="message-containers"></span></h3><p>完整的 HTTP 消息使用 message class 建模，用户可进行自定义。</p>
+<h2><span id="接口">接口</span></h2>
+<h3><span id="messagecontainers"></span></h3>
+<p>完整的 HTTP 消息使用 message class 建模，用户可进行自定义。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// An HTTP message</span><br><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-type">bool</span> isRequest,             <span class="hljs-comment">// `true` 代表 requests, `false` 代表 responses</span><br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Body</span>,                 <span class="hljs-comment">// Controls the container and algorithms used for the body</span><br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Fields</span> = fields&gt;      <span class="hljs-comment">// The type of container to store the fields</span><br><span class="hljs-keyword">class</span> message;<br><br><span class="hljs-comment">// A typical HTTP request</span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Body</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Fields</span> = fields&gt;<br><span class="hljs-keyword">using</span> request = message&lt;<span class="hljs-literal">true</span>, Body, Fields&gt;;<br><br><span class="hljs-comment">// A typical HTTP response</span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Body</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Fields</span> = fields&gt;<br><span class="hljs-keyword">using</span> response = message&lt;<span class="hljs-literal">false</span>, Body, Fields&gt;;<br></code></pre></td></tr></table></figure>
-
-<p>从上面的模板可以看出，message 通过 第一个参数来区分 request 和 response，然后第三个参数 有默认参数。所以，对于 创建  request 和 response 的时候必须填写的参数是 Body，Fields 是可选的。</p>
-<p><img src="/images/2024/09/19/c6b59930-7661-11ef-a8f8-f3952e97d7ff.png" alt="Body.png"></p>
-<p>这里面值得一提的是 <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/master/libs/beast/doc/html/beast/concepts/DynamicBuffer.html">DynamicBuffer</a> 动态缓冲区。</p>
-<p>动态缓冲区封装了内存存储，该存储可以根据需要自动调整大小，其中内存分为输入序列和输出序列。这些内存区域是动态缓冲区的内部，但提供了对元素的直接访问，以允许它们有效地用于 I&#x2F;O 操作，例如套接字的发送或接收操作。 写入动态缓冲区对象输出序列的数据将追加到同一对象的输入序列中。</p>
+<p>从上面的模板可以看出，message 通过 第一个参数来区分 request 和
+response，然后第三个参数 有默认参数。所以，对于 创建 request 和 response
+的时候必须填写的参数是 Body，Fields 是可选的。</p>
+<figure>
+<img src="/images/2024/09/19/c6b59930-7661-11ef-a8f8-f3952e97d7ff.png" alt="Body.png">
+<figcaption aria-hidden="true">Body.png</figcaption>
+</figure>
+<p>这里面值得一提的是 <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/master/libs/beast/doc/html/beast/concepts/DynamicBuffer.html">DynamicBuffer</a>
+动态缓冲区。</p>
+<p>动态缓冲区封装了内存存储，该存储可以根据需要自动调整大小，其中内存分为输入序列和输出序列。这些内存区域是动态缓冲区的内部，但提供了对元素的直接访问，以允许它们有效地用于
+I/O 操作，例如套接字的发送或接收操作。
+写入动态缓冲区对象输出序列的数据将追加到同一对象的输入序列中。</p>
 <p>如果你要存储 request 和 response ，可以如下定义：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">namespace</span> beast = boost::beast;         <span class="hljs-comment">// from &lt;boost/beast.hpp&gt;</span><br><span class="hljs-keyword">namespace</span> http = beast::http;           <span class="hljs-comment">// from &lt;boost/beast/http.hpp&gt;</span><br><br>http::request&lt;http::dynamic_body&gt; request_;<br>http::response&lt;http::dynamic_body&gt; response_;<br></code></pre></td></tr></table></figure>
-
 <p>等后面我们学习消息的发送和接受，就能用到了。</p>
 <p>这里记录一下官方的使用案例：</p>
 <p><strong>我们构建了一个带有空消息正文的 HTTP GET 请求。</strong></p>
-<p><img src="/images/2024/09/19/c1dce800-7661-11ef-a8f8-f3952e97d7ff.png" alt="createReq.png"></p>
+<figure>
+<img src="/images/2024/09/19/c1dce800-7661-11ef-a8f8-f3952e97d7ff.png" alt="createReq.png">
+<figcaption aria-hidden="true">createReq.png</figcaption>
+</figure>
 <p><strong>我们创建了一个 HTTP 响应，状态代码表示成功。</strong></p>
-<p><img src="/images/2024/09/19/be018290-7661-11ef-a8f8-f3952e97d7ff.png" alt="createRes.png"></p>
+<figure>
+<img src="/images/2024/09/19/be018290-7661-11ef-a8f8-f3952e97d7ff.png" alt="createRes.png">
+<figcaption aria-hidden="true">createRes.png</figcaption>
+</figure>
 <hr>
-<p>我们前面处理的消息是包含 body + header，如果你只需要处理 header，beast 也支持。</p>
+<p>我们前面处理的消息是包含 body + header，如果你只需要处理
+header，beast 也支持。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// An HTTP header</span><br><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-type">bool</span> isRequest,             <span class="hljs-comment">// `true` for requests, `false` for responses</span><br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Fields</span> = fields&gt;      <span class="hljs-comment">// The type of container to store the fields</span><br><span class="hljs-keyword">class</span> header;<br><br><span class="hljs-comment">// A typical HTTP request header</span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Fields</span>&gt;<br><span class="hljs-keyword">using</span> request_header = header&lt;<span class="hljs-literal">true</span>, Fields&gt;;<br><br>	<br><span class="hljs-comment">// A typical HTTP response header</span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Fields</span>&gt;<br><span class="hljs-keyword">using</span> response_header = header&lt;<span class="hljs-literal">false</span>, Fields&gt;;<br></code></pre></td></tr></table></figure>
-
-<h3><span id="message-stream-operations"></span></h3><p>提供 <code>read</code>、<code>async_read</code> 等函数用于从流中读取 HTTP 消息数据。</p>
-<p>提供 <code>write</code>、<code>async_write</code> 等函数用于将 HTTP 消息写入流中。</p>
-<p><img src="/images/2024/09/19/b2f28c00-7661-11ef-a8f8-f3952e97d7ff.png" alt="messageStream.png"></p>
+<h3><span id="messagestream-operations"></span></h3>
+<p>提供 <code>read</code>、<code>async_read</code> 等函数用于从流中读取
+HTTP 消息数据。</p>
+<p>提供 <code>write</code>、<code>async_write</code> 等函数用于将 HTTP
+消息写入流中。</p>
+<figure>
+<img src="/images/2024/09/19/b2f28c00-7661-11ef-a8f8-f3952e97d7ff.png" alt="messageStream.png">
+<figcaption aria-hidden="true">messageStream.png</figcaption>
+</figure>
 <p>我们直接看官方案例就好，这些函数的含义在前面的章节已经学习过，尽管参数的类型可能会有所不同。</p>
-<p>这个参数类型就是 <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/master/libs/beast/doc/html/beast/ref/boost__beast__flat_buffer.html">flat_buffer</a>，通常用于处理网络 I&#x2F;O 操作中的可变大小的字节序列。而且，它非常适合和前面讲的 动态缓冲区 结合使用。</p>
+<p>这个参数类型就是 <a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/master/libs/beast/doc/html/beast/ref/boost__beast__flat_buffer.html">flat_buffer</a>，通常用于处理网络
+I/O 操作中的可变大小的字节序列。而且，它非常适合和前面讲的 动态缓冲区
+结合使用。</p>
 <p>（一）Reading</p>
 <p>同步读：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">flat_buffer buffer;<br>request&lt;string_body&gt; req;<br><span class="hljs-built_in">read</span>(sock, buffer, req);<br></code></pre></td></tr></table></figure>
-
 <p>异步读：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++">flat_buffer buffer;<br>response&lt;string_body&gt; res;<br><span class="hljs-built_in">async_read</span>(sock, buffer, res,<br>    [&amp;](error_code ec, std::<span class="hljs-type">size_t</span> bytes_transferred)<br>    &#123;<br>        boost::<span class="hljs-built_in">ignore_unused</span>(bytes_transferred);<br>        std::cerr &lt;&lt; ec.<span class="hljs-built_in">message</span>() &lt;&lt; std::endl;<br>    &#125;);<br></code></pre></td></tr></table></figure>
-
 <p>用于限制 HTTP 消息标头的最大大小的技术，以防止缓冲区溢出攻击：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++">flat_buffer buffer&#123;<span class="hljs-number">10</span>&#125;;<br><span class="hljs-comment">// Try to read a request</span><br>error_code ec;<br>request&lt;string_body&gt; req;<br><span class="hljs-built_in">read</span>(sock, buffer, req, ec);<br><span class="hljs-keyword">if</span>(ec == http::error::buffer_overflow)<br>    std::cerr &lt;&lt; <span class="hljs-string">&quot;Buffer limit exceeded!&quot;</span> &lt;&lt; std::endl;<br></code></pre></td></tr></table></figure>
-
 <p>（二）Writing</p>
 <p>同步写：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++">response&lt;string_body&gt; res;<br>res.<span class="hljs-built_in">version</span>(<span class="hljs-number">11</span>);<br>res.<span class="hljs-built_in">result</span>(status::ok);<br>res.<span class="hljs-built_in">set</span>(field::server, <span class="hljs-string">&quot;Beast&quot;</span>);<br>res.<span class="hljs-built_in">body</span>() = <span class="hljs-string">&quot;Hello, world!&quot;</span>;<br>res.<span class="hljs-built_in">prepare_payload</span>();<br><br>error_code ec;<br><span class="hljs-built_in">write</span>(sock, res, ec);<br></code></pre></td></tr></table></figure>
-
 <p>异步写：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">async_write</span>(sock, res,<br>    [&amp;](error_code ec, std::<span class="hljs-type">size_t</span> bytes_transferred)<br>    &#123;<br>        boost::<span class="hljs-built_in">ignore_unused</span>(bytes_transferred);<br>        <span class="hljs-keyword">if</span>(ec)<br>            std::cerr &lt;&lt; ec.<span class="hljs-built_in">message</span>() &lt;&lt; std::endl;<br>    &#125;);<br></code></pre></td></tr></table></figure>
-
-<h3><span id="serialization">Serialization</span></h3><p> 将 HTTP 消息转化为字节缓冲区。</p>
+<h3><span id="serialization">Serialization</span></h3>
+<p>将 HTTP 消息转化为字节缓冲区。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 将 HTTP message 序列化为字节流</span><br><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-type">bool</span> isRequest,<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Body</span>,<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Fields</span> = fields<br>&gt;<br><span class="hljs-keyword">class</span> serializer;<br><br>	<br><span class="hljs-comment">// 将 HTTP request 序列化为字节流</span><br><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Body</span>,<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Fields</span> = fields<br>&gt;<br><span class="hljs-keyword">using</span> request_serializer = serializer&lt;<span class="hljs-literal">true</span>, Body, Fields&gt;;<br><br><span class="hljs-comment">//将 HTTP response 序列化为字节流</span><br><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Body</span>,<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Fields</span> = fields<br>&gt;<br><span class="hljs-keyword">using</span> response_serializer = serializer&lt;<span class="hljs-literal">false</span>, Body, Fields&gt;;<br></code></pre></td></tr></table></figure>
-
-<p>其实这不难理解，就是我们构建 HTTP 数据包，将其序列化后就可以发送出去了。</p>
+<p>其实这不难理解，就是我们构建 HTTP
+数据包，将其序列化后就可以发送出去了。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 构建HTTP响应</span><br>        http::response&lt;http::string_body&gt; res&#123;http::status::ok, <span class="hljs-number">11</span>&#125;;<br>        res.<span class="hljs-built_in">set</span>(http::field::server, <span class="hljs-string">&quot;Beast&quot;</span>);<br>        res.<span class="hljs-built_in">set</span>(http::field::content_type, <span class="hljs-string">&quot;text/plain&quot;</span>);<br>        res.<span class="hljs-built_in">body</span>() = <span class="hljs-string">&quot;Hello, World!&quot;</span>;<br>        res.<span class="hljs-built_in">prepare_payload</span>(); <span class="hljs-comment">// 准备消息体的负载</span><br><br><span class="hljs-comment">// 创建序列化器</span><br>        http::response_serializer&lt;http::string_body&gt; sr&#123;res&#125;;<br><br><span class="hljs-comment">// 循环写入流，直到所有数据都被发送</span><br>        <span class="hljs-keyword">while</span>(! sr.<span class="hljs-built_in">is_done</span>()) &#123;<br>            beast::error_code ec;<br>            http::<span class="hljs-built_in">write_some</span>(socket, sr, ec);  <span class="hljs-comment">// 逐步发送</span><br>            <span class="hljs-keyword">if</span>(ec) &#123;<br>                std::cerr &lt;&lt; <span class="hljs-string">&quot;Error: &quot;</span> &lt;&lt; ec.<span class="hljs-built_in">message</span>() &lt;&lt; std::endl;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br></code></pre></td></tr></table></figure>
-
 <p>按照常见的通信模式来看，服务器需要进行序列化（Serialization），而客户端需要进行反序列化（Parsing）。下面看看可用的传输序列化数据的操作：</p>
-<p><img src="/images/2024/09/19/a283b2e0-7661-11ef-a8f8-f3952e97d7ff.png" alt="Serializer_Stream.png"></p>
-<h3><span id="parsing">Parsing</span></h3><p>将字节缓冲区解析为 HTTP 消息。</p>
+<figure>
+<img src="/images/2024/09/19/a283b2e0-7661-11ef-a8f8-f3952e97d7ff.png" alt="Serializer_Stream.png">
+<figcaption aria-hidden="true">Serializer_Stream.png</figcaption>
+</figure>
+<h3><span id="parsing">Parsing</span></h3>
+<p>将字节缓冲区解析为 HTTP 消息。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 生成 message 的解析器</span><br><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-type">bool</span> isRequest,                       <br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Body</span>,                             <br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Allocator</span> = std::allocator&lt;<span class="hljs-type">char</span>&gt;&gt; <br><span class="hljs-keyword">class</span> parser<br>    : <span class="hljs-keyword">public</span> basic_parser&lt;...&gt;;<br><br><span class="hljs-comment">// 生成 request message 的解析器</span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Body</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Allocator</span> = std::allocator&lt;<span class="hljs-type">char</span>&gt;&gt;<br><span class="hljs-keyword">using</span> request_parser = parser&lt;<span class="hljs-literal">true</span>, Body, Allocator&gt;;<br><br><span class="hljs-comment">//生成 response message 的解析器</span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Body</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Allocator</span> = std::allocator&lt;<span class="hljs-type">char</span>&gt;&gt;<br><span class="hljs-keyword">using</span> response_parser = parser&lt;<span class="hljs-literal">false</span>, Body, Allocator&gt;;<br></code></pre></td></tr></table></figure>
-
-<p>比方说我们构造 HTTP 请求发给 百度，然后将百度的 response 进行解析，通过 get 方法获取解析结果。下面仅记录核心代码：</p>
+<p>比方说我们构造 HTTP 请求发给 百度，然后将百度的 response
+进行解析，通过 get 方法获取解析结果。下面仅记录核心代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 构建HTTP请求</span><br>        http::request&lt;http::string_body&gt; req&#123; http::verb::get, <span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-number">11</span> &#125;;<br>        req.<span class="hljs-built_in">set</span>(http::field::host, <span class="hljs-string">&quot;www.baidu.com&quot;</span>);<br>        req.<span class="hljs-built_in">set</span>(http::field::user_agent, BOOST_BEAST_VERSION_STRING);<br><br><span class="hljs-comment">// 将请求发送到服务器</span><br>        http::<span class="hljs-built_in">write</span>(socket, req);<br><br><span class="hljs-comment">// 定义一个缓冲区来存储从服务器接收到的数据</span><br>        beast::flat_buffer buffer;<br><br><span class="hljs-comment">// 定义一个HTTP响应解析器</span><br>        http::response_parser&lt;http::string_body&gt; parser;<br><br><span class="hljs-comment">// 读取响应头和消息体，存入缓冲区并由解析器处理</span><br>        http::<span class="hljs-built_in">read</span>(socket, buffer, parser);<br><br><span class="hljs-comment">// 获取解析后的响应对象</span><br>        <span class="hljs-keyword">auto</span> <span class="hljs-type">const</span>&amp; response = parser.<span class="hljs-built_in">get</span>();<br><br><span class="hljs-comment">// 提取HTTP状态码</span><br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Status: &quot;</span> &lt;&lt; response.<span class="hljs-built_in">result_int</span>() &lt;&lt; std::endl;<br><br><span class="hljs-comment">// 提取Content-Length头部字段</span><br>        <span class="hljs-keyword">if</span> (response.<span class="hljs-built_in">find</span>(http::field::content_length) != response.<span class="hljs-built_in">end</span>()) &#123;<br>            std::cout &lt;&lt; <span class="hljs-string">&quot;Content-Length: &quot;</span> &lt;&lt; response[http::field::content_length] &lt;&lt; std::endl;<br>        &#125;<br><br><span class="hljs-comment">// 提取Content-Type头部字段</span><br>        <span class="hljs-keyword">if</span> (response.<span class="hljs-built_in">find</span>(http::field::content_type) != response.<span class="hljs-built_in">end</span>()) &#123;<br>            std::cout &lt;&lt; <span class="hljs-string">&quot;Content-Type: &quot;</span> &lt;&lt; response[http::field::content_type] &lt;&lt; std::endl;<br>        &#125;<br></code></pre></td></tr></table></figure>
-
 <p>解析结果：</p>
-<p><img src="/images/2024/09/19/9a680bb0-7661-11ef-a8f8-f3952e97d7ff.png" alt="HTTPdemo.png"></p>
-<p>通过 get 获取整个 HTTP 消息的 header + body，我们常常需要获取 header 中的字段信息，部分字段可直接调用接口，其余字段需要通过 find 方法查找。我们讲完 response_parse ，也就 自然领会 request_parse，它们的操作也都是一致的。</p>
-<p><img src="/images/2024/09/19/e071bbb0-7661-11ef-a8f8-f3952e97d7ff.png" alt="Parser_Stream.png"></p>
-<h2><span id="代码实现和测试">代码实现和测试</span></h2><p><strong>get 请求测试</strong></p>
-<p><img src="/images/2024/09/19/947278d0-7661-11ef-a8f8-f3952e97d7ff.png" alt="get请求.png"></p>
+<figure>
+<img src="/images/2024/09/19/9a680bb0-7661-11ef-a8f8-f3952e97d7ff.png" alt="HTTPdemo.png">
+<figcaption aria-hidden="true">HTTPdemo.png</figcaption>
+</figure>
+<p>通过 get 获取整个 HTTP 消息的 header + body，我们常常需要获取 header
+中的字段信息，部分字段可直接调用接口，其余字段需要通过 find
+方法查找。我们讲完 response_parse ，也就 自然领会
+request_parse，它们的操作也都是一致的。</p>
+<figure>
+<img src="/images/2024/09/19/e071bbb0-7661-11ef-a8f8-f3952e97d7ff.png" alt="Parser_Stream.png">
+<figcaption aria-hidden="true">Parser_Stream.png</figcaption>
+</figure>
+<h2><span id="代码实现和测试">代码实现和测试</span></h2>
+<p><strong>get 请求测试</strong></p>
+<figure>
+<img src="/images/2024/09/19/947278d0-7661-11ef-a8f8-f3952e97d7ff.png" alt="get请求.png">
+<figcaption aria-hidden="true">get请求.png</figcaption>
+</figure>
 <p><strong>post 请求测试</strong></p>
-<p><img src="/images/2024/09/19/8ed677a0-7661-11ef-a8f8-f3952e97d7ff.png" alt="post请求.png"></p>
+<figure>
+<img src="/images/2024/09/19/8ed677a0-7661-11ef-a8f8-f3952e97d7ff.png" alt="post请求.png">
+<figcaption aria-hidden="true">post请求.png</figcaption>
+</figure>
 <p>测试工具：Postman</p>
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/12-HttpServer/">实现HttpServer</a></p>
 <hr>
-<p>⭐️内容取自 B 站 UP 恋恋风辰和 mmoaay 的《Boost.Asio C++ 网络编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议看原视频或者读原书。</p>
+<p>⭐️内容取自 B 站 UP 恋恋风辰和 mmoaay 的《Boost.Asio C++
+网络编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议看原视频或者读原书。</p>
 
       </div>
     </div>
@@ -342,7 +384,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\30\第一章：Asio-建立网络连接基本-API\" title="第一章：Asio 建立网络连接基本 API" rel="bookmark">第一章：Asio 建立网络连接基本 API</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\08\第三章：粘包和反序列化\" title="第三章：粘包和反序列化" rel="bookmark">第三章：粘包和反序列化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\19\第七章：Beast网络库实现WebSocket服务器\" title="第七章：Beast网络库实现WebSocket服务器" rel="bookmark">第七章：Beast网络库实现WebSocket服务器</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\30\第一章：Asio-建立网络连接基本-API\" title="第一章：Asio 建立网络连接基本 API" rel="bookmark">第一章：Asio 建立网络连接基本 API</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\19\第七章：Beast网络库实现WebSocket服务器\" title="第七章：Beast网络库实现WebSocket服务器" rel="bookmark">第七章：Beast网络库实现WebSocket服务器</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\08\第三章：粘包和反序列化\" title="第三章：粘包和反序列化" rel="bookmark">第三章：粘包和反序列化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -874,11 +916,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

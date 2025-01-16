@@ -173,14 +173,25 @@
             
           </div>
         
-        <p>网上就我的搜索经验来看，没有一篇文章实打实的把这个讲清楚，尽管我实践成功也来源于网上公布的文章，因此绝非要嘲讽谁。发此文就是希望那些想要通过 CMake 来管理 Qt 项目的人能够成功，网上的文章针对这块比较零散，把这些零散的内容和自身的实际情况结合，此文得以形成。</p>
-<p><img src="/images/2024/09/20/fb0cb650-772e-11ef-bb33-ad22fef3cf2e.png" alt="qt.png"></p>
+        <p>网上就我的搜索经验来看，没有一篇文章实打实的把这个讲清楚，尽管我实践成功也来源于网上公布的文章，因此绝非要嘲讽谁。发此文就是希望那些想要通过
+CMake 来管理 Qt
+项目的人能够成功，网上的文章针对这块比较零散，把这些零散的内容和自身的实际情况结合，此文得以形成。</p>
+<figure>
+<img src="/images/2024/09/20/fb0cb650-772e-11ef-bb33-ad22fef3cf2e.png" alt="qt.png">
+<figcaption aria-hidden="true">qt.png</figcaption>
+</figure>
 <p>Qt中要管理头文件、源文件、ui文件、qrc资源文件，针对上面这种文件结构对应的CMakeLists.tx文件内容如下：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.26</span>)<br><span class="hljs-keyword">project</span>(WarehouseManageSys)<br><br><span class="hljs-keyword">set</span>(CMAKE_CXX_STANDARD <span class="hljs-number">17</span>)<br><br><span class="hljs-comment"># 务必指定 ，即Qt库的路径</span><br><span class="hljs-keyword">set</span>(CMAKE_PREFIX_PATH <span class="hljs-string">&quot;C:/Qt/6.5.3/mingw_64&quot;</span>)<br><br><span class="hljs-comment"># 在当前目录中查找包含文件</span><br><span class="hljs-keyword">set</span>(CMAKE_INCLUDE_CURRENT_DIR <span class="hljs-keyword">ON</span>)<br><br><span class="hljs-comment"># 查找所需的Qt6组件</span><br><span class="hljs-keyword">find_package</span>(Qt6 COMPONENTS<br>        Core<br>        Gui<br>        Widgets<br>        Sql<br>        REQUIRED)<br><br><br><span class="hljs-comment">#搜索头文件</span><br><span class="hljs-keyword">include_directories</span>(<span class="hljs-keyword">include</span>/)<br><span class="hljs-keyword">file</span>(GLOB HEADER_FILES <span class="hljs-string">&quot;include/*.h&quot;</span>)<br><br><span class="hljs-comment">#搜索源文件</span><br><span class="hljs-keyword">file</span>(GLOB SRC_LIST <span class="hljs-string">&quot;src/*.cpp&quot;</span>)<br><br><span class="hljs-comment"># 搜索ui文件</span><br><span class="hljs-keyword">file</span>(GLOB UI_FILES <span class="hljs-string">&quot;ui/*.ui&quot;</span>)<br><br><span class="hljs-comment"># 搜索资源文件（图片、图标、音乐等）</span><br><span class="hljs-keyword">file</span>(GLOB_RECURSE RESOURCES <span class="hljs-string">&quot;sources/*.qrc&quot;</span>)<br><br><span class="hljs-keyword">add_subdirectory</span>(src)<br><span class="hljs-keyword">add_subdirectory</span>(thirdpart/OpenXLSX)<br><br><span class="hljs-comment"># 生成头文件的 MOC 文件</span><br>QT6_WRAP_CPP(HEADERS_MOC <span class="hljs-variable">$&#123;HEADER_FILES&#125;</span>)<br><span class="hljs-comment"># 生成 UI 文件对应的头文件</span><br>QT6_WRAP_UI(FORMS_HEADERS <span class="hljs-variable">$&#123;UI_FILES&#125;</span>)<br><span class="hljs-comment"># 添加资源文件</span><br>QT6_ADD_RESOURCES(RCC <span class="hljs-variable">$&#123;RESOURCES&#125;</span>)<br><br><span class="hljs-keyword">add_executable</span>(WarehouseManageSys main.cpp <span class="hljs-variable">$&#123;HEADERS_MOC&#125;</span> <span class="hljs-variable">$&#123;SRC_LIST&#125;</span> <span class="hljs-variable">$&#123;FORMS_HEADERS&#125;</span> <span class="hljs-variable">$&#123;RCC&#125;</span>)<br><br><span class="hljs-keyword">target_link_libraries</span>(WarehouseManageSys<br>        Qt6::Core<br>        Qt6::Gui<br>        Qt6::Widgets<br>        Qt6::Sql<br>        OpenXLSX::OpenXLSX<br>)<br></code></pre></td></tr></table></figure>
-
-<p>也许 CMake 管理 Qt 项目还有其它语法，但个人实践成功并一直使用的就是如上方式，在今后的项目中只需要参考这份文件应该不会有大碍。如果无法满足需求的话，CMake 官方也有有关 Qt 项目语法介绍，尽管我从来没去看过。</p>
-<p>最后补充一个点，即由于在 CLion 上进行 Qt 开发，因此 ui_xx.h文件都在 cmake-build-debug 中，但是我又没有配置如何找到这些头文件的语法，写程序的时候是如何找到的呢？ </p>
-<p>在 <code>CMakeLists.txt</code> 中，已经使用了 <code>QT6_WRAP_UI</code> 来处理 <code>.ui</code> 文件。这些宏会生成相应的 <code>ui_xx.h</code> 文件，并将其路径添加到编译器的搜索路径中。这个过程是自动处理的，因此你不需要显式地指定这些生成文件的路径。</p>
+<p>也许 CMake 管理 Qt
+项目还有其它语法，但个人实践成功并一直使用的就是如上方式，在今后的项目中只需要参考这份文件应该不会有大碍。如果无法满足需求的话，CMake
+官方也有有关 Qt 项目语法介绍，尽管我从来没去看过。</p>
+<p>最后补充一个点，即由于在 CLion 上进行 Qt 开发，因此 ui_xx.h文件都在
+cmake-build-debug
+中，但是我又没有配置如何找到这些头文件的语法，写程序的时候是如何找到的呢？</p>
+<p>在 <code>CMakeLists.txt</code> 中，已经使用了
+<code>QT6_WRAP_UI</code> 来处理 <code>.ui</code>
+文件。这些宏会生成相应的 <code>ui_xx.h</code>
+文件，并将其路径添加到编译器的搜索路径中。这个过程是自动处理的，因此你不需要显式地指定这些生成文件的路径。</p>
 
       </div>
     </div>
@@ -265,7 +276,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第九章：CMake-交叉编译\" title="第九章：CMake 交叉编译" rel="bookmark">第九章：CMake 交叉编译</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第九章：CMake-交叉编译\" title="第九章：CMake 交叉编译" rel="bookmark">第九章：CMake 交叉编译</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -797,11 +808,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

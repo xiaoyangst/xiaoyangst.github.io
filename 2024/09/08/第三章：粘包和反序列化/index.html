@@ -174,109 +174,184 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E4%BC%AA%E9%97%AD%E5%8C%85%E5%BB%B6%E9%95%BF%E8%BF%9E%E6%8E%A5%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">伪闭包延长连接生命周期</a><ul>
-<li><a href="#server%E7%B1%BB">Server类</a></li>
-<li><a href="#session%E7%B1%BB">Session类</a></li>
-<li><a href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%92%8C%E7%BB%93%E6%9E%9C%E9%AA%8C%E8%AF%81">代码实现和结果验证</a></li>
-</ul>
-</li>
-<li><a href="#%E5%A2%9E%E5%8A%A0%E5%8F%91%E9%80%81%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%8F%8C%E5%B7%A5%E9%80%9A%E4%BF%A1">增加发送队列实现全双工通信</a><ul>
-<li><a href="#%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%8F%8C%E5%B7%A5%E7%9A%84%E8%AF%BB%E5%86%99%E5%9B%9E%E8%B0%83%E6%B5%81%E7%A8%8B">实现全双工的读写回调流程</a></li>
-<li><a href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%92%8C%E7%B2%98%E5%8C%85%E7%8E%B0%E8%B1%A1">代码实现和粘包现象</a></li>
-</ul>
-</li>
-<li><a href="#%E5%A4%84%E7%90%86%E7%BD%91%E7%BB%9C%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98">处理网络粘包问题</a><ul>
-<li><a href="#session%E7%B1%BB-1">Session类</a></li>
-<li><a href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%92%8C%E8%A7%A3%E5%86%B3%E7%B2%98%E5%8C%85">代码实现和解决粘包</a></li>
-</ul>
-</li>
-<li><a href="#%E5%AD%97%E8%8A%82%E5%BA%8F%E5%A4%84%E7%90%86%E5%92%8C%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E6%8E%A7%E5%88%B6">字节序处理和消息队列的控制</a></li>
-<li><a href="#%E5%BA%8F%E5%88%97%E5%8C%96">序列化</a></li>
+<li><a href="#伪闭包延长连接生命周期">伪闭包延长连接生命周期</a>
+<ul>
+<li><a href="#server类">Server类</a></li>
+<li><a href="#session类">Session类</a></li>
+<li><a href="#代码实现和结果验证">代码实现和结果验证</a></li>
+</ul></li>
+<li><a href="#增加发送队列实现全双工通信">增加发送队列实现全双工通信</a>
+<ul>
+<li><a href="#实现全双工的读写回调流程">实现全双工的读写回调流程</a></li>
+<li><a href="#代码实现和粘包现象">代码实现和粘包现象</a></li>
+</ul></li>
+<li><a href="#处理网络粘包问题">处理网络粘包问题</a>
+<ul>
+<li><a href="#session类-1">Session类</a></li>
+<li><a href="#代码实现和解决粘包">代码实现和解决粘包</a></li>
+</ul></li>
+<li><a href="#字节序处理和消息队列的控制">字节序处理和消息队列的控制</a></li>
+<li><a href="#序列化">序列化</a></li>
 <li><a href="#hexopostrendercodeblockfigure-classhighlight-ctabletrtd-classgutterprespan-classline1spanbrspan-classline2spanbrspan-classline3spanbrspan-classline4spanbrspan-classline5spanbrpretdtd-classcodeprecode-classhljs-cjsonreader-readerbrjsonvalue-rootbrreaderspan-classhljs-built_inparsespanstdspan-classhljs-built_instringspan_recv_msg_node-gt_data-_recv_msg_node-gt_total_len-rootbrstdcout-ltlt-span-classhljs-stringquotrecevie-msg-id-is-quotspan-ltlt-rootspan-classhljs-stringquotidquotspanspan-classhljs-built_inasintspan-ltlt-span-classhljs-stringquot-msg-data-is-quotspanbrltlt-rootspan-classhljs-stringquotdataquotspanspan-classhljs-built_inasstringspan-ltlt-endlbrcodepretdtrtablefigurehexopostrendercodeblock"><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">Json::Reader reader;<br>Json::Value root;<br>reader.<span class="hljs-built_in">parse</span>(std::<span class="hljs-built_in">string</span>(_recv_msg_node-&gt;_data, _recv_msg_node-&gt;_total_len), root);<br>std::cout &lt;&lt; <span class="hljs-string">&quot;recevie msg id  is &quot;</span> &lt;&lt; root[<span class="hljs-string">&quot;id&quot;</span>].<span class="hljs-built_in">asInt</span>() &lt;&lt; <span class="hljs-string">&quot; msg data is &quot;</span><br>&lt;&lt; root[<span class="hljs-string">&quot;data&quot;</span>].<span class="hljs-built_in">asString</span>() &lt;&lt; endl;<br></code></pre></td></tr></table></figure></a></li>
 </ul>
 <!-- tocstop -->
-
-<p>在上一章中，但我们编写基于官方代码的 全双工通信，发现由于 Session 管理不当，导致多次析构。我们要解决 Session 的生命周期问题，以及网络传输必然存在的粘包问题。</p>
-<h2><span id="伪闭包延长连接生命周期">伪闭包延长连接生命周期</span></h2><h3><span id="server类">Server类</span></h3><p>我们可以通过 <a href="https://xiaoyangst.github.io/2024/08/16/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">shared_ptr 智能指针</a>对这些 Session 进行管理，shared_ptr 智能指针管理的对象会在引用技术为 0 的时候自动析构。</p>
-<p>那用什么来存储这些 Session 呢？unordered_map容器，key 为 Session 的 uuid，value 为该 Session 的智能指针。由于存储到 unordered_map 容器中的对象是拷贝一份进来的，那么引用计数会 加 1，至少可以保证说如果我们不在容器中移除 这些存储的 Session，就能保证它必然不会被析构。</p>
+<p>在上一章中，但我们编写基于官方代码的 全双工通信，发现由于 Session
+管理不当，导致多次析构。我们要解决 Session
+的生命周期问题，以及网络传输必然存在的粘包问题。</p>
+<h2><span id="伪闭包延长连接生命周期">伪闭包延长连接生命周期</span></h2>
+<h3><span id="server类">Server类</span></h3>
+<p>我们可以通过 <a href="https://xiaoyangst.github.io/2024/08/16/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">shared_ptr
+智能指针</a>对这些 Session 进行管理，shared_ptr
+智能指针管理的对象会在引用技术为 0 的时候自动析构。</p>
+<p>那用什么来存储这些 Session 呢？unordered_map容器，key 为 Session 的
+uuid，value 为该 Session 的智能指针。由于存储到 unordered_map
+容器中的对象是拷贝一份进来的，那么引用计数会 加
+1，至少可以保证说如果我们不在容器中移除 这些存储的
+Session，就能保证它必然不会被析构。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">unordered_map&lt;std::string, std::shared_ptr&lt;Session&gt;&gt; sessionMap_;<br></code></pre></td></tr></table></figure>
-
-<p>管理 Session 的是 Server 类，因此 sessionMap_ 定义在  Server 类中。所以只涉及让 Session 在适当的地方增加和删除操作。</p>
+<p>管理 Session 的是 Server 类，因此 sessionMap_ 定义在 Server
+类中。所以只涉及让 Session 在适当的地方增加和删除操作。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Server::ClearSession</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; uuid)</span></span><br><span class="hljs-function"></span>&#123;<br>	sessionMap_.<span class="hljs-built_in">erase</span>(uuid);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Server::start_accept</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	std::shared_ptr&lt;Session&gt; new_session = std::<span class="hljs-built_in">make_shared</span>&lt;Session&gt;(ioc_,<span class="hljs-keyword">this</span>);<br>	acceptor_.<span class="hljs-built_in">async_accept</span>(new_session-&gt;<span class="hljs-built_in">Socket</span>(),<br>		std::<span class="hljs-built_in">bind</span>(&amp;Server::handle_accept, <span class="hljs-keyword">this</span>, new_session, std::placeholders::_1));<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Server::handle_accept</span><span class="hljs-params">(std::shared_ptr&lt;Session&gt; new_session, <span class="hljs-type">const</span> boost::system::error_code&amp; error)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> (!error) &#123;<br>	new_session-&gt;<span class="hljs-built_in">Start</span>();		<br>	sessionMap_.<span class="hljs-built_in">insert</span>(std::<span class="hljs-built_in">make_pair</span>(new_session-&gt;<span class="hljs-built_in">getUUID</span>(), new_session));	<span class="hljs-comment">// 代表有新连接建立，所以触发此回调了</span><br>	<span class="hljs-built_in">start_accept</span>();<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>这里我们重点分析 new_session 对象的引用计数情况。start_accept 函数 中第一次创建 共享智能指针对象 new_session，引用计数加 1，即从 0 变为 1。调用 acceptor_ 对象的 async_accept 方法需要 bind 一个回调函数，该回调函数需要用到 new_session 对象，但我们知道 bind 是通过拷贝值来满足函数调用的参数需求的，这个时候 共享智能指针对象 new_session，引用计数加 1，即从 1 变为 2。</p>
-<p>触发回调之后，进入 handle_accept 函数，这也意味着 start_accept 函数 执行完毕，那么一开始创建的 new_session 脱离作用域，引用计数减 1，即从 2 变为 1。由于 bind 绑定的 handle_accept 函数还没有执行完毕，所以不会修改引用计数。那么开始 执行 handle_accept 函数，把 共享智能指针对象 new_session 加入到 map 容器中，也是把 对象拷贝到容器中，引用计数加 1，即从 1 变为 2。等到 handle_accept 函数执行完成，那么 bind 绑定所需的 new_session 也就 离开其作用域了，引用计数减 1，即从 2 变为 1。所以 最后的 这个为 1 的引用计数是 map 容器中还保留着 new_session 对象。</p>
-<h3><span id="session类">Session类</span></h3><p>如果我们从 map 容器中移除 new_session 对象，这就是 new_session 对象的消亡时刻。那我们的 读写回调函数在如果继续前一章的测试条件还是会出错，因为读事件回调如果从 map 容器中移除 new_session 对象，写事件回调在有错误的情况下同样会 再次从 map 容器中移除 new_session 对象，这也是不正确的做法。因为 从 map 中移除对象，会调用对应的回调函数，还是会双重析构。</p>
-<p>其实，我们需要保证的是，读写事件在执行的时候能够保证 new_session 对象 是可用的，这样就不出现重复删除同一个对象了。在类中使用 shared_ptr 智能指针要注意一个问题，避免通过 this 指针 创建 shared_ptr 对象，因为并不会返回 shared_ptr 对象，而是返回到裸指针。如果真要能够返回 当前类的 shared_ptr 对象，需要让当前类继承 enable_shared_from_this，然后调用 shared_from_this 函数即可。</p>
-<p>我们给 handle_read 和 handle_write 函数就会得到 new_session 对象，并让 引用计数 加 1，就保证 读写事件在执行的时候能够保证 new_session 对象 是可用的。</p>
+<p>这里我们重点分析 new_session 对象的引用计数情况。start_accept 函数
+中第一次创建 共享智能指针对象 new_session，引用计数加 1，即从 0 变为
+1。调用 acceptor_ 对象的 async_accept 方法需要 bind
+一个回调函数，该回调函数需要用到 new_session 对象，但我们知道 bind
+是通过拷贝值来满足函数调用的参数需求的，这个时候 共享智能指针对象
+new_session，引用计数加 1，即从 1 变为 2。</p>
+<p>触发回调之后，进入 handle_accept 函数，这也意味着 start_accept 函数
+执行完毕，那么一开始创建的 new_session 脱离作用域，引用计数减 1，即从 2
+变为 1。由于 bind 绑定的 handle_accept
+函数还没有执行完毕，所以不会修改引用计数。那么开始 执行 handle_accept
+函数，把 共享智能指针对象 new_session 加入到 map 容器中，也是把
+对象拷贝到容器中，引用计数加 1，即从 1 变为 2。等到 handle_accept
+函数执行完成，那么 bind 绑定所需的 new_session 也就
+离开其作用域了，引用计数减 1，即从 2 变为 1。所以 最后的 这个为 1
+的引用计数是 map 容器中还保留着 new_session 对象。</p>
+<h3><span id="session类">Session类</span></h3>
+<p>如果我们从 map 容器中移除 new_session 对象，这就是 new_session
+对象的消亡时刻。那我们的
+读写回调函数在如果继续前一章的测试条件还是会出错，因为读事件回调如果从
+map 容器中移除 new_session 对象，写事件回调在有错误的情况下同样会 再次从
+map 容器中移除 new_session 对象，这也是不正确的做法。因为 从 map
+中移除对象，会调用对应的回调函数，还是会双重析构。</p>
+<p>其实，我们需要保证的是，读写事件在执行的时候能够保证 new_session 对象
+是可用的，这样就不出现重复删除同一个对象了。在类中使用 shared_ptr
+智能指针要注意一个问题，避免通过 this 指针 创建 shared_ptr
+对象，因为并不会返回 shared_ptr 对象，而是返回到裸指针。如果真要能够返回
+当前类的 shared_ptr 对象，需要让当前类继承
+enable_shared_from_this，然后调用 shared_from_this 函数即可。</p>
+<p>我们给 handle_read 和 handle_write 函数就会得到 new_session
+对象，并让 引用计数 加 1，就保证 读写事件在执行的时候能够保证
+new_session 对象 是可用的。</p>
 <p>《恋恋风尘》博主是如下第一种写法，我是采用的第二种写法：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">socket_.<span class="hljs-built_in">async_read_some</span>(boost::asio::<span class="hljs-built_in">buffer</span>(data_, BUFFSIZE),	<span class="hljs-comment">// 接收客户端发生来的数据</span><br>		std::<span class="hljs-built_in">bind</span>(&amp;Session::handle_read, <span class="hljs-keyword">this</span>, std::placeholders::_1, std::placeholders::_2, <span class="hljs-built_in">shared_from_this</span>()));<br><br>socket_.<span class="hljs-built_in">async_read_some</span>(boost::asio::<span class="hljs-built_in">buffer</span>(data_, BUFFSIZE),<br>        std::<span class="hljs-built_in">bind</span>(&amp;Session::handle_read, <span class="hljs-built_in">shared_from_this</span>(), std::placeholders::_1, std::placeholders::_2));<br></code></pre></td></tr></table></figure>
-
 <p>询问ChatGpt结果：</p>
 <ul>
-<li><strong>第一种方式</strong>：<code>this</code> 是裸指针，可能会导致生命周期问题，虽然 <code>shared_from_this()</code> 提供了一定的保护，但 <code>this</code> 依然存在风险。</li>
-<li><strong>第二种方式</strong>：完全使用 <code>shared_ptr&lt;Session&gt;</code> 来管理生命周期，更加安全。</li>
+<li><strong>第一种方式</strong>：<code>this</code>
+是裸指针，可能会导致生命周期问题，虽然 <code>shared_from_this()</code>
+提供了一定的保护，但 <code>this</code> 依然存在风险。</li>
+<li><strong>第二种方式</strong>：完全使用
+<code>shared_ptr&lt;Session&gt;</code> 来管理生命周期，更加安全。</li>
 </ul>
-<p>通常，<strong>第二种方式</strong>更推荐使用，因为它可以确保在异步操作完成之前，<code>Session</code> 对象的生命周期得到完全管理，避免使用裸指针的潜在风险。</p>
-<h3><span id="代码实现和结果验证">代码实现和结果验证</span></h3><p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/4-%E4%BF%9D%E8%AF%81%E8%AF%BB%E5%86%99%E4%BA%8B%E4%BB%B6%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%8F%AF%E7%94%A8%E6%80%A7">保证读写事件连接的可用性</a></p>
-<p><img src="/images/2024/09/08/674145c0-6dd4-11ef-85cc-4768e704f183.png" alt="实现连接存活.png"></p>
+<p>通常，<strong>第二种方式</strong>更推荐使用，因为它可以确保在异步操作完成之前，<code>Session</code>
+对象的生命周期得到完全管理，避免使用裸指针的潜在风险。</p>
+<h3><span id="代码实现和结果验证">代码实现和结果验证</span></h3>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/4-%E4%BF%9D%E8%AF%81%E8%AF%BB%E5%86%99%E4%BA%8B%E4%BB%B6%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%8F%AF%E7%94%A8%E6%80%A7">保证读写事件连接的可用性</a></p>
+<figure>
+<img src="/images/2024/09/08/674145c0-6dd4-11ef-85cc-4768e704f183.png" alt="实现连接存活.png">
+<figcaption aria-hidden="true">实现连接存活.png</figcaption>
+</figure>
 <p>采用之前同样的断点进行测试，图中只进行一次析构，说明连接保活成功。</p>
-<h2><span id="增加发送队列实现全双工通信">增加发送队列实现全双工通信</span></h2><p>解决多次析构的问题，就要进入到消息发送的问题上来了。实际的网络服务器那都是全双工，即读写事件同时监听。我们需要实现一个 Buffer 结构（这里实现的MsgNode类），用于读和写事件数据的存储，把未发送完的数据保存到队列中，保证消息的有序性。同时还要重写之前的读写回调函数。</p>
-<h3><span id="实现全双工的读写回调流程">实现全双工的读写回调流程</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Session::handle_write</span><span class="hljs-params">(<span class="hljs-type">const</span> boost::system::error_code&amp; error)</span></span><br><span class="hljs-function"></span>&#123;<br>	std::cout &lt;&lt; <span class="hljs-string">&quot;触发 write event&quot;</span> &lt;&lt; std::endl;<br><br>	<span class="hljs-keyword">if</span> (error) &#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot;handle_write error = &quot;</span> &lt;&lt; error &lt;&lt; std::endl;<br>		server_-&gt;<span class="hljs-built_in">ClearSession</span>(uuid_);<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br>	<span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">send_lock</span><span class="hljs-params">(mtx_)</span></span>;<br>	<span class="hljs-keyword">if</span> (!sendQue_.<span class="hljs-built_in">empty</span>()) &#123;<br>		<span class="hljs-keyword">auto</span>&amp; msgNode = sendQue_.<span class="hljs-built_in">front</span>();<br>		boost::asio::<span class="hljs-built_in">async_write</span>(socket_, boost::asio::<span class="hljs-built_in">buffer</span>(msgNode-&gt;data_, msgNode-&gt;max_len_),<br>			std::<span class="hljs-built_in">bind</span>(&amp;Session::handle_write, <span class="hljs-built_in">shared_from_this</span>(), std::placeholders::_1));<br>		sendQue_.<span class="hljs-built_in">pop</span>();<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Session::Send</span><span class="hljs-params">(<span class="hljs-type">char</span>* msg, <span class="hljs-type">int</span> max_len)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">bool</span> pending = <span class="hljs-literal">false</span>;<br>	<span class="hljs-comment">// 加锁</span><br>	<span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">send_lock</span><span class="hljs-params">(mtx_)</span></span>;<br>	<span class="hljs-keyword">if</span> (!sendQue_.<span class="hljs-built_in">empty</span>()) &#123;	<br>		pending = <span class="hljs-literal">true</span>;<br>	&#125;<br>	sendQue_.<span class="hljs-built_in">push</span>(std::<span class="hljs-built_in">make_shared</span>&lt;MsgNode&gt;(msg, max_len));<br>	<span class="hljs-keyword">if</span> (pending) &#123;	<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	socket_.<span class="hljs-built_in">async_write_some</span>(boost::asio::<span class="hljs-built_in">buffer</span>(msg,max_len),	<br>		std::<span class="hljs-built_in">bind</span>(&amp;Session::handle_write, <span class="hljs-built_in">shared_from_this</span>(), std::placeholders::_1));<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>增加的这个队列是发送队列。当客户端第一次发送数据，触发这边的读回调，该回调内部就会调用 Send 函数。在 Send 函数中，对数据进行操作需要加锁，异步编程中，你不知道会被哪个线程再次调用 Send 接口。如果 发送队列 sendQue_ 不为空，代表 handle_write 内部已经再次监听写事件，这边就只需要把数据加入到发生队列中即可。如果发送队列 sendQue_ 为空，代表当前 socket 没有再监听写事件，那么我们需要再次 监听写事件。通过这样的方式，就可以一直保证监听写事件，不管队列中有没有数据。</p>
+<h2><span id="增加发送队列实现全双工通信">增加发送队列实现全双工通信</span></h2>
+<p>解决多次析构的问题，就要进入到消息发送的问题上来了。实际的网络服务器那都是全双工，即读写事件同时监听。我们需要实现一个
+Buffer
+结构（这里实现的MsgNode类），用于读和写事件数据的存储，把未发送完的数据保存到队列中，保证消息的有序性。同时还要重写之前的读写回调函数。</p>
+<h3><span id="实现全双工的读写回调流程">实现全双工的读写回调流程</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Session::handle_write</span><span class="hljs-params">(<span class="hljs-type">const</span> boost::system::error_code&amp; error)</span></span><br><span class="hljs-function"></span>&#123;<br>	std::cout &lt;&lt; <span class="hljs-string">&quot;触发 write event&quot;</span> &lt;&lt; std::endl;<br><br>	<span class="hljs-keyword">if</span> (error) &#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot;handle_write error = &quot;</span> &lt;&lt; error &lt;&lt; std::endl;<br>		server_-&gt;<span class="hljs-built_in">ClearSession</span>(uuid_);<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br>	<span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">send_lock</span><span class="hljs-params">(mtx_)</span></span>;<br>	<span class="hljs-keyword">if</span> (!sendQue_.<span class="hljs-built_in">empty</span>()) &#123;<br>		<span class="hljs-keyword">auto</span>&amp; msgNode = sendQue_.<span class="hljs-built_in">front</span>();<br>		boost::asio::<span class="hljs-built_in">async_write</span>(socket_, boost::asio::<span class="hljs-built_in">buffer</span>(msgNode-&gt;data_, msgNode-&gt;max_len_),<br>			std::<span class="hljs-built_in">bind</span>(&amp;Session::handle_write, <span class="hljs-built_in">shared_from_this</span>(), std::placeholders::_1));<br>		sendQue_.<span class="hljs-built_in">pop</span>();<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Session::Send</span><span class="hljs-params">(<span class="hljs-type">char</span>* msg, <span class="hljs-type">int</span> max_len)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">bool</span> pending = <span class="hljs-literal">false</span>;<br>	<span class="hljs-comment">// 加锁</span><br>	<span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">send_lock</span><span class="hljs-params">(mtx_)</span></span>;<br>	<span class="hljs-keyword">if</span> (!sendQue_.<span class="hljs-built_in">empty</span>()) &#123;	<br>		pending = <span class="hljs-literal">true</span>;<br>	&#125;<br>	sendQue_.<span class="hljs-built_in">push</span>(std::<span class="hljs-built_in">make_shared</span>&lt;MsgNode&gt;(msg, max_len));<br>	<span class="hljs-keyword">if</span> (pending) &#123;	<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	socket_.<span class="hljs-built_in">async_write_some</span>(boost::asio::<span class="hljs-built_in">buffer</span>(msg,max_len),	<br>		std::<span class="hljs-built_in">bind</span>(&amp;Session::handle_write, <span class="hljs-built_in">shared_from_this</span>(), std::placeholders::_1));<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>增加的这个队列是发送队列。当客户端第一次发送数据，触发这边的读回调，该回调内部就会调用
+Send 函数。在 Send
+函数中，对数据进行操作需要加锁，异步编程中，你不知道会被哪个线程再次调用
+Send 接口。如果 发送队列 sendQue_ 不为空，代表 handle_write
+内部已经再次监听写事件，这边就只需要把数据加入到发生队列中即可。如果发送队列
+sendQue_ 为空，代表当前 socket 没有再监听写事件，那么我们需要再次
+监听写事件。通过这样的方式，就可以一直保证监听写事件，不管队列中有没有数据。</p>
 <p>我们的 handle_read 函数 接受客户端数据之后，就继续监听读事件了。</p>
 <p>至此，该服务器虽然实现了全双工通信，但是仍存在缺陷，比如粘包问题未处理。</p>
-<h3><span id="代码实现和粘包现象">代码实现和粘包现象</span></h3><p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/5-%E6%B7%BB%E5%8A%A0%E5%8F%91%E7%94%9F%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E7%9A%84%E6%9C%89%E5%BA%8F%E6%80%A7">添加发生消息队列保证消息处理的有序性</a></p>
-<p>我们只需要把客户端修改为 循环发送 数据就可以见证粘包现象。记得不要写成客户端发一个消息，然后接一个消息，这会让服务器很快就处理数据，看不到粘包现象了。</p>
-<p><img src="/images/2024/09/08/6d16a670-6dd4-11ef-85cc-4768e704f183.png" alt="粘包.png"></p>
-<h2><span id="处理网络粘包问题">处理网络粘包问题</span></h2><p>网络粘包问题可见我的另一篇文章<a href="https://xiaoyangst.github.io/2024/08/10/%E8%AE%B0%E4%BD%8F%EF%BC%9ATCP%E6%98%AF%E4%B8%80%E7%A7%8D%E6%B5%81%E5%8D%8F%E8%AE%AE/">记住：TCP 是一种流协议</a>。</p>
-<h3><span id="session类">Session类</span></h3><p>说明：红色数据代表已发送，灰色数据代表未发送</p>
-<p><img src="/images/2024/09/08/72528640-6dd4-11ef-85cc-4768e704f183.png" alt="粘包情况分析.png"></p>
+<h3><span id="代码实现和粘包现象">代码实现和粘包现象</span></h3>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/5-%E6%B7%BB%E5%8A%A0%E5%8F%91%E7%94%9F%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E7%9A%84%E6%9C%89%E5%BA%8F%E6%80%A7">添加发生消息队列保证消息处理的有序性</a></p>
+<p>我们只需要把客户端修改为 循环发送
+数据就可以见证粘包现象。记得不要写成客户端发一个消息，然后接一个消息，这会让服务器很快就处理数据，看不到粘包现象了。</p>
+<figure>
+<img src="/images/2024/09/08/6d16a670-6dd4-11ef-85cc-4768e704f183.png" alt="粘包.png">
+<figcaption aria-hidden="true">粘包.png</figcaption>
+</figure>
+<h2><span id="处理网络粘包问题">处理网络粘包问题</span></h2>
+<p>网络粘包问题可见我的另一篇文章<a href="https://xiaoyangst.github.io/2024/08/10/%E8%AE%B0%E4%BD%8F%EF%BC%9ATCP%E6%98%AF%E4%B8%80%E7%A7%8D%E6%B5%81%E5%8D%8F%E8%AE%AE/">记住：TCP
+是一种流协议</a>。</p>
+<h3><span id="session类">Session类</span></h3>
+<p>说明：红色数据代表已发送，灰色数据代表未发送</p>
+<figure>
+<img src="/images/2024/09/08/72528640-6dd4-11ef-85cc-4768e704f183.png" alt="粘包情况分析.png">
+<figcaption aria-hidden="true">粘包情况分析.png</figcaption>
+</figure>
 <ul>
 <li>如果头部记录的长度大于数据长度，意味着本次接受的消息不完整，还有一部分数据在下一个数据包中</li>
 <li>如果头部记录的长度小于数据长度，意味着本次接受的消息包含上一个数据包未完整接受到的数据和其他数据</li>
 <li>如果头部记录的长度等于数据长度，意味着解析完成或者刚好没有粘包，直接接受即可</li>
 <li>头部记录的长度非法，头部记录的长度远远超出我们规定的可接受数据包的最大长度，这种视为非法的带有攻击性的数据包，直接丢弃即可</li>
 </ul>
-<p>由于我们调用的异步函数 async_read_some，对方只要有发送数据就会触发回调函数，那我们就得写复杂的拆包逻辑。消息不完整的，需要等待下次数据包到来切割出剩余的数据，拼凑出完整的数据。消息超出头部记录的长度，需要把多余的部分切割出来给到上一次的数据包，然后继续处理余下的数据包。其余两种情况就不难处理了。不管怎么样，我们要记录很多的信息，消息处理到哪个位置了？上次的消息有没有处理完？诸如此类的考量，以至于《恋恋风辰》写出<a target="_blank" rel="noopener" href="https://llfc.club/category?catid=225RaiVNI8pFDD5L4m807g7ZwmF#!aid/2PSqYnkrogKeDPjv3gdBUAcbN5P">如此复杂的代码</a>，实在看不下去了。其实，就算我们按照这种情况去处理，也可以写出比这个还看起来轻松的代码，但我们还是直接利用 async_receive 异步回调函数 满足指定长度才触发回到的机制来实现吧。</p>
-<h3><span id="代码实现和解决粘包">代码实现和解决粘包</span></h3><p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/6-%E5%A4%84%E7%90%86%E7%BD%91%E7%BB%9C%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98">处理网络粘包问题</a></p>
-<p><img src="/images/2024/09/08/7968cb60-6dd4-11ef-85cc-4768e704f183.png" alt="服务器解决粘包问题.png"></p>
-<p>客户端的代码要修改，即发生消息按照 数据头+数据 的格式发送过来。我这边只是测试服务器的是否解决粘包，所以依旧是客户端大量发送消息。</p>
-<h2><span id="字节序处理和消息队列的控制">字节序处理和消息队列的控制</span></h2><p>字节序问题可以看我此文的介绍：<a href="https://xiaoyangst.github.io/2024/08/10/%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F/">主机字节序和网络字节序</a></p>
-<p>网络字节序是大端字节序，而主机字节序可能是大端（如某些RISC处理器）或小端（如x86&#x2F;x86_64处理器）。为了保证不同系统间的数据兼容性，需要在网络数据交换时进行字节序转换。</p>
-<p>当你发送或接收的数据中包含整数（如IP地址、端口号等），需要进行字节序转换。例如，TCP&#x2F;IP协议中有很多字段需要进行字节序转换：</p>
+<p>由于我们调用的异步函数
+async_read_some，对方只要有发送数据就会触发回调函数，那我们就得写复杂的拆包逻辑。消息不完整的，需要等待下次数据包到来切割出剩余的数据，拼凑出完整的数据。消息超出头部记录的长度，需要把多余的部分切割出来给到上一次的数据包，然后继续处理余下的数据包。其余两种情况就不难处理了。不管怎么样，我们要记录很多的信息，消息处理到哪个位置了？上次的消息有没有处理完？诸如此类的考量，以至于《恋恋风辰》写出<a target="_blank" rel="noopener" href="https://llfc.club/category?catid=225RaiVNI8pFDD5L4m807g7ZwmF#!aid/2PSqYnkrogKeDPjv3gdBUAcbN5P">如此复杂的代码</a>，实在看不下去了。其实，就算我们按照这种情况去处理，也可以写出比这个还看起来轻松的代码，但我们还是直接利用
+async_receive 异步回调函数 满足指定长度才触发回到的机制来实现吧。</p>
+<h3><span id="代码实现和解决粘包">代码实现和解决粘包</span></h3>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/6-%E5%A4%84%E7%90%86%E7%BD%91%E7%BB%9C%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98">处理网络粘包问题</a></p>
+<figure>
+<img src="/images/2024/09/08/7968cb60-6dd4-11ef-85cc-4768e704f183.png" alt="服务器解决粘包问题.png">
+<figcaption aria-hidden="true">服务器解决粘包问题.png</figcaption>
+</figure>
+<p>客户端的代码要修改，即发生消息按照 数据头+数据
+的格式发送过来。我这边只是测试服务器的是否解决粘包，所以依旧是客户端大量发送消息。</p>
+<h2><span id="字节序处理和消息队列的控制">字节序处理和消息队列的控制</span></h2>
+<p>字节序问题可以看我此文的介绍：<a href="https://xiaoyangst.github.io/2024/08/10/%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F/">主机字节序和网络字节序</a></p>
+<p>网络字节序是大端字节序，而主机字节序可能是大端（如某些RISC处理器）或小端（如x86/x86_64处理器）。为了保证不同系统间的数据兼容性，需要在网络数据交换时进行字节序转换。</p>
+<p>当你发送或接收的数据中包含整数（如IP地址、端口号等），需要进行字节序转换。例如，TCP/IP协议中有很多字段需要进行字节序转换：</p>
 <ul>
 <li><strong>端口号</strong>（如<code>htons</code>和<code>ntohs</code>）：网络中使用的端口号在发送之前需要转换为网络字节序，接收后需要转换为主机字节序。</li>
 <li><strong>IP地址</strong>（如<code>htonl</code>和<code>ntohl</code>）：IP地址通常以32位的整数形式传输，发送前转换为网络字节序，接收后转换为主机字节序。</li>
 </ul>
-<p>我们知道网络传输数据务必保证字节序相同，即采用网络字节序，因此看看 asio 提供什么接口给我们使用了。</p>
+<p>我们知道网络传输数据务必保证字节序相同，即采用网络字节序，因此看看
+asio 提供什么接口给我们使用了。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 将一个 32 位无符号整数从主机字节序转换为网络字节序，返回转换后的结果</span><br>boost::asio::detail::socket_ops::<span class="hljs-built_in">host_to_network_long</span>()<br><br> <span class="hljs-comment">// 将一个 16 位无符号整数从主机字节序转换为网络字节序，返回转换后的结果</span><br>boost::asio::detail::socket_ops::<span class="hljs-built_in">host_to_network_short</span>()<br></code></pre></td></tr></table></figure>
-
 <p>需要注意的是，在使用这些函数时，应该确保输入参数和返回结果都是无符号整数类型，否则可能会出现错误。同样的道理，我们只需要在服务器发送数据时，将数据长度转化为网络字节序，在接收数据时，将长度转为本机字节序即可。客户端也要遵循相同的规则。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">boost::asio::detail::socket_ops::<span class="hljs-built_in">network_to_host_short</span>()<br><br>boost::asio::detail::socket_ops::<span class="hljs-built_in">network_to_host_long</span>()<br></code></pre></td></tr></table></figure>
-
 <p><strong>发生数据时，把本地字节序转换为网络字节序。接受数据时，把网络字节序转换为本地字节序。</strong>客户端和服务端都要遵守。下面只截取一部分代码作为演示：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 服务器端代码</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Session::handle_read</span><span class="hljs-params">(<span class="hljs-type">const</span> boost::system::error_code&amp; error, <span class="hljs-type">size_t</span> bytes_transfered)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> (error) &#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot;handle_read error = &quot;</span> &lt;&lt; error.<span class="hljs-built_in">message</span>() &lt;&lt; std::endl;<br>		<span class="hljs-built_in">Close</span>();<br>		server_-&gt;<span class="hljs-built_in">ClearSession</span>(uuid_);<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	<span class="hljs-type">int</span> data_len = <span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">memcpy</span>(&amp;data_len, recv_head_node_-&gt;data_, HEAD_LENGTH);<br>	std::cout &lt;&lt; <span class="hljs-string">&quot; data length = &quot;</span> &lt;&lt; data_len &lt;&lt; std::endl;<br><br>	<span class="hljs-keyword">if</span> (data_len &gt; MAX_LENGTH) &#123;	<span class="hljs-comment">// 非法</span><br>		std::cout &lt;&lt; <span class="hljs-string">&quot;invalid data length is &quot;</span> &lt;&lt; data_len &lt;&lt; std::endl;<br>		server_-&gt;<span class="hljs-built_in">ClearSession</span>(uuid_);<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br>	<br>       <span class="hljs-comment">//网络字节序转化为本地字节序</span><br>	data_len = boost::asio::detail::socket_ops::<span class="hljs-built_in">network_to_host_short</span>(data_len);<br><br>	recv_msg_node_ = std::<span class="hljs-built_in">make_shared</span>&lt;MsgNode&gt;(data_len);<br>	socket_.<span class="hljs-built_in">async_receive</span>(boost::asio::<span class="hljs-built_in">buffer</span>(recv_msg_node_-&gt;data_, data_len),	<span class="hljs-comment">// 读完 HEAD_LENGTH 字节才触发读回调</span><br>		std::<span class="hljs-built_in">bind</span>(&amp;Session::HandleReadMsg, <span class="hljs-built_in">shared_from_this</span>(), std::placeholders::_1, std::placeholders::_2));<br><br>&#125;<br><br><span class="hljs-comment">// 客户端代码</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">send_thread</span><span class="hljs-params">(tcp::socket&amp; sock)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (;;) &#123;<br>        this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">milliseconds</span>(<span class="hljs-number">2</span>));<br>        <span class="hljs-type">const</span> <span class="hljs-type">char</span>* request = <span class="hljs-string">&quot;hello world!&quot;</span>;<br>        <span class="hljs-comment">// 本地字节序转换为网络字节序</span><br>        <span class="hljs-type">short</span> request_length = boost::asio::detail::socket_ops::<span class="hljs-built_in">host_to_network_short</span>(<span class="hljs-built_in">strlen</span>(request));<br>        <br>        <span class="hljs-type">char</span> send_data[MAX_LENGTH] = &#123; <span class="hljs-number">0</span> &#125;;<br>        <span class="hljs-built_in">memcpy</span>(send_data, &amp;request_length, HEAD_LENGTH);<br>        <span class="hljs-built_in">memcpy</span>(send_data + HEAD_LENGTH, request, request_length);<br><br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mtx)</span></span>;<br>        boost::asio::<span class="hljs-built_in">write</span>(sock, boost::asio::<span class="hljs-built_in">buffer</span>(send_data, request_length + HEAD_LENGTH));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>我在实际测试的时候，发现 asio 这几个库函数出现问题，导致我的客户端发送数据失败。建议还是用 我博客介绍的 htons 和 ntohs 来进行转换吧。</p>
+<p>我在实际测试的时候，发现 asio
+这几个库函数出现问题，导致我的客户端发送数据失败。建议还是用
+我博客介绍的 htons 和 ntohs 来进行转换吧。</p>
 <p>还有就是我们的发送队列要有限制，不然无限添加也不合理。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Session::Send</span><span class="hljs-params">(<span class="hljs-type">char</span>* msg, <span class="hljs-type">int</span> max_len)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">bool</span> pending = <span class="hljs-literal">false</span>;<br>	<span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">send_lock</span><span class="hljs-params">(mtx_)</span></span>;<br>	<span class="hljs-keyword">if</span> (!sendQue_.<span class="hljs-built_in">empty</span>()) &#123;	<br>		pending = <span class="hljs-literal">true</span>;<br>	&#125;<br>	<span class="hljs-keyword">if</span> (sendQue_.<span class="hljs-built_in">size</span>() &gt; MAX_SENDQUE) &#123;	<span class="hljs-comment">// 超过队列限制大小，直接丢弃</span><br>		std::cout &lt;&lt; <span class="hljs-string">&quot;uuid = &quot;</span>&lt;&lt; uuid_ &lt;&lt; <span class="hljs-string">&quot;Exceeding the maximum capacity of the SendQue&quot;</span> &lt;&lt; std::endl;<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br>	sendQue_.<span class="hljs-built_in">push</span>(std::<span class="hljs-built_in">make_shared</span>&lt;MsgNode&gt;(msg, max_len));<br>	<span class="hljs-keyword">if</span> (pending) &#123;	<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	socket_.<span class="hljs-built_in">async_write_some</span>(boost::asio::<span class="hljs-built_in">buffer</span>(msg,max_len),	<br>		std::<span class="hljs-built_in">bind</span>(&amp;Session::handle_write, <span class="hljs-built_in">shared_from_this</span>(), std::placeholders::_1));<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/7-%E5%AD%97%E8%8A%82%E5%BA%8F%E5%A4%84%E7%90%86%E5%92%8C%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%8E%A7%E5%88%B6">字节序处理和消息队列控制</a></p>
-<h2><span id="序列化">序列化</span></h2><p>常见的序列化方式是通过 Json 或 Protobuf 来完成，这里就以 json这种格式简单看看 在网络库中的应用。你可以理解为就是把传递的消息进行打包，那么对方在接收到这份数据之后，能够根据一定的规则得到数据中存储的有效值（毕竟 key 是用来查找 value，实际我们关心的就是 value）。</p>
-<p><img src="/images/2024/09/08/84628c40-6dd4-11ef-85cc-4768e704f183.png" alt="序列化和反序列化.png"></p>
-<p>如果你要发送的数据是有联系的，你不进行反序列化话就要多次发生数据。如果进行反序列化就可以打包在一起发过去，只需要发生一次数据，然后对端序列化之后通过 key 来读取实际要获取的数据就可以了。序列化只是把数据打包，因此依旧要通过 数据头部+数据长度解决粘包问题。序列化和反序列化可以规范数据的传输格式，但并不能解决<strong>粘包</strong>或<strong>拆包</strong>问题。<strong>粘包问题</strong>主要是由于TCP流式传输的特性引起的，而不是数据的编码方式。</p>
+<h2><span id="序列化">序列化</span></h2>
+<p>常见的序列化方式是通过 Json 或 Protobuf 来完成，这里就以
+json这种格式简单看看
+在网络库中的应用。你可以理解为就是把传递的消息进行打包，那么对方在接收到这份数据之后，能够根据一定的规则得到数据中存储的有效值（毕竟
+key 是用来查找 value，实际我们关心的就是 value）。</p>
+<figure>
+<img src="/images/2024/09/08/84628c40-6dd4-11ef-85cc-4768e704f183.png" alt="序列化和反序列化.png">
+<figcaption aria-hidden="true">序列化和反序列化.png</figcaption>
+</figure>
+<p>如果你要发送的数据是有联系的，你不进行反序列化话就要多次发生数据。如果进行反序列化就可以打包在一起发过去，只需要发生一次数据，然后对端序列化之后通过
+key 来读取实际要获取的数据就可以了。序列化只是把数据打包，因此依旧要通过
+数据头部+数据长度解决粘包问题。序列化和反序列化可以规范数据的传输格式，但并不能解决<strong>粘包</strong>或<strong>拆包</strong>问题。<strong>粘包问题</strong>主要是由于TCP流式传输的特性引起的，而不是数据的编码方式。</p>
 <p>序列化可以规范和压缩数据结构，但为了避免粘包，常结合<strong>消息头+消息体</strong>的方式进行序列化。比如，你可以先序列化数据，将其打包成字节流，再在字节流前加上长度信息，接收方根据长度信息判断数据是否完整，然后再反序列化还原数据。</p>
 <p>客户端把要发生的数据序列化：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++">Json::Value root;<br>root[<span class="hljs-string">&quot;id&quot;</span>] = <span class="hljs-number">1001</span>;<br>root[<span class="hljs-string">&quot;data&quot;</span>] = <span class="hljs-string">&quot;hello world&quot;</span>;<br>std::string request = root.<span class="hljs-built_in">toStyledString</span>();<br><span class="hljs-type">size_t</span> request_length = request.<span class="hljs-built_in">length</span>();<br><span class="hljs-type">char</span> send_data[MAX_LENGTH] = &#123; <span class="hljs-number">0</span> &#125;;<br><span class="hljs-type">int</span> request_host_length = <span class="hljs-built_in">htons</span>(request_length);<br><span class="hljs-built_in">memcpy</span>(send_data, &amp;request_host_length, <span class="hljs-number">2</span>);<br><span class="hljs-built_in">memcpy</span>(send_data + <span class="hljs-number">2</span>, request.<span class="hljs-built_in">c_str</span>(), request_length);<br>boost::asio::<span class="hljs-built_in">write</span>(sock, boost::asio::<span class="hljs-built_in">buffer</span>(send_data, request_length + <span class="hljs-number">2</span>));<br></code></pre></td></tr></table></figure>
-
 <p>客户端收到数据之后，进行反序列化：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">Json::Reader reader;<br>Json::Value root;<br>reader.<span class="hljs-built_in">parse</span>(std::<span class="hljs-built_in">string</span>(_recv_msg_node-&gt;_data, _recv_msg_node-&gt;_total_len), root);<br>std::cout &lt;&lt; <span class="hljs-string">&quot;recevie msg id  is &quot;</span> &lt;&lt; root[<span class="hljs-string">&quot;id&quot;</span>].<span class="hljs-built_in">asInt</span>() &lt;&lt; <span class="hljs-string">&quot; msg data is &quot;</span><br>&lt;&lt; root[<span class="hljs-string">&quot;data&quot;</span>].<span class="hljs-built_in">asString</span>() &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
-<hr>
-<p>⭐️内容取自 B 站 UP 恋恋风辰和 mmoaay 的《Boost.Asio C++ 网络编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议看原视频或者读原书。</p>
+<h2><span id="12345jsonreader-readerjsonvalue-rootreaderparsestdstring_recv_msg_node-gt_data-_recv_msg_node-gt_total_len-rootstdcout-ltlt-quotrecevie-msg-id-is-quot-ltlt-rootquotidquotasint-ltlt-quot-msg-data-is-quotltlt-rootquotdataquotasstring-ltlt-endl"><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">Json::Reader reader;<br>Json::Value root;<br>reader.<span class="hljs-built_in">parse</span>(std::<span class="hljs-built_in">string</span>(_recv_msg_node-&gt;_data, _recv_msg_node-&gt;_total_len), root);<br>std::cout &lt;&lt; <span class="hljs-string">&quot;recevie msg id  is &quot;</span> &lt;&lt; root[<span class="hljs-string">&quot;id&quot;</span>].<span class="hljs-built_in">asInt</span>() &lt;&lt; <span class="hljs-string">&quot; msg data is &quot;</span><br>&lt;&lt; root[<span class="hljs-string">&quot;data&quot;</span>].<span class="hljs-built_in">asString</span>() &lt;&lt; endl;<br></code></pre></td></tr></table></figure></span></h2>
+<p>⭐️内容取自 B 站 UP 恋恋风辰和 mmoaay 的《Boost.Asio C++
+网络编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议看原视频或者读原书。</p>
 
       </div>
     </div>
@@ -361,7 +436,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\30\第一章：Asio-建立网络连接基本-API\" title="第一章：Asio 建立网络连接基本 API" rel="bookmark">第一章：Asio 建立网络连接基本 API</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\19\第七章：Beast网络库实现WebSocket服务器\" title="第七章：Beast网络库实现WebSocket服务器" rel="bookmark">第七章：Beast网络库实现WebSocket服务器</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\07\第二章：同步和异步\" title="第二章：同步和异步" rel="bookmark">第二章：同步和异步</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\30\第一章：Asio-建立网络连接基本-API\" title="第一章：Asio 建立网络连接基本 API" rel="bookmark">第一章：Asio 建立网络连接基本 API</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\19\第七章：Beast网络库实现WebSocket服务器\" title="第七章：Beast网络库实现WebSocket服务器" rel="bookmark">第七章：Beast网络库实现WebSocket服务器</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\07\第二章：同步和异步\" title="第二章：同步和异步" rel="bookmark">第二章：同步和异步</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -893,11 +968,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -173,21 +173,29 @@
             
           </div>
         
-        <p>单例模式能够保证一个类只有一个实例， 并提供一个访问该实例的全局节点，所以任何用户在该实例创建之后将不再允许再次创建。</p>
+        <p>单例模式能够保证一个类只有一个实例，
+并提供一个访问该实例的全局节点，所以任何用户在该实例创建之后将不再允许再次创建。</p>
 <p><a target="_blank" rel="noopener" href="https://www.yuque.com/xiaoyang-wyxle/his01x/cvyavebud851hnoh">单例模式有多种实现方式</a>，当我们要实现的单例模式必须是线程安全，且派生类通过继承就可以得到轻松创建该派生类的单例模式，后续就不必在每个类中都去实现一份单例了。</p>
 <ul>
-<li>once_flag 和 call_once 保证创建单例的方法在多线程环境下只会被调用一次</li>
-<li>static 关键字 保证 实例只能拥有一份（但需要设计才能保证多线程环境下独一份）</li>
+<li>once_flag 和 call_once
+保证创建单例的方法在多线程环境下只会被调用一次</li>
+<li>static 关键字 保证
+实例只能拥有一份（但需要设计才能保证多线程环境下独一份）</li>
 <li>用智能指针管理单例的实例对象</li>
-<li>禁用拷贝构造函数和拷贝赋值运算符函数，保证对象不可被拷贝构造和拷贝赋值，但是由于我们这里要设计的这个单例类用以被继承，所以得是 protected。派生类以 public 继承之后，自然会让其成为 private</li>
-<li>单例类的构造函数必须是 private，这样才能将类的创建权控制在类的内部，但是由于我们这里要设计的这个单例类用以被继承，所以得是 protected。派生类以 public 继承之后，自然会让其成为 private</li>
-<li>单例类的析构函数必须是 private，保证对象不可以在外部随意删除，但是由于我们这里要设计的这个单例类用以被继承，所以得是 protected。派生类以 public 继承之后，自然会让其成为 private</li>
+<li>禁用拷贝构造函数和拷贝赋值运算符函数，保证对象不可被拷贝构造和拷贝赋值，但是由于我们这里要设计的这个单例类用以被继承，所以得是
+protected。派生类以 public 继承之后，自然会让其成为 private</li>
+<li>单例类的构造函数必须是
+private，这样才能将类的创建权控制在类的内部，但是由于我们这里要设计的这个单例类用以被继承，所以得是
+protected。派生类以 public 继承之后，自然会让其成为 private</li>
+<li>单例类的析构函数必须是
+private，保证对象不可以在外部随意删除，但是由于我们这里要设计的这个单例类用以被继承，所以得是
+protected。派生类以 public 继承之后，自然会让其成为 private</li>
 <li>既然希望创建任意类的单例，需要用到模板类</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span> &#123;<br><span class="hljs-keyword">protected</span>:<br>	<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>	~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br><br>	<span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&lt;T&gt;&amp;) = <span class="hljs-keyword">delete</span>;<br>	Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&lt;T&gt;&amp;) = <span class="hljs-keyword">delete</span>;<br><br>	<span class="hljs-type">static</span> std::shared_ptr&lt;T&gt; instance_;<br>	<span class="hljs-type">static</span> std::once_flag once_;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-type">static</span> std::shared_ptr&lt;T&gt; <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>&#123;<br>		std::<span class="hljs-built_in">call_once</span>(once_, []() &#123;		<br>			instance_ = std::<span class="hljs-built_in">make_shared</span>&lt;T&gt;();<br>			&#125;);<br>		<span class="hljs-keyword">return</span> instance_;<br>	&#125;<br>&#125;;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br>std::shared_ptr&lt;T&gt; Singleton&lt;T&gt;::instance_ = <span class="hljs-literal">nullptr</span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br>std::once_flag Singleton&lt;T&gt;::once_;<br></code></pre></td></tr></table></figure>
-
 <p>客户端测试代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> : <span class="hljs-keyword">public</span> Singleton&lt;Student&gt; &#123;<br>    <span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&lt;Student&gt;;	<span class="hljs-comment">// 将 Singleton&lt;Student&gt; 声明为友元类，其私有的构造函数和析构函数都可以被 Singleton 调用了</span><br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doSomething</span><span class="hljs-params">()</span> </span>&#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot; Student do&quot;</span> &lt;&lt; std::endl;<br>	&#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">testSingleton</span><span class="hljs-params">()</span> </span>&#123;<br>	std::shared_ptr&lt;Student&gt; instance1 = Student::<span class="hljs-built_in">getInstance</span>();<br>	std::shared_ptr&lt;Student&gt; instance2 = Student::<span class="hljs-built_in">getInstance</span>();<br><br>	<span class="hljs-keyword">if</span> (instance1 == instance2) &#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot;Singleton test passed: Both instances are the same.&quot;</span> &lt;&lt; std::endl;<br>	&#125;<br>	<span class="hljs-keyword">else</span> &#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot;Singleton test failed: Instances are different.&quot;</span> &lt;&lt; std::endl;<br>	&#125;<br><br>	instance1-&gt;<span class="hljs-built_in">doSomething</span>();<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>	<span class="hljs-function">std::thread <span class="hljs-title">t1</span><span class="hljs-params">(testSingleton)</span></span>;<br>	<span class="hljs-function">std::thread <span class="hljs-title">t2</span><span class="hljs-params">(testSingleton)</span></span>;<br><br>	t<span class="hljs-number">1.</span><span class="hljs-built_in">join</span>();<br>	t<span class="hljs-number">2.</span><span class="hljs-built_in">join</span>();<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	Singleton test passed: Both instances are the same.</span><br><span class="hljs-comment"> 	 Student do</span><br><span class="hljs-comment">	Singleton test passed: Both instances are the same.</span><br><span class="hljs-comment">       Student do</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -271,7 +279,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\28\UML类图绘制\" title="UML类图绘制" rel="bookmark">UML类图绘制</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\29\代理模式\" title="代理模式" rel="bookmark">代理模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\04\命令模式\" title="命令模式" rel="bookmark">命令模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\28\UML类图绘制\" title="UML类图绘制" rel="bookmark">UML类图绘制</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\29\代理模式\" title="代理模式" rel="bookmark">代理模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\04\命令模式\" title="命令模式" rel="bookmark">命令模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -803,11 +811,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

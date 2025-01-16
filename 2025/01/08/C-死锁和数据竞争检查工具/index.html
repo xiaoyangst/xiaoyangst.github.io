@@ -174,26 +174,39 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%95%B0%E6%8D%AE%E7%AB%9E%E4%BA%89">数据竞争</a></li>
-<li><a href="#%E6%AD%BB%E9%94%81">死锁</a></li>
+<li><a href="#数据竞争">数据竞争</a></li>
+<li><a href="#死锁">死锁</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="数据竞争">数据竞争</span></h2><p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98/%E6%95%B0%E6%8D%AE%E7%AB%9E%E4%BA%89">存在数据竞争</a></p>
+<h2><span id="数据竞争">数据竞争</span></h2>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98/%E6%95%B0%E6%8D%AE%E7%AB%9E%E4%BA%89">存在数据竞争</a></p>
 <p><code>valgrind --tool = helgrind ./thread</code></p>
 <p>信息解读：</p>
 <p>1-线程创建信息，表明为 线程 3</p>
-<p><img src="/images/2025/01/08/9c15a29f-a0e3-4a30-83bd-3dadfc514ad7.png" alt="image20250108200134322.png"></p>
+<figure>
+<img src="/images/2025/01/08/9c15a29f-a0e3-4a30-83bd-3dadfc514ad7.png" alt="image20250108200134322.png">
+<figcaption aria-hidden="true">image20250108200134322.png</figcaption>
+</figure>
 <p>2-global_variable 变量可能存在数据竞争</p>
-<p><img src="/images/2025/01/08/9a172e58-9bca-49b9-b997-a0902a8c5baa.png" alt="image20250108200631379.png"></p>
-<h2><span id="死锁">死锁</span></h2><p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98/%E6%AD%BB%E9%94%81">死锁代码</a></p>
+<figure>
+<img src="/images/2025/01/08/9a172e58-9bca-49b9-b997-a0902a8c5baa.png" alt="image20250108200631379.png">
+<figcaption aria-hidden="true">image20250108200631379.png</figcaption>
+</figure>
+<h2><span id="死锁">死锁</span></h2>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98/%E6%AD%BB%E9%94%81">死锁代码</a></p>
 <p><code>valgrind --tool = helgrind ./thread</code></p>
 <p>运行就会卡住，Ctrl+C 停止程序，就可以看到相关输出了</p>
-<p><img src="/images/2025/01/08/176b8e98-da43-47d0-b13a-4896cdae5c69.png" alt="image20250108204044573.png"></p>
-<p><img src="/images/2025/01/08/5bd54ea0-360d-4534-825c-1b3ce8cf5c37.png" alt="image20250108204308194.png"></p>
-<p>我觉得这个输出非常让人不满意，只可以检测出由死锁问题导致的程序卡住，但是没有提示究竟的哪些锁（我们代码中由两把锁，名字为 mutexA 和 mutexB），不如用 gdb 进行调试死锁，信息比这个全面一些。</p>
+<figure>
+<img src="/images/2025/01/08/176b8e98-da43-47d0-b13a-4896cdae5c69.png" alt="image20250108204044573.png">
+<figcaption aria-hidden="true">image20250108204044573.png</figcaption>
+</figure>
+<figure>
+<img src="/images/2025/01/08/5bd54ea0-360d-4534-825c-1b3ce8cf5c37.png" alt="image20250108204308194.png">
+<figcaption aria-hidden="true">image20250108204308194.png</figcaption>
+</figure>
+<p>我觉得这个输出非常让人不满意，只可以检测出由死锁问题导致的程序卡住，但是没有提示究竟的哪些锁（我们代码中由两把锁，名字为
+mutexA 和 mutexB），不如用 gdb 进行调试死锁，信息比这个全面一些。</p>
 <p>而且还有个问题就是，如果你锁住的内容很多，输出就会很多，非常恶心。</p>
 
       </div>
@@ -279,7 +292,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\10\C-内存泄露检测工具\" title="C++内存泄露检测工具" rel="bookmark">C++内存泄露检测工具</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\05\CMake-和-GTest-结合\" title="CMake 和 GTest 结合" rel="bookmark">CMake 和 GTest 结合</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\13\Gdb基础教程\" title="Gdb基础教程" rel="bookmark">Gdb基础教程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\10\C-内存泄露检测工具\" title="C++内存泄露检测工具" rel="bookmark">C++内存泄露检测工具</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\05\CMake-和-GTest-结合\" title="CMake 和 GTest 结合" rel="bookmark">CMake 和 GTest 结合</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\13\Gdb基础教程\" title="Gdb基础教程" rel="bookmark">Gdb基础教程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -811,11 +824,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

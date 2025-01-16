@@ -174,13 +174,15 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">bool</span> have = <span class="hljs-literal">false</span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtracing</span><span class="hljs-params">(TreeNode* root,<span class="hljs-type">int</span> targetSum,<span class="hljs-type">int</span> tmp)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(root == <span class="hljs-literal">nullptr</span>) <span class="hljs-keyword">return</span>;<br>        tmp += root-&gt;val;<br>        <span class="hljs-keyword">if</span>((!root-&gt;left) &amp;&amp; (!root-&gt;right) &amp;&amp; (targetSum == tmp))&#123;<br>            have = <span class="hljs-literal">true</span>;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-built_in">backtracing</span>(root-&gt;left,targetSum,tmp);<br>        <span class="hljs-built_in">backtracing</span>(root-&gt;right,targetSum,tmp);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">hasPathSum</span><span class="hljs-params">(TreeNode* root, <span class="hljs-type">int</span> targetSum)</span> </span>&#123;<br>        <span class="hljs-built_in">backtracing</span>(root,targetSum,<span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">return</span> have;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>这道题要注意题意，判断该树中是否存在 <strong>根节点到叶子节点</strong> 的路径，这条路径上所有节点值相加等于目标和 <code>targetSum</code> 。</p>
+<p>这道题要注意题意，判断该树中是否存在
+<strong>根节点到叶子节点</strong>
+的路径，这条路径上所有节点值相加等于目标和 <code>targetSum</code> 。</p>
 <p>所以并不只是总和为目标值就可以，即如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (targetSum == tmp) &#123;<br>    have = <span class="hljs-literal">true</span>;<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>你还要保证它是 <strong>根节点到叶子节点</strong> 的路径，所以应该是如下判断方式：</p>
+<p>你还要保证它是 <strong>根节点到叶子节点</strong>
+的路径，所以应该是如下判断方式：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> ((!root - &gt;left) &amp;&amp; (!root - &gt;right) &amp;&amp; (targetSum == tmp)) &#123;<br>    have = <span class="hljs-literal">true</span>;<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -264,7 +266,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\11\226-翻转二叉树\" title="226. 翻转二叉树" rel="bookmark">226. 翻转二叉树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\13\501-二叉搜索树中的众数\" title="501. 二叉搜索树中的众数" rel="bookmark">501. 二叉搜索树中的众数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\11\226-翻转二叉树\" title="226. 翻转二叉树" rel="bookmark">226. 翻转二叉树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\13\530-二叉搜索树的最小绝对差\" title="530. 二叉搜索树的最小绝对差" rel="bookmark">530. 二叉搜索树的最小绝对差</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
     
   </div>
 </div>
@@ -796,11 +798,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

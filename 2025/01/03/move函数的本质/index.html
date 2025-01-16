@@ -173,14 +173,20 @@
             
           </div>
         
-        <p>move 容易被人误以为是 窃取某个对象的资源给另一个对象，但这是错误的认知。</p>
-<p>move 本质上只干一件事情，<font color="red">把左值强制转换为右值引用</font>，进而能够让编译器去调用 move 对象的移动语义。</p>
-<p>因此，如果 move 的对象没有实现移动语义，那么你也无法触发，就会去走 拷贝（复制）语义，也就无法实现高效的资源转移。</p>
+        <p>move 容易被人误以为是
+窃取某个对象的资源给另一个对象，但这是错误的认知。</p>
+<p>move
+本质上只干一件事情，<font color="red">把左值强制转换为右值引用</font>，进而能够让编译器去调用
+move 对象的移动语义。</p>
+<p>因此，如果 move 的对象没有实现移动语义，那么你也无法触发，就会去走
+拷贝（复制）语义，也就无法实现高效的资源转移。</p>
 <ul>
 <li>待移动的对象实现移动语义，move 该对象实现资源窃取，性能提升</li>
-<li>待移动的对象没有实现移动语义，move 不会对该对象实现资源窃取，转而去走拷贝语义，性能没有任何提升</li>
+<li>待移动的对象没有实现移动语义，move
+不会对该对象实现资源窃取，转而去走拷贝语义，性能没有任何提升</li>
 </ul>
-<p>代码实现：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E7%90%86%E8%A7%A3move%E5%87%BD%E6%95%B0">理解 move 函数</a></p>
+<p>代码实现：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E7%90%86%E8%A7%A3move%E5%87%BD%E6%95%B0">理解
+move 函数</a></p>
 
       </div>
     </div>
@@ -265,7 +271,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -797,11 +803,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

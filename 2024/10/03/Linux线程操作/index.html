@@ -174,151 +174,181 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C">线程的基本操作</a><ul>
-<li><a href="#pthread_self-%E8%8E%B7%E5%8F%96%E7%BA%BF%E7%A8%8Bid">pthread_self–获取线程ID</a></li>
-<li><a href="#pthread_create-%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B">pthread_create–创建线程</a></li>
-<li><a href="#pthread_exit-%E7%BB%88%E6%AD%A2%E7%BA%BF%E7%A8%8B">pthread_exit–终止线程</a></li>
-<li><a href="#pthread_join-%E8%BF%9E%E6%8E%A5%E5%B7%B2%E7%BB%88%E6%AD%A2%E7%9A%84%E7%BA%BF%E7%A8%8B">pthread_join–连接已终止的线程</a></li>
-<li><a href="#pthread_detach-%E5%88%86%E7%A6%BB%E7%BA%BF%E7%A8%8B">pthread_detach–分离线程</a></li>
-<li><a href="#pthread_cancel-%E5%8F%96%E6%B6%88%E7%BA%BF%E7%A8%8B%E4%BA%86%E8%A7%A3">pthread_cancel–取消线程（了解）</a></li>
-<li><a href="#%E7%BA%BF%E7%A8%8B%E6%B8%85%E7%90%86%E5%87%BD%E6%95%B0%E4%BA%86%E8%A7%A3">线程清理函数（了解）</a></li>
-</ul>
-</li>
-<li><a href="#%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5">线程同步</a><ul>
-<li><a href="#%E4%BA%92%E6%96%A5%E9%94%81">互斥锁</a></li>
-<li><a href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F">条件变量</a></li>
-</ul>
-</li>
+<li><a href="#线程的基本操作">线程的基本操作</a>
+<ul>
+<li><a href="#pthread_self-获取线程id">pthread_self--获取线程ID</a></li>
+<li><a href="#pthread_create-创建线程">pthread_create--创建线程</a></li>
+<li><a href="#pthread_exit-终止线程">pthread_exit--终止线程</a></li>
+<li><a href="#pthread_join-连接已终止的线程">pthread_join--连接已终止的线程</a></li>
+<li><a href="#pthread_detach-分离线程">pthread_detach--分离线程</a></li>
+<li><a href="#pthread_cancel-取消线程了解">pthread_cancel--取消线程（了解）</a></li>
+<li><a href="#线程清理函数了解">线程清理函数（了解）</a></li>
+</ul></li>
+<li><a href="#线程同步">线程同步</a>
+<ul>
+<li><a href="#互斥锁">互斥锁</a></li>
+<li><a href="#条件变量">条件变量</a></li>
+</ul></li>
 </ul>
 <!-- tocstop -->
-
-<p>由于在 C++ 阶段就已经深刻学习过 线程相关的知识，但是 C 语言的线程操作繁琐且难用，就算以后要用也必然是用封装过的线程，我们需要做这个工作。总的来讲，我们要显示三个内容：银行存钱取钱，阻塞队列，生产者消费者模型。</p>
-<h2><span id="线程的基本操作">线程的基本操作</span></h2><h3><span id="pthread_self获取线程id">pthread_self–获取线程ID</span></h3><p>每个线程都有一个唯一的ID。</p>
-<p>在 Linux 中， pthread_t 类型定义为无符号长整型 ( unsigned long ) 。</p>
+<p>由于在 C++ 阶段就已经深刻学习过 线程相关的知识，但是 C
+语言的线程操作繁琐且难用，就算以后要用也必然是用封装过的线程，我们需要做这个工作。总的来讲，我们要显示三个内容：银行存钱取钱，阻塞队列，生产者消费者模型。</p>
+<h2><span id="线程的基本操作">线程的基本操作</span></h2>
+<h3><span id="pthread_self-获取线程id">pthread_self--获取线程ID</span></h3>
+<p>每个线程都有一个唯一的ID。</p>
+<p>在 Linux 中， pthread_t 类型定义为无符号长整型 ( unsigned long )
+。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">pthread_t</span> <span class="hljs-title">pthread_self</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<h3><span id="pthread_create创建线程">pthread_create–创建线程</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_create</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> *thread, <span class="hljs-type">const</span> <span class="hljs-type">pthread_attr_t</span> *attr,</span></span><br><span class="hljs-params"><span class="hljs-function">                          <span class="hljs-type">void</span> *(*start_routine) (<span class="hljs-type">void</span> *), <span class="hljs-type">void</span> *arg)</span></span>;<br></code></pre></td></tr></table></figure>
-
+<h3><span id="pthread_create-创建线程">pthread_create--创建线程</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_create</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> *thread, <span class="hljs-type">const</span> <span class="hljs-type">pthread_attr_t</span> *attr,</span></span><br><span class="hljs-params"><span class="hljs-function">                          <span class="hljs-type">void</span> *(*start_routine) (<span class="hljs-type">void</span> *), <span class="hljs-type">void</span> *arg)</span></span>;<br></code></pre></td></tr></table></figure>
 <p>thread：pthread_t* 定义，用于接收创建的线程的标识符。</p>
 <p>attr：线程属性，通常是 NULL ，采用默认属性。</p>
 <p>start_routine：函数指针。</p>
 <p>arg：传递给函数指针的形参。如果不传递任何参数，填 NULL。</p>
-<p>代码：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/C%E8%AF%AD%E8%A8%80%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C">C 语言线程的基本使用</a></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/C%E8%AF%AD%E8%A8%80%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C">C
+语言线程的基本使用</a></p>
 <p>实际上这并不难，重点还是要演示如果传递更多的参数，已经如何获取线程的返回值。后者需要等到介绍后面的接口才能做，这里重点谈一谈前者。</p>
-<p>我们看传递给函数指针的参数只有一个，理论上也只能传递一个。但是 void* 代表可以传递任何类型，结构体是一个类型，并且支持存储多个不同类型的参数，因此C 语言线程如何突破只能传递一个参数的限制？用结构体！</p>
-<p>代码：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/C%E8%AF%AD%E8%A8%80%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/%E4%BC%A0%E9%80%92%E5%A4%9A%E4%B8%AA%E5%8F%82%E6%95%B0">C 语言线程如何突破只能传递一个参数的限制</a></p>
-<h3><span id="pthread_exit终止线程">pthread_exit–终止线程</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pthread_exit</span><span class="hljs-params">(<span class="hljs-type">void</span> *retval)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>我们通过这个函数可以传递线程的返回值，即 retval 参数。然后其他线程就可以通过 pthread_join() 获取该返回值。等到我们讲完 pthread_join() 就实现获取返回值的代码。</p>
+<p>我们看传递给函数指针的参数只有一个，理论上也只能传递一个。但是 void*
+代表可以传递任何类型，结构体是一个类型，并且支持存储多个不同类型的参数，因此C
+语言线程如何突破只能传递一个参数的限制？用结构体！</p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/C%E8%AF%AD%E8%A8%80%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/%E4%BC%A0%E9%80%92%E5%A4%9A%E4%B8%AA%E5%8F%82%E6%95%B0">C
+语言线程如何突破只能传递一个参数的限制</a></p>
+<h3><span id="pthread_exit-终止线程">pthread_exit--终止线程</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pthread_exit</span><span class="hljs-params">(<span class="hljs-type">void</span> *retval)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>我们通过这个函数可以传递线程的返回值，即 retval
+参数。然后其他线程就可以通过 pthread_join() 获取该返回值。等到我们讲完
+pthread_join() 就实现获取返回值的代码。</p>
 <p>让线程终止的方式，还要很多，下面列举：</p>
-<ol>
-<li>进程终止 (比如调用 exit() ，从 main() 函数返回)，那么该进程的所有线程都会立即终止。</li>
+<ol type="1">
+<li>进程终止 (比如调用 exit() ，从 main()
+函数返回)，那么该进程的所有线程都会立即终止。</li>
 <li>从线程的入口函数返回。</li>
 <li>线程调用 pthread_exit() 。</li>
 <li>响应 pthread_cancel() 的取消请求。</li>
 </ol>
-<h3><span id="pthread_join连接已终止的线程">pthread_join–连接已终止的线程</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_join</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> thread, <span class="hljs-type">void</span> **retval)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>如果我们 detach 或者 等待 线程终止，主线程可能早早结束，会导致线程没有被执行的机会，或者执行到途中异常终止，主线程结束意味着进程结束，其他线程依赖于该进程，也就随之消亡。</p>
+<h3><span id="pthread_join-连接已终止的线程">pthread_join--连接已终止的线程</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_join</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> thread, <span class="hljs-type">void</span> **retval)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>如果我们 detach 或者 等待
+线程终止，主线程可能早早结束，会导致线程没有被执行的机会，或者执行到途中异常终止，主线程结束意味着进程结束，其他线程依赖于该进程，也就随之消亡。</p>
 <p>但它还有一个作用，就是获取返回值。</p>
-<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/C%E8%AF%AD%E8%A8%80%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/%E8%8E%B7%E5%8F%96%E8%BF%94%E5%9B%9E%E5%80%BC">C 语言线程获取返回值</a></p>
-<h3><span id="pthread_detach分离线程">pthread_detach–分离线程</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_detach</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> thread)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>有时，我们并不关心线程的返回状态，反而希望在线程终止时系统能够自动清理并移除它。在这种情况下，我们可以调用 pthread_detach() 将线程标记为处于分离（detached）状态。一旦线程处于分离状态，就不能再使用 pthread_join() 来获取其返回状态了，也无法再回到可连接（joinable）状态了。</p>
-<h3><span id="pthread_cancel取消线程了解">pthread_cancel–取消线程（了解）</span></h3><p>通常情况下，程序中的多个线程会并发执行，每个线程各司其职。 但有时候，需要取消一个线程的执行。</p>
-<p>与 pthread_exit 只能终止本线程不同。pthread_cancel 可以由其他线程调用以显式地向目标线程发起取消请求，且 pthread_cancel 不是强制的，是一种协商机制，目标线程可以选择是否响应这次取消操作。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/C%E8%AF%AD%E8%A8%80%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/%E8%8E%B7%E5%8F%96%E8%BF%94%E5%9B%9E%E5%80%BC">C
+语言线程获取返回值</a></p>
+<h3><span id="pthread_detach-分离线程">pthread_detach--分离线程</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_detach</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> thread)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>有时，我们并不关心线程的返回状态，反而希望在线程终止时系统能够自动清理并移除它。在这种情况下，我们可以调用
+pthread_detach()
+将线程标记为处于分离（detached）状态。一旦线程处于分离状态，就不能再使用
+pthread_join()
+来获取其返回状态了，也无法再回到可连接（joinable）状态了。</p>
+<h3><span id="pthread_cancel-取消线程了解">pthread_cancel--取消线程（了解）</span></h3>
+<p>通常情况下，程序中的多个线程会并发执行，每个线程各司其职。
+但有时候，需要取消一个线程的执行。</p>
+<p>与 pthread_exit 只能终止本线程不同。pthread_cancel
+可以由其他线程调用以显式地向目标线程发起取消请求，且 pthread_cancel
+不是强制的，是一种协商机制，目标线程可以选择是否响应这次取消操作。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_cancel</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> thread)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>发送取消请求后，pthread_cancel() 函数会立即返回，不会等待目标线程退出 。</p>
+<p>发送取消请求后，pthread_cancel() 函数会立即返回，不会等待目标线程退出
+。</p>
 <p>目标线程会不会响应取消请求？以及何时响应？这取决于目标线程的两个属性：取消状态和取消类型。</p>
 <p>（一）取消状态</p>
 <p>目标线程会不会响应取消请求，是由目标线程的取消状态决定的，它有两个取值：</p>
 <ul>
 <li>PTHREAD_CANCEL_ENABLE ：线程可以取消。这是默认值。</li>
-<li>PTHREAD_CANCEL_DISABLE ：线程不可取消。如果此类线程收到取消请求，则会<strong>将取消请求挂起，直到线程的取消状态设置为启用</strong>。</li>
+<li>PTHREAD_CANCEL_DISABLE
+：线程不可取消。如果此类线程收到取消请求，则会<strong>将取消请求挂起，直到线程的取消状态设置为启用</strong>。</li>
 </ul>
 <p>下面是设置取消状态的方法：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_setcancelstate</span><span class="hljs-params">(<span class="hljs-type">int</span> state, <span class="hljs-type">int</span> *oldstate)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>state ：取消状态，可取下面两个值：</p>
 <ul>
 <li>PTHREAD_CANCEL_ENABLE ：线程可以取消。这是默认值。</li>
-<li>PTHREAD_CANCEL_DISABLE ：线程不可取消。如果此类线程收到取消请求，则会将取消请求挂起，直到线程的取消状态设置为启用。</li>
+<li>PTHREAD_CANCEL_DISABLE
+：线程不可取消。如果此类线程收到取消请求，则会将取消请求挂起，直到线程的取消状态设置为启用。</li>
 </ul>
 <p>oldstate ：传出参数，用来保存以前的取消状态。</p>
 <p>（二）取消类型</p>
 <p>目标线程<strong>何时响应取消请求</strong>，是由目标线程的取消类型决定的，它也有两个取值：</p>
 <ul>
-<li>PTHREAD_CANCEL_DEFERRED ：延迟响应，挂起取消请求，直到下一个取消点才响应。这是默认值。</li>
-<li>PTHREAD_CANCEL_ASYNCHRONOUS ：异步响应，可以在任意时间点响应取消请求 (未必是立即响应)。异步响应在实际应用中很少使用。</li>
+<li>PTHREAD_CANCEL_DEFERRED
+：延迟响应，挂起取消请求，直到下一个取消点才响应。这是默认值。</li>
+<li>PTHREAD_CANCEL_ASYNCHRONOUS ：异步响应，可以在任意时间点响应取消请求
+(未必是立即响应)。异步响应在实际应用中很少使用。</li>
 </ul>
 <p>设置线程的取消类型：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_setcanceltype</span><span class="hljs-params">(<span class="hljs-type">int</span> type, <span class="hljs-type">int</span> *oldtype)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>type ：取消类型，可取下面两个值：</p>
 <ul>
-<li>PTHREAD_CANCEL_DEFERRED ：延迟响应，挂起取消请求，直到下一个取消点才响应。这是默认值。</li>
-<li>PTHREAD_CANCEL_ASYNCHRONOUS ：异步响应，可以在任意时间点响应取消请求 (未必是立即响应)。异步响应在实际应用中很少使用。</li>
+<li>PTHREAD_CANCEL_DEFERRED
+：延迟响应，挂起取消请求，直到下一个取消点才响应。这是默认值。</li>
+<li>PTHREAD_CANCEL_ASYNCHRONOUS ：异步响应，可以在任意时间点响应取消请求
+(未必是立即响应)。异步响应在实际应用中很少使用。</li>
 </ul>
 <p>oldtype ：传出参数，用来保存以前的取消类型。</p>
 <p>（三）取消点</p>
-<p>若将线程的取消性状态和类型分别置为 ENABLE 和 DEFERRED（默认状态），那么只有当线程执行到某个取消点 时，取消请求才会起生效。取消点是一组函数，这些函数往往可以让线程陷入无限期的阻塞。</p>
-<p><img src="/images/2024/10/03/9c1a21d0-8180-11ef-b9cc-9d1a3128f314.png" alt="取消点.png"></p>
-<p>如果线程的取消类型为 DEFERRED ，当线程收到取消请求后，它会在下次抵达取消点时终止。如果该线程尚未分离，其它线程调用 pthread_join() 进行连接，会收到一个特殊的返回值 PTHREAD_CANCELED 。</p>
+<p>若将线程的取消性状态和类型分别置为 ENABLE 和
+DEFERRED（默认状态），那么只有当线程执行到某个取消点
+时，取消请求才会起生效。取消点是一组函数，这些函数往往可以让线程陷入无限期的阻塞。</p>
+<figure>
+<img src="/images/2024/10/03/9c1a21d0-8180-11ef-b9cc-9d1a3128f314.png" alt="取消点.png">
+<figcaption aria-hidden="true">取消点.png</figcaption>
+</figure>
+<p>如果线程的取消类型为 DEFERRED
+，当线程收到取消请求后，它会在下次抵达取消点时终止。如果该线程尚未分离，其它线程调用
+pthread_join() 进行连接，会收到一个特殊的返回值 PTHREAD_CANCELED 。</p>
 <p>（四）设置取消点</p>
 <p>线程如果有挂起的取消请求，只要调用这个函数，线程就会终止。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pthread_testcancel</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>如果线程执行的代码中不包含取消点，可以周期性地调用 pthread_testcancel() ，以确保对取消请求做出及时响应。</p>
-<h3><span id="线程清理函数了解">线程清理函数（了解）</span></h3><p>线程收到取消请求后，会执行到下一个取消点终止。如果线程只是草草地直接终止，可能会让程序处于不一致的状态，比如：对共享变量的修改只进行了一半啦，没有释放互斥锁啦…… 这样的错误轻则导致其他线程产生错误的结果、发生死锁，重则让进程直接崩溃。</p>
-<p>为了规避这一问题，线程可以设置一个或多个清理函数。当线程响应取消请求时，会自动执行这些清理函数。每个线程都拥有一个清理函数栈。当线程响应取消请求时，会依次执行栈中的清理函数 (从栈顶到栈底)。当执行完所有的清理函数后，线程终止。</p>
+<p>如果线程执行的代码中不包含取消点，可以周期性地调用
+pthread_testcancel() ，以确保对取消请求做出及时响应。</p>
+<h3><span id="线程清理函数了解">线程清理函数（了解）</span></h3>
+<p>线程收到取消请求后，会执行到下一个取消点终止。如果线程只是草草地直接终止，可能会让程序处于不一致的状态，比如：对共享变量的修改只进行了一半啦，没有释放互斥锁啦......
+这样的错误轻则导致其他线程产生错误的结果、发生死锁，重则让进程直接崩溃。</p>
+<p>为了规避这一问题，线程可以设置一个或多个清理函数。当线程响应取消请求时，会自动执行这些清理函数。每个线程都拥有一个清理函数栈。当线程响应取消请求时，会依次执行栈中的清理函数
+(从栈顶到栈底)。当执行完所有的清理函数后，线程终止。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">会将函数指针 routine 添加到清理函数栈的栈顶<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pthread_cleanup_push</span><span class="hljs-params">(<span class="hljs-type">void</span> (*routine)(<span class="hljs-type">void</span> *), <span class="hljs-type">void</span> *arg)</span></span>;<br><br>从调用线程的清理函数栈的栈顶删除一个清理函数<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pthread_cleanup_pop</span><span class="hljs-params">(<span class="hljs-type">int</span> execute)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<h2><span id="线程同步">线程同步</span></h2><h3><span id="互斥锁">互斥锁</span></h3><p>（一）初始化</p>
+<h2><span id="线程同步">线程同步</span></h2>
+<h3><span id="互斥锁">互斥锁</span></h3>
+<p>（一）初始化</p>
 <p>下面有两种方式：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">pthread_mutex_t</span> mtx = PTHREAD_MUTEX_INITIALIZER; <span class="hljs-comment">// 静态初始化，仅适用于静态变量</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_mutex_init</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span>* mutex, <span class="hljs-type">const</span> <span class="hljs-type">pthread_mutexattr_t</span>* attr)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>（二）上锁</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_mutex_lock</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span>* mutex)</span></span>;	<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_mutex_trylock</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span>* mutex)</span></span>;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_mutex_timedlock</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span>* mutex, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> timespec* abstime)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>如果已经没有上锁，上面就会锁住。如果已经上锁，就会：按顺序注释</p>
-<ol>
+<ol type="1">
 <li>一直阻塞，直到等待的互斥量解锁</li>
 <li>立即失败，并返回状态码 EBUSY</li>
-<li>如果在超时时间内，调用线程没能获得互斥量的所有权，那么函数 pthread_mutex_timedlock() 会返回错误码 ETIMEDOUT</li>
+<li>如果在超时时间内，调用线程没能获得互斥量的所有权，那么函数
+pthread_mutex_timedlock() 会返回错误码 ETIMEDOUT</li>
 </ol>
 <p>（三）释放锁</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_mutex_unlock</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span> *mutex)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>（四）销毁</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_mutex_destroy</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span> *mutex)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>只有当互斥量处于未锁定状态，且后续不再使用它时，才应将其销毁。</p>
 <p>（五）实战</p>
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/C%E8%AF%AD%E8%A8%80%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%93%B6%E8%A1%8C%E5%8F%96%E9%92%B1">10个线程从银行取钱</a></p>
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/C%E8%AF%AD%E8%A8%80%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/%E4%B8%A4%E4%B8%AA%E8%B4%A6%E6%88%B7%E8%BD%AC%E8%B4%A6">两个银行用户互相转账</a></p>
-<h3><span id="条件变量">条件变量</span></h3><p>（一）初始化</p>
+<h3><span id="条件变量">条件变量</span></h3>
+<p>（一）初始化</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">pthread_cond_t</span> cond = PTHREAD_COND_INITIALIZER; <span class="hljs-comment">// 静态初始化，仅适用于静态变量</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_cond_init</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span>* cond, <span class="hljs-type">const</span> <span class="hljs-type">pthread_condattr_t</span>* attr)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>（二）等待</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_cond_wait</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span>* cond, <span class="hljs-type">pthread_mutex_t</span>* mutex)</span></span>;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_cond_timedwait</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span>* cond, <span class="hljs-type">pthread_mutex_t</span>* mutex, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> timespec* abstime)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>pthread_cond_wait() 函数的语义如下：</p>
-<ol>
+<ol type="1">
 <li>释放所持有的互斥量 mutex 。</li>
 <li>陷入阻塞状态。</li>
-<li>当 pthread_cond_wait() 返回时，调用线程一定再一次获取了互斥量 mutex 。</li>
+<li>当 pthread_cond_wait() 返回时，调用线程一定再一次获取了互斥量 mutex
+。</li>
 </ol>
-<p>如果不然，就会一直阻塞。而 pthread_cond_timedwait 可以在哪怕是在指定时间内没有满足要求，也会自动解除阻塞。</p>
+<p>如果不然，就会一直阻塞。而 pthread_cond_timedwait
+可以在哪怕是在指定时间内没有满足要求，也会自动解除阻塞。</p>
 <p>（三）唤醒</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_cond_signal</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span> *cond)</span></span>;	<span class="hljs-comment">// 唤醒一个线程</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_cond_broadcast</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span> *cond)</span></span>;	<span class="hljs-comment">// 唤醒多个线程</span><br></code></pre></td></tr></table></figure>
-
 <p>（四）销毁</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_cond_destroy</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span> *cond)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>当后续不再使用条件变量时，才应调用 pthread_cond_destroy() 将其销毁。</p>
+<p>当后续不再使用条件变量时，才应调用 pthread_cond_destroy()
+将其销毁。</p>
 <p>（五）实战</p>
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/C%E8%AF%AD%E8%A8%80%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97">阻塞队列</a></p>
 <p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/C%E8%AF%AD%E8%A8%80%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B">生产者消费者</a></p>
@@ -406,7 +436,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -938,11 +968,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -181,10 +181,11 @@
 <li>构造函数的参数也可以按<strong>从右向左规则赋默认值</strong>，同样的，如果构造函数的声明和定义分开写，只用在声明或定义中的一处设置参数默认值，一般建议在声明中设置默认值。</li>
 <li>C++11之后，普通的数据成员也可以在声明时就进行初始化（类似于默认值的性质）。但一些特殊的数据成员初始化只能在初始化列表中进行，故一般情况下统一推荐在初始化列表中进行数据成员初始化。</li>
 </ul>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>类的数据成员中有指针时</strong>，意味着创建该类的对象时要进行指针成员的初始化，需要申请堆空间。</p>
 <p><strong>在初始化列表中申请空间，在函数体中复制内容。</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Computer</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">Computer</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span> * brand, <span class="hljs-type">double</span> price)<br>	: _brand(<span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[<span class="hljs-built_in">strlen</span>(brand) + <span class="hljs-number">1</span>]())	<span class="hljs-comment">// 申请空间</span><br>	, _price(price)<br>	&#123;<br>        <span class="hljs-built_in">strcpy</span>(_brand,brand);	<span class="hljs-comment">// 赋值</span><br>    &#125;<br>    <br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-type">char</span> * _brand;<br>	<span class="hljs-type">double</span> _price;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -268,7 +269,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -800,11 +801,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

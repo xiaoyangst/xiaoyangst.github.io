@@ -174,43 +174,60 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%8E%A5%E5%8F%A3">接口</a></li>
-<li><a href="#select-%E6%B3%A8%E6%84%8F%E7%82%B9">select 注意点</a><ul>
-<li><a href="#%E6%B8%85%E7%A9%BA-fd_set-%E9%9B%86%E5%90%88">清空 fd_set 集合</a></li>
-<li><a href="#%E6%97%B6%E5%88%BB%E8%AE%B0%E5%BD%95%E7%9B%91%E5%90%AC%E7%9A%84%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%AA%E6%95%B0">时刻记录监听的文件描述符个数</a></li>
-<li><a href="#select-%E7%9A%84-%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%82%E6%95%B0">select 的 第一个参数</a></li>
-<li><a href="#%E5%90%8C%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%90%8C%E4%B8%80%E6%97%B6%E5%88%BB%E4%B8%8D%E5%8F%AF%E4%BB%A5%E5%A4%9A%E6%AC%A1%E5%8A%A0%E5%85%A5-fd_set-%E9%9B%86%E5%90%88%E4%B8%AD">同一个文件描述符同一时刻不可以多次加入 fd_set 集合中</a></li>
-</ul>
-</li>
-<li><a href="#%E7%96%91%E9%97%AE">疑问</a><ul>
-<li><a href="#%E4%BC%9A%E5%87%BA%E7%8E%B0%E6%9F%90%E4%B8%AA%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A6%86%E7%9B%96%E5%8F%A6%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%90%97">会出现某个文件描述符覆盖另一个文件描述符吗？</a></li>
-<li><a href="#select-%E4%B8%80%E6%AC%A1%E8%83%BD%E5%A4%9F%E7%9B%91%E5%90%AC%E5%A4%9A%E5%B0%91%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84%E8%AF%B7%E6%B1%82">select 一次能够监听多少客户端建立连接的请求？</a></li>
-</ul>
-</li>
-<li><a href="#%E5%AE%9E%E6%88%98%E4%BB%A3%E7%A0%81">实战代码</a></li>
-<li><a href="#select-%E7%9A%84%E7%BC%BA%E9%99%B7">select 的缺陷</a></li>
-<li><a href="#select-%E5%8E%9F%E7%90%86">select 原理</a></li>
+<li><a href="#接口">接口</a></li>
+<li><a href="#select-注意点">select 注意点</a>
+<ul>
+<li><a href="#清空-fd_set-集合">清空 fd_set 集合</a></li>
+<li><a href="#时刻记录监听的文件描述符个数">时刻记录监听的文件描述符个数</a></li>
+<li><a href="#select-的-第一个参数">select 的 第一个参数</a></li>
+<li><a href="#同一个文件描述符同一时刻不可以多次加入-fd_set-集合中">同一个文件描述符同一时刻不可以多次加入
+fd_set 集合中</a></li>
+</ul></li>
+<li><a href="#疑问">疑问</a>
+<ul>
+<li><a href="#会出现某个文件描述符覆盖另一个文件描述符吗">会出现某个文件描述符覆盖另一个文件描述符吗？</a></li>
+<li><a href="#select-一次能够监听多少客户端建立连接的请求">select
+一次能够监听多少客户端建立连接的请求？</a></li>
+</ul></li>
+<li><a href="#实战代码">实战代码</a></li>
+<li><a href="#select-的缺陷">select 的缺陷</a></li>
+<li><a href="#select-原理">select 原理</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="接口">接口</span></h2><p>通过 fd_set 创建一个文件描述符集合，通过下面的方法可以对该集合进行操作：</p>
+<h2><span id="接口">接口</span></h2>
+<p>通过 fd_set
+创建一个文件描述符集合，通过下面的方法可以对该集合进行操作：</p>
 <p><code>FD_ZERO(&amp;fdset)</code>：将文件描述符集合清空。</p>
-<p><code>FD_SET(fd, &amp;fdset)</code>：将文件描述符 <code>fd</code> 添加到集合中。</p>
-<p><code>FD_CLR(fd, &amp;fdset)</code>：将文件描述符 <code>fd</code> 从集合中移除。</p>
-<p><code>FD_ISSET(fd, &amp;fdset)</code>：检查 <code>fd</code> 是否在集合中。</p>
-<p>从参数类型就可以知道，fd_set 中可以添加多个文件描述符（通常是 1024 个），而后面介绍的 select 就是 监听 fd_set 集合中的所有文件描述符，即 select 不只可以监听 socket 文件描述符。</p>
+<p><code>FD_SET(fd, &amp;fdset)</code>：将文件描述符 <code>fd</code>
+添加到集合中。</p>
+<p><code>FD_CLR(fd, &amp;fdset)</code>：将文件描述符 <code>fd</code>
+从集合中移除。</p>
+<p><code>FD_ISSET(fd, &amp;fdset)</code>：检查 <code>fd</code>
+是否在集合中。</p>
+<p>从参数类型就可以知道，fd_set 中可以添加多个文件描述符（通常是 1024
+个），而后面介绍的 select 就是 监听 fd_set 集合中的所有文件描述符，即
+select 不只可以监听 socket 文件描述符。</p>
 <p>接着，我们看看 select 接口：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">select</span><span class="hljs-params">(<span class="hljs-type">int</span> nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, <span class="hljs-keyword">struct</span> timeval *timeout)</span></span>;<br><br></code></pre></td></tr></table></figure>
-
 <p>参数说明：</p>
 <ul>
-<li><strong>nfds</strong>：文件描述符的数量，通常是待监控的文件描述符中最大值加 1。</li>
-<li><strong>readfds</strong>：指向一个 <code>fd_set</code> 集合，用于监控是否有数据可读的文件描述符。如果不关心可读事件，可以传递 <code>NULL</code>。</li>
-<li><strong>writefds</strong>：指向一个 <code>fd_set</code> 集合，用于监控是否可以写入的文件描述符。如果不关心可写事件，可以传递 <code>NULL</code>。</li>
-<li><strong>exceptfds</strong>：指向一个 <code>fd_set</code> 集合，用于监控异常事件的文件描述符。如果不关心异常事件，可以传递 <code>NULL</code>。</li>
-<li><strong>timeout</strong>：指向一个 <code>timeval</code> 结构体，用于指定 <code>select</code> 调用的超时时间。如果传递 <code>NULL</code>，<code>select</code> 将无限期等待；如果传递一个超时值，<code>select</code> 会在超时后返回。</li>
+<li><strong>nfds</strong>：文件描述符的数量，通常是待监控的文件描述符中最大值加
+1。</li>
+<li><strong>readfds</strong>：指向一个 <code>fd_set</code>
+集合，用于监控是否有数据可读的文件描述符。如果不关心可读事件，可以传递
+<code>NULL</code>。</li>
+<li><strong>writefds</strong>：指向一个 <code>fd_set</code>
+集合，用于监控是否可以写入的文件描述符。如果不关心可写事件，可以传递
+<code>NULL</code>。</li>
+<li><strong>exceptfds</strong>：指向一个 <code>fd_set</code>
+集合，用于监控异常事件的文件描述符。如果不关心异常事件，可以传递
+<code>NULL</code>。</li>
+<li><strong>timeout</strong>：指向一个 <code>timeval</code>
+结构体，用于指定 <code>select</code> 调用的超时时间。如果传递
+<code>NULL</code>，<code>select</code>
+将无限期等待；如果传递一个超时值，<code>select</code>
+会在超时后返回。</li>
 </ul>
 <p>返回值：</p>
 <ul>
@@ -218,69 +235,156 @@
 <li>返回 0 表示超时。</li>
 <li>返回 -1 表示出错。</li>
 </ul>
-<p>由于 select 不知道是哪些文件描述符的事件有发生，所以每次都是通过遍历，再利用 FD_ISSET 判断具体的文件描述符发生的事件，再进行后续处理。</p>
-<p>select 实现多路复用的方式是，将已连接的 Socket 都放到一个文件描述符集合，然后调用 select 函数将文件描述符集合拷贝到内核里，让内核来检查是否有网络事件产生，检查的方式很粗暴，就是通过遍历文件描述符集合的方式，当检查到有事件产生后，将此 Socket 标记为可读或可写， 接着再把整个文件描述符集合拷贝回用户态里，然后用户态还需要再通过遍历的方法找到可读或可写的 Socket，然后再对其处理。</p>
-<p>所以，对于 select 这种方式，需要进行 2 次「遍历」文件描述符集合，一次是在内核态里，一次是在用户态里，而且还会发生 2 次「拷贝」文件描述符集合，先从用户空间传入内核空间，由内核修改后，再传出到用户空间中。</p>
-<h2><span id="select-注意点">select 注意点</span></h2><h3><span id="清空-fd_set-集合">清空 fd_set 集合</span></h3><p>fd_set 集合<strong>必须在下次使用前利用 FD_ZERO 清空</strong>，否则该集合中将会继续记录着上一次触发的事件，可不代表我们还关心这些文件描述符，唯有清空才能保证本次的文件描述符集合是我们关心的。</p>
-<h3><span id="时刻记录监听的文件描述符个数">时刻记录监听的文件描述符个数</span></h3><p>由于 select 不知道具体的文件描述符发生的事件，只能通过遍历的方式去做。那么为了保证不会遗漏触发事件的文件描述符，就需要时刻记录。这个记录值往往就是   我们着重填写的 select 的第一个参数，它代表内核遍历的范围。</p>
-<h3><span id="select-的-第一个参数">select 的 第一个参数</span></h3><p>select 的 第一个参数往往容易被错误使用，它代表着要监控的 fd_set 数组中的最大范围。Linux 中有三个文件描述符的下标是固定的，见下图：</p>
-<p><img src="/images/2024/10/10/45278310-86d8-11ef-a116-296dc0f7b0ab.png" alt="默认文件描述符.png"></p>
-<p>因此，监听的其他文件描述符，最小也是为 3。所以我们会初始化 max_fd &#x3D; 3 作为初值。</p>
-<p>再通过 FD_SET 添加文件描述符的时候，随时更新 max_fd 为最大的文件描述符值即可，然后传入 select 作为第一个参数的时候，记得是 max_fd + 1。至于后续有些文件描述符不再监听，我们也不用再意，只要确保待监听的文件描述符在范围以内即可。</p>
-<h3><span id="同一个文件描述符同一时刻不可以多次加入-fd_set-集合中">同一个文件描述符同一时刻不可以多次加入 fd_set 集合中</span></h3><p>同一个文件描述符<strong>不能也不需要</strong>多次加入到 <code>fd_set</code> 中。即使多次调用 <code>FD_SET()</code>，最终只会在 <code>fd_set</code> 中保留一个，不会起到任何额外的作用。</p>
-<p>每个文件描述符在 <code>fd_set</code> 中<strong>对应一个唯一的比特位</strong>，<code>FD_SET()</code> 只是设置该位为 1。多次调用 <code>FD_SET()</code> 对同一个文件描述符只是重复设置相同的位，没有任何附加效果。</p>
-<p>文件描述符是唯一的，通过公式计算得到的下标作为在 fd_set 集合中的索引也是唯一，同一个文件描述符多次加入到 fd_set 中也就属于重复的无意义行为。</p>
-<h2><span id="疑问">疑问</span></h2><h3><span id="会出现某个文件描述符覆盖另一个文件描述符吗">会出现某个文件描述符覆盖另一个文件描述符吗？</span></h3><p>不会出现某个文件描述符覆盖另一个文件描述符的情况，因为在 <code>fd_set</code> 中，每个文件描述符都有一个唯一的比特位对应它的状态，且这些比特位的分配是基于文件描述符的值精确计算的。</p>
+<p>由于 select
+不知道是哪些文件描述符的事件有发生，所以每次都是通过遍历，再利用
+FD_ISSET 判断具体的文件描述符发生的事件，再进行后续处理。</p>
+<p>select 实现多路复用的方式是，将已连接的 Socket
+都放到一个文件描述符集合，然后调用 select
+函数将文件描述符集合拷贝到内核里，让内核来检查是否有网络事件产生，检查的方式很粗暴，就是通过遍历文件描述符集合的方式，当检查到有事件产生后，将此
+Socket 标记为可读或可写，
+接着再把整个文件描述符集合拷贝回用户态里，然后用户态还需要再通过遍历的方法找到可读或可写的
+Socket，然后再对其处理。</p>
+<p>所以，对于 select 这种方式，需要进行 2
+次「遍历」文件描述符集合，一次是在内核态里，一次是在用户态里，而且还会发生
+2
+次「拷贝」文件描述符集合，先从用户空间传入内核空间，由内核修改后，再传出到用户空间中。</p>
+<h2><span id="select-注意点">select 注意点</span></h2>
+<h3><span id="清空-fd_set-集合">清空 fd_set 集合</span></h3>
+<p>fd_set 集合<strong>必须在下次使用前利用 FD_ZERO
+清空</strong>，否则该集合中将会继续记录着上一次触发的事件，可不代表我们还关心这些文件描述符，唯有清空才能保证本次的文件描述符集合是我们关心的。</p>
+<h3><span id="时刻记录监听的文件描述符个数">时刻记录监听的文件描述符个数</span></h3>
+<p>由于 select
+不知道具体的文件描述符发生的事件，只能通过遍历的方式去做。那么为了保证不会遗漏触发事件的文件描述符，就需要时刻记录。这个记录值往往就是
+我们着重填写的 select 的第一个参数，它代表内核遍历的范围。</p>
+<h3><span id="select-的-第一个参数">select 的 第一个参数</span></h3>
+<p>select 的 第一个参数往往容易被错误使用，它代表着要监控的 fd_set
+数组中的最大范围。Linux 中有三个文件描述符的下标是固定的，见下图：</p>
+<figure>
+<img src="/images/2024/10/10/45278310-86d8-11ef-a116-296dc0f7b0ab.png" alt="默认文件描述符.png">
+<figcaption aria-hidden="true">默认文件描述符.png</figcaption>
+</figure>
+<p>因此，监听的其他文件描述符，最小也是为 3。所以我们会初始化 max_fd = 3
+作为初值。</p>
+<p>再通过 FD_SET 添加文件描述符的时候，随时更新 max_fd
+为最大的文件描述符值即可，然后传入 select 作为第一个参数的时候，记得是
+max_fd +
+1。至于后续有些文件描述符不再监听，我们也不用再意，只要确保待监听的文件描述符在范围以内即可。</p>
+<h3><span id="同一个文件描述符同一时刻不可以多次加入fd_set-集合中">同一个文件描述符同一时刻不可以多次加入
+fd_set 集合中</span></h3>
+<p>同一个文件描述符<strong>不能也不需要</strong>多次加入到
+<code>fd_set</code> 中。即使多次调用 <code>FD_SET()</code>，最终只会在
+<code>fd_set</code> 中保留一个，不会起到任何额外的作用。</p>
+<p>每个文件描述符在 <code>fd_set</code>
+中<strong>对应一个唯一的比特位</strong>，<code>FD_SET()</code>
+只是设置该位为 1。多次调用 <code>FD_SET()</code>
+对同一个文件描述符只是重复设置相同的位，没有任何附加效果。</p>
+<p>文件描述符是唯一的，通过公式计算得到的下标作为在 fd_set
+集合中的索引也是唯一，同一个文件描述符多次加入到 fd_set
+中也就属于重复的无意义行为。</p>
+<h2><span id="疑问">疑问</span></h2>
+<h3><span id="会出现某个文件描述符覆盖另一个文件描述符吗">会出现某个文件描述符覆盖另一个文件描述符吗？</span></h3>
+<p>不会出现某个文件描述符覆盖另一个文件描述符的情况，因为在
+<code>fd_set</code>
+中，每个文件描述符都有一个唯一的比特位对应它的状态，且这些比特位的分配是基于文件描述符的值精确计算的。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++">index = fd / (<span class="hljs-number">8</span> * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span>));   <span class="hljs-comment">// 数组索引</span><br><br>bit   = fd % (<span class="hljs-number">8</span> * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span>));   <span class="hljs-comment">// 比特位</span><br><br></code></pre></td></tr></table></figure>
-
 <p>所谓 fd_set 就是一个位图：</p>
-<p><img src="/images/2024/10/10/3dc34500-86d8-11ef-a116-296dc0f7b0ab.png" alt="bit.png"></p>
-<p>假设你有两个文件描述符，<code>fd1 = 130</code> 和 <code>fd2 = 135</code>，让我们计算它们在 <code>fds_bits</code> 中的位置：相同的数组下标，不同的 bit 位。</p>
+<figure>
+<img src="/images/2024/10/10/3dc34500-86d8-11ef-a116-296dc0f7b0ab.png" alt="bit.png">
+<figcaption aria-hidden="true">bit.png</figcaption>
+</figure>
+<p>假设你有两个文件描述符，<code>fd1 = 130</code> 和
+<code>fd2 = 135</code>，让我们计算它们在 <code>fds_bits</code>
+中的位置：相同的数组下标，不同的 bit 位。</p>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs tex">index = 130 / 64 = 2;    // 130 映射到 fds<span class="hljs-built_in">_</span>bits[2]<br><br>bit   = 130 <span class="hljs-comment">% 64 = 2;    // 130 位于 fds_bits[2] 的第 2 位</span><br><br></code></pre></td></tr></table></figure>
-
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs tex">index = 135 / 64 = 2;    // 135 也映射到 fds<span class="hljs-built_in">_</span>bits[2] （同一个数组元素）<br><br>bit   = 135 <span class="hljs-comment">% 64 = 7;    // 135 位于 fds_bits[2] 的第 7 位</span><br></code></pre></td></tr></table></figure>
-
-<h3><span id="select-一次能够监听多少客户端建立连接的请求">select 一次能够监听多少客户端建立连接的请求？</span></h3><p>实际上这个问题是不正确的，select 是监听文件描述符，比方说我们用以监听客户端是否有连接的 sock_fd。对于 select 而言，如果你有状态变化，select 至少保证有一条建立连接请求的到来。</p>
-<p>至于你要和多少个客户端建立连接，得看 sock_fd 中的全连接队列的连接对象数量以及你调用 accept 的次数。但我们通常是不建议调用多次 accept ，而是选择调用一次。</p>
+<h3><span id="select一次能够监听多少客户端建立连接的请求">select
+一次能够监听多少客户端建立连接的请求？</span></h3>
+<p>实际上这个问题是不正确的，select
+是监听文件描述符，比方说我们用以监听客户端是否有连接的 sock_fd。对于
+select 而言，如果你有状态变化，select
+至少保证有一条建立连接请求的到来。</p>
+<p>至于你要和多少个客户端建立连接，得看 sock_fd
+中的全连接队列的连接对象数量以及你调用 accept
+的次数。但我们通常是不建议调用多次 accept ，而是选择调用一次。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">FD_ISSET</span>(sock_fd, &amp;read_fds)) &#123;<br>    <span class="hljs-type">int</span> client_fd = <span class="hljs-built_in">accept</span>(sock_fd, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>);<br>    <span class="hljs-comment">// ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>等你 accept 连接之后，再次来到 select 会立即触发，因为 sock_fd  的全连接队列还有连接对象（select 默认是水平触发，也只有水平触发），接着往下执行。效率上并无二致，而且逻辑更加合理。</p>
-<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/select/%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%E6%9C%89%E8%BF%9E%E6%8E%A5%E5%AF%B9%E8%B1%A1">全连接队列有连接对象，select 立即返回</a></p>
-<h2><span id="实战代码">实战代码</span></h2><p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/select/%E7%BE%A4%E8%81%8A">群聊</a></p>
+<p>等你 accept 连接之后，再次来到 select 会立即触发，因为 sock_fd
+的全连接队列还有连接对象（select
+默认是水平触发，也只有水平触发），接着往下执行。效率上并无二致，而且逻辑更加合理。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/select/%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%E6%9C%89%E8%BF%9E%E6%8E%A5%E5%AF%B9%E8%B1%A1">全连接队列有连接对象，select
+立即返回</a></p>
+<h2><span id="实战代码">实战代码</span></h2>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/select/%E7%BE%A4%E8%81%8A">群聊</a></p>
 <p>下面这个代码单独拎出来说：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; HOME_SIZE; ++i) &#123;<br>    <span class="hljs-keyword">if</span> (home[i] &gt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">FD_SET</span>(home[i], &amp;read_fds);<br>        <span class="hljs-keyword">if</span> (home[i] &gt; max_fd) &#123;<br>            max_fd = home[i];<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>由于每次必须清空 fd_set 集合，那么每次清空之后又必须 把所有连接的客户端对应的 socket 文件描述符加入到 fd_set 集合中，监听对应的读事件。</p>
-<p>还有一个问题，accept 和 select 都是阻塞函数。如果想要 accept 不阻塞，需要将 accept 的第一个参数，即套接字设置为非阻塞。如果想要 select 不阻塞，需要设置超时时间。实际情况我们都不会让它们阻塞。</p>
-<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/select/%E4%B9%9F%E7%9B%91%E5%90%ACsock_fd">select 监听 sock_fd</a></p>
-<p>让 select 监听 socket_fd 套接字，等到有事件触发就往下走，等判断是新连接建立的事件再去调用 accept 更加合理。而不是像前面那样，不管有没有都去调用一次。</p>
+<p>由于每次必须清空 fd_set 集合，那么每次清空之后又必须
+把所有连接的客户端对应的 socket 文件描述符加入到 fd_set
+集合中，监听对应的读事件。</p>
+<p>还有一个问题，accept 和 select 都是阻塞函数。如果想要 accept
+不阻塞，需要将 accept 的第一个参数，即套接字设置为非阻塞。如果想要
+select 不阻塞，需要设置超时时间。实际情况我们都不会让它们阻塞。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/select/%E4%B9%9F%E7%9B%91%E5%90%ACsock_fd">select
+监听 sock_fd</a></p>
+<p>让 select 监听 socket_fd
+套接字，等到有事件触发就往下走，等判断是新连接建立的事件再去调用 accept
+更加合理。而不是像前面那样，不管有没有都去调用一次。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 处理新连接</span><br><span class="hljs-keyword">if</span> (<span class="hljs-built_in">FD_ISSET</span>(sock_fd, &amp;read_fds)) &#123;<br>    <span class="hljs-type">int</span> client_fd = <span class="hljs-built_in">accept</span>(sock_fd, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>);<br>    <span class="hljs-comment">// 后续处理逻辑</span><br>&#125;<br><br><span class="hljs-comment">// 处理客户端的读事件</span><br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; HOME_SIZE; ++i) &#123;<br>    <span class="hljs-keyword">if</span> (home[i] &gt; <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-built_in">FD_ISSET</span>(home[i], &amp;read_fds)) &#123;<br>        <span class="hljs-comment">// 后续处理逻辑</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<h2><span id="select-的缺陷">select 的缺陷</span></h2><p><strong>文件描述符限制</strong>：<code>select</code> 的最大文件描述符数量通常受系统限制（通常为 1024），这使得它不适合处理大量连接。</p>
-<p><strong>性能问题</strong>：在每次调用时，<code>select</code> 需要遍历所有的文件描述符，这可能导致性能下降，尤其是在文件描述符数量很大时。</p>
-<p><strong>状态重置</strong>：每次调用 <code>select</code> 前，必须重置监视的文件描述符集合，这增加了额外的开销。</p>
-<p><strong>不支持边缘触发</strong>：<code>select</code> 仅支持水平触发模式，不支持边缘触发，这可能导致不必要的重复事件处理。</p>
-<p><strong>扩展性差</strong>：由于使用线性扫描，<code>select</code> 难以扩展到更高的并发连接数。</p>
-<p>由于监听集合 和 就绪集合是同一个，耦合度高，这在 epoll 中得到解决。</p>
-<h2><span id="select-原理">select 原理</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">fd_set read_fds;<br><br><span class="hljs-built_in">FD_ZERO</span>(&amp;read_fds);<br></code></pre></td></tr></table></figure>
-
+<h2><span id="select-的缺陷">select 的缺陷</span></h2>
+<p><strong>文件描述符限制</strong>：<code>select</code>
+的最大文件描述符数量通常受系统限制（通常为
+1024），这使得它不适合处理大量连接。</p>
+<p><strong>性能问题</strong>：在每次调用时，<code>select</code>
+需要遍历所有的文件描述符，这可能导致性能下降，尤其是在文件描述符数量很大时。</p>
+<p><strong>状态重置</strong>：每次调用 <code>select</code>
+前，必须重置监视的文件描述符集合，这增加了额外的开销。</p>
+<p><strong>不支持边缘触发</strong>：<code>select</code>
+仅支持水平触发模式，不支持边缘触发，这可能导致不必要的重复事件处理。</p>
+<p><strong>扩展性差</strong>：由于使用线性扫描，<code>select</code>
+难以扩展到更高的并发连接数。</p>
+<p>由于监听集合 和 就绪集合是同一个，耦合度高，这在 epoll
+中得到解决。</p>
+<h2><span id="select-原理">select 原理</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">fd_set read_fds;<br><br><span class="hljs-built_in">FD_ZERO</span>(&amp;read_fds);<br></code></pre></td></tr></table></figure>
 <p>得到如下位图：</p>
-<p><img src="/images/2024/10/10/33ef6680-86d8-11ef-a116-296dc0f7b0ab.png" alt="select代码过程1.png"></p>
+<figure>
+<img src="/images/2024/10/10/33ef6680-86d8-11ef-a116-296dc0f7b0ab.png" alt="select代码过程1.png">
+<figcaption aria-hidden="true">select代码过程1.png</figcaption>
+</figure>
 <p>添加我们关心的文件描述符到 read_fds 集合中</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">FD_SET(sock_fd, &amp;read_fds);<br><br>FD_SET(STDIN_FILENO, &amp;read_fds);<br></code></pre></td></tr></table></figure>
-
 <p>最新的位图：</p>
-<p><img src="/images/2024/10/10/2fc56be0-86d8-11ef-a116-296dc0f7b0ab.png" alt="select代码过程2.png"></p>
-<p>调用 select 方法，把 read_fds 集合 从用户态拷贝到内核态，内核态维护着相同的但属于自己的 read_fds 集合。如果集合中有事件发生，内核就会遍历 read_fds 集合，关心的文件描述符且发生事件的位置设置为1，其余设置为0。内核接着就把自己维护的 read_fds 拷贝到用户态度 read_fds 集合中。select 此刻就解除阻塞，接下来的代码就会遍历 read_fds 来判断哪个文件描述符触发，然后执行相应的处理逻辑。</p>
-<p><img src="/images/2024/10/10/2bb513c0-86d8-11ef-a116-296dc0f7b0ab.png" alt="select流程.png"></p>
+<figure>
+<img src="/images/2024/10/10/2fc56be0-86d8-11ef-a116-296dc0f7b0ab.png" alt="select代码过程2.png">
+<figcaption aria-hidden="true">select代码过程2.png</figcaption>
+</figure>
+<p>调用 select 方法，把 read_fds 集合
+从用户态拷贝到内核态，内核态维护着相同的但属于自己的 read_fds
+集合。如果集合中有事件发生，内核就会遍历 read_fds
+集合，关心的文件描述符且发生事件的位置设置为1，其余设置为0。内核接着就把自己维护的
+read_fds 拷贝到用户态度 read_fds 集合中。select
+此刻就解除阻塞，接下来的代码就会遍历 read_fds
+来判断哪个文件描述符触发，然后执行相应的处理逻辑。</p>
+<figure>
+<img src="/images/2024/10/10/2bb513c0-86d8-11ef-a116-296dc0f7b0ab.png" alt="select流程.png">
+<figcaption aria-hidden="true">select流程.png</figcaption>
+</figure>
 <p>为什么再次使用 fd_set 都得 清空 一次 ？</p>
-<p>从图中就可以看到答案，早先监听的文件描述符因为在内核中没有被触发过，导致被置为 0，如果不重置为 0 并且 再次把监听的文件描述符加入其中，而是选择继续拿来使用，那就会导致原先我们关心的部分文件描述符不会被触发，只是监听上次触发的文件描述符，并且会越来越少，毕竟不能保证每次都能触发上次的文件描述符。</p>
-<p>说到这里，你就会提出这样一个问题，即 FD_SET 是把标志位置为 1。那么，为什么每次都需要 FD_ZERO，直接调用 FD_SET 把关心的文件描述符添加一下，一样实现让 fd_set 中包含所有关心的文件描述符。</p>
-<p>这确实是一个好问题，但是依旧应该选择 再次使用 FD_ZERO 把 fd_set 清空 一次，因为之前触发的文件描述符我们不一定还感兴趣。每次清空，可以保证加入到 fd_set 中的文件描述符是我们当前感兴趣的。</p>
+<p>从图中就可以看到答案，早先监听的文件描述符因为在内核中没有被触发过，导致被置为
+0，如果不重置为 0 并且
+再次把监听的文件描述符加入其中，而是选择继续拿来使用，那就会导致原先我们关心的部分文件描述符不会被触发，只是监听上次触发的文件描述符，并且会越来越少，毕竟不能保证每次都能触发上次的文件描述符。</p>
+<p>说到这里，你就会提出这样一个问题，即 FD_SET 是把标志位置为
+1。那么，为什么每次都需要 FD_ZERO，直接调用 FD_SET
+把关心的文件描述符添加一下，一样实现让 fd_set
+中包含所有关心的文件描述符。</p>
+<p>这确实是一个好问题，但是依旧应该选择 再次使用 FD_ZERO 把 fd_set 清空
+一次，因为之前触发的文件描述符我们不一定还感兴趣。每次清空，可以保证加入到
+fd_set 中的文件描述符是我们当前感兴趣的。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; HOME_SIZE; ++i) &#123;<br>    <span class="hljs-keyword">if</span> (home[i] &gt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">FD_SET</span>(home[i], &amp;read_fds);<br>        <span class="hljs-keyword">if</span> (home[i] &gt; max_fd) &#123;<br>            max_fd = home[i];<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>就拿这份代码举例，home 数组记录连接服务器的客户端文件描述符。如果某个客户端断开连接，我们自然是要将它从数组中移除，那么你要是不使用 FD_ZERO 把 fd_set 清空，fd_set 集合中不就可能包含已经被移除的文件描述符吗？关心一个不该关心或不存在的文件描述符，这是多么荒唐的事情。</p>
-<p>至此，我们再次强调，务必每次使用 fd_set 之前，用 FD_ZERO 清空一次。</p>
+<p>就拿这份代码举例，home
+数组记录连接服务器的客户端文件描述符。如果某个客户端断开连接，我们自然是要将它从数组中移除，那么你要是不使用
+FD_ZERO 把 fd_set 清空，fd_set
+集合中不就可能包含已经被移除的文件描述符吗？关心一个不该关心或不存在的文件描述符，这是多么荒唐的事情。</p>
+<p>至此，我们再次强调，务必每次使用 fd_set 之前，用 FD_ZERO
+清空一次。</p>
 
       </div>
     </div>
@@ -365,7 +469,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\10\epoll的使用\" title="epoll的使用" rel="bookmark">epoll的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\10\epoll的使用\" title="epoll的使用" rel="bookmark">epoll的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -897,11 +1001,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

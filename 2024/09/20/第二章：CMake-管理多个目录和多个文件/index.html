@@ -174,59 +174,93 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%BC%94%E7%A4%BA%E5%B8%B8%E8%A7%81%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%AE%A1%E7%90%86%E6%96%B9%E5%BC%8F">演示常见项目的管理方式</a></li>
-<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
-<li><a href="#%E4%B8%8D%E5%BE%97%E4%B8%8D%E4%BB%8B%E7%BB%8D%E7%9A%84file%E5%91%BD%E4%BB%A4">不得不介绍的FILE命令</a></li>
+<li><a href="#演示常见项目的管理方式">演示常见项目的管理方式</a></li>
+<li><a href="#总结">总结</a></li>
+<li><a href="#不得不介绍的file命令">不得不介绍的FILE命令</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="演示常见项目的管理方式">演示常见项目的管理方式</span></h2><p>很多人讲 CMake 特别喜欢讲单个文件夹和单个文件的处理情况，可这是没有必要的。这种文件结构并不常见，不如上来直接讲如何管理多个目录和多个文件，这样更具实际价值。</p>
+<h2><span id="演示常见项目的管理方式">演示常见项目的管理方式</span></h2>
+<p>很多人讲 CMake
+特别喜欢讲单个文件夹和单个文件的处理情况，可这是没有必要的。这种文件结构并不常见，不如上来直接讲如何管理多个目录和多个文件，这样更具实际价值。</p>
 <p>就当前个人的项目编写情况来看，常用的结构如下：</p>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs markdown">include<br>src<br>thirdparty<br>CMakeLists.txt<br></code></pre></td></tr></table></figure>
-
-<p>include 用来存放头文件，src 用来存储源文件，thirdparty 用来存储第三方库。</p>
-<p><em>这里的第三方库还只是个简单的头文件，后续有章节会演示结构复杂的第三方库的引入（用 CMake 管理的第三方库和没用 CMake 管理的第三方库的两种情况的引入）。</em></p>
-<p>CMakeLists.txt 文件是 CMake 的核心文件，用于描述整个项目的构建过程。使用该文件可以方便地管理项目的构建和编译过程。只有源文件存在的文件夹才有可能用到 CMakeLists.txt 文件，而且子 CMakeLists.txt 文件将继承父 CMakeLists.txt 文件的变量，也就是说这里有传递关系。</p>
-<p>为了方便看清楚每个 CMakeLists.txt 文件的内容，对下面的结构中的 CMakeLists.txt 文件进行序号标识：</p>
+<p>include 用来存放头文件，src 用来存储源文件，thirdparty
+用来存储第三方库。</p>
+<p><em>这里的第三方库还只是个简单的头文件，后续有章节会演示结构复杂的第三方库的引入（用
+CMake 管理的第三方库和没用 CMake
+管理的第三方库的两种情况的引入）。</em></p>
+<p>CMakeLists.txt 文件是 CMake
+的核心文件，用于描述整个项目的构建过程。使用该文件可以方便地管理项目的构建和编译过程。只有源文件存在的文件夹才有可能用到
+CMakeLists.txt 文件，而且子 CMakeLists.txt 文件将继承父 CMakeLists.txt
+文件的变量，也就是说这里有传递关系。</p>
+<p>为了方便看清楚每个 CMakeLists.txt 文件的内容，对下面的结构中的
+CMakeLists.txt 文件进行序号标识：</p>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs markdown">├── CMakeLists.txt ①<br>├── include<br>│   ├── public.h<br>│   └── server<br>│       ├── ChatServer.h<br>│       ├── ChatService.h<br>│       ├── db<br>│       │   └── db.h<br>│       ├── model<br>│       │   ├── FriendModel.h<br>│       │   ├── Group.h<br>│       │   ├── GroupModel.h<br>│       │   ├── GroupUser.h<br>│       │   ├── OfflineMsgModel.h<br>│       │   ├── User.h<br>│       │   └── UserModel.h<br>│       └── redis<br>├── src<br>│   ├── client<br>│   │   ├── Client.cpp<br>│   │   └── CMakeLists.txt ③<br>│   ├── CMakeLists.txt ②<br>│   └── server<br>│       ├── ChatServer.cpp<br>│       ├── ChatService.cpp<br>│       ├── CMakeLists.txt ④<br>│       ├── db<br>│       │   └── db.cpp<br>│       ├── model<br>│       │   ├── FriendModel.cpp<br>│       │   ├── Group.cpp<br>│       │   ├── GroupModel.cpp<br>│       │   ├── OfflineMsgModel.cpp<br>│       │   ├── User.cpp<br>│       │   └── UserModel.cpp<br>│       ├── redis<br>│       └── Server.cpp<br>└── thirdparty<br><span class="hljs-code">    └── json.hpp</span><br></code></pre></td></tr></table></figure>
-
-<p>① CMakeLists.txt 文件（根，也是管理项目的起点，这里设置的变量将会传递给其后代）：</p>
+<p>① CMakeLists.txt
+文件（根，也是管理项目的起点，这里设置的变量将会传递给其后代）：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment"># 设置CMake的最低版本要求为3.16</span><br><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.16</span>)<br><br><span class="hljs-comment"># 定义项目名称为“chat”，语言为C++</span><br><span class="hljs-keyword">project</span>(chat CXX)<br><br><span class="hljs-comment"># 设置C++编译标志，添加-g选项以生成调试信息</span><br><span class="hljs-keyword">set</span>(CMAKE_CXX_FLAGS <span class="hljs-string">&quot;$&#123;CMAKE_CXX_FLAGS&#125; -g&quot;</span>)<br><br><span class="hljs-comment"># 设置可执行文件的输出目录为项目根目录下的bin目录</span><br><span class="hljs-keyword">set</span>(EXECUTABLE_OUTPUT_PATH <span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/bin)<br><br><span class="hljs-comment"># 包含项目的头文件目录</span><br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/<span class="hljs-keyword">include</span>)<br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/<span class="hljs-keyword">include</span>/server)<br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/<span class="hljs-keyword">include</span>/server/db)<br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/<span class="hljs-keyword">include</span>/server/model)<br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/<span class="hljs-keyword">include</span>/server/redis)<br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>/thirdparty)<br><br><span class="hljs-comment"># 添加src子目录，其中包含项目的源文件和进一步的CMakeLists.txt文件</span><br><span class="hljs-keyword">add_subdirectory</span>(src)<br></code></pre></td></tr></table></figure>
-
-<p>include_directories 用于指定在编译期间搜索头文件的目录。通过指定这些目录，编译器在处理<code>#include</code>指令时会优先搜索这些目录。但是，你切记这个是无法层级搜索头文件的，只能搜索到指定目录下的头文件。如果你指定的文件夹A下面还有文件夹B，那么文件夹B下面的头文件是无法被搜索到的，你需要再添加一个关于文件夹B的头文件搜索路径。这些头文件搜索的结果会传递给当前文件夹的子文件夹，前提是被 add_subdirectory 包含了</p>
-<p>add_subdirectory 命令用于将指定的子目录添加到构建过程中，并处理该子目录中的 CMakeLists.txt 文件。</p>
+<p>include_directories
+用于指定在编译期间搜索头文件的目录。通过指定这些目录，编译器在处理<code>#include</code>指令时会优先搜索这些目录。但是，你切记这个是无法层级搜索头文件的，只能搜索到指定目录下的头文件。如果你指定的文件夹A下面还有文件夹B，那么文件夹B下面的头文件是无法被搜索到的，你需要再添加一个关于文件夹B的头文件搜索路径。这些头文件搜索的结果会传递给当前文件夹的子文件夹，前提是被
+add_subdirectory 包含了</p>
+<p>add_subdirectory
+命令用于将指定的子目录添加到构建过程中，并处理该子目录中的
+CMakeLists.txt 文件。</p>
 <p>② CMakeLists.txt 文件：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">add_subdirectory</span>(client)<br><span class="hljs-keyword">add_subdirectory</span>(server)<br></code></pre></td></tr></table></figure>
-
-<p>src文件夹下面没有要处理的源文件，但是src文件下的client和server文件夹却有，所以继续利用 add_subdirectory 命令往下递进</p>
-<p> ③和 ④是同层级的目录，优先看 ③ CMakeLists.txt 文件：</p>
+<p>src文件夹下面没有要处理的源文件，但是src文件下的client和server文件夹却有，所以继续利用
+add_subdirectory 命令往下递进</p>
+<p>③和 ④是同层级的目录，优先看 ③ CMakeLists.txt 文件：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment"># 将当前目录中的所有源文件添加到 CLIENT_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(. CLIENT_LIST)<br><br><span class="hljs-comment"># 将 ../server/model 目录中的所有源文件添加到 MODEL_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(../server/model MODEL_LIST)<br><br><span class="hljs-comment"># 将 ../server/db 目录中的所有源文件添加到 DB_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(../server/db DB_LIST)<br><br><span class="hljs-comment"># 创建一个名为 ChatClient 的可执行文件，并将 CLIENT_LIST、MODEL_LIST 和 DB_LIST 中的源文件添加到目标文件中</span><br><span class="hljs-keyword">add_executable</span>(ChatClient <span class="hljs-variable">$&#123;CLIENT_LIST&#125;</span> <span class="hljs-variable">$&#123;MODEL_LIST&#125;</span> <span class="hljs-variable">$&#123;DB_LIST&#125;</span>)<br><br><span class="hljs-comment"># 链接 ChatClient 可执行文件所需的库</span><br><span class="hljs-keyword">target_link_libraries</span>(ChatClient muduo_net muduo_base mysqlclient hiredis pthread)<br></code></pre></td></tr></table></figure>
-
-<p>aux_source_directory 用于将指定目录中的所有源文件添加到一个变量中，且不会递归地搜索指定目录及其子目录中的源文件。它只会在指定的目录中查找源文件，而不会自动搜索子目录中的文件。</p>
-<p>add_executable 用于定义一个可执行目标，第一个参数是可执行文件的名称，其后跟的就是源文件（aux_source_directory会把需要的源文件存储到一个变量中，这些变量就需要加入到这里面来）。至于所需的头文件，其父已经帮我们寻找了，就无需再找，因为前面说过父寻找到头文件记录会传递给其后代。</p>
-<p>头文件实际上并不会被编译，编译器只会编译源文件。只是在编译之前，会将源文件中#include包含的文件在源文件中展开。所以头文件无需加入到 add_executable 中，只要编译器能找到头文件即可。include_directories 显然就是干这个工作的。</p>
-<p>如果我们的可执行文件还需要链接库文件，那就需要用 target_link_libraries 。第一个参数指定需要链接库的可执行程序的名称，后买你的参数就是所需库的名称（到后面讲静态库动态库再细究）。</p>
+<p>aux_source_directory
+用于将指定目录中的所有源文件添加到一个变量中，且不会递归地搜索指定目录及其子目录中的源文件。它只会在指定的目录中查找源文件，而不会自动搜索子目录中的文件。</p>
+<p>add_executable
+用于定义一个可执行目标，第一个参数是可执行文件的名称，其后跟的就是源文件（aux_source_directory会把需要的源文件存储到一个变量中，这些变量就需要加入到这里面来）。至于所需的头文件，其父已经帮我们寻找了，就无需再找，因为前面说过父寻找到头文件记录会传递给其后代。</p>
+<p>头文件实际上并不会被编译，编译器只会编译源文件。只是在编译之前，会将源文件中#include包含的文件在源文件中展开。所以头文件无需加入到
+add_executable 中，只要编译器能找到头文件即可。include_directories
+显然就是干这个工作的。</p>
+<p>如果我们的可执行文件还需要链接库文件，那就需要用
+target_link_libraries
+。第一个参数指定需要链接库的可执行程序的名称，后买你的参数就是所需库的名称（到后面讲静态库动态库再细究）。</p>
 <p>再看④ CMakeLists.txt 文件：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment"># 将当前目录中的所有源文件添加到 SRC_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(. SRC_LIST)<br><br><span class="hljs-comment"># 将 ./db 目录中的所有源文件添加到 DB_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(./db DB_LIST)<br><br><span class="hljs-comment"># 将 ./model 目录中的所有源文件添加到 MODEL_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(./model MODEL_LIST)<br><br><span class="hljs-comment"># 将 ./redis 目录中的所有源文件添加到 REDIS_LIST 变量中</span><br><span class="hljs-keyword">aux_source_directory</span>(./redis REDIS_LIST)<br><br><span class="hljs-comment"># 创建一个名为 ChatServer 的可执行文件，并将 SRC_LIST、DB_LIST、REDIS_LIST 和 MODEL_LIST 中的源文件添加到目标文件中</span><br><span class="hljs-keyword">add_executable</span>(ChatServer <span class="hljs-variable">$&#123;SRC_LIST&#125;</span> <span class="hljs-variable">$&#123;DB_LIST&#125;</span> <span class="hljs-variable">$&#123;REDIS_LIST&#125;</span> <span class="hljs-variable">$&#123;MODEL_LIST&#125;</span>)<br><br><span class="hljs-comment"># 链接 ChatServer 可执行文件所需的库</span><br><span class="hljs-keyword">target_link_libraries</span>(ChatServer muduo_net muduo_base mysqlclient hiredis pthread)<br></code></pre></td></tr></table></figure>
-
-<h2><span id="总结">总结</span></h2><p>include_directories：搜索头文件。指定文件夹下的头文件编译器就能找到，且最好在根CMakeLists.txt 文件完成这个工作，那么所有子CMakeLists.txt 文件都无需再用该语法了。</p>
-<p>aux_source_directory ：搜索源文件。用于将指定目录中的所有源文件添加到一个变量中。</p>
-<p>add_executable：生成可执行程序。第一个参数填写可执行程序名称，后面就跟上需要的源文件（通常用aux_source_directory 搜索到源文件且保存到一个变量中，然后再把这个变量引入进来）。</p>
+<h2><span id="总结">总结</span></h2>
+<p>include_directories：搜索头文件。指定文件夹下的头文件编译器就能找到，且最好在根CMakeLists.txt
+文件完成这个工作，那么所有子CMakeLists.txt 文件都无需再用该语法了。</p>
+<p>aux_source_directory
+：搜索源文件。用于将指定目录中的所有源文件添加到一个变量中。</p>
+<p>add_executable：生成可执行程序。第一个参数填写可执行程序名称，后面就跟上需要的源文件（通常用aux_source_directory
+搜索到源文件且保存到一个变量中，然后再把这个变量引入进来）。</p>
 <p>target_link_libraries：链接所需库。第一个参数填写可执行程序名称，后面就跟库文件名称。</p>
-<p><em>include_directories 和 aux_source_directory都不会递归地搜索指定目录及其子目录中的文件。它只会在指定的目录中查找文件，而不会自动搜索子目录中的文件</em>。</p>
-<h2><span id="不得不介绍的file命令">不得不介绍的FILE命令</span></h2><p>这个命令非常重要，可以替代 include_directories 和 aux_source_directory 命令（<strong>能层级搜索</strong>指定目录下的文件）。</p>
-<p>后面讲 Qt 项目配置的时候，就需要这个命令，因为 ui 文件、qss 文件、qrc 文件等资源没有专门的命令来查找，但是借助 file 这个命令就能解决。简单来讲，file 可以把任何文件保存到一个变量中，然后给别人引用。</p>
+<p><em>include_directories 和
+aux_source_directory都不会递归地搜索指定目录及其子目录中的文件。它只会在指定的目录中查找文件，而不会自动搜索子目录中的文件</em>。</p>
+<h2><span id="不得不介绍的file命令">不得不介绍的FILE命令</span></h2>
+<p>这个命令非常重要，可以替代 include_directories 和
+aux_source_directory
+命令（<strong>能层级搜索</strong>指定目录下的文件）。</p>
+<p>后面讲 Qt 项目配置的时候，就需要这个命令，因为 ui 文件、qss 文件、qrc
+文件等资源没有专门的命令来查找，但是借助 file
+这个命令就能解决。简单来讲，file
+可以把任何文件保存到一个变量中，然后给别人引用。</p>
 <p>这里只演示匹配指定模式的文件，并将结果存储在变量中：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">file</span>(GLOB TEST_RESULT /public/home *.cpp)			<span class="hljs-comment">#只会查找指定目录下的文件，不会递归子目录，即不会层级搜索.cpp文件</span><br><br><span class="hljs-keyword">file</span>(GLOB_RECURSE TEST_RESULT /public/home *.cpp)	 <span class="hljs-comment">#会递归查找指定目录及其所有子目录中的文件，即会层级搜索.cpp文件</span><br></code></pre></td></tr></table></figure>
-
-<p>但不建议替代 include_directories，因为编译器不会知道去哪里寻找头文件。那么导入头文件会有很长的路径，极其不美观。如果你真这么做了，那记得把头文件搜索结果存储的变量加入到 add_executable 中，因为编译器找不到头文件。</p>
-<p>个人觉得，优先选择 include_directories 和 aux_source_directory 命令，再考虑 file 命令辅助。特别是如果只是用来查找头文件而不是要用头文件再去编译（Qt就需要把头文件编译为 ui_xxx.h 文件，所以不得不用 file 命令，但尽管如此，我们也还是会用到 include_directories 来帮我们搜索头文件）。</p>
-<p>即 file 即使存在，include_directories 也无可替代，aux_source_directory 可以被替代。</p>
-<p>使用 <code>file(GLOB ...)</code> 和 <code>file(GLOB_RECURSE ...)</code> 的时候要注意，CMake 在配置期间会获取文件列表，但如果之后文件列表发生变化（如新增或删除文件），你可能需要重新运行 CMake 来更新构建系统配置。</p>
+<p>但不建议替代
+include_directories，因为编译器不会知道去哪里寻找头文件。那么导入头文件会有很长的路径，极其不美观。如果你真这么做了，那记得把头文件搜索结果存储的变量加入到
+add_executable 中，因为编译器找不到头文件。</p>
+<p>个人觉得，优先选择 include_directories 和 aux_source_directory
+命令，再考虑 file
+命令辅助。特别是如果只是用来查找头文件而不是要用头文件再去编译（Qt就需要把头文件编译为
+ui_xxx.h 文件，所以不得不用 file 命令，但尽管如此，我们也还是会用到
+include_directories 来帮我们搜索头文件）。</p>
+<p>即 file 即使存在，include_directories
+也无可替代，aux_source_directory 可以被替代。</p>
+<p>使用 <code>file(GLOB ...)</code> 和
+<code>file(GLOB_RECURSE ...)</code> 的时候要注意，CMake
+在配置期间会获取文件列表，但如果之后文件列表发生变化（如新增或删除文件），你可能需要重新运行
+CMake 来更新构建系统配置。</p>
 <p>通常推荐显式列出源文件，以避免这种潜在的问题。我看很多第三方库都采用这种方式，我觉得确实可以采纳过来，就像下面这样：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment"># 添加头文件目录</span><br><span class="hljs-keyword">include_directories</span>(<span class="hljs-variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>/<span class="hljs-keyword">include</span>)<br><br><span class="hljs-comment"># 显式列出源文件</span><br><span class="hljs-keyword">set</span>(SOURCES<br>    src/main.cpp<br>    src/foo.cpp<br>    src/bar.cpp<br>)<br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -310,7 +344,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第七章：CMake-构建-Qt-项目\" title="第七章：CMake 构建 Qt 项目" rel="bookmark">第七章：CMake 构建 Qt 项目</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第七章：CMake-构建-Qt-项目\" title="第七章：CMake 构建 Qt 项目" rel="bookmark">第七章：CMake 构建 Qt 项目</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第三章：CMake-常用内置变量\" title="第三章：CMake 常用内置变量" rel="bookmark">第三章：CMake 常用内置变量</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -842,11 +876,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

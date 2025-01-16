@@ -174,36 +174,59 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E8%AE%A4%E8%AF%86-time-wait">认识 TIME-WAIT</a></li>
-<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E5%AE%83">为什么要使用它</a></li>
-<li><a href="#time-wait-%E6%9A%97%E6%9D%80">TIME-WAIT 暗杀</a><ul>
-<li><a href="#%E7%A2%B0%E5%B7%A7%E5%8F%91%E7%94%9F%E7%9A%84%E6%83%85%E5%86%B5">碰巧发生的情况</a></li>
-<li><a href="#%E6%95%85%E6%84%8F%E9%80%A0%E6%88%90%E7%9A%84">故意造成的</a></li>
-</ul>
-</li>
+<li><a href="#认识-time-wait">认识 TIME-WAIT</a></li>
+<li><a href="#为什么要使用它">为什么要使用它</a></li>
+<li><a href="#time-wait-暗杀">TIME-WAIT 暗杀</a>
+<ul>
+<li><a href="#碰巧发生的情况">碰巧发生的情况</a></li>
+<li><a href="#故意造成的">故意造成的</a></li>
+</ul></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="认识-time-wait">认识 TIME-WAIT</span></h2><p>主机 2 关闭连接并释放资源。从主机 2 的角度来看，连接不再存在了。但主机 1 还没有关闭连接，而是会进入 TIME_WAIT状态，并在这个状态停留 2MSL，等待 2MSL智慧，主机 1 也将连接关闭，并释放其资源。</p>
-<p><img src="/images/2024/08/10/1f7d2ce0-571d-11ef-a7b6-1b323923df30.png" alt="time_wait.png"></p>
+<h2><span id="认识-time-wait">认识 TIME-WAIT</span></h2>
+<p>主机 2 关闭连接并释放资源。从主机 2
+的角度来看，连接不再存在了。但主机 1 还没有关闭连接，而是会进入
+TIME_WAIT状态，并在这个状态停留 2MSL，等待 2MSL智慧，主机 1
+也将连接关闭，并释放其资源。</p>
+<figure>
+<img src="/images/2024/08/10/1f7d2ce0-571d-11ef-a7b6-1b323923df30.png" alt="time_wait.png">
+<figcaption aria-hidden="true">time_wait.png</figcaption>
+</figure>
 <p>关于 TIME-WAIT 状态，还要弄清楚三点：</p>
-<ol>
+<ol type="1">
 <li>主动关闭的那一端才会进入 TIME-WAIT 状态</li>
 <li>RFC 将 MSL 定义为 2 分钟</li>
 <li>如果连接处于 TIME-WAIT 状态时有分组到达，就重启 2MSL 的定时器</li>
 </ol>
-<h2><span id="为什么要使用它">为什么要使用它</span></h2><ol>
-<li>维护连接状态，以防主动关闭连接的那端发送的最后一条 ACK 丢失后照成另一端重新发送 FIN 信号</li>
+<h2><span id="为什么要使用它">为什么要使用它</span></h2>
+<ol type="1">
+<li>维护连接状态，以防主动关闭连接的那端发送的最后一条 ACK
+丢失后照成另一端重新发送 FIN 信号</li>
 <li>为耗尽网络中所有此连接的“走失段”提供时间（确保在原有连接的所有分段从网络中消失之前，不会再次使用原来用过的套接字对，以此来防止这类问题的产生）</li>
 </ol>
-<h2><span id="time-wait-暗杀">TIME-WAIT 暗杀</span></h2><p>不幸的时，TIME-WAIT 状态可以被提前终止，这被称为 TIME-WAIT 暗杀。它可能时“碰巧”产生的，也可能是故意造成的。不管是哪种情况，提前终止 TIME-WAIT 状态 都是不明智的。</p>
-<h3><span id="碰巧发生的情况">碰巧发生的情况</span></h3><p>首先来看看怎么会碰巧发生这种情况。当一条连接处于 TIME-WAIT 状态并收到一个 RST 时，应该立即将连接关闭。假设有一条处于 TIME-WAIT 状态的连接，并有一个原有的重复分段到达，而这个分段是 TCP 无法接受的（比如，序列号在当前接收窗口之外）。TCP 会以一个 ACK 响应，说明它所期待的序列号（就是对等实体的 FIN 之后的序列号）。但对等实体中已经没有这个连接的记录了，所以会以一个 RST 来进行 ACK。当这个 RST 回到连接处于 TIME-WAIT 状态的主机时，会使连接立即关闭–TIME-WAIT 状态被暗杀了。</p>
-<p>可能会影响到原有连接的再生，还包含了对原有数据的错误接收，造成无线 ACK 循环的连接不同步现象，以及新连接的错误行终止。</p>
-<h3><span id="故意造成的">故意造成的</span></h3><p>另一种 TIME-WAIT 暗杀方式是故意造成的。如下所述，即使应用程序正在主动关闭连接，程序员也可以用套接字选项 SO_LINGER 迫使连接立即关闭。有时会推荐用这种可疑的方式使服务器跳出 TIME-WAIT状态，这样就可以在崩溃或终止之后重启服务器了。</p>
+<h2><span id="time-wait-暗杀">TIME-WAIT 暗杀</span></h2>
+<p>不幸的时，TIME-WAIT 状态可以被提前终止，这被称为 TIME-WAIT
+暗杀。它可能时“碰巧”产生的，也可能是故意造成的。不管是哪种情况，提前终止
+TIME-WAIT 状态 都是不明智的。</p>
+<h3><span id="碰巧发生的情况">碰巧发生的情况</span></h3>
+<p>首先来看看怎么会碰巧发生这种情况。当一条连接处于 TIME-WAIT
+状态并收到一个 RST 时，应该立即将连接关闭。假设有一条处于 TIME-WAIT
+状态的连接，并有一个原有的重复分段到达，而这个分段是 TCP
+无法接受的（比如，序列号在当前接收窗口之外）。TCP 会以一个 ACK
+响应，说明它所期待的序列号（就是对等实体的 FIN
+之后的序列号）。但对等实体中已经没有这个连接的记录了，所以会以一个 RST
+来进行 ACK。当这个 RST 回到连接处于 TIME-WAIT
+状态的主机时，会使连接立即关闭--TIME-WAIT 状态被暗杀了。</p>
+<p>可能会影响到原有连接的再生，还包含了对原有数据的错误接收，造成无线
+ACK 循环的连接不同步现象，以及新连接的错误行终止。</p>
+<h3><span id="故意造成的">故意造成的</span></h3>
+<p>另一种 TIME-WAIT
+暗杀方式是故意造成的。如下所述，即使应用程序正在主动关闭连接，程序员也可以用套接字选项
+SO_LINGER 迫使连接立即关闭。有时会推荐用这种可疑的方式使服务器跳出
+TIME-WAIT状态，这样就可以在崩溃或终止之后重启服务器了。</p>
 <hr>
-<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
+<p>⭐️内容取自译者陈涓、赵振平《TCP/IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
 
       </div>
     </div>
@@ -288,7 +311,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -820,11 +843,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

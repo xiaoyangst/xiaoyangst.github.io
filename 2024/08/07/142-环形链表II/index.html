@@ -174,24 +174,30 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;  <br><span class="hljs-keyword">public</span>:  <br>    <span class="hljs-function">ListNode* <span class="hljs-title">detectCycle</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;  <br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">NULL</span> || head-&gt;next == <span class="hljs-literal">NULL</span>) &#123;  <br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;  <br>        &#125;  <br>        <span class="hljs-comment">// 快慢指针，有环必相遇  </span><br>        ListNode* node = head;  <br>        ListNode* slow = head;  <br>        ListNode* fast = head;  <br>        <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;  <br>            slow = slow-&gt;next;  <br>            fast = fast-&gt;next-&gt;next;  <br>            <span class="hljs-keyword">if</span> (slow == fast) &#123; <span class="hljs-comment">// 有环  </span><br>                <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;  <br>                    <span class="hljs-keyword">if</span> (node == slow) &#123;  <br>                        <span class="hljs-keyword">return</span> slow;  <br>                    &#125;  <br>                    node = node-&gt;next;  <br>                    slow = slow-&gt;next;  <br>                &#125;  <br>            &#125;  <br>        &#125;  <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;  <br>    &#125;  <br>&#125;;  <br></code></pre></td></tr></table></figure>
-
-<p>此题建立在你已经完成 《141.环形链表》题目，我们重点就关注判断有环之后如果找到第一次相遇的节点。</p>
-<p><img src="/images/2024/08/07/fcf6ef00-5490-11ef-996a-6b29d9dcc7bf.png" alt="环形链表II.png"></p>
+<p>此题建立在你已经完成
+《141.环形链表》题目，我们重点就关注判断有环之后如果找到第一次相遇的节点。</p>
+<figure>
+<img src="/images/2024/08/07/fcf6ef00-5490-11ef-996a-6b29d9dcc7bf.png" alt="环形链表II.png">
+<figcaption aria-hidden="true">环形链表II.png</figcaption>
+</figure>
 <p>我们可以确定如下信息：</p>
 <ul>
 <li>慢指针必然不可能环绕圆形一圈，快指针至少环绕环形一圈</li>
 <li>快指针和慢指针从同一个起点出发，并且快指针是慢指针的两倍</li>
 </ul>
-<p>设定 相应的变量之后，得到如下等式：n &gt;&#x3D; 1，且 n 为正整数 （因为快指针至少环绕环形一圈）</p>
+<p>设定 相应的变量之后，得到如下等式：n &gt;= 1，且 n 为正整数
+（因为快指针至少环绕环形一圈）</p>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs tex">(x + y) * 2 = x + y + n ( y + z ) <br>		↓<br>x = (n - 1)(x + y) + z<br></code></pre></td></tr></table></figure>
-
-<p>我们假定 n &#x3D;&#x3D; 1，那么 x &#x3D; z。这个时候再看图，就发现只要 快慢指针的相遇节点和头节点同时向前移动，它们两个的相遇点就是链表开始入环的第一个节点。</p>
+<p>我们假定 n == 1，那么 x = z。这个时候再看图，就发现只要
+快慢指针的相遇节点和头节点同时向前移动，它们两个的相遇点就是链表开始入环的第一个节点。</p>
 <hr>
 <p>在完成《141.环形链表》题目的时候，我的第一份代码如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">hasCycle</span><span class="hljs-params">(ListNode *head)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(head == <span class="hljs-literal">NULL</span> || head-&gt;next == <span class="hljs-literal">NULL</span>)&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>        ListNode* slow = head;<br>        ListNode* fast = head-&gt;next;<br>        <span class="hljs-keyword">while</span>(fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>)&#123;<br>            <span class="hljs-keyword">if</span>(slow == fast)&#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>            &#125;<br>            slow = slow-&gt;next;<br>            fast = fast-&gt;next-&gt;next;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>我企图用这份代码来套用到本题，却发现犯了一个大错误，那就是 slow 和 fast 不是同一个起点开始，导致上面的推导公式失效。所以，我们务必保证最初的快慢指针的起点是一致的，即指向头节点。如果是这样，上面的代码还需要改正的地方是，要先进行指针移动，再判断快慢指针是否指向同一个节点，从而判断是否为环形链表。</p>
+<p>我企图用这份代码来套用到本题，却发现犯了一个大错误，那就是 slow 和
+fast
+不是同一个起点开始，导致上面的推导公式失效。所以，我们务必保证最初的快慢指针的起点是一致的，即指向头节点。如果是这样，上面的代码还需要改正的地方是，要先进行指针移动，再判断快慢指针是否指向同一个节点，从而判断是否为环形链表。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">hasCycle</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">NULL</span> || head-&gt;next == <span class="hljs-literal">NULL</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>        <br>        ListNode* slow = head;<br>        ListNode* fast = head;<br>        <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;<br>            slow = slow-&gt;next;<br>            fast = fast-&gt;next-&gt;next;<br>            <span class="hljs-keyword">if</span> (slow == fast) &#123; <span class="hljs-comment">// 快慢指针，有环必相遇</span><br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -275,7 +281,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\23\160-相交链表\" title="160. 相交链表" rel="bookmark">160. 相交链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\23\160-相交链表\" title="160. 相交链表" rel="bookmark">160. 相交链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -807,11 +813,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

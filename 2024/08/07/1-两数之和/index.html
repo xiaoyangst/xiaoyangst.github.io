@@ -174,11 +174,14 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">twoSum</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>        unordered_map&lt;<span class="hljs-type">int</span>,<span class="hljs-type">int</span>&gt; data;<br>        vector&lt;<span class="hljs-type">int</span>&gt; result;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-type">int</span> re = target - nums[i];<br>            <span class="hljs-keyword">auto</span> it = data.<span class="hljs-built_in">find</span>(re);<br>            <span class="hljs-keyword">if</span>(it != data.<span class="hljs-built_in">end</span>())&#123;	<br>                result.<span class="hljs-built_in">push_back</span>(i);	<span class="hljs-comment">// 当前元素下标</span><br>                result.<span class="hljs-built_in">push_back</span>(it-&gt;second);	<span class="hljs-comment">// 配对元素下标</span><br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>            data[nums[i]] = i;<br>        &#125;<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>拿到此题个人的解题思路是采用哈希表</p>
-<p>C++中具有哈希表特征的是 set 和 map 容器，题目要求获取下标同时又需要参考<code>target - nums[i]</code>的结果。因此采用unordered_map容器最佳，即 key 存储<code>target - nums[i]</code>的结果，value 存储下标</p>
-<p>个人遇到的问题是记不清 map 容器的 find 的方法究竟寻找的 key 还是 value？答案是 key！！！</p>
-<p><code>std::unordered_map::find</code> 用于查找键，并返回一个指向该 键-值对 的迭代器</p>
+<p>C++中具有哈希表特征的是 set 和 map
+容器，题目要求获取下标同时又需要参考<code>target - nums[i]</code>的结果。因此采用unordered_map容器最佳，即
+key 存储<code>target - nums[i]</code>的结果，value 存储下标</p>
+<p>个人遇到的问题是记不清 map 容器的 find 的方法究竟寻找的 key 还是
+value？答案是 key！！！</p>
+<p><code>std::unordered_map::find</code> 用于查找键，并返回一个指向该
+键-值对 的迭代器</p>
 
       </div>
     </div>
@@ -263,7 +266,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\08\26-删除有序数组中的重复项\" title="26.删除有序数组中的重复项" rel="bookmark">26.删除有序数组中的重复项</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\22\27-移除元素\" title="27.移除元素" rel="bookmark">27.移除元素</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\23\283-移动零\" title="283.移动零" rel="bookmark">283.移动零</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\08\26-删除有序数组中的重复项\" title="26.删除有序数组中的重复项" rel="bookmark">26.删除有序数组中的重复项</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\22\27-移除元素\" title="27.移除元素" rel="bookmark">27.移除元素</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\15\350-两个数组的交集-II\" title="350. 两个数组的交集 II" rel="bookmark">350. 两个数组的交集 II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
     
   </div>
 </div>
@@ -795,11 +798,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

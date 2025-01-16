@@ -174,80 +174,89 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%97%B6%E9%97%B4%E6%AE%B5duration">时间段duration</a></li>
-<li><a href="#%E6%97%B6%E9%97%B4%E7%82%B9time_point">时间点time_point</a></li>
-<li><a href="#%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%92%9Fclocks">系统时钟clocks</a></li>
-<li><a href="#%E8%A1%A8%E7%A4%BA%E4%B8%8D%E5%90%8C%E7%9A%84%E6%97%B6%E9%97%B4%E5%8D%95%E4%BD%8D">表示不同的时间单位</a></li>
-<li><a href="#%E8%BD%AC%E6%8D%A2%E4%B8%BAduration%E6%88%96time_point">转换为duration或time_point</a></li>
+<li><a href="#时间段duration">时间段duration</a></li>
+<li><a href="#时间点time_point">时间点time_point</a></li>
+<li><a href="#系统时钟clocks">系统时钟clocks</a></li>
+<li><a href="#表示不同的时间单位">表示不同的时间单位</a></li>
+<li><a href="#转换为duration或time_point">转换为duration或time_point</a></li>
 </ul>
 <!-- tocstop -->
-
 <blockquote>
 <p>之前浅学这块内容，C++11封装的如此冗长，于是“重学”加深影响，方便后续查阅</p>
 </blockquote>
 <p>在<code>std::chrono</code>命名空间下定义。</p>
-<p>C语言虽然也有时间处理方法，但是精度只到秒。Linux 和 Windows 都有提供相应的方法精确到微秒，但是用法不同，显然不支持跨平台。<strong>chrono 库精度更高，同时支持跨平台</strong>，因此C++11之后使用chrono 库处理时间和日期是有必要的，至于到后面的C++版本是否会继续加强，那是以后的事情。</p>
+<p>C语言虽然也有时间处理方法，但是精度只到秒。Linux 和 Windows
+都有提供相应的方法精确到微秒，但是用法不同，显然不支持跨平台。<strong>chrono
+库精度更高，同时支持跨平台</strong>，因此C++11之后使用chrono
+库处理时间和日期是有必要的，至于到后面的C++版本是否会继续加强，那是以后的事情。</p>
 <p>对于时间、日期的处理，它引入了三个基本概念：</p>
 <ul>
 <li>时间（时钟）：时间点的同上概念，包含时间点、时间间隔、日期</li>
 <li>时间间隔（时间段）：两个时间点的差值</li>
-<li>时间点：比如 12:05:00 表示一个时间点，比如 2021-01-01 13:00:00 也表示一个时间点</li>
+<li>时间点：比如 12:05:00 表示一个时间点，比如 2021-01-01 13:00:00
+也表示一个时间点</li>
 </ul>
-<p><img src="/images/2024/08/16/cdf3a940-5b94-11ef-922f-4335b82b6d11.png" alt="时间库.png"></p>
-<h2><span id="时间段duration">时间段duration</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Rep</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Period</span> = ratio&lt;<span class="hljs-number">1</span>&gt; &gt;<br><span class="hljs-keyword">class</span> duration;<br><br>Rep: 表示时间的数量（例如，整数或浮点数）<br>Period: 表示时间单位（例如，秒、毫秒、微秒等）<br></code></pre></td></tr></table></figure>
-
+<figure>
+<img src="/images/2024/08/16/cdf3a940-5b94-11ef-922f-4335b82b6d11.png" alt="时间库.png">
+<figcaption aria-hidden="true">时间库.png</figcaption>
+</figure>
+<h2><span id="时间段duration">时间段duration</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Rep</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Period</span> = ratio&lt;<span class="hljs-number">1</span>&gt; &gt;<br><span class="hljs-keyword">class</span> duration;<br><br>Rep: 表示时间的数量（例如，整数或浮点数）<br>Period: 表示时间单位（例如，秒、毫秒、微秒等）<br></code></pre></td></tr></table></figure>
 <p>提供 count方法 获得计数值，还能进行运算符运算（加减乘除）</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std::chrono;<br>    <br>    <span class="hljs-comment">// 创建两个时间段</span><br>    <span class="hljs-function">seconds <span class="hljs-title">five_seconds</span><span class="hljs-params">(<span class="hljs-number">5</span>)</span></span>;<br>    <span class="hljs-function">seconds <span class="hljs-title">three_seconds</span><span class="hljs-params">(<span class="hljs-number">3</span>)</span></span>;<br>    <br>    <span class="hljs-comment">// 加法运算</span><br>    seconds total = five_seconds + three_seconds;<br>    <br>    <span class="hljs-comment">// 减法运算</span><br>    seconds difference = five_seconds - three_seconds;<br>    <br>    <span class="hljs-comment">// 乘法运算</span><br>    seconds double_time = five_seconds * <span class="hljs-number">2</span>;<br>    <br>    <span class="hljs-comment">// 除法运算</span><br>    seconds half_time = five_seconds / <span class="hljs-number">2</span>;<br>    <br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Total time: &quot;</span> &lt;&lt; total.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; seconds&quot;</span> &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Difference in time: &quot;</span> &lt;&lt; difference.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; seconds&quot;</span> &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Double time: &quot;</span> &lt;&lt; double_time.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; seconds&quot;</span> &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Half time: &quot;</span> &lt;&lt; half_time.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; seconds&quot;</span> &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">Total time: 8 seconds</span><br><span class="hljs-comment">Difference in time: 2 seconds</span><br><span class="hljs-comment">Double time: 10 seconds</span><br><span class="hljs-comment">Half time: 2 seconds</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-
-<p>时间段可以应用于 wait_until 这种等到某个时间段的语句，下面介绍的时间点可以应用于 wait_for 这种等到某个时间点的语句</p>
-<h2><span id="时间点time_point">时间点time_point</span></h2><p>用于表示时间点的类模板，和下面要介绍的clocks结合使用</p>
+<p>时间段可以应用于 wait_until
+这种等到某个时间段的语句，下面介绍的时间点可以应用于 wait_for
+这种等到某个时间点的语句</p>
+<h2><span id="时间点time_point">时间点time_point</span></h2>
+<p>用于表示时间点的类模板，和下面要介绍的clocks结合使用</p>
 <p>创建对象不填写参数，代表构造一个以纪元为值的对象</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br><br>  std::chrono::system_clock::time_point time_point1;<br>  <span class="hljs-type">time_t</span>  tt1 = std::chrono::system_clock::<span class="hljs-built_in">to_time_t</span>(time_point1);<br>  std::cout&lt;&lt;<span class="hljs-built_in">ctime</span>(&amp;tt1);<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	Thu Jan  1 08:00:00 1970</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-
 <p>有两个成员方法：min和max代表time_point的最小值和最大值</p>
 <p>测试最小值为空，最大值为Sat Apr 12 07:47:16 2262</p>
 <p>前面介绍无参构造函数，还有两个构造函数没有介绍</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 使用一个时间段 d 来初始化时间点，从时钟的时间零点开始计算</span><br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">time_point</span><span class="hljs-params">(<span class="hljs-type">const</span> duration&amp; d)</span></span>;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    // 创建一个时间段</span><br><span class="hljs-comment">    std::chrono::seconds duration(10);</span><br><span class="hljs-comment">    </span><br><span class="hljs-comment">    // 使用时间段构造 time_point</span><br><span class="hljs-comment">    std::chrono::system_clock::time_point tp_with_duration(duration);</span><br><span class="hljs-comment">    </span><br><span class="hljs-comment">    auto duration_since_epoch = tp_with_duration.time_since_epoch();</span><br><span class="hljs-comment">    </span><br><span class="hljs-comment">    std::cout &lt;&lt; &quot;Constructed time_point with duration: &quot;</span><br><span class="hljs-comment">              &lt;&lt; duration_since_epoch.count() &lt;&lt; &quot; seconds since epoch\n&quot;;</span><br><span class="hljs-comment">             </span><br><span class="hljs-comment">     输出结果：</span><br><span class="hljs-comment">     Constructed time_point with duration: 10000000000 seconds since epoch</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">*/</span><br><br></code></pre></td></tr></table></figure>
-
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 使用另一个时间点来拷贝构造新的时间点</span><br><span class="hljs-built_in">time_point</span>(<span class="hljs-type">const</span> time_point&amp; other) = <span class="hljs-keyword">default</span>;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    // 获取当前时间点</span><br><span class="hljs-comment">    std::chrono::system_clock::time_point tp_now = std::chrono::system_clock::now();</span><br><span class="hljs-comment">    </span><br><span class="hljs-comment">    // 使用拷贝构造函数</span><br><span class="hljs-comment">    std::chrono::system_clock::time_point tp_copy(tp_now);</span><br><span class="hljs-comment">    </span><br><span class="hljs-comment">    auto duration_since_epoch_now = tp_now.time_since_epoch();</span><br><span class="hljs-comment">    auto duration_since_epoch_copy = tp_copy.time_since_epoch();</span><br><span class="hljs-comment">    </span><br><span class="hljs-comment">    std::cout &lt;&lt; &quot;Original time_point: &quot;</span><br><span class="hljs-comment">              &lt;&lt; duration_since_epoch_now.count() &lt;&lt; &quot; ticks since epoch\n&quot;;</span><br><span class="hljs-comment">    std::cout &lt;&lt; &quot;Copied time_point: &quot;</span><br><span class="hljs-comment">              &lt;&lt; duration_since_epoch_copy.count() &lt;&lt; &quot; ticks since epoch\n&quot;;</span><br><span class="hljs-comment">              </span><br><span class="hljs-comment">     输出结果：</span><br><span class="hljs-comment">     Original time_point: 1719716264027922800 ticks since epoch</span><br><span class="hljs-comment">     Copied time_point: 1719716264027922800 ticks since epoch</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-
-<h2><span id="系统时钟clocks">系统时钟clocks</span></h2><p>（一）std::chrono::system_clock</p>
+<h2><span id="系统时钟clocks">系统时钟clocks</span></h2>
+<p>（一）std::chrono::system_clock</p>
 <p>now：可以用于获取当前时间</p>
-<p>to_time_t：转换为 time_t </p>
+<p>to_time_t：转换为 time_t</p>
 <p>from_time_t：从time_t 转换</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br><br>  std::chrono::system_clock::time_point curTime = std::chrono::system_clock::<span class="hljs-built_in">now</span>(); <span class="hljs-comment">// 获取当前时间</span><br>  <span class="hljs-type">time_t</span> showTime = std::chrono::system_clock::<span class="hljs-built_in">to_time_t</span>(curTime);  <span class="hljs-comment">// 转换为 time_t 类型</span><br>  std::cout&lt;&lt;<span class="hljs-string">&quot;当前时间: &quot;</span>&lt;&lt;std::<span class="hljs-built_in">ctime</span>(&amp;showTime)&lt;&lt;std::endl;<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	当前时间: Sun Jun 30 10:29:03 2024</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-
-<p>time_t 类型是C语言的时间类型，这就是实现C++和C语言时间类型的转换的</p>
+<p>time_t
+类型是C语言的时间类型，这就是实现C++和C语言时间类型的转换的</p>
 <p>（二）std::chrono::steady_clock</p>
 <p>不会被系统时间的调整所影响，且它的滴答频率是稳定的，适合用于<strong>测量时间间隔</strong></p>
-<p>只提供 now方法用于获取当前时间，测量时间间隔只需要调用两次now方法求差即可</p>
+<p>只提供
+now方法用于获取当前时间，测量时间间隔只需要调用两次now方法求差即可</p>
 <p>（三）std::chrono::high_resolution_clock</p>
-<p>提供了最高可能的时间分辨率。通常，它是 <code>system_clock</code> 或 <code>steady_clock</code> 的别名，但具体实现依赖于系统和标准库实现</p>
+<p>提供了最高可能的时间分辨率。通常，它是 <code>system_clock</code> 或
+<code>steady_clock</code> 的别名，但具体实现依赖于系统和标准库实现</p>
 <p>同样只提供 now 方法用于获取当前时间</p>
 <hr>
-<p>看来，测试时间间隔采用std::chrono::steady_clock（稳定，不受系统时间影响，因为原点是计算机启动的时刻），希望将时间转换为日历显示效果或者转换为C语言风格的时间类当采用std::chrono::system_clock（不稳定，如果被恶意修改系统时间，这里跟着受影响，通过 is_steady 判断是否稳定）</p>
-<h2><span id="表示不同的时间单位">表示不同的时间单位</span></h2><p>通过在构造函数中传递值，表示不同的时间类型，比方说你在 hours(1)代表一个小时，seconds(1)代表一秒</p>
+<p>看来，测试时间间隔采用std::chrono::steady_clock（稳定，不受系统时间影响，因为原点是计算机启动的时刻），希望将时间转换为日历显示效果或者转换为C语言风格的时间类当采用std::chrono::system_clock（不稳定，如果被恶意修改系统时间，这里跟着受影响，通过
+is_steady 判断是否稳定）</p>
+<h2><span id="表示不同的时间单位">表示不同的时间单位</span></h2>
+<p>通过在构造函数中传递值，表示不同的时间类型，比方说你在
+hours(1)代表一个小时，seconds(1)代表一秒</p>
 <p><code>std::chrono::hours</code>：表示小时的持续时间</p>
 <p><code>std::chrono::minutes</code>：表示分钟的持续时间</p>
 <p><code>std::chrono::seconds</code>：表示秒的持续时间</p>
 <p><code>std::chrono::milliseconds</code>：表示毫秒的持续时间</p>
 <p><code>std::chrono::microseconds</code>：表示微秒的持续时间</p>
 <p><code>std::chrono::nanoseconds</code>：表示纳秒的持续时间</p>
-<h2><span id="转换为duration或time_point">转换为duration或time_point</span></h2><p>（一）duration_cast</p>
+<h2><span id="转换为duration或time_point">转换为duration或time_point</span></h2>
+<p>（一）duration_cast</p>
 <p>用于将时间段从一种单位转换为另一种单位</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">ToDuration</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Rep</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Period</span>&gt;<br><span class="hljs-function"><span class="hljs-keyword">constexpr</span> ToDuration <span class="hljs-title">duration_cast</span><span class="hljs-params">(<span class="hljs-type">const</span> duration&lt;Rep, Period&gt;&amp; d)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>把 秒 转换为 分钟，把 秒 转换为毫秒 </p>
+<p>把 秒 转换为 分钟，把 秒 转换为毫秒</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::<span class="hljs-function">chrono::seconds <span class="hljs-title">sec</span><span class="hljs-params">(<span class="hljs-number">120</span>)</span></span>; <span class="hljs-comment">// 120 seconds</span><br><br>    <span class="hljs-comment">// 将秒转换为分钟</span><br>    std::chrono::minutes min = std::chrono::<span class="hljs-built_in">duration_cast</span>&lt;std::chrono::minutes&gt;(sec);<br>    std::cout &lt;&lt; sec.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; seconds is &quot;</span> &lt;&lt; min.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; minutes.&quot;</span> &lt;&lt; std::endl;<br><br>    <span class="hljs-comment">// 将秒转换为毫秒</span><br>    std::chrono::milliseconds millisec = std::chrono::<span class="hljs-built_in">duration_cast</span>&lt;std::chrono::milliseconds&gt;(sec);<br>    std::cout &lt;&lt; sec.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; seconds is &quot;</span> &lt;&lt; millisec.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot; milliseconds.&quot;</span> &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>（二）time_point_cast</p>
 <p>用于将时间点从一种单位转换为另一种单位</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">ToDuration</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Clock</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Duration</span>&gt;<br><span class="hljs-function"><span class="hljs-keyword">constexpr</span> time_point&lt;Clock, ToDuration&gt; <span class="hljs-title">time_point_cast</span><span class="hljs-params">(<span class="hljs-type">const</span> time_point&lt;Clock, Duration&gt;&amp; tp)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>将当前时间点 转换为 毫秒精度，将当前时间点转换为秒精度</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">auto</span> now = std::chrono::system_clock::<span class="hljs-built_in">now</span>(); <span class="hljs-comment">// 获取当前时间点</span><br><br>    <span class="hljs-comment">// 将当前时间点转换为毫秒精度</span><br>    <span class="hljs-keyword">auto</span> now_ms = std::chrono::<span class="hljs-built_in">time_point_cast</span>&lt;std::chrono::milliseconds&gt;(now);<br>    <span class="hljs-keyword">auto</span> epoch = now_ms.<span class="hljs-built_in">time_since_epoch</span>();<br>    <span class="hljs-keyword">auto</span> value = std::chrono::<span class="hljs-built_in">duration_cast</span>&lt;std::chrono::milliseconds&gt;(epoch);<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Current time in milliseconds since epoch: &quot;</span> &lt;&lt; value.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot;ms&quot;</span> &lt;&lt; std::endl;<br><br>    <span class="hljs-comment">// 将当前时间点转换为秒精度</span><br>    <span class="hljs-keyword">auto</span> now_sec = std::chrono::<span class="hljs-built_in">time_point_cast</span>&lt;std::chrono::seconds&gt;(now);<br>    epoch = now_sec.<span class="hljs-built_in">time_since_epoch</span>();<br>    <span class="hljs-keyword">auto</span> value_sec = std::chrono::<span class="hljs-built_in">duration_cast</span>&lt;std::chrono::seconds&gt;(epoch);<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Current time in seconds since epoch: &quot;</span> &lt;&lt; value_sec.<span class="hljs-built_in">count</span>() &lt;&lt; <span class="hljs-string">&quot;s&quot;</span> &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -331,7 +340,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\16\Lambda-表达式\" title="Lambda 表达式" rel="bookmark">Lambda 表达式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\auto-和-decltype\" title="auto 和 decltype" rel="bookmark">auto 和 decltype</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\function-和-bind\" title="function 和 bind" rel="bookmark">function 和 bind</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\16\Lambda-表达式\" title="Lambda 表达式" rel="bookmark">Lambda 表达式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\auto-和-decltype\" title="auto 和 decltype" rel="bookmark">auto 和 decltype</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\function-和-bind\" title="function 和 bind" rel="bookmark">function 和 bind</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -863,11 +872,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

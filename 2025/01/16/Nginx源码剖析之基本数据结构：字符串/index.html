@@ -174,17 +174,20 @@
           </div>
         
         <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs tex">src/core/ngx<span class="hljs-built_in">_</span>string.h<br>src/core/ngx<span class="hljs-built_in">_</span>string.c<br></code></pre></td></tr></table></figure>
-
-<h1><span id="string-源码">string 源码</span></h1><p>ngx_string 有很多的操作，但是并不会去讲解这部分源码，而是看看结构的设计。</p>
+<h1><span id="string-源码">string 源码</span></h1>
+<p>ngx_string
+有很多的操作，但是并不会去讲解这部分源码，而是看看结构的设计。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">size_t</span>      len;    <span class="hljs-comment">// 长度</span><br>    u_char     *data;   <span class="hljs-comment">// 首地址</span><br>&#125; <span class="hljs-type">ngx_str_t</span>;    <span class="hljs-comment">// 字符串</span><br></code></pre></td></tr></table></figure>
-
 <p>示意图：</p>
-<p><img src="/images/2025/01/16/d4b7d004-2672-40e2-a2e1-482a60cfe030.png" alt="image20250116132704342.png"></p>
+<figure>
+<img src="/images/2025/01/16/d4b7d004-2672-40e2-a2e1-482a60cfe030.png" alt="image20250116132704342.png">
+<figcaption aria-hidden="true">image20250116132704342.png</figcaption>
+</figure>
 <p>从图中可知，len 为 2。</p>
-<p>也可以看得出来，nginx 的字符串 是一个字符数组，其中记录有字符串长度的信息。</p>
+<p>也可以看得出来，nginx 的字符串
+是一个字符数组，其中记录有字符串长度的信息。</p>
 <p>下面是初始化字符串的方式：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> ngx_string(str)     &#123; sizeof(str) - 1, (u_char *) str &#125;</span><br></code></pre></td></tr></table></figure>
-
 
       </div>
     </div>
@@ -269,7 +272,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2025\01\13\Nginx源码剖析之基本数据结构：内存池\" title="Nginx源码剖析之基本数据结构：内存池" rel="bookmark">Nginx源码剖析之基本数据结构：内存池</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\13\Nginx源码剖析之基本数据结构：数组\" title="Nginx源码剖析之基本数据结构：数组" rel="bookmark">Nginx源码剖析之基本数据结构：数组</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\16\Nginx源码剖析之基本数据结构：单向链表\" title="Nginx源码剖析之基本数据结构：单向链表" rel="bookmark">Nginx源码剖析之基本数据结构：单向链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2025\01\13\Nginx源码剖析之基本数据结构：内存池\" title="Nginx源码剖析之基本数据结构：内存池" rel="bookmark">Nginx源码剖析之基本数据结构：内存池</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\16\Nginx源码剖析之基本数据结构：单向链表\" title="Nginx源码剖析之基本数据结构：单向链表" rel="bookmark">Nginx源码剖析之基本数据结构：单向链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\16\Nginx源码剖析之基本数据结构：双向链表\" title="Nginx源码剖析之基本数据结构：双向链表" rel="bookmark">Nginx源码剖析之基本数据结构：双向链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -801,11 +804,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

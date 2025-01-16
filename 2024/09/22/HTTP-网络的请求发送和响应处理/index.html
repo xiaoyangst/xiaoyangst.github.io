@@ -174,53 +174,65 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#finished-%E4%BF%A1%E5%8F%B7%E6%84%8F%E5%91%B3%E7%9D%80%E4%BB%80%E4%B9%88">finished 信号意味着什么 ？</a></li>
-<li><a href="#%E8%AF%BB%E5%8F%96%E5%AF%B9%E7%AB%AF%E5%93%8D%E5%BA%94">读取对端响应</a></li>
+<li><a href="#finished-信号意味着什么">finished 信号意味着什么
+？</a></li>
+<li><a href="#读取对端响应">读取对端响应</a></li>
 </ul>
 <!-- tocstop -->
-
 <p>通常需要包含以下头文件：</p>
-<ol>
-<li><strong><code>QNetworkAccessManager</code></strong>: 用于管理网络请求</li>
-<li><strong><code>QNetworkRequest</code></strong>: 用于构建并发送请求（例如设置URL、HTTP头等）</li>
+<ol type="1">
+<li><strong><code>QNetworkAccessManager</code></strong>:
+用于管理网络请求</li>
+<li><strong><code>QNetworkRequest</code></strong>:
+用于构建并发送请求（例如设置URL、HTTP头等）</li>
 <li><strong><code>QNetworkReply</code></strong>: 用于接收响应</li>
 <li><strong><code>QUrl</code></strong>: 用于处理请求的URL</li>
 </ol>
-<p>注：qmake 中添加 QT +&#x3D; network</p>
-<p><img src="/images/2024/09/22/d2a19700-788a-11ef-9d1d-2119386dba73.gif" alt="运行演示.gif"></p>
-<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Qt%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/HTTP%20%E5%92%8C%20JSON">HTTP 和 JSON</a></p>
-<p>文章指引：<a href="https://xiaoyangst.github.io/2024/09/22/Json-%E7%9A%84%E5%A4%84%E7%90%86/">JSON 处理</a> </p>
-<h2><span id="finished-信号意味着什么">finished 信号意味着什么 ？</span></h2><p>待我们发送请求之后，直到对端响应才会继续往下执行代码：</p>
+<p>注：qmake 中添加 QT += network</p>
+<figure>
+<img src="/images/2024/09/22/d2a19700-788a-11ef-9d1d-2119386dba73.gif" alt="运行演示.gif">
+<figcaption aria-hidden="true">运行演示.gif</figcaption>
+</figure>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Qt%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/HTTP%20%E5%92%8C%20JSON">HTTP
+和 JSON</a></p>
+<p>文章指引：<a href="https://xiaoyangst.github.io/2024/09/22/Json-%E7%9A%84%E5%A4%84%E7%90%86/">JSON
+处理</a></p>
+<h2><span id="finished-信号意味着什么">finished 信号意味着什么 ？</span></h2>
+<p>待我们发送请求之后，直到对端响应才会继续往下执行代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">QNetworkReply* response_ = httpManager_-&gt;<span class="hljs-built_in">get</span>(request_);<br></code></pre></td></tr></table></figure>
-
-<p>响应之后，QNetworkReply 会发出 finished 信号，这个信号的触发<strong>并不意味着请求一定成功</strong>，它只是表示网络请求的处理已经完成，所有数据都已接收，无论请求的结果是成功还是失败。要判断请求是否成功，需要检查 QNetworkReply 对象的状态。</p>
+<p>响应之后，QNetworkReply 会发出 finished
+信号，这个信号的触发<strong>并不意味着请求一定成功</strong>，它只是表示网络请求的处理已经完成，所有数据都已接收，无论请求的结果是成功还是失败。要判断请求是否成功，需要检查
+QNetworkReply 对象的状态。</p>
 <p>我们先判断此次请求是否有错误（QNetworkReply::NoError），如果有就打印错误情况，否则就继续我们的代码逻辑。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">connect</span>(response_,&amp;QNetworkReply::finished,<span class="hljs-keyword">this</span>,[response_,<span class="hljs-keyword">this</span>]()&#123;<br>    <span class="hljs-keyword">if</span>(response_-&gt;<span class="hljs-built_in">error</span>() == QNetworkReply::NoError)&#123;   <span class="hljs-comment">// 没有发送错误</span><br>        emit <span class="hljs-built_in">http_finished</span>(response_);<br>    &#125;<span class="hljs-keyword">else</span>&#123;<br>        <span class="hljs-built_in">qDebug</span>()&lt;&lt;response_-&gt;<span class="hljs-built_in">error</span>();   <span class="hljs-comment">// 打印失败情况</span><br>    &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
-
-<h2><span id="读取对端响应">读取对端响应</span></h2><p>此代码中是 readAll 读取全部的数据，然后保存到 QByteArray 中，但是如果传来的数据很大，这未必是合理的处理方式。对几种常用的方式简单总结：</p>
+<h2><span id="读取对端响应">读取对端响应</span></h2>
+<p>此代码中是 readAll 读取全部的数据，然后保存到 QByteArray
+中，但是如果传来的数据很大，这未必是合理的处理方式。对几种常用的方式简单总结：</p>
 <ul>
-<li><strong>readAll()</strong> 是最简单的方式，但可能在数据较大时消耗较多内存。</li>
-<li><strong>read()</strong> 和 <strong>readLine()</strong> 提供了逐步读取的控制，适合处理流式或分块数据。</li>
-<li><strong>bytesAvailable()</strong> 让你可以根据数据量动态决定读取策略，适合需要优化性能的场景。</li>
+<li><strong>readAll()</strong>
+是最简单的方式，但可能在数据较大时消耗较多内存。</li>
+<li><strong>read()</strong> 和 <strong>readLine()</strong>
+提供了逐步读取的控制，适合处理流式或分块数据。</li>
+<li><strong>bytesAvailable()</strong>
+让你可以根据数据量动态决定读取策略，适合需要优化性能的场景。</li>
 </ul>
 <p>（一）read：逐步读取接收的数据，参数是要读取的字节数。你可以调用它多次来读取一部分数据</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">QByteArray chunk = reply-&gt;<span class="hljs-built_in">read</span>(<span class="hljs-number">1024</span>);  <span class="hljs-comment">// 读取1024字节</span><br></code></pre></td></tr></table></figure>
-
-<p><strong>适用场景</strong>：当数据量较大或者需要按块处理时，<code>read()</code> 允许你控制读取的数据大小。例如处理大型文件或流式数据时，可以避免一次性占用过多内存。</p>
+<p><strong>适用场景</strong>：当数据量较大或者需要按块处理时，<code>read()</code>
+允许你控制读取的数据大小。例如处理大型文件或流式数据时，可以避免一次性占用过多内存。</p>
 <p>（二）readAll：一次性读取所有可用的数据</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">QByteArray allData = reply-&gt;<span class="hljs-built_in">readAll</span>();  <span class="hljs-comment">// 读取所有数据</span><br></code></pre></td></tr></table></figure>
-
-<p><strong>适用场景</strong>：当你知道数据量较小，或者你不关心数据的大小时，<code>readAll()</code> 是最简单的方式。它会把所有接收到的数据存储在一个字节数组中。</p>
+<p><strong>适用场景</strong>：当你知道数据量较小，或者你不关心数据的大小时，<code>readAll()</code>
+是最简单的方式。它会把所有接收到的数据存储在一个字节数组中。</p>
 <p>（三）readLine：读取一行数据，行以换行符（<code>\n</code>）或回车换行符（<code>\r\n</code>）作为结尾。它会读取直到遇到这些字符或达到给定字节数</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">QByteArray line = reply-&gt;<span class="hljs-built_in">readLine</span>();<br></code></pre></td></tr></table></figure>
-
-<p><strong>适用场景</strong>：适合处理以行结构组织的文本数据（例如 HTTP 响应头、CSV 文件）</p>
+<p><strong>适用场景</strong>：适合处理以行结构组织的文本数据（例如 HTTP
+响应头、CSV 文件）</p>
 <p>（四）bytesAvailable：返回当前可以从缓冲区中读取的字节数。你可以使用它来查看是否有足够的数据可供读取</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">qint64 availableBytes = reply-&gt;<span class="hljs-built_in">bytesAvailable</span>();<br></code></pre></td></tr></table></figure>
-
-<p>用于判断是否有足够数据来决定使用 <code>read()</code> 或 <code>readLine()</code></p>
+<p>用于判断是否有足够数据来决定使用 <code>read()</code> 或
+<code>readLine()</code></p>
 
       </div>
     </div>
@@ -305,7 +317,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\22\Json-的处理\" title="Json 的处理" rel="bookmark">Json 的处理</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\22\Json-的处理\" title="Json 的处理" rel="bookmark">Json 的处理</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
     
   </div>
 </div>
@@ -837,11 +849,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

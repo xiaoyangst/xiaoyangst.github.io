@@ -173,10 +173,19 @@
             
           </div>
         
-        <p><img src="/images/2024/08/31/b3adae00-6760-11ef-a26a-13be39d63a86.png" alt="进程的虚拟内存地址空间.png"></p>
-<p>操作系统给每个进程营造一种假象，即独占整个内存。在 x86 系统中，为每个进程虚拟出 4G 的内存空间，其中 3G 为用户空间，这块空间各进程相互独立；1G 为内核空间，这块空间进程间共享。</p>
+        <figure>
+<img src="/images/2024/08/31/b3adae00-6760-11ef-a26a-13be39d63a86.png" alt="进程的虚拟内存地址空间.png">
+<figcaption aria-hidden="true">进程的虚拟内存地址空间.png</figcaption>
+</figure>
+<p>操作系统给每个进程营造一种假象，即独占整个内存。在 x86
+系统中，为每个进程虚拟出 4G 的内存空间，其中 3G
+为用户空间，这块空间各进程相互独立；1G
+为内核空间，这块空间进程间共享。</p>
 <p>进程在用户态时，只能访问用户空间内存；只有进入内核态后，才可以访问内核空间内存。虽然每个进程的地址空间都包含了内核空间，但这些内核空间，其实关联的都是相同的物理内存。这样，进程切换到内核态后，就可以很方便地访问内核空间内存。</p>
-<p><img src="/images/2024/08/31/b84118d0-6760-11ef-a26a-13be39d63a86.png" alt="进程的虚拟地址空间2.png"></p>
+<figure>
+<img src="/images/2024/08/31/b84118d0-6760-11ef-a26a-13be39d63a86.png" alt="进程的虚拟地址空间2.png">
+<figcaption aria-hidden="true">进程的虚拟地址空间2.png</figcaption>
+</figure>
 <p>代码段：用来存放程序执行代码，也可能包含一些只读的常量。这块区域的大小在程序运行时就已经确定，并且为了防止代码和常量遭到修改，代码段被设置为只读</p>
 <p>数据段：用来存放程序中已初始化全局变量与静态变量</p>
 <p>BSS段：用来存放程序中未初始化全局变量与静态变量</p>
@@ -269,7 +278,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -801,11 +810,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

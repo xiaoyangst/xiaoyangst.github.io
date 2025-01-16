@@ -175,14 +175,18 @@
         
         <p>字符串数组即存储字符串的数组，我们可能会想到用二维数组来存储字符串。就像下面这样：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> planets[][<span class="hljs-number">8</span>] = &#123;<span class="hljs-string">&quot;Mercury&quot;</span>, <span class="hljs-string">&quot;Venus&quot;</span>, <span class="hljs-string">&quot;Earth&quot;</span>, <br>                     	<span class="hljs-string">&quot;Mars&quot;</span>, <span class="hljs-string">&quot;Jupiter&quot;</span>, <span class="hljs-string">&quot;Saturn&quot;</span>, <br>                     	<span class="hljs-string">&quot;Uranus&quot;</span>, <span class="hljs-string">&quot;Neptune&quot;</span>, <span class="hljs-string">&quot;Pluto&quot;</span>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>那么对于没有占用字符的位置会填充为0，但这本就属于多余申请的空间。</p>
-<p><img src="/images/2024/09/09/87506c40-6eb7-11ef-8b20-af503e99b33d.png" alt="字符串数组二维.png"></p>
+<figure>
+<img src="/images/2024/09/09/87506c40-6eb7-11ef-8b20-af503e99b33d.png" alt="字符串数组二维.png">
+<figcaption aria-hidden="true">字符串数组二维.png</figcaption>
+</figure>
 <p>如果我们该用一维数组来存储字符串指针，不但可以存储字符串，还可以节约空间。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">char* planets[] = &#123;&quot;Mercury&quot;, &quot;Venus&quot;, &quot;Earth&quot;, <br>                     	&quot;Mars&quot;, &quot;Jupiter&quot;, &quot;Saturn&quot;, <br>                     	&quot;Uranus&quot;, &quot;Neptune&quot;, &quot;Pluto&quot;&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>就像下面这样：</p>
-<p><img src="/images/2024/09/09/7e4b4f70-6eb7-11ef-8b20-af503e99b33d.png" alt="字符串数组一维.png"></p>
+<figure>
+<img src="/images/2024/09/09/7e4b4f70-6eb7-11ef-8b20-af503e99b33d.png" alt="字符串数组一维.png">
+<figcaption aria-hidden="true">字符串数组一维.png</figcaption>
+</figure>
 <p>因此，我们存储字符串用一维数组，即指向字符串的指针的数组。</p>
 
       </div>
@@ -268,7 +272,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -800,11 +804,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

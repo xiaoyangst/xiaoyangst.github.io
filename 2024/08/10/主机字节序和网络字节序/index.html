@@ -174,34 +174,47 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F">主机字节序</a></li>
-<li><a href="#%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F">网络字节序</a></li>
-<li><a href="#%E4%B8%BB%E6%9C%BA%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E7%BD%91%E7%BB%9C%E5%AD%97%E8%8A%82%E5%BA%8F%E7%9A%84%E8%BD%AC%E6%8D%A2">主机字节序和网络字节序的转换</a></li>
+<li><a href="#主机字节序">主机字节序</a></li>
+<li><a href="#网络字节序">网络字节序</a></li>
+<li><a href="#主机字节序和网络字节序的转换">主机字节序和网络字节序的转换</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="主机字节序">主机字节序</span></h2><p>主机字节序是指在特定计算机系统中数据的存储顺序。常见的字节序有两种：</p>
+<h2><span id="主机字节序">主机字节序</span></h2>
+<p>主机字节序是指在特定计算机系统中数据的存储顺序。常见的字节序有两种：</p>
 <ul>
-<li><strong>大端字节序（Big-endian）：</strong> 数据的高字节存储在低地址端。例如，数值 0x12345678 将按顺序存储为 0x12 0x34 0x56 0x78</li>
-<li><strong>小端字节序（Little-endian）：</strong> 数据的低字节存储在低地址端。例如，数值 0x12345678 将按顺序存储为 0x78 0x56 0x34 0x12</li>
+<li><strong>大端字节序（Big-endian）：</strong>
+数据的高字节存储在低地址端。例如，数值 0x12345678 将按顺序存储为 0x12
+0x34 0x56 0x78</li>
+<li><strong>小端字节序（Little-endian）：</strong>
+数据的低字节存储在低地址端。例如，数值 0x12345678 将按顺序存储为 0x78
+0x56 0x34 0x12</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> </span>&#123;<br><br>    <span class="hljs-type">int</span> num = <span class="hljs-number">0x61626364</span>;   <span class="hljs-comment">// abcd</span><br><br>    <span class="hljs-comment">// 大端 ： 0x61626364 --》 abcd</span><br>    <br>    <span class="hljs-comment">// 小端 ： 0x64636261 --》 dcba</span><br><br>    <span class="hljs-type">char</span>* str = (<span class="hljs-type">char</span>*)&amp;num;  <span class="hljs-comment">// 将num的地址转为char*类型，逐字节检查;如果是 a，大端；如果是 d，小端</span><br><br>    <span class="hljs-keyword">if</span> (*str == <span class="hljs-string">&#x27;d&#x27;</span>) &#123;  <span class="hljs-comment">// 检查最低字节</span><br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;小端\n&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (*str == <span class="hljs-string">&#x27;a&#x27;</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;大端\n&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>核心还是取到一个可识别的字节对应的内容，一般取 int 类型数据的地址，转换为 char* 代表第一个字节（从左往右看）。因此，也可以有如下代码，原理相同：</p>
+<p>核心还是取到一个可识别的字节对应的内容，一般取 int
+类型数据的地址，转换为 char*
+代表第一个字节（从左往右看）。因此，也可以有如下代码，原理相同：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> num = <span class="hljs-number">1</span>; <span class="hljs-comment">// 定义一个整数</span><br>    <span class="hljs-type">char</span> *byte = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;num); <span class="hljs-comment">// 将整数的地址转换为字符指针</span><br><br>    <span class="hljs-keyword">if</span> (byte[<span class="hljs-number">0</span>] == <span class="hljs-number">1</span>) &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;小端字节序&quot;</span> &lt;&lt; std::endl; <span class="hljs-comment">// 如果最低位字节在最前面，说明是小端</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;大端字节序&quot;</span> &lt;&lt; std::endl; <span class="hljs-comment">// 如果最高位字节在最前面，说明是大端</span><br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-
-<h2><span id="网络字节序">网络字节序</span></h2><p>网络字节序是一种标准化的数据表示方式，用于在不同计算机系统之间传输数据。为了确保数据在网络传输中保持一致，<strong>网络协议（如 TCP&#x2F;IP）规定采用大端字节序</strong>。</p>
-<h2><span id="主机字节序和网络字节序的转换">主机字节序和网络字节序的转换</span></h2><p><code>htons</code>（Host to Network Short）：将 16 位主机字节序转换为网络字节序</p>
-<p><code>htonl</code>（Host to Network Long）：将 32 位主机字节序转换为网络字节序</p>
-<p><code>ntohs</code>（Network to Host Short）：将 16 位网络字节序转换为主机字节序</p>
-<p><code>ntohl</code>（Network to Host Long）：将 32 位网络字节序转换为主机字节序</p>
-<p>在网络编程中，数据收发的过程中有自动转换机制，不需要程序员手动转换，<strong>只有向 sockadd_in 结构体成员变量填充数据时，才需要考虑字节序的问题</strong>。</p>
+<h2><span id="网络字节序">网络字节序</span></h2>
+<p>网络字节序是一种标准化的数据表示方式，用于在不同计算机系统之间传输数据。为了确保数据在网络传输中保持一致，<strong>网络协议（如
+TCP/IP）规定采用大端字节序</strong>。</p>
+<h2><span id="主机字节序和网络字节序的转换">主机字节序和网络字节序的转换</span></h2>
+<p><code>htons</code>（Host to Network Short）：将 16
+位主机字节序转换为网络字节序</p>
+<p><code>htonl</code>（Host to Network Long）：将 32
+位主机字节序转换为网络字节序</p>
+<p><code>ntohs</code>（Network to Host Short）：将 16
+位网络字节序转换为主机字节序</p>
+<p><code>ntohl</code>（Network to Host Long）：将 32
+位网络字节序转换为主机字节序</p>
+<p>在网络编程中，数据收发的过程中有自动转换机制，不需要程序员手动转换，<strong>只有向
+sockadd_in
+结构体成员变量填充数据时，才需要考虑字节序的问题</strong>。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr_in</span> server_addr;<br><span class="hljs-built_in">memset</span>(&amp;server_addr, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(server_addr));<br>server_addr.sin_family = AF_INET;<br>server_addr.sin_port = <span class="hljs-built_in">htons</span>(port);		<span class="hljs-comment">// 端口号转换为网络字节序</span><br>server_addr.sin_addr.s_addr = <span class="hljs-built_in">inet_addr</span>(ip.<span class="hljs-built_in">c_str</span>());  <br></code></pre></td></tr></table></figure>
-
-<p>sockaddr_in 结构体成员 sin_port 接受 16位的大端序，因此用 htons 处理端口 port</p>
-<p>inet_addr 函数已经返回了网络字节序（big-endian）的地址，也就用不着 htonl 处理网络地址 ip</p>
+<p>sockaddr_in 结构体成员 sin_port 接受 16位的大端序，因此用 htons
+处理端口 port</p>
+<p>inet_addr 函数已经返回了网络字节序（big-endian）的地址，也就用不着
+htonl 处理网络地址 ip</p>
 
       </div>
     </div>
@@ -286,7 +299,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -818,11 +831,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

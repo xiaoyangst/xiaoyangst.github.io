@@ -174,13 +174,22 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; result;<br>    vector&lt;<span class="hljs-type">int</span>&gt; path;<br><span class="hljs-keyword">public</span>:<br>      <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtrace</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> cur)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(path.<span class="hljs-built_in">size</span>() &gt;= <span class="hljs-number">2</span>)&#123;<br>            result.<span class="hljs-built_in">push_back</span>(path);<br>        &#125;<br>        set&lt;<span class="hljs-type">int</span>&gt; removeSame;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = cur; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-keyword">if</span>(!path.<span class="hljs-built_in">empty</span>() &amp;&amp; path.<span class="hljs-built_in">back</span>() &gt; nums[i])&#123;     <span class="hljs-comment">// 非递增</span><br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br>            <span class="hljs-keyword">if</span>(removeSame.<span class="hljs-built_in">find</span>(nums[i]) != removeSame.<span class="hljs-built_in">end</span>())&#123;   <span class="hljs-comment">// 有重复</span><br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br><br>            <span class="hljs-comment">// 到达这里的，皆是合法的</span><br>            removeSame.<span class="hljs-built_in">insert</span>(nums[i]);<br>            path.<span class="hljs-built_in">push_back</span>(nums[i]);<br>            <span class="hljs-built_in">backtrace</span>(nums,i + <span class="hljs-number">1</span>);<br>            path.<span class="hljs-built_in">pop_back</span>();<br>        &#125;<br>      &#125;<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">findSubsequences</span>(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums) &#123;<br>        <span class="hljs-built_in">backtrace</span>(nums,<span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>这道题真的困扰好久，我觉得就是没有去画图，导致在脑子里来回绕，特画如下简图：</p>
-<p><img src="/images/2024/09/20/656a9320-775a-11ef-8444-c35b50d6b191.png" alt="491.非递增子序列.png"></p>
-<p>我们先解决非递增问题。前一个栈的元素 A 和当前栈的所有元素逐一比较，如果谁比 A 大，那么这个数就是不合法的，将被跳过。合法的就会继续往下判断。</p>
-<p>接着处理重复元素的问题，从图中明显看得出是同一栈中的元素重复了，那就只需要维护一个当前栈的一个记录项（这里用的 set）即可，当它进入下一个栈时就会被清空。因此，只需要让检查当前栈的元素是否存在与 set 集合中，存在就意味着是不合法的。因此<code>removeSame.insert(nums[i])</code>，即加入当前栈且合法的元素进去，以便后续去重。</p>
-<p>还要<code>path.push_back(nums[i])</code>，因为合法的元素是要加入到 path 中记录的，这也是我们的最终目标的组成部分。</p>
-<p>来到末尾，从题意中可以看到的是，我们是要在合法元素的下一个位置开始，因此 backtrace 的第二个参数是 i + 1。可不要误写成为 cur + 1。</p>
+<figure>
+<img src="/images/2024/09/20/656a9320-775a-11ef-8444-c35b50d6b191.png" alt="491.非递增子序列.png">
+<figcaption aria-hidden="true">491.非递增子序列.png</figcaption>
+</figure>
+<p>我们先解决非递增问题。前一个栈的元素 A
+和当前栈的所有元素逐一比较，如果谁比 A
+大，那么这个数就是不合法的，将被跳过。合法的就会继续往下判断。</p>
+<p>接着处理重复元素的问题，从图中明显看得出是同一栈中的元素重复了，那就只需要维护一个当前栈的一个记录项（这里用的
+set）即可，当它进入下一个栈时就会被清空。因此，只需要让检查当前栈的元素是否存在与
+set
+集合中，存在就意味着是不合法的。因此<code>removeSame.insert(nums[i])</code>，即加入当前栈且合法的元素进去，以便后续去重。</p>
+<p>还要<code>path.push_back(nums[i])</code>，因为合法的元素是要加入到
+path 中记录的，这也是我们的最终目标的组成部分。</p>
+<p>来到末尾，从题意中可以看到的是，我们是要在合法元素的下一个位置开始，因此
+backtrace 的第二个参数是 i + 1。可不要误写成为 cur + 1。</p>
 
       </div>
     </div>
@@ -265,7 +274,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\27\131-分割回文串\" title="131.分割回文串" rel="bookmark">131.分割回文串</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\17-电话号码的字母组合\" title="17.电话号码的字母组合" rel="bookmark">17.电话号码的字母组合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\218-组合III\" title="218.组合III" rel="bookmark">218.组合III</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\27\131-分割回文串\" title="131.分割回文串" rel="bookmark">131.分割回文串</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\17-电话号码的字母组合\" title="17.电话号码的字母组合" rel="bookmark">17.电话号码的字母组合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\09\218-组合III\" title="218.组合III" rel="bookmark">218.组合III</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -797,11 +806,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

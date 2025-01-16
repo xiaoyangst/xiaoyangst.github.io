@@ -174,30 +174,43 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%8C%87%E9%92%88%E5%92%8C%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F">指针和指针变量</a></li>
-<li><a href="#%E5%8F%96%E5%9C%B0%E5%9D%80%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80%E8%BF%90%E7%AE%97%E7%AC%A6">取地址运算符和间接寻址运算符</a></li>
-<li><a href="#%E6%8C%87%E9%92%88%E8%B5%8B%E5%80%BC">指针赋值</a></li>
+<li><a href="#指针和指针变量">指针和指针变量</a></li>
+<li><a href="#取地址运算符和间接寻址运算符">取地址运算符和间接寻址运算符</a></li>
+<li><a href="#指针赋值">指针赋值</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="指针和指针变量">指针和指针变量</span></h2><p>指针是地址，指针变量是存储地址的变量。</p>
+<h2><span id="指针和指针变量">指针和指针变量</span></h2>
+<p>指针是地址，指针变量是存储地址的变量。</p>
 <p>如下图为，指针变量 p 指向 变量 i 的地址。</p>
-<p><img src="/images/2024/09/09/9c5b2df0-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针1.png"></p>
-<h2><span id="取地址运算符和间接寻址运算符">取地址运算符和间接寻址运算符</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num = <span class="hljs-number">10</span>;<br><br>	<span class="hljs-type">int</span>* p;	<span class="hljs-comment">// 声明一个指针变量</span><br><br>	p = &amp;num;	<span class="hljs-comment">// 指向变量 num 的地址</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d&quot;</span>, *p);	<span class="hljs-comment">// 对指针变量 p 解引用，即获取 指针变量 p 指向地址的数据</span><br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
+<figure>
+<img src="/images/2024/09/09/9c5b2df0-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针1.png">
+<figcaption aria-hidden="true">指针1.png</figcaption>
+</figure>
+<h2><span id="取地址运算符和间接寻址运算符">取地址运算符和间接寻址运算符</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num = <span class="hljs-number">10</span>;<br><br>	<span class="hljs-type">int</span>* p;	<span class="hljs-comment">// 声明一个指针变量</span><br><br>	p = &amp;num;	<span class="hljs-comment">// 指向变量 num 的地址</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d&quot;</span>, *p);	<span class="hljs-comment">// 对指针变量 p 解引用，即获取 指针变量 p 指向地址的数据</span><br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>&amp; 获取变量的地址，* 对指针变量解引用。</p>
-<p>你可以看到 &amp; 和 * 是互相抵消的关系，如上述代码中<code>*p = *&amp;num = num</code>。</p>
-<p>只要 p 指向 num，p 就是 num 的别名。p 不仅拥有和 num 相同的值，而且对 p 的改变也会改变 num 的值。（p 是左值，所以对它赋值是合法的。）</p>
-<h2><span id="指针赋值">指针赋值</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num1 = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> num2 = <span class="hljs-number">20</span>;<br><br>	<span class="hljs-type">int</span>* p = &amp;num1;<br>	<span class="hljs-type">int</span>* m = &amp;num2;<br><br>	p = m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);	<br><br>	*p = *m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
+<p>你可以看到 &amp; 和 *
+是互相抵消的关系，如上述代码中<code>*p = *&amp;num = num</code>。</p>
+<p>只要 p 指向 num，p 就是 num 的别名。p 不仅拥有和 num 相同的值，而且对
+p 的改变也会改变 num 的值。（p 是左值，所以对它赋值是合法的。）</p>
+<h2><span id="指针赋值">指针赋值</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> num1 = <span class="hljs-number">10</span>;<br>	<span class="hljs-type">int</span> num2 = <span class="hljs-number">20</span>;<br><br>	<span class="hljs-type">int</span>* p = &amp;num1;<br>	<span class="hljs-type">int</span>* m = &amp;num2;<br><br>	p = m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);	<br><br>	*p = *m;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;p = %d, m = %d\n&quot;</span>, *p, *m);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>两个指针，对于不同的赋值方式含义也是不同的。</p>
-<p><code>p = m</code> 是指针赋值，即 指针变量p 原来指向变量 num1的地址，现在和 指针变量m 一起指向 变量 num2。</p>
-<p><img src="/images/2024/09/09/94b21eb0-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针2.png"></p>
-<p><code>*p = *m</code> 是把 m 指向的值（num2 的值）复制到 p 指向的对象（变量num1）中。</p>
-<p><img src="/images/2024/09/09/90731570-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针3.png"></p>
-<p>至此，我们可以说改变 变量的值有两种方式，一个是修改所指向的对象，一个是修改所指向的对象存储的值。切记弄清楚两种赋值方式的区别。</p>
+<p><code>p = m</code> 是指针赋值，即 指针变量p 原来指向变量
+num1的地址，现在和 指针变量m 一起指向 变量 num2。</p>
+<figure>
+<img src="/images/2024/09/09/94b21eb0-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针2.png">
+<figcaption aria-hidden="true">指针2.png</figcaption>
+</figure>
+<p><code>*p = *m</code> 是把 m 指向的值（num2 的值）复制到 p
+指向的对象（变量num1）中。</p>
+<figure>
+<img src="/images/2024/09/09/90731570-6eb2-11ef-9a3d-f9a0fb494c06.png" alt="指针3.png">
+<figcaption aria-hidden="true">指针3.png</figcaption>
+</figure>
+<p>至此，我们可以说改变
+变量的值有两种方式，一个是修改所指向的对象，一个是修改所指向的对象存储的值。切记弄清楚两种赋值方式的区别。</p>
 
       </div>
     </div>
@@ -282,7 +295,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -814,11 +827,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

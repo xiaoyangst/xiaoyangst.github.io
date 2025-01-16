@@ -174,36 +174,41 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E5%A4%8D%E5%88%B6%E8%AF%AD%E4%B9%89%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89">复制语义和移动语义</a></li>
-<li><a href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%A4%8D%E5%88%B6%E8%AF%AD%E4%B9%89%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89">代码实现复制语义和移动语义</a></li>
-<li><a href="#move%E5%87%BD%E6%95%B0">move函数</a></li>
-<li><a href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E7%9A%84%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8">移动语义的合理使用</a></li>
-<li><a href="#%E8%A1%A5%E5%85%85%E7%BC%96%E8%AF%91%E5%99%A8%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E7%A7%BB%E5%8A%A8%E6%93%8D%E4%BD%9C%E7%9A%84%E8%A6%81%E6%B1%82">补充：编译器自动生成移动操作的要求</a></li>
-<li><a href="#%E8%A1%A5%E5%85%85%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%AE%9E%E7%8E%B0%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E8%80%8C%E4%B8%8D%E6%98%AF%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8">补充：为什么用右值引用实现移动语义，而不是左值引用？</a></li>
+<li><a href="#复制语义和移动语义">复制语义和移动语义</a></li>
+<li><a href="#代码实现复制语义和移动语义">代码实现复制语义和移动语义</a></li>
+<li><a href="#move函数">move函数</a></li>
+<li><a href="#移动语义的合理使用">移动语义的合理使用</a></li>
+<li><a href="#补充编译器自动生成移动操作的要求">补充：编译器自动生成移动操作的要求</a></li>
+<li><a href="#补充为什么用右值引用实现移动语义而不是左值引用">补充：为什么用右值引用实现移动语义，而不是左值引用？</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="复制语义和移动语义">复制语义和移动语义</span></h2><p>C++11 之前只有复制（拷贝）语义，定义了<strong>析构函数，复制构造函数，赋值函数</strong>就称为有了拷贝控制。对对象的非指针，非引用的行为都会使用复制语义。在拥有内存资源对象中，都会定义这三个函数以实现<strong>深拷贝</strong>。</p>
+<h2><span id="复制语义和移动语义">复制语义和移动语义</span></h2>
+<p>C++11
+之前只有复制（拷贝）语义，定义了<strong>析构函数，复制构造函数，赋值函数</strong>就称为有了拷贝控制。对对象的非指针，非引用的行为都会使用复制语义。在拥有内存资源对象中，都会定义这三个函数以实现<strong>深拷贝</strong>。</p>
 <p>复制语义不会销毁用来复制的对象，同时还得到一个和其一模一样的对象。但是在某些场景中，我们希望对象拷贝后立即被销毁，这种情况我们就是移动语义，即只是移动而非拷贝对象以大幅度提升性能。</p>
-<p><img src="/images/2024/08/16/94175820-5b94-11ef-922f-4335b82b6d11.png" alt="copymove.png"></p>
+<figure>
+<img src="/images/2024/08/16/94175820-5b94-11ef-922f-4335b82b6d11.png" alt="copymove.png">
+<figcaption aria-hidden="true">copymove.png</figcaption>
+</figure>
 <p>我们的重点还是集中在移动语义上，谈及复制语义是为了更清楚地知道移动语义出现的意义。移动语义就是从给定对象“窃取”资源而不是拷贝资源，源对象不再拥有资源，资源的所有权已经归属于新创建的对象。那么实现移动语义有哪些要求呢？</p>
-<ol>
+<ol type="1">
 <li>移动语义可以将一个对象中的资源移走，而不是赋值，所以它们<strong>并不分配内存</strong></li>
-<li>移动后的源对象会被销毁（形参是右值引用），所以内部资源会被置为无效（比如指针会被置为 nullptr ）</li>
+<li>移动后的源对象会被销毁（形参是右值引用），所以内部资源会被置为无效（比如指针会被置为
+nullptr ）</li>
 <li>它们都需要声明为noexcept（不能抛异常）</li>
 </ol>
 <p>如果需要移动语义，建议自己定义，不要编译器合成。因为编译器会优先考虑使用复制语义，而不是移动语义，除非对象明确的定义了移动语义。</p>
-<h2><span id="代码实现复制语义和移动语义">代码实现复制语义和移动语义</span></h2><p>复制语义：拷贝构造函数，拷贝赋值函数</p>
+<h2><span id="代码实现复制语义和移动语义">代码实现复制语义和移动语义</span></h2>
+<p>复制语义：拷贝构造函数，拷贝赋值函数</p>
 <p>移动语义：移动构造函数，移动赋值函数</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstring&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyString</span> &#123;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">char</span>* str_;<br>  <span class="hljs-type">int</span> size_;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-built_in">MyString</span>(<span class="hljs-type">char</span>* str, <span class="hljs-type">int</span> size) : <span class="hljs-built_in">size_</span>(size) &#123;<br>    str_ = <span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[size_ + <span class="hljs-number">1</span>]; <span class="hljs-comment">// 分配内存，并加1用于终止符</span><br>    std::<span class="hljs-built_in">memset</span>(str_, <span class="hljs-number">0</span>, size_ + <span class="hljs-number">1</span>); <span class="hljs-comment">// 使用size_ + 1，确保包含终止符</span><br>    std::<span class="hljs-built_in">strncpy</span>(str_, str, size_);<br>    str_[size_] = <span class="hljs-string">&#x27;\0&#x27;</span>; <span class="hljs-comment">// 确保字符串以终止符结束</span><br>  &#125;<br><br>  ~<span class="hljs-built_in">MyString</span>() &#123;<br>    <span class="hljs-keyword">delete</span>[] str_;<br>  &#125;<br><br>  <span class="hljs-comment">// 拷贝构造函数</span><br>  <span class="hljs-built_in">MyString</span>(<span class="hljs-type">const</span> MyString&amp; other) : <span class="hljs-built_in">size_</span>(other.size_) &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;拷贝（复制）构造函数&quot;</span> &lt;&lt; std::endl;<br>    str_ = <span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[size_ + <span class="hljs-number">1</span>];<br>    std::<span class="hljs-built_in">memset</span>(str_, <span class="hljs-number">0</span>, size_ + <span class="hljs-number">1</span>);<br>    std::<span class="hljs-built_in">strncpy</span>(str_, other.str_, size_);<br>    str_[size_] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>  &#125;<br><br>  <span class="hljs-comment">// 拷贝赋值操作符</span><br>  MyString&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> MyString&amp; other) &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;拷贝（复制）赋值函数&quot;</span> &lt;&lt; std::endl;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> != &amp;other) &#123;<br>      <span class="hljs-keyword">delete</span>[] str_;<br>      size_ = other.size_;<br>      str_ = <span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[size_ + <span class="hljs-number">1</span>];<br>      std::<span class="hljs-built_in">memset</span>(str_, <span class="hljs-number">0</span>, size_ + <span class="hljs-number">1</span>);<br>      std::<span class="hljs-built_in">strncpy</span>(str_, other.str_, size_);<br>      str_[size_] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>  &#125;<br><br>  <span class="hljs-comment">// 移动构造函数</span><br>  <span class="hljs-built_in">MyString</span>(MyString&amp;&amp; other) <span class="hljs-keyword">noexcept</span> : <span class="hljs-built_in">str_</span>(other.str_), <span class="hljs-built_in">size_</span>(other.size_) &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;移动构造函数&quot;</span> &lt;&lt; std::endl;<br>    other.str_ = <span class="hljs-literal">nullptr</span>;<br>    other.size_ = <span class="hljs-number">0</span>;<br>  &#125;<br><br>  <span class="hljs-comment">// 移动赋值操作符</span><br>  MyString&amp; <span class="hljs-keyword">operator</span>=(MyString&amp;&amp; other) <span class="hljs-keyword">noexcept</span> &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;移动赋值函数&quot;</span> &lt;&lt; std::endl;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> != &amp;other) &#123;<br>      <span class="hljs-keyword">delete</span>[] str_;<br>      str_ = other.str_;<br>      size_ = other.size_;<br>      other.str_ = <span class="hljs-literal">nullptr</span>;<br>      other.size_ = <span class="hljs-number">0</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>这些代码实现并不难，只有弄清楚实际的语义就好，说明如下：</p>
 <ul>
 <li>构造函数是没有返回值的，不管是哪种构造函数（普通构造函数，拷贝构造函数和移动构造函数）</li>
-<li>赋值函数 就是对赋值运算符 &#x3D; 的重载</li>
-<li>赋值操作要考虑不能自我赋值的情况，所以要判断是否为自我赋值，false 的情况下再进行赋值操作，true 的情况下直接返回 当前对象即可</li>
+<li>赋值函数 就是对赋值运算符 = 的重载</li>
+<li>赋值操作要考虑不能自我赋值的情况，所以要判断是否为自我赋值，false
+的情况下再进行赋值操作，true 的情况下直接返回 当前对象即可</li>
 <li>移动语义（移动构造函数和移动赋值函数）下需要移动的对象必须是右值引用</li>
 <li>类中的成员变量需要分配内存的务必分配内存之后再进行操作</li>
 <li>复制语义只是把传递进来的对象中的成员变量拷贝到当前对象中，并不会销毁对象，代码中仅涉及拷贝操作。移动语义需要把传递进来的对象中的成员变量拷贝到当前对象中，同时需要销毁传递进来的对象，代码中不仅涉及拷贝操作，还涉及清理内存操作（传递进来的对象）</li>
@@ -211,29 +216,36 @@
 </ul>
 <p>测试代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>  <span class="hljs-comment">// 测试构造函数</span><br>  <span class="hljs-type">char</span> text[] = <span class="hljs-string">&quot;Hello, World!&quot;</span>;<br>  <span class="hljs-function">MyString <span class="hljs-title">str1</span><span class="hljs-params">(text, strlen(text))</span></span>;<br><br>  <span class="hljs-comment">// 测试拷贝构造函数</span><br>  MyString str2 = str1;<br><br>  <span class="hljs-comment">// 测试拷贝赋值操作符</span><br>  <span class="hljs-function">MyString <span class="hljs-title">str3</span><span class="hljs-params">(text, strlen(text))</span></span>;<br>  str3 = str1;<br><br>  <span class="hljs-comment">// 测试移动构造函数</span><br>  MyString str4 = std::<span class="hljs-built_in">move</span>(str1);<br><br>  <span class="hljs-comment">// 测试移动赋值操作符</span><br>  <span class="hljs-function">MyString <span class="hljs-title">str5</span><span class="hljs-params">(text, strlen(text))</span></span>;<br>  str5 = std::<span class="hljs-built_in">move</span>(str2);<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>输出结果：</p>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs tex">拷贝（复制）构造函数<br>拷贝（复制）赋值函数<br>移动构造函数<br>移动赋值函数<br></code></pre></td></tr></table></figure>
-
-<h2><span id="move函数">move函数</span></h2><p>std::move 的功能仅是<strong>将左值转换成右值引用</strong>。它本身不会产生移动操作，只是产生一个右值引用，真正的移动操作是在移动构造函数和移动赋值函数中完成的。总的来说，如果你没有实现移动语义，std::move 产生一个右值引用是无法触发移动语义的，从而去调用复制语义了。</p>
-<h2><span id="移动语义的合理使用">移动语义的合理使用</span></h2><p>似乎 移动语义带来的性能提升让我们觉得可以无处不在，实际情况也非如此：</p>
-<ol>
+<h2><span id="move函数">move函数</span></h2>
+<p>std::move
+的功能仅是<strong>将左值转换成右值引用</strong>。它本身不会产生移动操作，只是产生一个右值引用，真正的移动操作是在移动构造函数和移动赋值函数中完成的。总的来说，如果你没有实现移动语义，std::move
+产生一个右值引用是无法触发移动语义的，从而去调用复制语义了。</p>
+<h2><span id="移动语义的合理使用">移动语义的合理使用</span></h2>
+<p>似乎
+移动语义带来的性能提升让我们觉得可以无处不在，实际情况也非如此：</p>
+<ol type="1">
 <li>编译器为自定义类型自动生成移动语义的是有要求的，必须没有声明复制操作，移动操作以及析构函数</li>
-<li>即使在标准库中都已经支持移动操作，但是也可能不会像希望的那样带来那么大利好。这样取决于具体的实现<ul>
+<li>即使在标准库中都已经支持移动操作，但是也可能不会像希望的那样带来那么大利好。这样取决于具体的实现
+<ul>
 <li>比如list，它的实现通常是会在堆上分配内存，将容器元素放在这个堆内存上，内部只是会维护指向堆内存的指针。那么对list的移动，只算交换指针，那么效率自然会有提升</li>
-<li>比如array，它是C++ 11引入的新的容器类型，就是数组。它的内存就是对象内部的一个缓存区(比如是在栈上分配的一段顺序的空间)，所以对它的移动操作，还是要将元素进行复制</li>
-</ul>
-</li>
+<li>比如array，它是C++
+11引入的新的容器类型，就是数组。它的内存就是对象内部的一个缓存区(比如是在栈上分配的一段顺序的空间)，所以对它的移动操作，还是要将元素进行复制</li>
+</ul></li>
 </ol>
-<h2><span id="补充编译器自动生成移动操作的要求">补充：编译器自动生成移动操作的要求</span></h2><p>如果我们在类中没有定义拷贝操作，那么编译器会自动为我们生成默认的拷贝操作，但是对移动操作，编译器是有条件满足才会生成的：</p>
-<ol>
+<h2><span id="补充编译器自动生成移动操作的要求">补充：编译器自动生成移动操作的要求</span></h2>
+<p>如果我们在类中没有定义拷贝操作，那么编译器会自动为我们生成默认的拷贝操作，但是对移动操作，编译器是有条件满足才会生成的：</p>
+<ol type="1">
 <li>类中没有自定义拷贝控制成员（拷贝构造函数、赋值操作、析构函数）</li>
 <li>它的所有数据成员都能够移动构造或移动赋值</li>
 </ol>
 <p>如果需要移动语义，我们还是自己定义，免得去计较它需要的条件。</p>
-<h2><span id="补充为什么用右值引用实现移动语义而不是左值引用">补充：为什么用右值引用实现移动语义，而不是左值引用？</span></h2><p>在有拥有内存资源的对象中，通过复制语义(深拷贝)来转移内存，将源对象赋值给目标对象，源对象中资源很可能是不需要再保留的，这时直接将源对象中的资源转移给目标对象(浅拷贝，只移动指针)，就更贴切。但是使用左值引用来实现有两个限制:</p>
+<h2><span id="补充为什么用右值引用实现移动语义而不是左值引用">补充：为什么用右值引用实现移动语义，而不是左值引用？</span></h2>
+<p>在有拥有内存资源的对象中，通过复制语义(深拷贝)来转移内存，将源对象赋值给目标对象，源对象中资源很可能是不需要再保留的，这时直接将源对象中的资源转移给目标对象(浅拷贝，只移动指针)，就更贴切。但是使用左值引用来实现有两个限制:</p>
 <ul>
-<li>为了满足所有的表示移动的场景，它必须是一个构造函数，并且形参需为const &amp;(为了能引用临时对象这样的右值)，为了与其它构造函数作区分，形参个数需不同(显然是没有这样的语法的)</li>
+<li>为了满足所有的表示移动的场景，它必须是一个构造函数，并且形参需为const
+&amp;(为了能引用临时对象这样的右值)，为了与其它构造函数作区分，形参个数需不同(显然是没有这样的语法的)</li>
 <li>对 const 引用的形参，在函数中并不能改变的它</li>
 </ul>
 <p>引入右值引用就是来实现移动语义的，解决实现上的限制。</p>
@@ -321,7 +333,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\16\Lambda-表达式\" title="Lambda 表达式" rel="bookmark">Lambda 表达式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\auto-和-decltype\" title="auto 和 decltype" rel="bookmark">auto 和 decltype</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\chrono库\" title="chrono库" rel="bookmark">chrono库</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\16\Lambda-表达式\" title="Lambda 表达式" rel="bookmark">Lambda 表达式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\auto-和-decltype\" title="auto 和 decltype" rel="bookmark">auto 和 decltype</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\16\chrono库\" title="chrono库" rel="bookmark">chrono库</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -853,11 +865,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

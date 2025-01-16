@@ -174,35 +174,45 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4%E5%AE%83%E6%98%AF%E4%BC%AA%E9%9A%8F%E6%9C%BA">为什么说它是伪随机？</a></li>
-<li><a href="#%E5%A6%82%E4%BD%95%E5%BE%97%E5%88%B0%E7%9C%9F%E6%AD%A3%E6%84%8F%E4%B9%89%E4%B8%8A%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0">如何得到真正意义上的随机数？</a></li>
-<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88srand%E5%BB%BA%E8%AE%AE%E5%8F%AA%E8%B0%83%E7%94%A8%E4%B8%80%E6%AC%A1">为什么srand()建议只调用一次？</a></li>
+<li><a href="#为什么说它是伪随机">为什么说它是伪随机？</a></li>
+<li><a href="#如何得到真正意义上的随机数">如何得到真正意义上的随机数？</a></li>
+<li><a href="#为什么srand建议只调用一次">为什么srand()建议只调用一次？</a></li>
 </ul>
 <!-- tocstop -->
-
-<p>C语言提供两个随机数相关的函数，即 rand 和 srand。主要弄清楚它的伪随机，以及如何产生真正意义上的随机数。</p>
+<p>C语言提供两个随机数相关的函数，即 rand 和
+srand。主要弄清楚它的伪随机，以及如何产生真正意义上的随机数。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">rand</span> <span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;		<span class="hljs-comment">// 返回值是一个伪随机数</span><br></code></pre></td></tr></table></figure>
-
-<p>此数字由一种算法生成，该算法在每次调用时都会返回一系列明显不相关的数字。此算法使用种子生成序列，应使用下面的 srand 函数 将其初始化为某个独特的值。</p>
+<p>此数字由一种算法生成，该算法在每次调用时都会返回一系列明显不相关的数字。此算法使用种子生成序列，应使用下面的
+srand 函数 将其初始化为某个独特的值。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">srand</span> <span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> seed)</span></span>;	<span class="hljs-comment">// 传递一个种子数</span><br></code></pre></td></tr></table></figure>
-
-<h2><span id="为什么说它是伪随机">为什么说它是伪随机？</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;first random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;second random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br></code></pre></td></tr></table></figure>
-
-<p>运行上面的函数你会得到两个随机数，但你再次运行你会发现还是之前得到的两个随机数，这就是说 rand() 得到的是伪随机的原因。当你确定种子的那一刻起，你后面生成的数字也就都被确定下来，这就是为什么伪随机的缘故。</p>
+<h2><span id="为什么说它是伪随机">为什么说它是伪随机？</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;first random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;second random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br></code></pre></td></tr></table></figure>
+<p>运行上面的函数你会得到两个随机数，但你再次运行你会发现还是之前得到的两个随机数，这就是说
+rand()
+得到的是伪随机的原因。当你确定种子的那一刻起，你后面生成的数字也就都被确定下来，这就是为什么伪随机的缘故。</p>
 <p>下面通过 srand() 创建种子，看看现象：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">srand</span>(<span class="hljs-number">10</span>);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;first random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br><span class="hljs-built_in">srand</span>(<span class="hljs-number">10</span>);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;second random number = %d\n&quot;</span>, <span class="hljs-built_in">rand</span>());<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">first random number = 71</span><br><span class="hljs-comment">second random number = 71</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-
-<p>没错，当你种子确定的那一刻，那么底层算法就已经帮你规定好后面顺序的所有数字该多少了。当你第一次规定种子为 10，那么获取随机数为 71，如果这个时候你重新规定种子为 10，那么再次获取随机数也还是71。</p>
-<h2><span id="如何得到真正意义上的随机数">如何得到真正意义上的随机数？</span></h2><p>既然，种子不同就会得到不同的随机数，那么时间是不断变化的，只要我们传入 每一刻的时间即可。</p>
+<p>没错，当你种子确定的那一刻，那么底层算法就已经帮你规定好后面顺序的所有数字该多少了。当你第一次规定种子为
+10，那么获取随机数为 71，如果这个时候你重新规定种子为
+10，那么再次获取随机数也还是71。</p>
+<h2><span id="如何得到真正意义上的随机数">如何得到真正意义上的随机数？</span></h2>
+<p>既然，种子不同就会得到不同的随机数，那么时间是不断变化的，只要我们传入
+每一刻的时间即可。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">srand</span>(<span class="hljs-built_in">time</span>(<span class="hljs-literal">NULL</span>));<br></code></pre></td></tr></table></figure>
-
 <p>往后，你调用 rand 得到的必然就是随机数了。</p>
-<p>注意：srand() 函数只需要在程序中调用一次即可，而 rand() 函数可以多吃调用生成随机数。</p>
-<h2><span id="为什么srand建议只调用一次">为什么srand()建议只调用一次？</span></h2><p><strong>频繁重置种子</strong>：如果你在短时间内多次调用 <code>srand(time(NULL))</code>，种子值可能不会发生变化（因为 <code>time(NULL)</code> 返回的是当前时间，单位是秒）。因此，随机数生成器会被重新初始化为相同的种子值，这会导致生成的随机数序列重复，从而降低随机性。</p>
-<p><strong>随机性降低</strong>：理想情况下，随机数序列应当尽可能不可预测。如果你不断地调用 srand 并使用几乎相同的种子，生成的随机数序列将会是相同的或高度相关的，这就违背了使用随机数的目的。</p>
-<p>因此，避免多次调用 <code>srand(time(NULL))</code>，这样可以保持随机数序列的随机性和不可预测性。</p>
+<p>注意：srand() 函数只需要在程序中调用一次即可，而 rand()
+函数可以多吃调用生成随机数。</p>
+<h2><span id="为什么srand建议只调用一次">为什么srand()建议只调用一次？</span></h2>
+<p><strong>频繁重置种子</strong>：如果你在短时间内多次调用
+<code>srand(time(NULL))</code>，种子值可能不会发生变化（因为
+<code>time(NULL)</code>
+返回的是当前时间，单位是秒）。因此，随机数生成器会被重新初始化为相同的种子值，这会导致生成的随机数序列重复，从而降低随机性。</p>
+<p><strong>随机性降低</strong>：理想情况下，随机数序列应当尽可能不可预测。如果你不断地调用
+srand
+并使用几乎相同的种子，生成的随机数序列将会是相同的或高度相关的，这就违背了使用随机数的目的。</p>
+<p>因此，避免多次调用
+<code>srand(time(NULL))</code>，这样可以保持随机数序列的随机性和不可预测性。</p>
 
       </div>
     </div>
@@ -287,7 +297,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\28\i-和-i-的区别\" title="i++ 和 ++i 的区别" rel="bookmark">i++ 和 ++i 的区别</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -819,11 +829,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

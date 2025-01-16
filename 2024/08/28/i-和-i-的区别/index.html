@@ -174,19 +174,25 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> </span>&#123;<br>	<br>	<span class="hljs-type">int</span> i;<br><br>	i = <span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;i++ = %d\n&quot;</span>, i++);<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;i = %d\n&quot;</span>, i);<br><br>	i = <span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;++i = %d\n&quot;</span>, ++i);<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;i = %d\n&quot;</span>, i);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>输出结果：</p>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs tex">i++ = 0<br>i = 1<br>++i = 1<br>i = 1<br></code></pre></td></tr></table></figure>
-
-<p>不管是 i++ 还是 ++i 最终都会让 i 产生副作用，即都会使得 i 在原来的基础上 加 1。二者的区别在于 <code>++i</code> 的值 代表 i+1，而 <code>i++</code> 的值 代表 i。即 ++i 会立即产生自增的效果，而 i++ 不会立即产生自增的效果。</p>
+<p>不管是 i++ 还是 ++i 最终都会让 i 产生副作用，即都会使得 i
+在原来的基础上 加 1。二者的区别在于 <code>++i</code> 的值 代表 i+1，而
+<code>i++</code> 的值 代表 i。即 ++i 会立即产生自增的效果，而 i++
+不会立即产生自增的效果。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c">i++ 对应的汇编代码<br><br><span class="hljs-number">0042186</span>C  mov         eax,dword ptr [i]        		; 将变量 i 的值加载到 eax 寄存器中<br><span class="hljs-number">0042186F</span>  mov         dword ptr [ebp<span class="hljs-number">-0</span>D0h],eax    ; 将 eax 中的值（即 i 的当前值）存储到内存（临时变量）<br><span class="hljs-number">00421875</span>  mov         ecx,dword ptr [i]        		; 再次加载 i 的值到 ecx 寄存器<br><span class="hljs-number">00421878</span>  add          ecx,<span class="hljs-number">1</span>                    	       ; 对 ecx 中的 i 进行递增操作<br><span class="hljs-number">0042187B</span>  mov         dword ptr [i],ecx        		; 将递增后的值存储回 i<br><span class="hljs-number">0042187</span>E  mov         edx,dword ptr [ebp<span class="hljs-number">-0</span>D0h]   ; 将最初保存的 i 的值加载到 edx<br><span class="hljs-number">00421884</span>  push        edx                      		     ; 将最初的 i 值压入堆栈，用于 <span class="hljs-built_in">printf</span> 输出<br><span class="hljs-number">00421885</span>  push        offset <span class="hljs-built_in">string</span> <span class="hljs-string">&quot;%lld\n&quot;</span>   	     ; 压入字符串格式化参数<br><span class="hljs-number">0042188</span>A  call          _printf                  		; 调用 <span class="hljs-built_in">printf</span> 函数<br><span class="hljs-number">0042188F</span>  add          esp,<span class="hljs-number">8</span>                   	            ; 调整堆栈指针<br><br><br>++i 对应的汇编代码<br><br><span class="hljs-number">004218</span>AA  mov         eax,dword ptr [i]        			; 将变量 i 的值加载到 eax 寄存器中<br><span class="hljs-number">004218</span>AD  add         eax,<span class="hljs-number">1</span>                    			      ; 对 eax 中的 i 进行递增操作<br><span class="hljs-number">004218B</span>0  mov         dword ptr [i],eax       		       ; 将递增后的值存储回 i<br><span class="hljs-number">004218B</span>3  mov         ecx,dword ptr [i]        			; 再次加载递增后的 i 到 ecx 寄存器<br><span class="hljs-number">004218B</span>6  push        ecx                     			     ; 将递增后的 i 值压入堆栈，用于 <span class="hljs-built_in">printf</span> 输出<br><span class="hljs-number">004218B</span>7  push        offset <span class="hljs-built_in">string</span> <span class="hljs-string">&quot;++i = %d\n&quot;</span> 	   ; 压入字符串格式化参数<br><span class="hljs-number">004218B</span>C  call         _printf                  			; 调用 <span class="hljs-built_in">printf</span> 函数<br><span class="hljs-number">004218</span>C1  add         esp,<span class="hljs-number">8</span>                    			     ; 调整堆栈指针<br></code></pre></td></tr></table></figure>
-
 <p>解读：</p>
-<p>从 ++i 的汇编代码可以看出是 先让 i 执行自增操作之后才打印 i 的值，所以打印结果为 1。</p>
-<p>i++ 的汇编代码是把 i 最初的值转存到其他临时地址，并读取原始 i 的值进行自加后放到其他寄存器，然后再把之前存储到临时地址的 i 的数据用于输出，所以打印结果为 0。</p>
+<p>从 ++i 的汇编代码可以看出是 先让 i 执行自增操作之后才打印 i
+的值，所以打印结果为 1。</p>
+<p>i++ 的汇编代码是把 i 最初的值转存到其他临时地址，并读取原始 i
+的值进行自加后放到其他寄存器，然后再把之前存储到临时地址的 i
+的数据用于输出，所以打印结果为 0。</p>
 <p>总结：</p>
-<p><code>i++</code> 先使用 <code>i</code> 的原值，再递增。这就需要在递增之前保存 <code>i</code> 的原值，以便在后续操作中使用。</p>
-<p><code>++i</code> 先递增 <code>i</code>，然后使用递增后的值。这个过程更简单，不需要保存原值，因为递增操作已经完成。</p>
+<p><code>i++</code> 先使用 <code>i</code>
+的原值，再递增。这就需要在递增之前保存 <code>i</code>
+的原值，以便在后续操作中使用。</p>
+<p><code>++i</code> 先递增
+<code>i</code>，然后使用递增后的值。这个过程更简单，不需要保存原值，因为递增操作已经完成。</p>
 
       </div>
     </div>
@@ -271,7 +277,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\03\传入参数和传出参数\" title="传入参数和传出参数" rel="bookmark">传入参数和传出参数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\01\if-和-switch\" title="if 和 switch" rel="bookmark">if 和 switch</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\09\二级指针和函数指针\" title="二级指针和函数指针" rel="bookmark">二级指针和函数指针</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\03\传入参数和传出参数\" title="传入参数和传出参数" rel="bookmark">传入参数和传出参数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -803,11 +809,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

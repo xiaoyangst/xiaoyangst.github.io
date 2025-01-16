@@ -173,17 +173,29 @@
             
           </div>
         
-        <p>代理最好的体现是 Nginx 的反向代理功能，将客户端本该直接发给服务器 Server 的请求数据由自己接受之后转发给服务器 Server ，再把服务器 Server 本该直接返回给客户端的响应数据由自己接受之后转发给客户端。</p>
-<p><img src="/images/2024/11/29/6e647e20-ae49-11ef-ad78-edf00e36ea7b.png" alt="nginx.png"></p>
-<p>没错，本该可以直接被服务器 Server 完成的事情，Nginx 代理服务器提前做了（尽管这样说是不正确的，因为 Nginx 只是单纯的把服务器 Server 的接受和转发功能给做了，但是其它服务器 Server 的功能并没有做）。我们可以这样说，Nginx 代理服务器和 服务器 Server 由共同之处，可以抽象出一个基类 HTTPServer。</p>
-<p>好的，我们的 Nginx 类就得包含 Server 对象了，这样就可以调用 Server 提供的接口，让 Nginx 对外提供服务，尽管这些工作实际上还是由 Server 自己完成，而给外界的假象就是 Nginx 来完成的。</p>
+        <p>代理最好的体现是 Nginx 的反向代理功能，将客户端本该直接发给服务器
+Server 的请求数据由自己接受之后转发给服务器 Server ，再把服务器 Server
+本该直接返回给客户端的响应数据由自己接受之后转发给客户端。</p>
+<figure>
+<img src="/images/2024/11/29/6e647e20-ae49-11ef-ad78-edf00e36ea7b.png" alt="nginx.png">
+<figcaption aria-hidden="true">nginx.png</figcaption>
+</figure>
+<p>没错，本该可以直接被服务器 Server 完成的事情，Nginx
+代理服务器提前做了（尽管这样说是不正确的，因为 Nginx 只是单纯的把服务器
+Server 的接受和转发功能给做了，但是其它服务器 Server
+的功能并没有做）。我们可以这样说，Nginx 代理服务器和 服务器 Server
+由共同之处，可以抽象出一个基类 HTTPServer。</p>
+<p>好的，我们的 Nginx 类就得包含 Server 对象了，这样就可以调用 Server
+提供的接口，让 Nginx 对外提供服务，尽管这些工作实际上还是由 Server
+自己完成，而给外界的假象就是 Nginx 来完成的。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">HTTPServer</span> &#123;	<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">Request</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Server</span> : <span class="hljs-keyword">public</span> HTTPServer &#123;	<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Request</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;RealSubject: Handling request.\n&quot;</span>;<br>    &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Proxy</span> : <span class="hljs-keyword">public</span> HTTPServer &#123;	<br><span class="hljs-keyword">private</span>:<br>    Server* real_subject_;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">CheckAccess</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Proxy: Checking access prior to firing a real request.\n&quot;</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">LogAccess</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Proxy: Logging the time of request.\n&quot;</span>;<br>    &#125;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Proxy</span>(Server* real_subject) : <span class="hljs-built_in">real_subject_</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Server</span>(*real_subject)) &#123;<br>    &#125;<br><br>    ~<span class="hljs-built_in">Proxy</span>() &#123;<br>        <span class="hljs-keyword">delete</span> real_subject_;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Request</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">CheckAccess</span>()) &#123;<br>            <span class="hljs-keyword">this</span>-&gt;real_subject_-&gt;<span class="hljs-built_in">Request</span>();<br>            <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">LogAccess</span>();<br>        &#125;<br>    &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ClientCode</span><span class="hljs-params">(<span class="hljs-type">const</span> HTTPServer&amp; subject)</span> </span>&#123;<br>    subject.<span class="hljs-built_in">Request</span>();<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Client: Executing the client code with a real subject:\n&quot;</span>;<br>    Server* real_subject = <span class="hljs-keyword">new</span> Server;<br>    <span class="hljs-built_in">ClientCode</span>(*real_subject);<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Client: Executing the same client code with a proxy:\n&quot;</span>;<br>    Proxy* proxy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(real_subject);<br>    <span class="hljs-built_in">ClientCode</span>(*proxy);<br><br>    <span class="hljs-keyword">delete</span> real_subject;<br>    <span class="hljs-keyword">delete</span> proxy;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 <p>输出结果：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++">Client: Executing the client code with a real subject:<br>RealSubject: Handling request.<br><br>Client: Executing the same client code with a proxy:<br>Proxy: Checking access prior to firing a real request.<br>RealSubject: Handling request.<br>Proxy: Logging the time of request.<br></code></pre></td></tr></table></figure>
-
 <p>我想，我们可以绘制出 UML 类图：</p>
-<p><img src="/images/2024/11/29/66638ae0-ae49-11ef-ad78-edf00e36ea7b.png" alt="代理模式.png"></p>
+<figure>
+<img src="/images/2024/11/29/66638ae0-ae49-11ef-ad78-edf00e36ea7b.png" alt="代理模式.png">
+<figcaption aria-hidden="true">代理模式.png</figcaption>
+</figure>
 
       </div>
     </div>
@@ -268,7 +280,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\28\UML类图绘制\" title="UML类图绘制" rel="bookmark">UML类图绘制</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\11\单例模式\" title="单例模式" rel="bookmark">单例模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\04\命令模式\" title="命令模式" rel="bookmark">命令模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\28\UML类图绘制\" title="UML类图绘制" rel="bookmark">UML类图绘制</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\11\单例模式\" title="单例模式" rel="bookmark">单例模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\04\命令模式\" title="命令模式" rel="bookmark">命令模式</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -800,11 +812,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

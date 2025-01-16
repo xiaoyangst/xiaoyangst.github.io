@@ -174,25 +174,26 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E5%AE%89%E8%A3%85">安装</a></li>
-<li><a href="#%E7%94%9F%E6%88%90%E7%81%AB%E7%84%B0%E5%9B%BE">生成火焰图</a></li>
-<li><a href="#%E7%90%86%E8%A7%A3%E7%81%AB%E7%84%B0%E5%9B%BE">理解火焰图</a></li>
+<li><a href="#安装">安装</a></li>
+<li><a href="#生成火焰图">生成火焰图</a></li>
+<li><a href="#理解火焰图">理解火焰图</a></li>
 </ul>
 <!-- tocstop -->
-
-<h1><span id="安装">安装</span></h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">sudo apt install linux-tools-common<br>sudo apt install linux-tools-generic linux-cloud-tools-generic<br><br>sudo apt-get update<br>sudo apt-get upgrade<br>sudo apt-get install linux-tools<span class="hljs-number">-5.4</span><span class="hljs-number">.0</span><span class="hljs-number">-77</span>-generic linux-cloud-tools<span class="hljs-number">-5.4</span><span class="hljs-number">.0</span><span class="hljs-number">-77</span>-generic<br></code></pre></td></tr></table></figure>
-
+<h1><span id="安装">安装</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">sudo apt install linux-tools-common<br>sudo apt install linux-tools-generic linux-cloud-tools-generic<br><br>sudo apt-get update<br>sudo apt-get upgrade<br>sudo apt-get install linux-tools<span class="hljs-number">-5.4</span><span class="hljs-number">.0</span><span class="hljs-number">-77</span>-generic linux-cloud-tools<span class="hljs-number">-5.4</span><span class="hljs-number">.0</span><span class="hljs-number">-77</span>-generic<br></code></pre></td></tr></table></figure>
 <p>linux-tools 的版本要根据你自身的系统内核来改变。</p>
 <p>还要安装一个工具，来生成火焰图：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">git clone https:<span class="hljs-comment">//github.com/brendangregg/Flamegraph.git</span><br><br><span class="hljs-keyword">export</span> PATH=$PATH:FlameGraph的绝对路径<br></code></pre></td></tr></table></figure>
-
-<h1><span id="生成火焰图">生成火焰图</span></h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++">sudo perf record -F <span class="hljs-number">99</span> -g ./my_app<br>    <br>sudo perf script &gt; out.perf<br>    <br>stackcollapse-perf.pl out.perf &gt; out.folded<br>    <br>flamegraph.pl out.folded &gt; flamegraph.svg		<span class="hljs-comment">// 得到火焰图</span><br></code></pre></td></tr></table></figure>
-
-<h1><span id="理解火焰图">理解火焰图</span></h1><p>颜色本身没有什么意义</p>
+<h1><span id="生成火焰图">生成火焰图</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++">sudo perf record -F <span class="hljs-number">99</span> -g ./my_app<br>    <br>sudo perf script &gt; out.perf<br>    <br>stackcollapse-perf.pl out.perf &gt; out.folded<br>    <br>flamegraph.pl out.folded &gt; flamegraph.svg		<span class="hljs-comment">// 得到火焰图</span><br></code></pre></td></tr></table></figure>
+<h1><span id="理解火焰图">理解火焰图</span></h1>
+<p>颜色本身没有什么意义</p>
 <p>每一列代表一个调用栈（纵向表示调用栈的深度），每一个格子代表一个函数（横向表示消耗的时间）。</p>
-<p><img src="/images/2024/12/03/a92857c0-b178-11ef-b13f-0d2b27cfe2fc.png" alt="火焰图.png"></p>
+<figure>
+<img src="/images/2024/12/03/a92857c0-b178-11ef-b13f-0d2b27cfe2fc.png" alt="火焰图.png">
+<figcaption aria-hidden="true">火焰图.png</figcaption>
+</figure>
 <p><strong>横向来看</strong></p>
 <ul>
 <li>由于横向表示消耗的时间,所以一个格子的宽度越大越说明其可能是瓶颈</li>
@@ -290,7 +291,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\10\C-内存泄露检测工具\" title="C++内存泄露检测工具" rel="bookmark">C++内存泄露检测工具</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\08\C-死锁和数据竞争检查工具\" title="C++死锁和数据竞争检查工具" rel="bookmark">C++死锁和数据竞争检查工具</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\05\CMake-和-GTest-结合\" title="CMake 和 GTest 结合" rel="bookmark">CMake 和 GTest 结合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\10\C-内存泄露检测工具\" title="C++内存泄露检测工具" rel="bookmark">C++内存泄露检测工具</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\08\C-死锁和数据竞争检查工具\" title="C++死锁和数据竞争检查工具" rel="bookmark">C++死锁和数据竞争检查工具</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\05\CMake-和-GTest-结合\" title="CMake 和 GTest 结合" rel="bookmark">CMake 和 GTest 结合</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -822,11 +823,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

@@ -174,10 +174,18 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">RecentCounter</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    queue&lt;<span class="hljs-type">int</span>&gt; data; <br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">RecentCounter</span>() &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">ping</span><span class="hljs-params">(<span class="hljs-type">int</span> t)</span> </span>&#123;<br>        data.<span class="hljs-built_in">push</span>(t);<br>        <span class="hljs-keyword">while</span>(data.<span class="hljs-built_in">front</span>() &lt; (t - <span class="hljs-number">3000</span>))&#123;<br>            data.<span class="hljs-built_in">pop</span>();<br>        &#125;<br>        <span class="hljs-keyword">return</span> data.<span class="hljs-built_in">size</span>();<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>这道题只要想明白一件事情，即由于题目保证每次对 <code>ping</code> 调用所使用的 <code>t</code> 值都 <strong>严格递增</strong>，而我们只关心传递进来的 t 在 [t-3000,t] 范围内 ping 的总数，那就表明之前加入的所有数据并不是都有必要一直存在。</p>
+<p>这道题只要想明白一件事情，即由于题目保证每次对 <code>ping</code>
+调用所使用的 <code>t</code> 值都
+<strong>严格递增</strong>，而我们只关心传递进来的 t 在 [t-3000,t] 范围内
+ping 的总数，那就表明之前加入的所有数据并不是都有必要一直存在。</p>
 <p>简单举例说明：[1], [100], [3001], [3002]</p>
 <table>
+<colgroup>
+<col style="width: 11%">
+<col style="width: 22%">
+<col style="width: 60%">
+<col style="width: 5%">
+</colgroup>
 <thead>
 <tr>
 <th>加入元素</th>
@@ -186,7 +194,8 @@
 <th></th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>1</td>
 <td>[-2999,1]</td>
 <td>不需要，还有元素1</td>
@@ -210,8 +219,11 @@
 <td>需要，移除元素 1，还有元素 100、3001、3002</td>
 <td></td>
 </tr>
-</tbody></table>
-<p>没错，到加入3002开始，由于后续加入的元素必然大于 3002，那么元素 1 没有存在的必要了，因为它都不在 [2,3002]范围，那么后续加入的元素它也必然不可能满足，因此 pop 掉。</p>
+</tbody>
+</table>
+<p>没错，到加入3002开始，由于后续加入的元素必然大于 3002，那么元素 1
+没有存在的必要了，因为它都不在
+[2,3002]范围，那么后续加入的元素它也必然不可能满足，因此 pop 掉。</p>
 <p>如果这道题没有想到这点，就会容易弄复杂，可能头脑清晰的时候一下子就想出来了，可若不是如此，很容易掉进陷阱中，比方说所有数据都保存，但实际上这是没必要的，因为递增的数据说明前面的数据并不一定有价值，在合适的地方就该删掉。</p>
 
       </div>
@@ -297,7 +309,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\15\225-用队列实现栈\" title="225.用队列实现栈" rel="bookmark">225.用队列实现栈</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\15\225-用队列实现栈\" title="225.用队列实现栈" rel="bookmark">225.用队列实现栈</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -829,11 +841,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

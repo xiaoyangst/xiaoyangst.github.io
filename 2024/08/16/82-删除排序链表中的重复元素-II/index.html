@@ -174,7 +174,6 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">deleteDuplicates</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(head == <span class="hljs-literal">nullptr</span> || head-&gt;next == <span class="hljs-literal">nullptr</span>)&#123;<br>            <span class="hljs-keyword">return</span> head;<br>        &#125;<br>        ListNode* virtualHead = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">-101</span>);<br>        virtualHead-&gt;next = head;<br>        ListNode* slow = head;<br>        ListNode* fast = head-&gt;next;<br>        ListNode* delPre = virtualHead; <span class="hljs-comment">// 待删除节点的前一个节点</span><br><br>        <span class="hljs-keyword">while</span>(fast)&#123;<br>            <span class="hljs-keyword">if</span>(slow-&gt;val != fast-&gt;val)&#123; <span class="hljs-comment">// 如果不相等，三个指针集体前移</span><br>                delPre = delPre-&gt;next;<br>                slow = slow-&gt;next;<br>                fast = fast-&gt;next;<br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br>            <span class="hljs-keyword">while</span>(fast != <span class="hljs-literal">nullptr</span> &amp;&amp; slow-&gt;val == fast-&gt;val)&#123;   <span class="hljs-comment">// fast 最终指向 不重复节点的位置</span><br>                fast = fast-&gt;next;<br>            &#125;<br>            <span class="hljs-keyword">if</span>(fast != <span class="hljs-literal">nullptr</span>)&#123;    <span class="hljs-comment">// 删除重复节点</span><br>                delPre-&gt;next = fast;<br>                slow = fast;<br>                fast = fast-&gt;next;<br>            &#125;<span class="hljs-keyword">else</span>&#123;  <span class="hljs-comment">// 如果 fast 为空，表明slow 和 fast 之间都是重复值，delPre 指向 fast 就代表删除这些重复值</span><br>                delPre-&gt;next = fast;<br>            &#125;<br><br>        &#125;<br><br>        <span class="hljs-keyword">return</span> virtualHead-&gt;next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>当我们的链表中删除某个节点，如果这个节点可能包含头结点，那么务必使用虚拟头结点，因为删除节点需要拥有待删除节点的前一个节点才能进行删除。</p>
 
       </div>
@@ -260,7 +259,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\142-环形链表II\" title="142.环形链表II" rel="bookmark">142.环形链表II</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\143-重排链表\" title="143.重排链表" rel="bookmark">143.重排链表</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div></div>
     
   </div>
 </div>
@@ -792,11 +791,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

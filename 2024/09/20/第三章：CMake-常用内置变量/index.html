@@ -174,26 +174,27 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E5%9F%BA%E6%9C%AC%E5%8F%98%E9%87%8F">基本变量</a></li>
-<li><a href="#%E7%BC%96%E8%AF%91%E5%99%A8%E7%9B%B8%E5%85%B3%E5%8F%98%E9%87%8F">编译器相关变量</a></li>
-<li><a href="#%E6%9E%84%E5%BB%BA%E9%80%89%E9%A1%B9">构建选项</a></li>
-<li><a href="#%E9%93%BE%E6%8E%A5%E5%99%A8%E7%9B%B8%E5%85%B3%E5%8F%98%E9%87%8F">链接器相关变量</a></li>
-<li><a href="#%E5%AE%89%E8%A3%85%E7%9B%B8%E5%85%B3%E5%8F%98%E9%87%8F">安装相关变量</a></li>
-<li><a href="#%E6%9F%A5%E6%89%BE%E5%BA%93%E5%92%8C%E5%8C%85">查找库和包</a></li>
+<li><a href="#基本变量">基本变量</a></li>
+<li><a href="#编译器相关变量">编译器相关变量</a></li>
+<li><a href="#构建选项">构建选项</a></li>
+<li><a href="#链接器相关变量">链接器相关变量</a></li>
+<li><a href="#安装相关变量">安装相关变量</a></li>
+<li><a href="#查找库和包">查找库和包</a></li>
 </ul>
 <!-- tocstop -->
-
-<p>CMake变量有很多，下面列举一些常用且可能会用到的变量。再者，CMake变量通过 set 来设置参数。</p>
-<h2><span id="基本变量">基本变量</span></h2><table>
+<p>CMake变量有很多，下面列举一些常用且可能会用到的变量。再者，CMake变量通过
+set 来设置参数。</p>
+<h2><span id="基本变量">基本变量</span></h2>
+<table>
 <thead>
 <tr>
 <th>变量名</th>
 <th>功能描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CMAKE_SOURCE_DIR</td>
 <td>顶层CMakeLists.txt所在的目录</td>
 </tr>
@@ -221,9 +222,12 @@
 <td>CMAKE_INSTALL_PREFIX</td>
 <td>指定安装路径</td>
 </tr>
-</tbody></table>
-<p>在编译第三方库并导入到一个文件夹中，以后需要用到所需库文件，只需要拷贝这个文件夹到特定项目中即可，CMAKE_INSTALL_PREFIX 就指定此输出文件夹的。</p>
-<h2><span id="编译器相关变量">编译器相关变量</span></h2><p>控制和定制编译器的行为。</p>
+</tbody>
+</table>
+<p>在编译第三方库并导入到一个文件夹中，以后需要用到所需库文件，只需要拷贝这个文件夹到特定项目中即可，CMAKE_INSTALL_PREFIX
+就指定此输出文件夹的。</p>
+<h2><span id="编译器相关变量">编译器相关变量</span></h2>
+<p>控制和定制编译器的行为。</p>
 <table>
 <thead>
 <tr>
@@ -231,7 +235,8 @@
 <th>功能描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CMAKE_C_COMPILER</td>
 <td>C编译器的路径</td>
 </tr>
@@ -263,15 +268,22 @@
 <td>CMAKE_CXX_FLAGS_RELEASE</td>
 <td>为发布构建配置添加的C++编译器标志</td>
 </tr>
-</tbody></table>
-<h2><span id="构建选项">构建选项</span></h2><table>
+</tbody>
+</table>
+<h2><span id="构建选项">构建选项</span></h2>
+<table>
+<colgroup>
+<col style="width: 28%">
+<col style="width: 71%">
+</colgroup>
 <thead>
 <tr>
 <th>变量名</th>
 <th>功能描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CMAKE_BUILD_TYPE</td>
 <td>构建类型（如Debug、Release、RelWithDebInfo、MinSizeRel）</td>
 </tr>
@@ -279,15 +291,18 @@
 <td>CMAKE_VERBOSE_MAKEFILE</td>
 <td>设置为ON时，生成详细的Makefile</td>
 </tr>
-</tbody></table>
-<h2><span id="链接器相关变量">链接器相关变量</span></h2><table>
+</tbody>
+</table>
+<h2><span id="链接器相关变量">链接器相关变量</span></h2>
+<table>
 <thead>
 <tr>
 <th>变量名</th>
 <th>功能描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CMAKE_EXE_LINKER_FLAGS</td>
 <td>为生成可执行文件传递的额外链接标志</td>
 </tr>
@@ -299,15 +314,18 @@
 <td>CMAKE_MODULE_LINKER_FLAGS</td>
 <td>为生成模块库传递的额外链接标志</td>
 </tr>
-</tbody></table>
-<h2><span id="安装相关变量">安装相关变量</span></h2><table>
+</tbody>
+</table>
+<h2><span id="安装相关变量">安装相关变量</span></h2>
+<table>
 <thead>
 <tr>
 <th>变量名</th>
 <th>功能描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CMAKE_INSTALL_PREFIX</td>
 <td>安装路径的前缀</td>
 </tr>
@@ -323,17 +341,20 @@
 <td>CMAKE_INSTALL_INCLUDEDIR</td>
 <td>安装头文件的子目录</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>如果我们的项目是设计可打包的库文件（动态库或静态库），在CMake中配置好这些参数，非常有利于使用者导入我们的库文件。</p>
 <p>通常情况下 bin 目录存放动态库和可执行文件，lib 目录存放静态库。</p>
-<h2><span id="查找库和包">查找库和包</span></h2><table>
+<h2><span id="查找库和包">查找库和包</span></h2>
+<table>
 <thead>
 <tr>
 <th>变量名</th>
 <th>功能描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CMAKE_PREFIX_PATH</td>
 <td>用于指定查找包和库的前缀路径</td>
 </tr>
@@ -349,7 +370,8 @@
 <td>CMAKE_INCLUDE_PATH</td>
 <td>用于指定查找头文件的路径</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>这些变量名往往要结合其它方法才能实际找到第三方库。</p>
 
       </div>
@@ -435,7 +457,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第七章：CMake-构建-Qt-项目\" title="第七章：CMake 构建 Qt 项目" rel="bookmark">第七章：CMake 构建 Qt 项目</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第九章：CMake-交叉编译\" title="第九章：CMake 交叉编译" rel="bookmark">第九章：CMake 交叉编译</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\20\第一章：与-CMake-剪不断理还乱\" title="第一章：与 CMake 剪不断理还乱" rel="bookmark">第一章：与 CMake 剪不断理还乱</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第七章：CMake-构建-Qt-项目\" title="第七章：CMake 构建 Qt 项目" rel="bookmark">第七章：CMake 构建 Qt 项目</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\20\第九章：CMake-交叉编译\" title="第九章：CMake 交叉编译" rel="bookmark">第九章：CMake 交叉编译</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -967,11 +989,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

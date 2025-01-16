@@ -174,31 +174,39 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%A3%80%E6%B5%8B%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E7%BB%88%E6%AD%A2">检测客户端的终止</a></li>
-<li><a href="#%E6%A3%80%E6%B5%8B%E6%97%A0%E6%95%88%E8%BE%93%E5%85%A5">检测无效输入</a></li>
+<li><a href="#检测客户端的终止">检测客户端的终止</a></li>
+<li><a href="#检测无效输入">检测无效输入</a></li>
 </ul>
 <!-- tocstop -->
-
 <p>亦如在程序中接受用户的输入前，要对用户的输入进行“安全检测”，以防止恶意输入破坏应用程序的正常运行。可见，防御性编程在编码中是必备的意识，网络编程中也要考虑各种概率看似很小的事件，做出相应的处理动作。</p>
-<h2><span id="检测客户端的终止">检测客户端的终止</span></h2><p><img src="/images/2024/08/10/ddfaa030-56af-11ef-9b76-6d6092cc6dd4.png" alt="检测客户端的终止.png"></p>
-<p>这段代码中，如果客户端发送字符串”quit”代表客户端要退出，服务器这边就可以正常和客户端断开连接。如果客户端发生故障或者异常导致没有发生字符串”quit”，那么服务器这边就会频繁执行最后一条分支语句。</p>
-<p>可以只在读操作上设置一个定时器，如果客户端在某段时间区间内没有发出请求，服务器就假定客户端已经不存在了。很多 FTP 服务器就是这么做的：如果客户端在某段时间区间内没有发送任何请求，服务器就放弃连接。用一个显式定时器或者像心跳实例那样使用 select 定时器，就可以很方便地解决这个问题。</p>
-<h2><span id="检测无效输入">检测无效输入</span></h2><p>即客户端恶意输入无效字符，服务器如果没有进行“拦截检测”，可能会造成程序崩溃。崩溃最常见的两种原因是缓冲器溢出和指针丢失。</p>
+<h2><span id="检测客户端的终止">检测客户端的终止</span></h2>
+<figure>
+<img src="/images/2024/08/10/ddfaa030-56af-11ef-9b76-6d6092cc6dd4.png" alt="检测客户端的终止.png">
+<figcaption aria-hidden="true">检测客户端的终止.png</figcaption>
+</figure>
+<p>这段代码中，如果客户端发送字符串"quit"代表客户端要退出，服务器这边就可以正常和客户端断开连接。如果客户端发生故障或者异常导致没有发生字符串"quit"，那么服务器这边就会频繁执行最后一条分支语句。</p>
+<p>可以只在读操作上设置一个定时器，如果客户端在某段时间区间内没有发出请求，服务器就假定客户端已经不存在了。很多
+FTP
+服务器就是这么做的：如果客户端在某段时间区间内没有发送任何请求，服务器就放弃连接。用一个显式定时器或者像心跳实例那样使用
+select 定时器，就可以很方便地解决这个问题。</p>
+<h2><span id="检测无效输入">检测无效输入</span></h2>
+<p>即客户端恶意输入无效字符，服务器如果没有进行“拦截检测”，可能会造成程序崩溃。崩溃最常见的两种原因是缓冲器溢出和指针丢失。</p>
 <p><code>缓冲区溢出</code>是由于写入的数据超过了缓冲区的大小，从而覆盖了相邻的内存区域。为了防止缓冲区溢出，可以采取以下措施：</p>
-<ol>
-<li><strong>使用安全函数</strong>：使用库中提供的安全函数，例如 <code>strncpy</code> 代替 <code>strcpy</code>，<code>snprintf</code> 代替 <code>sprintf</code> 等</li>
+<ol type="1">
+<li><strong>使用安全函数</strong>：使用库中提供的安全函数，例如
+<code>strncpy</code> 代替 <code>strcpy</code>，<code>snprintf</code>
+代替 <code>sprintf</code> 等</li>
 <li><strong>手动检查长度</strong>：在写入数据之前，手动检查输入数据的长度是否超过了缓冲区的大小</li>
 </ol>
 <p><code>指针丢失</code>通常是由于未正确初始化指针或错误释放内存导致的。为了防止指针丢失，可以采取以下措施：</p>
-<ol>
+<ol type="1">
 <li><strong>初始化指针</strong>：确保所有指针在使用之前都被初始化</li>
 <li><strong>检查指针有效性</strong>：在使用指针之前，检查指针是否为空（<code>nullptr</code>）</li>
-<li><strong>正确管理内存</strong>：C++11 提供的智能指针</li>
+<li><h2><span id="正确管理内存c11提供的智能指针"><strong>正确管理内存</strong>：C++11
+提供的智能指针</span></h2>
+⭐️内容取自译者陈涓、赵振平《TCP/IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</li>
 </ol>
-<hr>
-<p>⭐️内容取自译者陈涓、赵振平《TCP&#x2F;IP高效编程：改善网络程序的44个技巧》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
 
       </div>
     </div>
@@ -283,7 +291,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\13\TCP网络编程的本质\" title="TCP网络编程的本质" rel="bookmark">TCP网络编程的本质</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -815,11 +823,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

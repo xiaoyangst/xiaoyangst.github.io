@@ -174,41 +174,47 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E7%89%B9%E6%AE%8A%E7%9A%84%E6%95%B0%E6%8D%AE%E6%88%90%E5%91%98">特殊的数据成员</a><ul>
-<li><a href="#%E5%B8%B8%E9%87%8F%E6%88%90%E5%91%98">常量成员</a></li>
-<li><a href="#%E5%BC%95%E7%94%A8%E6%88%90%E5%91%98">引用成员</a></li>
-<li><a href="#%E7%B1%BB%E5%AF%B9%E8%B1%A1%E6%88%90%E5%91%98">类对象成员</a></li>
-<li><a href="#%E9%9D%99%E6%80%81%E6%88%90%E5%91%98">静态成员</a></li>
-</ul>
-</li>
-<li><a href="#%E7%89%B9%E6%AE%8A%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0">特殊的成员函数</a><ul>
-<li><a href="#%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0">静态成员函数</a></li>
-<li><a href="#const-%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0">const 成员函数</a></li>
-</ul>
-</li>
+<li><a href="#特殊的数据成员">特殊的数据成员</a>
+<ul>
+<li><a href="#常量成员">常量成员</a></li>
+<li><a href="#引用成员">引用成员</a></li>
+<li><a href="#类对象成员">类对象成员</a></li>
+<li><a href="#静态成员">静态成员</a></li>
+</ul></li>
+<li><a href="#特殊的成员函数">特殊的成员函数</a>
+<ul>
+<li><a href="#静态成员函数">静态成员函数</a></li>
+<li><a href="#const-成员函数">const 成员函数</a></li>
+</ul></li>
 </ul>
 <!-- tocstop -->
-
-<h1><span id="特殊的数据成员">特殊的数据成员</span></h1><h2><span id="常量成员">常量成员</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Student</span><span class="hljs-params">(string name,<span class="hljs-type">int</span> age)</span></span>;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">const</span> string m_name;<br>  <span class="hljs-type">const</span> <span class="hljs-type">int</span> m_age;<br>&#125;;<br>Student::<span class="hljs-built_in">Student</span>(string name, <span class="hljs-type">int</span> age)<br>  :<span class="hljs-built_in">m_name</span>(name)<br>  ,<span class="hljs-built_in">m_age</span>(age)<br>&#123;&#125;<br></code></pre></td></tr></table></figure>
-
+<h1><span id="特殊的数据成员">特殊的数据成员</span></h1>
+<h2><span id="常量成员">常量成员</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Student</span><span class="hljs-params">(string name,<span class="hljs-type">int</span> age)</span></span>;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">const</span> string m_name;<br>  <span class="hljs-type">const</span> <span class="hljs-type">int</span> m_age;<br>&#125;;<br>Student::<span class="hljs-built_in">Student</span>(string name, <span class="hljs-type">int</span> age)<br>  :<span class="hljs-built_in">m_name</span>(name)<br>  ,<span class="hljs-built_in">m_age</span>(age)<br>&#123;&#125;<br></code></pre></td></tr></table></figure>
 <p>当数据成员用 const 关键字进行修饰以后，就成为常量成员。</p>
-<p>只有当我们在构造函数中初始化 const 成员之后，这个成员才具有“只读属性”，在程序中无法对其值修改。所以赋值操作是无法完成的。</p>
-<p>事实上，在构造函数体内对 const 数据成员赋值是非法的，<strong>const数据成员需在初始化列表中进行初始化</strong>（C++11之后也允许在声明时就初始化）。</p>
-<h2><span id="引用成员">引用成员</span></h2><p>引用成员也是同样，虽然从定义上说必须被初始化，不允许没有指向任何东西。但是，只有在构造函数中初始化之后，才让这个引用成员得以绑定对象，也可以说引用成员的引用特性真实存在了。</p>
+<p>只有当我们在构造函数中初始化 const
+成员之后，这个成员才具有“只读属性”，在程序中无法对其值修改。所以赋值操作是无法完成的。</p>
+<p>事实上，在构造函数体内对 const
+数据成员赋值是非法的，<strong>const数据成员需在初始化列表中进行初始化</strong>（C++11之后也允许在声明时就初始化）。</p>
+<h2><span id="引用成员">引用成员</span></h2>
+<p>引用成员也是同样，虽然从定义上说必须被初始化，不允许没有指向任何东西。但是，只有在构造函数中初始化之后，才让这个引用成员得以绑定对象，也可以说引用成员的引用特性真实存在了。</p>
 <p>但是我们要注意引用成员赋值的注意点，<strong>引用成员需要绑定一个已经存在的、且在这个引用成员的生命周期内始终有效的变量（对象）。</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Student</span><span class="hljs-params">(string name,<span class="hljs-type">int</span> age)</span></span>;<br>  string m_name;<br>  <span class="hljs-type">const</span> <span class="hljs-type">int</span> m_age;<br>  string&amp; copy_name;<br>&#125;;<br>Student::<span class="hljs-built_in">Student</span>(string name, <span class="hljs-type">int</span> age)<br>  :<span class="hljs-built_in">m_name</span>(name)<br>  ,<span class="hljs-built_in">m_age</span>(age)<br>  ,<span class="hljs-built_in">copy_name</span>(m_name)<br>&#123;&#125;<br></code></pre></td></tr></table></figure>
-
-<p>见上面这份代码，copy_name 初始化用通过初始化列表已初始化的方式来初始化，保证 m_name 的生命周期，因为它们是在一个类中的成员，保证 copy_name 的初始化数据的生命周期和自己保持一致。</p>
-<p>所以下面这种方式是不恰当的，即 用传递进来的数据初始化引用成员变量。</p>
+<p>见上面这份代码，copy_name
+初始化用通过初始化列表已初始化的方式来初始化，保证 m_name
+的生命周期，因为它们是在一个类中的成员，保证 copy_name
+的初始化数据的生命周期和自己保持一致。</p>
+<p>所以下面这种方式是不恰当的，即
+用传递进来的数据初始化引用成员变量。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">Student::<span class="hljs-built_in">Student</span>(string name, <span class="hljs-type">int</span> age)<br>  :<span class="hljs-built_in">m_name</span>(name)<br>  ,<span class="hljs-built_in">m_age</span>(age)<br>  ,<span class="hljs-built_in">copy_name</span>(name)	<span class="hljs-comment">// 不恰当</span><br>&#123;&#125;<br></code></pre></td></tr></table></figure>
-
-<p>那如果我们的形参 name 就是引用类型呢？那是可以的，但是你需要保证形参 name 的生命周期。</p>
+<p>那如果我们的形参 name 就是引用类型呢？那是可以的，但是你需要保证形参
+name 的生命周期。</p>
 <p>可以看到，引用成员的使用必须注意生命周期问题，否则你不知道什么时候出错。</p>
-<h2><span id="类对象成员">类对象成员</span></h2><p>有时候，一个类对象会作为另一个类对象的数据成员被使用。我们需要在初始化列表初始化对象。</p>
+<h2><span id="类对象成员">类对象成员</span></h2>
+<p>有时候，一个类对象会作为另一个类对象的数据成员被使用。我们需要在初始化列表初始化对象。</p>
 <p>注意：</p>
-<ol>
+<ol type="1">
 <li>初始化列表中写的是需要被初始化的对象成员的名称，而不是对象成员的类名。</li>
 <li>不能在声明对象成员时直接使用有参构造去创建。</li>
 </ol>
@@ -216,40 +222,51 @@
 <p>如果我们的类对象成员不是指针，那就用调用构造函数的方式初始化。如果你没有进行初始化，就会调用该类对象的无参构造，如果你的类对象没有无参构造就会报错，这就是为什么我们建议即便你不需要无参构造，也实现一个的缘故。反过来说，如果不想用Point的无参构造，那么必须在Line类的初始化列表中对Point类的对象成员进行初始化。</p>
 <p>详细见下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Demo</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-built_in">Demo</span>(<span class="hljs-type">int</span> n1,<span class="hljs-type">int</span> n2):<span class="hljs-built_in">num1</span>(n1),<span class="hljs-built_in">num2</span>(n2)&#123;&#125;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">int</span> num1;<br>  <span class="hljs-type">int</span> num2;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Student</span><span class="hljs-params">(<span class="hljs-type">int</span> n1,<span class="hljs-type">int</span> n2)</span></span><br><span class="hljs-function">    : demoA_(n1,n2)</span><br><span class="hljs-function">    , demoB_(new Demo(n1,n2))</span><br><span class="hljs-function">  &#123;</span>&#125;<br>  <br>  Demo demoA_;<br>  Demo* demoB_;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>这里有个问题值得讨论，那就是 Student 和 Demo 对应的构造函数谁先调用？</p>
-<p>Student 先调用构造函数，否则根本不可能初始化 Demo 对应的类对象，但是必然是 Demo 对应的类对象 先完成对象的构建，才让 Student构造完成。</p>
-<p>所以，你看到的现象是 Demo 对应的类对象先构造，其次才是 Student 构造，这个现象没有问题，但是是 Student 类对象先执行构造函数，等到 Demo 对应的类对象调用构造函数完成初始化之后，Student 类对象才构造完成。</p>
-<h2><span id="静态成员">静态成员</span></h2><p>C++ 允许使用 static （静态存储）修饰数据成员，这样的成员在创建对象之前被创建并初始化的。且其实例只有一个，被所有该类的对象共享。<strong>静态数据成员存储在全局&#x2F;静态区，并不占据对象的存储空间</strong>。</p>
+<p>这里有个问题值得讨论，那就是 Student 和 Demo
+对应的构造函数谁先调用？</p>
+<p>Student 先调用构造函数，否则根本不可能初始化 Demo
+对应的类对象，但是必然是 Demo 对应的类对象 先完成对象的构建，才让
+Student构造完成。</p>
+<p>所以，你看到的现象是 Demo 对应的类对象先构造，其次才是 Student
+构造，这个现象没有问题，但是是 Student 类对象先执行构造函数，等到 Demo
+对应的类对象调用构造函数完成初始化之后，Student 类对象才构造完成。</p>
+<h2><span id="静态成员">静态成员</span></h2>
+<p>C++ 允许使用 static
+（静态存储）修饰数据成员，这样的成员在创建对象之前被创建并初始化的。且其实例只有一个，被所有该类的对象共享。<strong>静态数据成员存储在全局/静态区，并不占据对象的存储空间</strong>。</p>
 <p>你可以认为，静态成员属于类，但不属于任何一个对象，但所有对象都可以访问静态成员。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-type">static</span>  <span class="hljs-type">char</span>* name_;<br>&#125;;<br><span class="hljs-type">char</span>* Student::name_ = <span class="hljs-literal">nullptr</span>;<br></code></pre></td></tr></table></figure>
-
 <p>静态成员规则：</p>
-<ol>
+<ol type="1">
 <li>private的静态数据成员无法在类之外直接访问（显然）</li>
 <li><strong>对于静态数据成员的初始化，必须放在类外</strong>（一般紧接着类的定义，这是规则1的特殊情况）</li>
-<li><strong>静态数据成员初始化时不能在数据类型前面加 static</strong>，在数据成员名前面要加上类名+作用域限定符</li>
+<li><strong>静态数据成员初始化时不能在数据类型前面加
+static</strong>，在数据成员名前面要加上类名+作用域限定符</li>
 <li>如果有多条静态数据成员，那么它们的初始化顺序需要与声明顺序一致（规范）</li>
 <li>静态成员在访问时可以通过对象访问，<strong>也可以直接通过类名::成员名的形式</strong>（更常用）</li>
 </ol>
-<h1><span id="特殊的成员函数">特殊的成员函数</span></h1><h2><span id="静态成员函数">静态成员函数</span></h2><p>在某一个成员函数的前面加上static关键字，这个函数就是静态成员函数。静态成员函数具有以下特点：</p>
+<h1><span id="特殊的成员函数">特殊的成员函数</span></h1>
+<h2><span id="静态成员函数">静态成员函数</span></h2>
+<p>在某一个成员函数的前面加上static关键字，这个函数就是静态成员函数。静态成员函数具有以下特点：</p>
 <p>（1）<strong>静态成员函数不依赖于某一个对象。</strong></p>
 <p>（2）静态成员函数可以通过对象调用，但更常见的方式是<font color="red"><strong>通过类名加上作用域限定符调用。</strong></font></p>
 <p>（3）静态成员函数没有this指针。</p>
 <p>（4）<strong>静态成员函数中无法直接用成员的名字访问非静态的成员（数据成员、成员函数）</strong>，只能访问静态数据成员或调用静态成员函数（因为没有this指针）。</p>
 <p>构造函数、拷贝构造函数、赋值运算符函数、析构函数比较特殊，可以在静态成员函数中调用。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 静态成员变量</span><br>    <span class="hljs-type">static</span> <span class="hljs-type">int</span> counter;<br><br>    <span class="hljs-comment">// 静态成员函数</span><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">showCounter</span><span class="hljs-params">()</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Counter: &quot;</span> &lt;&lt; counter &lt;&lt; std::endl;<br>    &#125;<br>&#125;;<br><br><span class="hljs-comment">// 静态成员变量定义</span><br><span class="hljs-type">int</span> MyClass::counter = <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
-
 <p>注：但是非静态的成员函数可以访问静态成员。</p>
-<p>静态成员函数不能是构造函数&#x2F;析构函数&#x2F;赋值运算符函数&#x2F;拷贝构造（因为这四个函数都会访问所有的数据成员，而 static 成员函数没有 this 指针）</p>
-<h2><span id="const-成员函数">const 成员函数</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Computer</span>&#123;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>        cout &lt;&lt; <span class="hljs-string">&quot;brand:&quot;</span> &lt;&lt; _brand &lt;&lt; endl;<br>        cout &lt;&lt; <span class="hljs-string">&quot;price:&quot;</span> &lt;&lt; _price &lt;&lt; endl;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
+<p>静态成员函数不能是构造函数/析构函数/赋值运算符函数/拷贝构造（因为这四个函数都会访问所有的数据成员，而
+static 成员函数没有 this 指针）</p>
+<h2><span id="const-成员函数">const 成员函数</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Computer</span>&#123;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>        cout &lt;&lt; <span class="hljs-string">&quot;brand:&quot;</span> &lt;&lt; _brand &lt;&lt; endl;<br>        cout &lt;&lt; <span class="hljs-string">&quot;price:&quot;</span> &lt;&lt; _price &lt;&lt; endl;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <p><strong>特点：</strong></p>
-<ol>
-<li>const 成员函数中，无法修改类的非 <code>mutable</code> 成员变量。</li>
-<li>当编译器发现该函数是 const 成员函数时，会自动将 this 指针设置为双重 const 限定的指针。</li>
+<ol type="1">
+<li>const 成员函数中，无法修改类的非 <code>mutable</code>
+成员变量。</li>
+<li>当编译器发现该函数是 const 成员函数时，会自动将 this 指针设置为双重
+const 限定的指针。</li>
 <li>只能调用该类的其他 <code>const</code> 成员函数。</li>
-<li>对于指针和引用类型的成员变量，<code>const</code> 成员函数只能确保指针或引用的地址（即指向的对象）不变，<strong>不能防止指向对象的内容被修改</strong>。</li>
+<li>对于指针和引用类型的成员变量，<code>const</code>
+成员函数只能确保指针或引用的地址（即指向的对象）不变，<strong>不能防止指向对象的内容被修改</strong>。</li>
 </ol>
 
       </div>
@@ -335,7 +352,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\02\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\12\29\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -867,11 +884,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

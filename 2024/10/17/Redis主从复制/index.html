@@ -174,40 +174,69 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%90%8C%E6%AD%A5">第一次同步</a><ul>
-<li><a href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5-%E5%8D%8F%E5%95%86%E5%90%8C%E6%AD%A5">第一阶段：建立连接、协商同步</a></li>
-<li><a href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%E4%B8%BB%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE%E7%BB%99%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8">第二阶段：主服务器同步数据给从服务器</a></li>
-<li><a href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%E4%B8%BB%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%94%9F%E6%96%B0%E5%86%99%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4%E7%BB%99%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8">第三阶段：主服务器发生新写操作命令给从服务器</a></li>
-</ul>
-</li>
-<li><a href="#%E5%91%BD%E4%BB%A4%E4%BC%A0%E6%92%AD">命令传播</a></li>
-<li><a href="#%E5%88%86%E6%91%8A%E4%B8%BB%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%8E%8B%E5%8A%9B">分摊主服务器的压力</a></li>
-<li><a href="#%E5%A2%9E%E9%87%8F%E5%A4%8D%E5%88%B6">增量复制</a></li>
+<li><a href="#第一次同步">第一次同步</a>
+<ul>
+<li><a href="#第一阶段建立连接-协商同步">第一阶段：建立连接、协商同步</a></li>
+<li><a href="#第二阶段主服务器同步数据给从服务器">第二阶段：主服务器同步数据给从服务器</a></li>
+<li><a href="#第三阶段主服务器发生新写操作命令给从服务器">第三阶段：主服务器发生新写操作命令给从服务器</a></li>
+</ul></li>
+<li><a href="#命令传播">命令传播</a></li>
+<li><a href="#分摊主服务器的压力">分摊主服务器的压力</a></li>
+<li><a href="#增量复制">增量复制</a></li>
 </ul>
 <!-- tocstop -->
-
-<p>之前介绍 Redis 持久化是针对单台主机，如果这台主机死掉，不能对外提供服务，那持久化策略也没有发挥的余地。</p>
-<p>为了避免这种情况，那就需要能够有多台 Redis 服务器，哪怕其中一台死掉，再选择一个允许正常的 Redis 服务器顶上，继续正常服务。但我们必须要保证数据的一致性，所以引出接下来介绍的主从复制。</p>
+<p>之前介绍 Redis
+持久化是针对单台主机，如果这台主机死掉，不能对外提供服务，那持久化策略也没有发挥的余地。</p>
+<p>为了避免这种情况，那就需要能够有多台 Redis
+服务器，哪怕其中一台死掉，再选择一个允许正常的 Redis
+服务器顶上，继续正常服务。但我们必须要保证数据的一致性，所以引出接下来介绍的主从复制。</p>
 <p>主服务器既可以读也可以写，从服务器只读。当主服务器写数据之后，要把最新的数据同步给从服务器，使得主从服务器数据一致。</p>
-<p><img src="/images/2024/10/17/4b715cf0-8c69-11ef-b261-f5b2cc89d32e.png" alt="主从复制.png"></p>
-<h2><span id="第一次同步">第一次同步</span></h2><p>第一阶段：建立连接，协商同步</p>
+<figure>
+<img src="/images/2024/10/17/4b715cf0-8c69-11ef-b261-f5b2cc89d32e.png" alt="主从复制.png">
+<figcaption aria-hidden="true">主从复制.png</figcaption>
+</figure>
+<h2><span id="第一次同步">第一次同步</span></h2>
+<p>第一阶段：建立连接，协商同步</p>
 <p>第二阶段：主服务器同步数据给从服务器，从服务器需清空已有的数据</p>
 <p>第三阶段：主服务器发送新的写操作命令给从服务器</p>
-<p><img src="/images/2024/10/17/481a90d0-8c69-11ef-b261-f5b2cc89d32e.png" alt="第一次同步.png"></p>
-<h3><span id="第一阶段建立连接-协商同步">第一阶段：建立连接、协商同步</span></h3><p>从服务器执行 replicaof 命令后，从服务器就会给主服务器发送 psync 命令，表示要进行数据同步。</p>
-<p>主服务器收到 psync 命令之后，会用 FULLRESYNC 作为响应命令返回给对象。FULLRESYNC 响应命令的意图是采用 全量复制 的方式，也就是主服务器会把所有的数据都同步给从服务器。</p>
+<figure>
+<img src="/images/2024/10/17/481a90d0-8c69-11ef-b261-f5b2cc89d32e.png" alt="第一次同步.png">
+<figcaption aria-hidden="true">第一次同步.png</figcaption>
+</figure>
+<h3><span id="第一阶段建立连接-协商同步">第一阶段：建立连接、协商同步</span></h3>
+<p>从服务器执行 replicaof 命令后，从服务器就会给主服务器发送 psync
+命令，表示要进行数据同步。</p>
+<p>主服务器收到 psync 命令之后，会用 FULLRESYNC
+作为响应命令返回给对象。FULLRESYNC 响应命令的意图是采用 全量复制
+的方式，也就是主服务器会把所有的数据都同步给从服务器。</p>
 <p>所以，第一阶段的工作是为了全年复制做准备，至于具体这么做，看第二阶段。</p>
-<h3><span id="第二阶段主服务器同步数据给从服务器">第二阶段：主服务器同步数据给从服务器</span></h3><p>主服务器会执行 bgsave 命令来生成 RDB 文件（不会阻塞主线程），然后把文件发送给从服务器。从服务器接收到 RDB 文件后，会先清空当前的数据，然后载入 RDB 文件。</p>
-<p>后续主服务器的写命令会记录到 一个缓冲区中（replication buffer），来保证数据的同步。</p>
-<h3><span id="第三阶段主服务器发生新写操作命令给从服务器">第三阶段：主服务器发生新写操作命令给从服务器</span></h3><p>从服务器完成 RDB 数据加载之后，给主服务器回复一个确认消息。主服务器接着把后续的写命令发给从服务器，即从 replication buffer 中所记录的写操作命令发送给从服务器，从服务器执行这些命令之后，这时主从服务器数据就保持一致了。</p>
+<h3><span id="第二阶段主服务器同步数据给从服务器">第二阶段：主服务器同步数据给从服务器</span></h3>
+<p>主服务器会执行 bgsave 命令来生成 RDB
+文件（不会阻塞主线程），然后把文件发送给从服务器。从服务器接收到 RDB
+文件后，会先清空当前的数据，然后载入 RDB 文件。</p>
+<p>后续主服务器的写命令会记录到 一个缓冲区中（replication
+buffer），来保证数据的同步。</p>
+<h3><span id="第三阶段主服务器发生新写操作命令给从服务器">第三阶段：主服务器发生新写操作命令给从服务器</span></h3>
+<p>从服务器完成 RDB
+数据加载之后，给主服务器回复一个确认消息。主服务器接着把后续的写命令发给从服务器，即从
+replication buffer
+中所记录的写操作命令发送给从服务器，从服务器执行这些命令之后，这时主从服务器数据就保持一致了。</p>
 <p>完成这一步，我们可以说主从服务器第一次同步完成。</p>
-<h2><span id="命令传播">命令传播</span></h2><p>第一次同步之后，主服务器和从服务器会维护一个 TCP 长连接，后续主服务器有新的写命令就通过这个连接同步给从服务器。 </p>
-<h2><span id="分摊主服务器的压力">分摊主服务器的压力</span></h2><p>第一次数据同步过程中，主服务器会做两件耗时的操作：生成 RDB 文件和传输 RDB 文件。</p>
+<h2><span id="命令传播">命令传播</span></h2>
+<p>第一次同步之后，主服务器和从服务器会维护一个 TCP
+长连接，后续主服务器有新的写命令就通过这个连接同步给从服务器。</p>
+<h2><span id="分摊主服务器的压力">分摊主服务器的压力</span></h2>
+<p>第一次数据同步过程中，主服务器会做两件耗时的操作：生成 RDB 文件和传输
+RDB 文件。</p>
 <p>主服务器可以有多个从服务器，但是数量增多就会压力很大。我们可以让从服务器也作为主服务器，让新的从服务器来依赖它们，那么真正的主服务器的压力就会小很多了。</p>
-<p><img src="/images/2024/10/17/42223ed0-8c69-11ef-b261-f5b2cc89d32e.png" alt="分摊主服务器压力.png"></p>
-<h2><span id="增量复制">增量复制</span></h2><p>之前讲第一次同步之后，主从服务器之间有一个 TCP 长连接。如果主从服务器间的网络连接断开了，那么就无法进行命令传播了，这时从服务器无法和主服务器保持数据同步了。</p>
+<figure>
+<img src="/images/2024/10/17/42223ed0-8c69-11ef-b261-f5b2cc89d32e.png" alt="分摊主服务器压力.png">
+<figcaption aria-hidden="true">分摊主服务器压力.png</figcaption>
+</figure>
+<h2><span id="增量复制">增量复制</span></h2>
+<p>之前讲第一次同步之后，主从服务器之间有一个 TCP
+长连接。如果主从服务器间的网络连接断开了，那么就无法进行命令传播了，这时从服务器无法和主服务器保持数据同步了。</p>
 <p>随后，连接恢复，该如何保证数据一致性呢？</p>
 <p>主从服务器会采用增量复制的方式继续同步，也就是只会把网络断开期间主服务器收到的写操作命令，同步给从服务器。</p>
 <hr>
@@ -296,7 +325,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\01\RDB-持久化\" title="RDB 持久化" rel="bookmark">RDB 持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\17\Redis哨兵\" title="Redis哨兵" rel="bookmark">Redis哨兵</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\01\RDB-持久化\" title="RDB 持久化" rel="bookmark">RDB 持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\17\Redis哨兵\" title="Redis哨兵" rel="bookmark">Redis哨兵</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
     
   </div>
 </div>
@@ -828,11 +857,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

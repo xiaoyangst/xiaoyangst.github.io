@@ -174,53 +174,90 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#%E6%8D%A2%E8%A1%8C">换行</a></li>
-<li><a href="#%E6%99%AE%E9%80%9A%E6%A8%A1%E5%BC%8F">普通模式</a><ul>
-<li><a href="#%E6%9F%A5%E6%89%BE">查找</a></li>
-<li><a href="#%E7%B2%98%E8%B4%B4%E6%92%A4%E9%94%80%E5%92%8C%E6%81%A2%E5%A4%8D%E4%BB%A5%E5%8F%8A%E4%BF%9D%E5%AD%98%E9%80%80%E5%87%BA">粘贴，撤销和恢复以及保存退出</a></li>
-<li><a href="#%E7%A7%BB%E5%8A%A8%E5%85%89%E6%A0%87">移动光标</a></li>
-<li><a href="#%E5%88%A0%E9%99%A4delete%E6%96%87%E6%9C%AC">删除（delete）文本</a></li>
-<li><a href="#%E5%A4%8D%E5%88%B6yank%E6%96%87%E6%9C%AC">复制（yank）文本</a></li>
-<li><a href="#%E4%BF%AE%E6%94%B9change%E6%96%87%E6%9C%AC">修改（change）文本</a></li>
-<li><a href="#%E6%9B%BF%E6%8D%A2substitute%E6%96%87%E6%9C%AC">替换（substitute）文本</a></li>
-</ul>
-</li>
-<li><a href="#%E8%A7%86%E5%9B%BE%E6%A8%A1%E5%BC%8F">视图模式</a></li>
+<li><a href="#换行">换行</a></li>
+<li><a href="#普通模式">普通模式</a>
+<ul>
+<li><a href="#查找">查找</a></li>
+<li><a href="#粘贴撤销和恢复以及保存退出">粘贴，撤销和恢复以及保存退出</a></li>
+<li><a href="#移动光标">移动光标</a></li>
+<li><a href="#删除delete文本">删除（delete）文本</a></li>
+<li><a href="#复制yank文本">复制（yank）文本</a></li>
+<li><a href="#修改change文本">修改（change）文本</a></li>
+<li><a href="#替换substitute文本">替换（substitute）文本</a></li>
+</ul></li>
+<li><a href="#视图模式">视图模式</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="换行">换行</span></h2><p>如果在 Vim 中打开文件时没有自动换行（换行显示），有可能是因为文件内容中没有换行符，或者 Vim 的自动换行设置没有开启。</p>
-<p>Vim 有两种常见的换行方式：<strong>硬换行</strong>和<strong>软换行</strong>。</p>
+<h2><span id="换行">换行</span></h2>
+<p>如果在 Vim
+中打开文件时没有自动换行（换行显示），有可能是因为文件内容中没有换行符，或者
+Vim 的自动换行设置没有开启。</p>
+<p>Vim
+有两种常见的换行方式：<strong>硬换行</strong>和<strong>软换行</strong>。</p>
 <ul>
 <li><strong>硬换行</strong>：文件中真正存在换行符</li>
-<li><strong>软换行</strong>：Vim 自动将一行文本在窗口宽度内进行折叠显示（不改变文件内容）</li>
+<li><strong>软换行</strong>：Vim
+自动将一行文本在窗口宽度内进行折叠显示（不改变文件内容）</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">// 启用软换行（自动换行显示）<br>:<span class="hljs-built_in">set</span> wrap	<br><br>// 禁用软换行（保持长行不折行）<br>:<span class="hljs-built_in">set</span> nowrap<br><br>// 软换行的视觉优化（如果你希望在折行时更清楚地看到行的起始和结束）<br>:<span class="hljs-built_in">set</span> linebreak<br></code></pre></td></tr></table></figure>
-
-<p>如果希望 Vim 每次启动都开启自动换行，可以在 Vim 配置文件 (<code>~/.vimrc</code>) 中添加以下设置：</p>
+<p>如果希望 Vim 每次启动都开启自动换行，可以在 Vim 配置文件
+(<code>~/.vimrc</code>) 中添加以下设置：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">set</span> wrap<br><span class="hljs-built_in">set</span> linebreak<br></code></pre></td></tr></table></figure>
-
-<h2><span id="普通模式">普通模式</span></h2><h3><span id="查找">查找</span></h3><p><img src="/images/2024/09/14/f59f2c70-727e-11ef-82d8-fd739d506881.png" alt="查找.png"></p>
-<h3><span id="粘贴撤销和恢复以及保存退出">粘贴，撤销和恢复以及保存退出</span></h3><p><img src="/images/2024/09/14/efd78760-727e-11ef-82d8-fd739d506881.png" alt="粘贴撤销恢复.png"></p>
-<p>如果你以为 Ctrl + s 是保存，那你就大错特错，并且会进入僵死状态，输入 Ctrl + q 可以解除。</p>
-<p>下面这个才是保存命令和退出命令。 </p>
-<p><img src="/images/2024/09/14/eb0b0b30-727e-11ef-82d8-fd739d506881.png" alt="保存.png"></p>
-<h3><span id="移动光标">移动光标</span></h3><p><img src="/images/2024/09/14/e5ef84a0-727e-11ef-82d8-fd739d506881.png" alt="移动光标.png"></p>
-<h3><span id="删除delete文本">删除（delete）文本</span></h3><p><code>dw</code> –&gt; delete word，删除一个单词，但是要把光标放到单词的首字母上。</p>
-<p><code>dt&quot;</code> 删除到<code>&quot;</code>，但不包含<code>&quot;</code></p>
+<h2><span id="普通模式">普通模式</span></h2>
+<h3><span id="查找">查找</span></h3>
+<figure>
+<img src="/images/2024/09/14/f59f2c70-727e-11ef-82d8-fd739d506881.png" alt="查找.png">
+<figcaption aria-hidden="true">查找.png</figcaption>
+</figure>
+<h3><span id="粘贴撤销和恢复以及保存退出">粘贴，撤销和恢复以及保存退出</span></h3>
+<figure>
+<img src="/images/2024/09/14/efd78760-727e-11ef-82d8-fd739d506881.png" alt="粘贴撤销恢复.png">
+<figcaption aria-hidden="true">粘贴撤销恢复.png</figcaption>
+</figure>
+<p>如果你以为 Ctrl + s 是保存，那你就大错特错，并且会进入僵死状态，输入
+Ctrl + q 可以解除。</p>
+<p>下面这个才是保存命令和退出命令。</p>
+<figure>
+<img src="/images/2024/09/14/eb0b0b30-727e-11ef-82d8-fd739d506881.png" alt="保存.png">
+<figcaption aria-hidden="true">保存.png</figcaption>
+</figure>
+<h3><span id="移动光标">移动光标</span></h3>
+<figure>
+<img src="/images/2024/09/14/e5ef84a0-727e-11ef-82d8-fd739d506881.png" alt="移动光标.png">
+<figcaption aria-hidden="true">移动光标.png</figcaption>
+</figure>
+<h3><span id="删除delete文本">删除（delete）文本</span></h3>
+<p><code>dw</code> --&gt; delete
+word，删除一个单词，但是要把光标放到单词的首字母上。</p>
+<p><code>dt"</code> 删除到<code>"</code>，但不包含<code>"</code></p>
 <p><code>dt)</code> 删除到<code>)</code>，但不包含<code>)</code></p>
-<p><img src="/images/2024/09/14/e0c8b370-727e-11ef-82d8-fd739d506881.png" alt="删除.png"></p>
-<h3><span id="复制yank文本">复制（yank）文本</span></h3><p><img src="/images/2024/09/14/db93ff90-727e-11ef-82d8-fd739d506881.png" alt="复制.png"></p>
-<h3><span id="修改change文本">修改（change）文本</span></h3><p>删除文本并进入编辑模式，只要你学会删除文本，这个也就等价于会了。</p>
-<p><img src="/images/2024/09/14/d5e95860-727e-11ef-82d8-fd739d506881.png" alt="修改.png"></p>
-<h3><span id="替换substitute文本">替换（substitute）文本</span></h3><p><img src="/images/2024/09/14/cffa7c40-727e-11ef-82d8-fd739d506881.png" alt="替换.png"></p>
-<h2><span id="视图模式">视图模式</span></h2><p>视图模式是用来选择内容的。选择内容之后，我们就可以对其进行复制或者删除。</p>
+<figure>
+<img src="/images/2024/09/14/e0c8b370-727e-11ef-82d8-fd739d506881.png" alt="删除.png">
+<figcaption aria-hidden="true">删除.png</figcaption>
+</figure>
+<h3><span id="复制yank文本">复制（yank）文本</span></h3>
+<figure>
+<img src="/images/2024/09/14/db93ff90-727e-11ef-82d8-fd739d506881.png" alt="复制.png">
+<figcaption aria-hidden="true">复制.png</figcaption>
+</figure>
+<h3><span id="修改change文本">修改（change）文本</span></h3>
+<p>删除文本并进入编辑模式，只要你学会删除文本，这个也就等价于会了。</p>
+<figure>
+<img src="/images/2024/09/14/d5e95860-727e-11ef-82d8-fd739d506881.png" alt="修改.png">
+<figcaption aria-hidden="true">修改.png</figcaption>
+</figure>
+<h3><span id="替换substitute文本">替换（substitute）文本</span></h3>
+<figure>
+<img src="/images/2024/09/14/cffa7c40-727e-11ef-82d8-fd739d506881.png" alt="替换.png">
+<figcaption aria-hidden="true">替换.png</figcaption>
+</figure>
+<h2><span id="视图模式">视图模式</span></h2>
+<p>视图模式是用来选择内容的。选择内容之后，我们就可以对其进行复制或者删除。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">v：行选模式<br>[ctrl] + v：竖选模式<br></code></pre></td></tr></table></figure>
-
 <p>常见用法：批量注释</p>
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs tex">1) [ctrl]+v 进入竖选模式<br>2) 选择范围<br>3) 输入 I（大写的字母i）<br>4) 输入 //<br>5) 输入 [ESC]<br></code></pre></td></tr></table></figure>
+
       </div>
     </div>
     
@@ -304,7 +341,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -836,11 +873,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

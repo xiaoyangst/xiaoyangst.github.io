@@ -174,50 +174,48 @@
           </div>
         
         <!-- toc -->
-
 <ul>
-<li><a href="#getcwd-%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95">getcwd–获取当前工作目录</a></li>
-<li><a href="#chdir-%E6%94%B9%E5%8F%98%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95">chdir–改变当前工作目录</a></li>
-<li><a href="#mkdir-%E5%88%9B%E5%BB%BA%E7%9B%AE%E5%BD%95">mkdir–创建目录</a></li>
-<li><a href="#rmdir-%E5%88%A0%E9%99%A4%E7%A9%BA%E7%9B%AE%E5%BD%95">rmdir–删除空目录</a></li>
-<li><a href="#opendir-%E6%89%93%E5%BC%80%E4%B8%80%E4%B8%AA%E7%9B%AE%E5%BD%95">opendir–打开一个目录</a></li>
-<li><a href="#closedir-%E5%85%B3%E9%97%AD%E7%9B%AE%E5%BD%95%E6%B5%81">closedir–关闭目录流</a></li>
-<li><a href="#readdir-%E8%AF%BB%E7%9B%AE%E5%BD%95%E6%B5%81%E6%A0%B8%E5%BF%83">readdir–读目录流（核心）</a></li>
-<li><a href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81">实例代码</a></li>
+<li><a href="#getcwd-获取当前工作目录">getcwd--获取当前工作目录</a></li>
+<li><a href="#chdir-改变当前工作目录">chdir--改变当前工作目录</a></li>
+<li><a href="#mkdir-创建目录">mkdir--创建目录</a></li>
+<li><a href="#rmdir-删除空目录">rmdir--删除空目录</a></li>
+<li><a href="#opendir-打开一个目录">opendir--打开一个目录</a></li>
+<li><a href="#closedir-关闭目录流">closedir--关闭目录流</a></li>
+<li><a href="#readdir-读目录流核心">readdir--读目录流（核心）</a></li>
+<li><a href="#实例代码">实例代码</a></li>
 </ul>
 <!-- tocstop -->
-
-<h2><span id="getcwd获取当前工作目录">getcwd–获取当前工作目录</span></h2><p>获取的路径是绝对路径。</p>
+<h2><span id="getcwd-获取当前工作目录">getcwd--获取当前工作目录</span></h2>
+<p>获取的路径是绝对路径。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">char</span> *<span class="hljs-title">getcwd</span><span class="hljs-params">(<span class="hljs-type">char</span> *buf, <span class="hljs-type">size_t</span> size)</span></span>;<br></code></pre></td></tr></table></figure>
-
 <p>但如果我们希望根据路径的实际长度来申请合适的空间，可以如下作：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">char</span>* cwd = <span class="hljs-built_in">getcwd</span>(<span class="hljs-literal">NULL</span>,<span class="hljs-number">0</span>);<br></code></pre></td></tr></table></figure>
-
-<h2><span id="chdir改变当前工作目录">chdir–改变当前工作目录</span></h2><p>你可以填绝对路径，如果是相对路径就是基于当前路径的。</p>
+<h2><span id="chdir-改变当前工作目录">chdir--改变当前工作目录</span></h2>
+<p>你可以填绝对路径，如果是相对路径就是基于当前路径的。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">chdir</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *path)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<h2><span id="mkdir创建目录">mkdir–创建目录</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">mkdir</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">mode_t</span> mode)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<p>mode: 目录的权限位，会受文件创建掩码 umask 的影响，实际的权限为（mode &amp; ~umask &amp; 0777）返回值。</p>
+<h2><span id="mkdir-创建目录">mkdir--创建目录</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">mkdir</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">mode_t</span> mode)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>mode: 目录的权限位，会受文件创建掩码 umask 的影响，实际的权限为（mode
+&amp; ~umask &amp; 0777）返回值。</p>
 <p>这很正常，不可能你一个没有写权限的用户，你执行这个函数就能让你创建有写权限的文件夹吧？这不合理。</p>
-<h2><span id="rmdir删除空目录">rmdir–删除空目录</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">rmdir</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *path)</span></span>;<br></code></pre></td></tr></table></figure>
-
+<h2><span id="rmdir-删除空目录">rmdir--删除空目录</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">rmdir</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *path)</span></span>;<br></code></pre></td></tr></table></figure>
 <p>删除<strong>空</strong>目录，因此后面我们实现如果递归删除目录和文件。</p>
-<h2><span id="opendir打开一个目录">opendir–打开一个目录</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">DIR *<span class="hljs-title">opendir</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name)</span></span>;<br></code></pre></td></tr></table></figure>
-
+<h2><span id="opendir-打开一个目录">opendir--打开一个目录</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">DIR *<span class="hljs-title">opendir</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name)</span></span>;<br></code></pre></td></tr></table></figure>
 <p>打开成功会返回一个指向目录流的指针 DIR*。</p>
-<h2><span id="closedir关闭目录流">closedir–关闭目录流</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">closedir</span><span class="hljs-params">(DIR *dirp)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<h2><span id="readdir读目录流核心">readdir–读目录流（核心）</span></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">dirent</span>* <span class="hljs-built_in">readdir</span>(DIR *dirp);<br></code></pre></td></tr></table></figure>
-
+<h2><span id="closedir-关闭目录流">closedir--关闭目录流</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">closedir</span><span class="hljs-params">(DIR *dirp)</span></span>;<br></code></pre></td></tr></table></figure>
+<h2><span id="readdir-读目录流核心">readdir--读目录流（核心）</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">dirent</span>* <span class="hljs-built_in">readdir</span>(DIR *dirp);<br></code></pre></td></tr></table></figure>
 <p>返回值是一个结构体，里面记录的信息是非常关键的，我们后面提供的三个核心小程序就是基于此操作的。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">dirent</span> &#123;<br>    <span class="hljs-type">ino_t</span> d_ino;           <span class="hljs-comment">// inode 编号</span><br>    <span class="hljs-type">off_t</span> d_off;           <span class="hljs-comment">// 下一条目在目录中的偏移</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> d_reclen; <span class="hljs-comment">// 结构体的长度</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> d_type;   <span class="hljs-comment">// 文件类型</span><br>    <span class="hljs-type">char</span> d_name[<span class="hljs-number">256</span>];      <span class="hljs-comment">// 文件名</span><br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>其中，常用以区分文件和文件夹的关键字就是 d_type，这是相当关键点。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++">DT_BLK：块设备。<br>DT_CHR：字符设备。<br>DT_DIR：目录。<br>DT_FIFO：命名管道（FIFO）。<br>DT_LNK：符号链接。<br>DT_REG：常规文件。<br>DT_SOCK：UNIX 域套接字。<br>DT_UNKNOWN：无法确定文件类型。<br></code></pre></td></tr></table></figure>
-
-<h2><span id="实例代码">实例代码</span></h2><p>实际上，上述接口并不难，最为核心的是 readdir 函数。而目录有关的操作就是递归遍历文件夹和文件，至于递归删除也就不在话下了。整个核心就是深度搜索，我们这里是前序遍历。</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E9%80%92%E5%BD%92%E6%89%93%E5%8D%B0%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84--%E9%9D%92%E6%98%A5%E7%89%88tree%E5%91%BD%E4%BB%A4">递归打印目录结构–青春版tree命令</a></p>
+<h2><span id="实例代码">实例代码</span></h2>
+<p>实际上，上述接口并不难，最为核心的是 readdir
+函数。而目录有关的操作就是递归遍历文件夹和文件，至于递归删除也就不在话下了。整个核心就是深度搜索，我们这里是前序遍历。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E9%80%92%E5%BD%92%E6%89%93%E5%8D%B0%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84--%E9%9D%92%E6%98%A5%E7%89%88tree%E5%91%BD%E4%BB%A4">递归打印目录结构--青春版tree命令</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E9%80%92%E5%BD%92%E5%A4%8D%E5%88%B6%E7%9B%AE%E5%BD%95">递归复制目录</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%9D%82%E9%A1%B9/%E9%80%92%E5%BD%92%E5%88%A0%E9%99%A4%E7%9B%AE%E5%BD%95">递归删除目录</a></p>
 
@@ -304,7 +302,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\13\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\08\HTTPS通信流程\" title="HTTPS通信流程" rel="bookmark">HTTPS通信流程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\27\Linux-五种-IO-模型\" title="Linux 五种 IO 模型" rel="bookmark">Linux 五种 IO 模型</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\25\Linux-收发网络数据包的过程\" title="Linux 收发网络数据包的过程" rel="bookmark">Linux 收发网络数据包的过程</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\30\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\09\01\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
@@ -836,11 +834,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>

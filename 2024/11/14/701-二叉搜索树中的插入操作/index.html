@@ -174,16 +174,21 @@
           </div>
         
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(TreeNode* root, <span class="hljs-type">int</span> val)</span> </span>&#123;<br>        <span class="hljs-type">int</span> cur = root-&gt;val;<br>        <span class="hljs-keyword">if</span> (root-&gt;left == <span class="hljs-literal">nullptr</span> &amp;&amp; root-&gt;right == <span class="hljs-literal">nullptr</span>) &#123;	<span class="hljs-comment">// 插入</span><br>            TreeNode* node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">TreeNode</span>(val);<br>            val &lt; cur ? root-&gt;left = node : root-&gt;right = node;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (root-&gt;left == <span class="hljs-literal">nullptr</span> &amp;&amp; val &lt; cur) &#123;<br>            TreeNode* node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">TreeNode</span>(val);<br>            root-&gt;left = node;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (root-&gt;right == <span class="hljs-literal">nullptr</span> &amp;&amp; val &gt; cur) &#123;<br>            TreeNode* node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">TreeNode</span>(val);<br>            root-&gt;right = node;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            val &lt; cur ? <span class="hljs-built_in">insert</span>(root-&gt;left, val) : <span class="hljs-built_in">insert</span>(root-&gt;right, val);	<span class="hljs-comment">// 递归查询</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-function">TreeNode* <span class="hljs-title">insertIntoBST</span><span class="hljs-params">(TreeNode* root, <span class="hljs-type">int</span> val)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (root == <span class="hljs-literal">nullptr</span>) &#123;	<span class="hljs-comment">// 如果为空节点，那就把待插入的 val 加入到空树中作为 root 节点</span><br>            root = <span class="hljs-keyword">new</span> <span class="hljs-built_in">TreeNode</span>(val);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-built_in">insert</span>(root, val);<br>        &#125;<br>        <span class="hljs-keyword">return</span> root;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
 <p>我们插入元素，不需要考虑调整，插入的时候就插在最后面就可以，考虑到下面三种可以插入的情况：</p>
-<p><img src="/images/2024/11/14/04d0f9c0-a237-11ef-86d2-652a012a3285.png" alt="701. 二叉搜索树中的插入操作.png"></p>
+<figure>
+<img src="/images/2024/11/14/04d0f9c0-a237-11ef-86d2-652a012a3285.png" alt="701. 二叉搜索树中的插入操作.png">
+<figcaption aria-hidden="true">701.
+二叉搜索树中的插入操作.png</figcaption>
+</figure>
 <ul>
-<li>如果当前节点有左右孩子，那就必然是不能插入，也必然进入递归中，即 else 语句</li>
+<li>如果当前节点有左右孩子，那就必然是不能插入，也必然进入递归中，即
+else 语句</li>
 <li>如果当前节点没有左右孩子，那是必然可以插入，只需要把目标值和当前值进行比较之后，选择插入左边还是右边</li>
 <li>如果当前节点右节点可插入，且目标值大于当前值，则确认可以插入到右边</li>
 <li>如果当前节点左节点可插入，且目标值小于当前值，则确认可以插入到左边</li>
 </ul>
-<p>最后就是一个特殊情况，即 为空树，对于这种就直接把待插入的 val 加入到空树中作为 root 节点。</p>
+<p>最后就是一个特殊情况，即 为空树，对于这种就直接把待插入的 val
+加入到空树中作为 root 节点。</p>
 
       </div>
     </div>
@@ -268,7 +273,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\11\226-翻转二叉树\" title="226. 翻转二叉树" rel="bookmark">226. 翻转二叉树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\11\226-翻转二叉树\" title="226. 翻转二叉树" rel="bookmark">226. 翻转二叉树</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\08\07\141-环形链表\" title="141.环形链表" rel="bookmark">141.环形链表</a></div></div></div>
     
   </div>
 </div>
@@ -800,11 +805,6 @@
   </div>
 </div>
 
-    
-      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
-      <script id="MathJax-script"
-              async
-              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     
     
       <script src="/js/search.js"></script>
