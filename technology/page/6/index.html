@@ -170,6 +170,24 @@
   
   <div class="post-card">
     <div class="post__head">
+      <a href="/2024/10/17/Redis%E5%93%A8%E5%85%B5/" class="post-title hover-line">Redis哨兵</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">此前，我们非常依赖主服务器，因为所有的写命令都首先会给主服务器，那如果主服务器死掉，其它从服务器该怎么办？顶替！选择一个从服务器来担任主服务器的职责。Redis 提供哨兵机制（哨兵其实是一个运行在特殊模式下的 Redis 进程，所以它也是一个节点），它会检测主节点是否存活，如果发现主节点挂掉，就会选举一个从节点切换为主节点，并且把新主节点的相关信息通知给从节点和客户端。总结就是主要负责三件事情：监控、选主、通知</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
       <a href="/2024/10/17/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" class="post-title hover-line">Redis主从复制</a>
       
     </div>
@@ -324,24 +342,6 @@
     <div class="post__foot">
       <div class="post-tags">
   <a href="/tags/Redis/" class="post-tag">#Redis</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/10/03/Linux%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9C/" class="post-title hover-line">Linux线程操作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">线程并没有想象中那么简单，对于代码很难保证说完全正确</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/Linux/" class="post-tag">#Linux</a>
 
 </div>
     </div>
