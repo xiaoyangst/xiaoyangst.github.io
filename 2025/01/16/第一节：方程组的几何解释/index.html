@@ -175,77 +175,64 @@
         
         <!-- toc -->
 <ul>
-<li><a href="#两方程两未知数">两方程两未知数</a></li>
-<li><a href="#三方程三未知数">三方程三未知数</a></li>
-<li><a href="#矩阵相乘">矩阵相乘</a></li>
+<li><a href="#%E4%B8%A4%E6%96%B9%E7%A8%8B%E4%B8%A4%E6%9C%AA%E7%9F%A5%E6%95%B0">两方程两未知数</a></li>
+<li><a href="#%E4%B8%89%E6%96%B9%E7%A8%8B%E4%B8%89%E6%9C%AA%E7%9F%A5%E6%95%B0">三方程三未知数</a></li>
+<li><a href="#%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98">矩阵相乘</a></li>
 </ul>
 <!-- tocstop -->
 <h1><span id="两方程两未知数">两方程两未知数</span></h1>
-<p><span class="math display">\[
-\begin{align}
-2x - y &amp;= 0 \\
--x + 2y &amp;= 3
-\end{align}
-\]</span></p>
+<p>$$<br>
+\begin{align}<br>
+2x - y &amp;= 0 \<br>
+-x + 2y &amp;= 3<br>
+\end{align}<br>
+$$</p>
 <p>转换成==行==矩阵，见下：AX = B</p>
-<p><span class="math display">\[
-\begin{bmatrix}2&amp;&amp;-1\\-1&amp;&amp;2\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}0\\3\end{bmatrix}
-\]</span></p>
-<p>你可以这样看待，右边的未知数 x 和 y
-已经排布好，接着就是将上边的不等式与之匹配。</p>
-<p>第一个不等式 x 的系数为 2，y 的系数为 -1；第二个不等式 x 的系数为
--1，y 的系数为 2。x 和 y
-自上而下，这些与之匹配的系数也就相应自上而下。</p>
-<figure>
-<img src="/images/2025/01/16/58c0b556-8181-437e-acc9-aff4cba4b2fd.png" alt="image20250116200823215.png">
-<figcaption aria-hidden="true">image20250116200823215.png</figcaption>
-</figure>
-<p>转换成==列==矩阵（以后就称线性组合），见下： <span class="math display">\[
-x \begin{bmatrix} 2 \\ -1 \end{bmatrix} + y \begin{bmatrix} -1 \\ 2
-\end{bmatrix} = \begin{bmatrix} 0 \\ 3 \end{bmatrix}
-\]</span> 那么 x 和 y 为多少，才让这个等式的成立具体化呢？当 x = 1，y =
-2时。</p>
-<p>记忆还不错的你，也应该看出这里的 x = 1，y = 2
-就是之前两个方程的解，即交点。</p>
+<p>$$<br>
+\begin{bmatrix}2&amp;&amp;-1\-1&amp;&amp;2\end{bmatrix}\begin{bmatrix}x\y\end{bmatrix}=\begin{bmatrix}0\3\end{bmatrix}<br>
+$$</p>
+<p>你可以这样看待，右边的未知数 x 和 y 已经排布好，接着就是将上边的不等式与之匹配。</p>
+<p>第一个不等式 x 的系数为 2，y 的系数为 -1；第二个不等式 x 的系数为 -1，y 的系数为 2。x 和 y 自上而下，这些与之匹配的系数也就相应自上而下。</p>
+<p><img src="/images/2025/01/16/58c0b556-8181-437e-acc9-aff4cba4b2fd.png" alt="image20250116200823215.png"></p>
+<p>转换成==列==矩阵（以后就称线性组合），见下：<br>
+$$<br>
+x \begin{bmatrix} 2 \ -1 \end{bmatrix} + y \begin{bmatrix} -1 \ 2 \end{bmatrix} = \begin{bmatrix} 0 \ 3 \end{bmatrix}<br>
+$$<br>
+那么 x 和 y 为多少，才让这个等式的成立具体化呢？当 x = 1，y = 2时。</p>
+<p>记忆还不错的你，也应该看出这里的 x = 1，y = 2 就是之前两个方程的解，即交点。</p>
 <p>想会计算？我们看几个公式：</p>
-<figure>
-<img src="/images/2025/01/16/12e09486-d7e0-4dfb-a5af-4d07aeb872f5.png" alt="image20250116202121212.png">
-<figcaption aria-hidden="true">image20250116202121212.png</figcaption>
-</figure>
-<p>前面讲的计算，是指已经知晓 x 和 y
-值的情况下，向量的计算规则。但如何求得 x 和 y
-的值呢？还没有讲到，前面只是直接给出答案。</p>
+<p><img src="/images/2025/01/16/12e09486-d7e0-4dfb-a5af-4d07aeb872f5.png" alt="image20250116202121212.png"></p>
+<p>前面讲的计算，是指已经知晓 x 和 y 值的情况下，向量的计算规则。但如何求得 x 和 y 的值呢？还没有讲到，前面只是直接给出答案。</p>
 <p>以原点 (0,0) 为起始点，绘制出对应的直线：</p>
-<figure>
-<img src="/images/2025/01/16/634d3555-d7f4-4ae6-8ae8-153dd991905b.png" alt="image20250116204758360.png">
-<figcaption aria-hidden="true">image20250116204758360.png</figcaption>
-</figure>
+<p><img src="/images/2025/01/16/634d3555-d7f4-4ae6-8ae8-153dd991905b.png" alt="image20250116204758360.png"></p>
 <p>我们暂且将绿线和红线的箭头连接起来，可以看到这条黑线是黄线的两倍。</p>
 <p>因此，我们讲 x = 1，y = 2。</p>
-<figure>
-<img src="/images/2025/01/16/5646abeb-9711-4522-a9b1-422c21cd7d9d.png" alt="image20250116205312862.png">
-<figcaption aria-hidden="true">image20250116205312862.png</figcaption>
-</figure>
+<p><img src="/images/2025/01/16/5646abeb-9711-4522-a9b1-422c21cd7d9d.png" alt="image20250116205312862.png"></p>
 <blockquote>
 <p>[!TIP]</p>
 <p>图中的几种颜色且有箭头的线在数学中称之为向量，如果不明白图中向量的运算，去补充向量的运算法则</p>
 </blockquote>
 <h1><span id="三方程三未知数">三方程三未知数</span></h1>
-<p><span class="math display">\[
-\begin{align}
-2x - y &amp;= 0 \\
--x + 2y -z &amp;= -1 \\
--3y + 4z &amp;= 0
-\end{align}
-\]</span></p>
-<p>网站推荐：https://www.desmos.com/3d</p>
+<p>$$<br>
+\begin{align}<br>
+2x - y &amp;= 0 \<br>
+-x + 2y -z &amp;= -1 \<br>
+-3y + 4z &amp;= 0<br>
+\end{align}<br>
+$$</p>
+<p>网站推荐：<a target="_blank" rel="noopener" href="https://www.desmos.com/3d">https://www.desmos.com/3d</a></p>
 <p>后面学习如何求解，本节暂时无能为力，只是引出随着纬度增加，绘图的方式算不上明智之举。</p>
 <h1><span id="矩阵相乘">矩阵相乘</span></h1>
-<p>Ax = b，求解 b： <span class="math display">\[
-\begin{bmatrix}2&amp;5\\1&amp;3\end{bmatrix}\begin{bmatrix}1\\2\end{bmatrix}
-\]</span> 推荐方式，将行矩阵方式转换成列矩阵方式求解： <span class="math display">\[
-\begin{bmatrix}2&amp;5\\1&amp;3\end{bmatrix}\begin{bmatrix}1\\2\end{bmatrix}=1\begin{bmatrix}2\\1\end{bmatrix}+2\begin{bmatrix}5\\3\end{bmatrix}=\begin{bmatrix}12\\7\end{bmatrix}
-\]</span></p>
+<p>Ax = b，求解 b：<br>
+$$<br>
+\begin{bmatrix}2&amp;5\1&amp;3\end{bmatrix}\begin{bmatrix}1\2\end{bmatrix}<br>
+$$<br>
+推荐方式，将行矩阵方式转换成列矩阵方式求解：<br>
+$$<br>
+\begin{bmatrix}2&amp;5\1&amp;3\end{bmatrix}\begin{bmatrix}1\2\end{bmatrix}=1\begin{bmatrix}2\1\end{bmatrix}+2\begin{bmatrix}5\3\end{bmatrix}=\begin{bmatrix}12\7\end{bmatrix}<br>
+$$</p>
+<p>x 中 第 1 个数 和 A 中 第 1 列相乘 <font color="red">+</font> x 中 第 2 个数 和 A 中 第 2 列相乘 得到结果。</p>
+<p>基于此规律，相比下次矩阵相乘也明白该怎么做了。</p>
 
       </div>
     </div>
