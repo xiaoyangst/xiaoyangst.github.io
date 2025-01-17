@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        哈希表 | 
+        454. 四数相加 II | 
       
     </title>
     <meta name="description" content="" />
@@ -62,9 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet"
-        type="text/css"
-        href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,118 +154,111 @@
     </div>
     <div class="body">
       
-  <div class="tag-page-title">#哈希表</div>
-  <div class="post-list">
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">454. 四数相加 II</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" class="post-tag">#哈希表</a>
+
+
+          <span class="post-date">2025-01-17</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fourSumCount</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums1, vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums2, vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums3,</span></span><br><span class="hljs-params"><span class="hljs-function">                     vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums4)</span> </span>&#123;<br>        <span class="hljs-type">int</span> result = <span class="hljs-number">0</span>;                <br>        unordered_map&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt; r12;<br>        unordered_map&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt; r34;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i : nums1) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> j : nums2) &#123;<br>                r12[i + j]++;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i : nums3) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> j : nums4) &#123;<br>                r34[i + j]++;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> it : r12)&#123;<br>            <span class="hljs-type">int</span> target = <span class="hljs-number">-1</span> * (it.first);<br>            <span class="hljs-keyword">auto</span> find_it = r<span class="hljs-number">34.f</span>ind(target);<br>            <span class="hljs-keyword">if</span>(find_it != r<span class="hljs-number">34.</span><span class="hljs-built_in">end</span>())&#123;<br>                result += (it.second * find_it-&gt;second);	<span class="hljs-comment">// 组合相乘</span><br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>将 num1 和 num2 组合相加，num3 和 num4 组合相加，分别记录在两个不同的
+map 容器中。四数之和就被转换为两数之和。</p>
+<p>遍历其中一个容器的元素并取相反数，然后从另一个容器中看是否存在。</p>
+<p>如果存在就将两个元素中的 value
+相乘（当时居然写成加法，调试的时候，才发现逻辑的错误），来表明组合的情况是多少个。</p>
+
+      </div>
+    </div>
     
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2025/01/17/454-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0-II/" class="post-title hover-line">454. 四数相加 II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">将 num1 和 num2 组合相加，num3 和 num4 组合相加，分别记录在两个不同的 map 容器中。四数之和就被转换为两数之和</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/01/17/383-%E8%B5%8E%E9%87%91%E4%BF%A1/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      383. 赎金信
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
   <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" class="post-tag">#哈希表</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\15\350-两个数组的交集-II\" title="350. 两个数组的交集 II" rel="bookmark">350. 两个数组的交集 II</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\17\242-有效的字母异位词\" title="242. 有效的字母异位词" rel="bookmark">242. 有效的字母异位词</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+    
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2025/01/17/383-%E8%B5%8E%E9%87%91%E4%BF%A1/" class="post-title hover-line">383. 赎金信</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题和242.有效的字母异位词稍有不同</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" class="post-tag">#哈希表</a>
-
 </div>
-    </div>
-  </div>
 
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2025/01/17/202-%E5%BF%AB%E4%B9%90%E6%95%B0/" class="post-title hover-line">202. 快乐数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">建立一张哈希表，如果计算出来的结果有在其中，就直接退出循环，表面这个数不是快乐数，不然你就一直死循环了</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" class="post-tag">#哈希表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2025/01/17/242-%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/" class="post-title hover-line">242. 有效的字母异位词</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">但我们绝不能选择 set 集合，因为它有去重功能。可以选择 map 映射，key 是 单个字母，value 是 单个字母的个数。如果遍历完成之后，所有单个字母的 value 都为 0，那么两个字符串就是字母异位词</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" class="post-tag">#哈希表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2025/01/15/350-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86-II/" class="post-title hover-line">350. 两个数组的交集 II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">之所以选择链表，而没有选择 set，因为后者会进行去重，导致统计结果有问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a><a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" class="post-tag">#哈希表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/08/07/1-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/" class="post-title hover-line">1. 两数之和</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">个人遇到的问题是记不清 map 容器的 find 的方法究竟寻找的 key 还是 value？答案是 key！！！</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a><a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" class="post-tag">#哈希表</a>
-
-</div>
-    </div>
-  </div>
-
-
+    
+    
+      <div id="gitalk-container"></div>
     
   </div>
 
@@ -803,6 +795,16 @@
     
     <script src="/js/copy-code.js"></script>
     
-    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
   </body>
 </html>
