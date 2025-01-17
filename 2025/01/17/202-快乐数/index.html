@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        242. 有效的字母异位词 | 
+        202. 快乐数 | 
       
     </title>
     <meta name="description" content="" />
@@ -157,7 +157,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">242. 有效的字母异位词</div>
+        <div class="post-title">202. 快乐数</div>
         <div class="post-info">
           
   <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" class="post-tag">#哈希表</a>
@@ -173,16 +173,9 @@
             
           </div>
         
-        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isAnagram</span><span class="hljs-params">(string s, string t)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(s.<span class="hljs-built_in">size</span>() &lt; t.<span class="hljs-built_in">size</span>())&#123;    <span class="hljs-comment">// 让字符更多的字符串作为检索对象，另一个就作为判断对象</span><br>            <span class="hljs-built_in">swap</span>(s,t);<br>        &#125;<br><br>        <span class="hljs-comment">// 加入 unordered_map</span><br>        unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; find_umap;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> ch : s) &#123;<br>            find_umap[ch]++;<br>        &#125;<br>        <span class="hljs-comment">// 检验 是否为 有效的字母异位词</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> ch : t) &#123;<br>            <span class="hljs-keyword">auto</span> it = find_umap.<span class="hljs-built_in">find</span>(ch);<br>            <span class="hljs-keyword">if</span> (it != find_umap.<span class="hljs-built_in">end</span>()) &#123;<br>                find_umap[ch]--;<br>            &#125;<br>        &#125;<br>        <span class="hljs-comment">// 是否所有 key 的 value 都为 0 了</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> data : find_umap) &#123;<br>            <span class="hljs-keyword">if</span> (data.second != <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-<p>字母异位词是通过重新排列不同单词或短语的字母而形成的单词或短语，并使用所有原字母一次。</p>
-<p>A 的 字母异位词是 B，那么 A 有的单词 B
-一个不能多一个不能少，那只需要把 A 中加入哈希表中，再遍历检查 B
-中的单词是否都能被找到即可。</p>
-<p>但我们绝不能选择 set 集合，因为它有去重功能。可以选择 map 映射，key
-是 单个字母，value 是 单个字母的个数。如果遍历完成之后，所有单个字母的
-value 都为 0，那么两个字符串就是字母异位词。</p>
-<p>为了让检索不出现遗漏，我们得让字符更多的字符串作为检索对象（加入到
-map 映射中），另一个就作为判断对象。</p>
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    set&lt;<span class="hljs-type">int</span>&gt; nums;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">split_number</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span></span>&#123;<br>        <span class="hljs-type">int</span> sum = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span>(n &gt; <span class="hljs-number">0</span>)&#123;<br>            <span class="hljs-type">int</span> sig = n % <span class="hljs-number">10</span>;<br>            sum += (sig * sig);<br>            n = n / <span class="hljs-number">10</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> sum;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isHappy</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>        <span class="hljs-type">int</span> re = <span class="hljs-built_in">split_number</span>(n);<br>        <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>)&#123;<br>            <span class="hljs-keyword">if</span>(nums.<span class="hljs-built_in">find</span>(re) != nums.<span class="hljs-built_in">end</span>())&#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>            &#125;<br>            nums.<span class="hljs-built_in">insert</span>(re);<br>            re = <span class="hljs-built_in">split_number</span>(re);<br>            <span class="hljs-keyword">if</span>(re == <span class="hljs-number">1</span>)&#123;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>从快乐数的这个行为来看，一个数拆分之后计算的结果是确定的。</p>
+<p>建立一张哈希表，如果计算出来的结果有在其中，就直接退出循环，表面这个数不是快乐数，不然你就一直死循环了。</p>
 
       </div>
     </div>
@@ -226,7 +219,7 @@ map 映射中），另一个就作为判断对象。</p>
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/2025/01/17/202-%E5%BF%AB%E4%B9%90%E6%95%B0/">
+    <a class="post-nav-item-left" href="/2025/01/17/383-%E8%B5%8E%E9%87%91%E4%BF%A1/">
       <div class="text-align">
         <svg t="1670570876164"
              class="icon"
@@ -237,12 +230,12 @@ map 映射中），另一个就作为判断对象。</p>
         </svg>
         <span class="text-small">上一篇</span>
       </div>
-      <div>202. 快乐数</div>
+      <div>383. 赎金信</div>
     </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2025/01/16/%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E6%96%B9%E7%A8%8B%E7%BB%84%E7%9A%84%E5%87%A0%E4%BD%95%E8%A7%A3%E9%87%8A/">
+    <a class="post-nav-item-right" href="/2025/01/17/242-%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -254,7 +247,7 @@ map 映射中），另一个就作为判断对象。</p>
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      第一节：方程组的几何解释
+      242. 有效的字母异位词
     </a>
   
 </div>
@@ -267,7 +260,7 @@ map 映射中），另一个就作为判断对象。</p>
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\15\350-两个数组的交集-II\" title="350. 两个数组的交集 II" rel="bookmark">350. 两个数组的交集 II</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\17\202-快乐数\" title="202. 快乐数" rel="bookmark">202. 快乐数</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2024\08\07\1-两数之和\" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\15\350-两个数组的交集-II\" title="350. 两个数组的交集 II" rel="bookmark">350. 两个数组的交集 II</a></div></div><div class="null-item"><div class="null-title"><a href="\2025\01\17\242-有效的字母异位词\" title="242. 有效的字母异位词" rel="bookmark">242. 有效的字母异位词</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\10\14\112-路径总和\" title="112. 路径总和" rel="bookmark">112. 路径总和</a></div></div><div class="null-item"><div class="null-title"><a href="\2024\11\14\108-将有序数组转换为二叉搜索树\" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
     
   </div>
 </div>
