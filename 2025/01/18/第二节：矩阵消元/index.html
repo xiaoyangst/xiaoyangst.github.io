@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        数学 | 
+        第二节：矩阵消元 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -136,7 +137,7 @@
               
                 <a class="nav-menu-item" href="/technology">计算机技术</a>
               
-                <a class="nav-menu-item" href="/math">数学</a>
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
               
                 <a class="nav-menu-item" href="/life">生活</a>
               
@@ -153,42 +154,257 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/math.svg)"></div>
-        数学
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">第二节：矩阵消元</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" class="post-tag">#线性代数</a><a href="/tags/MIT/" class="post-tag">#MIT</a>
+
+
+          <span class="post-date">2025-01-18</span>
+        </div>
       </div>
-      <div class="wall-category-description">Math knowledge</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" style="font-size: 1em;">线性代数</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#消元">消元</a></li>
+<li><a href="#回代">回代</a></li>
+<li><a href="#消元矩阵">消元矩阵</a></li>
+<li><a href="#置换矩阵">置换矩阵</a></li>
+<li><a href="#逆矩阵">逆矩阵</a></li>
+<li><a href="#参考链接">参考链接</a></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="消元">消元</span></h2>
+<p>消元法是计算机软件求解线形方程组所用的最常见的方法。任何情况下，只要是矩阵
+A <strong>可逆</strong>，均可以通过消元法求得 <code>Ax=b</code>
+的解。</p>
+<p>高斯消元法就是通过对方程组中的某两个方程进行适当的数<code>乘</code>和<code>加</code>，以达到将某一未知数系数变为零，从而削减未知数个数的目的。</p>
+<ul>
+<li>消元成功：矩阵的主元不包含 0， 也就是说，可逆矩阵</li>
+<li>消元失败：矩阵的主元有至少一个 0，也就是说，不可逆矩阵</li>
+</ul>
+<p> </p>
+<p>求解目标： <span class="math display">\[
+\begin{aligned}x+2y+z=2\\3x+8y+z=12\\4y+z=2\end{aligned}
+\]</span> 转换成 Ax = b 形式： <span class="math display">\[
+A=\begin{bmatrix}1&amp;2&amp;1\\3&amp;8&amp;1\\0&amp;4&amp;1\end{bmatrix}\mathbf{b}=\begin{bmatrix}2\\12\\2\end{bmatrix}
+\]</span> 注意看这个矩阵，左上角的数字为
+1，称其为“主元一”，是相当关键的。</p>
+<p>通过消元将第一列中<font color="red">除了主元之外的数字均变化为0</font>，寻找一种
+<strong>U矩阵</strong> <strong>（U upper triangular
+上三角矩阵）</strong>。就像下面这种：</p>
+<figure>
+<img src="/images/2025/01/18/303fbc08-b57d-4cd3-a710-e7c0b3c4e597.png" alt="image20250117213118058.png">
+<figcaption aria-hidden="true">image20250117213118058.png</figcaption>
+</figure>
+<p>操作方法就是<font color="red">用之后的每一行减去第一行的适当倍数</font>。</p>
+<p>可以看到下面计算之后，证明 A 是一个可逆矩阵。</p>
+<figure>
+<img src="/images/2025/01/18/eb65a634-1891-4eef-a313-d198b8e2bcf4.png" alt="image20250117214916560.png">
+<figcaption aria-hidden="true">image20250117214916560.png</figcaption>
+</figure>
+<p>需要说明的是，主元不能为0，如果恰好消元至某行，0出现在了主元的位置上，应当通过与下方的一行进行“行交换”使得非零数字出现在主元位置上。</p>
+<p><font color="red">如果0出现在了主元位置上，并且下方没有对等位置为非0数字的行，则消元终止，并证明矩阵A为不可逆矩阵，且线性方程组没有唯一解。</font></p>
+<h2><span id="回代">回代</span></h2>
+<p>做方程的高斯消元时，需要对等式右侧的<strong>b</strong>做同样的乘法和加减法。手工计算时比较有效率的方法是应用<strong>增广矩阵</strong>，将
+<strong>b</strong> 插入矩阵 <strong>A</strong>
+之后形成最后一列，在消元过程中带着 <strong>b</strong> 一起操作。</p>
+<p><strong>前面介绍消元的基本思路，以后实际情况中需要将 b 插入矩阵 A
+之后形成最后一列，在消元过程中带着 b 一起操作。</strong></p>
+<p>  <span class="math display">\[
+\begin{bmatrix}1&amp;2&amp;1&amp;2\\3&amp;8&amp;1&amp;12\\0&amp;4&amp;1&amp;2\end{bmatrix}\to\begin{bmatrix}1&amp;2&amp;1&amp;2\\0&amp;2&amp;-2&amp;6\\0&amp;4&amp;1&amp;2\end{bmatrix}\to\begin{bmatrix}1&amp;2&amp;1&amp;2\\0&amp;2&amp;-2&amp;6\\0&amp;0&amp;5&amp;-10\end{bmatrix}
+\]</span> 等价于： <span class="math display">\[
+\begin{align*}
+x + 2y + z &amp;= 2 \\
+2y - 2z &amp;= 6 \\
+5z &amp;= -10
+\end{align*}
+\]</span> z = -2，y = 1，x = 2</p>
+<h2><span id="消元矩阵">消元矩阵</span></h2>
+<p>消元矩阵，就是将前面演示的消元过程中的行变换转化为矩阵之间的乘法形式。</p>
+<p>即用矩阵描述消元过程。</p>
+<p> </p>
+<p>一列 乘以 一个矩阵，结果是一列</p>
+<figure>
+<img src="/images/2025/01/18/fd6f48c9-a3e8-4491-aed4-1b91c0a9105a.png" alt="image20250117223245773.png">
+<figcaption aria-hidden="true">image20250117223245773.png</figcaption>
+</figure>
+<p>一行 乘以 一个矩阵，结果是一行</p>
+<figure>
+<img src="/images/2025/01/18/cc62f5b7-bd13-4974-9a06-852f457949f0.png" alt="image20250117224101351.png">
+<figcaption aria-hidden="true">image20250117224101351.png</figcaption>
+</figure>
+<p>然后，我们来观察下面这个规律：</p>
+<figure>
+<img src="/images/2025/01/18/c09906b9-95ab-4564-9b7b-37d9e9499855.png" alt="c1caaa4c6edb2ea566c1d6e32f316e36.png">
+<figcaption aria-hidden="true">c1caaa4c6edb2ea566c1d6e32f316e36.png</figcaption>
+</figure>
+<figure>
+<img src="/images/2025/01/18/79f57e22-5ea7-4610-b956-d9372ca9fc04.png" alt="100f7f3ceedf0cf54a78fd0deb802773.png">
+<figcaption aria-hidden="true">100f7f3ceedf0cf54a78fd0deb802773.png</figcaption>
+</figure>
+<figure>
+<img src="/images/2025/01/18/6299d397-fa79-4ead-8882-2ecf8823052d.png" alt="de94ab832e1f9d3cef1d5673a06ab3e2.png">
+<figcaption aria-hidden="true">de94ab832e1f9d3cef1d5673a06ab3e2.png</figcaption>
+</figure>
+<p>所以，如果我们的矩阵是下面这个形式，与原矩阵相乘将不会改变原矩阵，我们称呼这个矩阵为<font color="red">单元矩阵</font>：</p>
+<figure>
+<img src="/images/2025/01/18/d4861c60-e48e-4c58-a95f-d01983ee3a47.png" alt="b57260d7d122b5041929f26dbec7d2bb.png">
+<figcaption aria-hidden="true">b57260d7d122b5041929f26dbec7d2bb.png</figcaption>
+</figure>
+<p> </p>
+<p>我们下面来求解左边的内容： <span class="math display">\[
+\begin{bmatrix}&amp;&amp;\\&amp;&amp;\\&amp;&amp;\end{bmatrix}\begin{bmatrix}1&amp;2&amp;1\\3&amp;8&amp;1\\0&amp;4&amp;1\end{bmatrix}=\begin{bmatrix}1&amp;2&amp;1\\0&amp;2&amp;-2\\0&amp;4&amp;1\end{bmatrix}
+\]</span>
+结合前面的知识，我们能很快写出第一行和第三行，因为这两行并没有变化。
+<span class="math display">\[
+\begin{bmatrix}1&amp;0&amp;0\\&amp;&amp;\\0&amp;0&amp;1\end{bmatrix}\begin{bmatrix}1&amp;2&amp;1\\3&amp;8&amp;1\\0&amp;4&amp;1\end{bmatrix}=\begin{bmatrix}1&amp;2&amp;1\\0&amp;2&amp;-2\\0&amp;4&amp;1\end{bmatrix}
+\]</span> 关键是看第二行： <span class="math display">\[
+[-3\quad1\quad0]\begin{bmatrix}1&amp;2&amp;1\\3&amp;8&amp;1\\0&amp;4&amp;1\end{bmatrix}&amp;=&amp;\begin{array}{cccc}-&amp;3&amp;[1&amp;2&amp;1]\\+&amp;1&amp;[3&amp;8&amp;1]\\+&amp;0&amp;[0&amp;4&amp;1]\end{array}=[\begin{array}{ccc}0&amp;2&amp;-2\end{array}]
+\]</span> 即：</p>
+<figure>
+<img src="/images/2025/01/18/ba77bb1d-18a1-4068-9860-b67162fc824d.png" alt="image20250117233810012.png">
+<figcaption aria-hidden="true">image20250117233810012.png</figcaption>
+</figure>
+<p>左乘的这个矩阵为称为初等矩阵（E），E<sub>21</sub>
+表示将矩阵A的第2行第1列的位置变为0的消元矩阵。</p>
+<p>接着，我们看到 E<sub>21</sub>A 第三行第二列还有个 4，要寻找一种
+<strong>U矩阵</strong> ，得将其变换为 0，见下图：</p>
+<figure>
+<img src="/images/2025/01/18/e259a38f-8178-4d7d-9b9d-8d78746dd708.png" alt="image20250118085436315.png">
+<figcaption aria-hidden="true">image20250118085436315.png</figcaption>
+</figure>
+<p>我们将这两步综合起来，即 E<sub>32</sub>(E<sub>21</sub>A) = U
+，也就是说如果我们想从 A 矩阵直接得到 U 矩阵的话，只需要
+E<sub>32</sub>(E<sub>21</sub>A) 即可。</p>
+<p>你可以看到，我们这里一直是在左乘，先是 E<sub>21</sub>A，即 A 左乘一个
+E<sub>21</sub>；再是 E<sub>32</sub>(E<sub>21</sub>A)，即 E<sub>21</sub>A
+左乘一个 E<sub>32</sub>。</p>
+<p>之所以如此，是有个概念得讲：<font color="red">在一个矩阵A的左边乘一个矩阵（简称左乘），就是对
+A 进行行变换，而在 A
+右边乘一个矩阵（简称右乘），就是对A进行列变换。</font></p>
+<blockquote>
+<p>[!NOTE]</p>
+<p>矩阵乘法满足结合律，但不满足交换律</p>
+</blockquote>
+<h2><span id="置换矩阵">置换矩阵</span></h2>
+<p>用矩阵相乘来完成矩阵的行交换与列交换，而用到的矩阵叫做置换矩阵。</p>
+<p>行交换： <span class="math display">\[
+{\begin{bmatrix}0&amp;1\\1&amp;0\end{bmatrix}\begin{bmatrix}a&amp;b\\c&amp;d\end{bmatrix}=\begin{bmatrix}c&amp;d\\a&amp;b\end{bmatrix}}
+\]</span> 列交换： <span class="math display">\[
+\begin{bmatrix}a&amp;b\\c&amp;d\end{bmatrix}\begin{bmatrix}0&amp;1\\1&amp;0\end{bmatrix}=\begin{bmatrix}b&amp;a\\d&amp;c\end{bmatrix}
+\]</span> 即<strong>左乘行交换，右乘列交换</strong>。</p>
+<blockquote>
+<p>[!CAUTION]</p>
+<p>左右乘效果不同也展示了矩阵运算不符合交换律的性质。</p>
+</blockquote>
+<h2><span id="逆矩阵">逆矩阵</span></h2>
+<p>把一个消元结束的 <strong>矩阵 U</strong> 如何变为 未经消元的
+<strong>矩阵 A</strong> 呢？即乘上一个逆矩阵！ <span class="math display">\[
+[?]\begin{bmatrix}1&amp;0&amp;0\\-3&amp;1&amp;0\\0&amp;0&amp;1\end{bmatrix}=\begin{bmatrix}1&amp;0&amp;0\\0&amp;1&amp;0\\0&amp;0&amp;1\end{bmatrix}
+\]</span></p>
+<p>就以之前的 E<sub>21</sub>
+举例，这次变换是从第二行中减去三倍的第一行，那么其逆变换就是给第二行加上三倍的第一行，所以逆矩阵（上面的
+?）如下： <span class="math display">\[
+\begin{bmatrix}1&amp;0&amp;0\\3&amp;1&amp;0\\0&amp;0&amp;1\end{bmatrix}
+\]</span> 我们把矩阵 <strong>E</strong> 的逆记作
+<strong>E<sup>−1</sup></strong> ，所以有 <strong>E<sup>−1</sup>E =
+I</strong></p>
+<h2><span id="参考链接">参考链接</span></h2>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/LJM1200/article/details/128180306">矩阵消元法</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/horizonshd/p/15365988.html">线性代数笔记第02讲
+矩阵消元</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/45717944">MIT—线性代数笔记02
+矩阵消元</a></p>
+
       </div>
     </div>
-  </div>
-  <div class="post-list">
     
-      
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2025/01/16/%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E6%96%B9%E7%A8%8B%E7%BB%84%E7%9A%84%E5%87%A0%E4%BD%95%E8%A7%A3%E9%87%8A/" class="post-title hover-line">第一节：方程组的几何解释</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">从二方程二未知数到三方程三未知数，引出是否一定有解，以及如何求解三方程三未知数的问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" class="post-tag">#线性代数</a>
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/01/17/454-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0-II/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      454. 四数相加 II
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" class="post-tag">#线性代数</a><a href="/tags/MIT/" class="post-tag">#MIT</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\2025\01\16\第一节：方程组的几何解释\" title="第一节：方程组的几何解释" rel="bookmark">第一节：方程组的几何解释</a></div></div></div>
+    
   </div>
-
+</div>
 
     
+    
+      <div id="gitalk-container"></div>
     
   </div>
 
@@ -725,6 +941,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>
