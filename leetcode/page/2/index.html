@@ -162,13 +162,31 @@
       </div>
       <div class="wall-category-description">leetcode Writeup Record</div>
       <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" style="font-size: 1em;">单调栈</a> <a href="/tags/%E5%8F%8C%E6%8C%87%E9%92%88/" style="font-size: 1em;">双指针</a> <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" style="font-size: 1em;">哈希表</a> <a href="/tags/%E5%9B%9E%E6%BA%AF/" style="font-size: 1em;">回溯</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 1em;">字符串</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 1em;">数组</a> <a href="/tags/%E6%A0%88/" style="font-size: 1em;">栈</a> <a href="/tags/%E6%A0%91/" style="font-size: 1em;">树</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1em;">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 1em;">队列</a></div>
+        <div id="tags-outer"><a href="/tags/%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86/" style="font-size: 1em;">前缀和与差分</a> <a href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" style="font-size: 1em;">单调栈</a> <a href="/tags/%E5%8F%8C%E6%8C%87%E9%92%88/" style="font-size: 1em;">双指针</a> <a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" style="font-size: 1em;">哈希表</a> <a href="/tags/%E5%9B%9E%E6%BA%AF/" style="font-size: 1em;">回溯</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 1em;">字符串</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 1em;">数组</a> <a href="/tags/%E6%A0%88/" style="font-size: 1em;">栈</a> <a href="/tags/%E6%A0%91/" style="font-size: 1em;">树</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1em;">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 1em;">队列</a></div>
       </div>
     </div>
   </div>
   <div class="post-list">
     
       
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/2024/11/13/501-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E4%BC%97%E6%95%B0/" class="post-title hover-line">501. 二叉搜索树中的众数</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">通用的方法是这里用到针对 map 或 unordered_map 容器的 value 进行排序，理论上只支持 key 的排序，即 map 本身是自动机械能 key 排序的。如果要进行 value 排序，就需要将其大包围 pair 放到 vector 中，然后利用 sort 的自定义排序函数的方式进行 value 的排序。如果是二叉搜索树，利用中序遍历再来看此树，就是相当于看有序的数组一样</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%A0%91/" class="post-tag">#树</a>
+
+</div>
+    </div>
+  </div>
+
   
   <div class="post-card">
     <div class="post__head">
@@ -322,24 +340,6 @@
     <div class="post__body">
       
       <div class="post-excerpt">记录 1 的个数来获取最终的最大值，并且要在最后再次 max 一下</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/2024/09/23/283-%E7%A7%BB%E5%8A%A8%E9%9B%B6/" class="post-title hover-line">283.移动零</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">cover_index 指向接下来要被覆盖的下标，只需要把遇到的非0在存放在该下标即可，记得更新 cover_index 。完成元素移动之后，此刻 cover_index 指向的下标到结尾全部置为 0</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
