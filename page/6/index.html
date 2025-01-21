@@ -222,6 +222,45 @@
     </div>
   </div>
   
+    <div class="timeline">
+      <div class="timeline-head">
+        <div class="title">时间线</div>
+        <div class="radio-wrapper">
+          
+            <div class="radio">
+              <input id="radio-article"
+                     type="checkbox"
+                     />
+              <label class="radio-skin--article" for="radio-article"></label>
+            </div>
+          
+            <div class="radio">
+              <input id="radio-apps"
+                     type="checkbox"
+                     />
+              <label class="radio-skin--apps" for="radio-apps"></label>
+            </div>
+          
+            <div class="radio">
+              <input id="radio-event"
+                     type="checkbox"
+                     checked/>
+              <label class="radio-skin--event" for="radio-event"></label>
+            </div>
+          
+        </div>
+      </div>
+      <div class="timeline-body">
+        <div class="timeline-item-first">
+          <div class="line-anchor line-anchor--now"></div>
+        </div>
+        <div class="timeline-list" id="timeline-list"></div>
+        <div class="timeline-item-last">
+          <div class="line-anchor line-anchor--end"></div>
+        </div>
+      </div>
+    </div>
+  
 
     </div>
     <div class="foot">
@@ -341,17 +380,6 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://paugram.com/">保罗的小宇宙</a>
-          </div>
-        
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
           </div>
         
@@ -429,17 +457,6 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://shuyi.tech/">陈树义的博客</a>
-          </div>
-        
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
             <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
           </div>
         
@@ -466,10 +483,6 @@
           </div>
         
       
-    </div>
-  
-    <div class="foot-link-group">
-      
         
         
           <div class="text">
@@ -491,6 +504,10 @@
             <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
           </div>
         
+      
+    </div>
+  
+    <div class="foot-link-group">
       
         
         
@@ -600,6 +617,12 @@
                  src="/images/icon/icon-link+.svg" />
             <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
           </div>
+        
+      
+        
+        
+      
+        
         
       
         
@@ -885,6 +908,61 @@
   })();
 </script>
   
+  
+  <script type="text/javascript">
+    const timelineData = {"types":["article","apps","event"],"posts":[{"title":"为思想找到一片空间","path":"/2025/01/21/%E4%B8%BA%E6%80%9D%E6%83%B3%E6%89%BE%E5%88%B0%E4%B8%80%E7%89%87%E7%A9%BA%E9%97%B4/","icon":"/images/icon/icon-event.svg","type":"event","date":"2025-01-21"}]}
+    const {types, posts} = timelineData
+    listEl = document.querySelector("#timeline-list");
+
+    elRefs = getElRefs(types)
+    bindListener(types, elRefs)
+
+    setTimeout(init.bind(this, types, elRefs))
+
+    function getElRefs(types) {
+      return types.map(type => document.querySelector(`#radio-${type}`))
+    }
+
+    function bindListener(names, els) {
+      names.map((name, i) => els[i].addEventListener('change', e => updateList(name, e.target.checked)))
+    }
+
+    function updateList(type, value) {
+      listDom
+        .filter(line => line.type === type)
+        .forEach(line => {
+          line.el.className = line
+            .el
+            .className
+            .replace(
+              /(--hidden)?$/, value
+              ? ""
+              : "--hidden");
+        });
+    }
+
+    const listDom = posts.map(t => getLine(t));
+    listEl.append(...listDom.map(i => i.el));
+
+    function getLine(data) {
+      const item = document.createElement("DIV");
+      item.className = `timeline-item-${data.type} timeline-item--hidden`;
+      item.innerHTML = `
+                          <div class="line-date">
+                          <div class="line-date-tag">${data.date}</div></div>
+                          <div class="line-anchor"></div>
+                          <div class="line-title">
+                              <img class="text-icon" src="${data.icon}" /><a class="timeline-post" href="${data.path}">${data.title}</a>
+                          </div>
+                          `;
+      return {el: item, type: data.type};
+    };
+
+    function init(names, els) {
+      names.map((name, i) => updateList(name, els[i].checked))
+    }
+  </script>
+
   
 
   </body>
