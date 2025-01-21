@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        再谈单例 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">再谈单例</div>
+        <div class="post-info">
+          
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+
+          <span class="post-date">2024-11-23</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#单例模式">单例模式</a>
+<ul>
+<li><a href="#饿汉式">饿汉式</a></li>
+<li><a href="#懒汉式">懒汉式</a></li>
+<li><a href="#懒汉传参问题">懒汉传参问题</a></li>
+<li><a href="#线程安全的单例">线程安全的单例</a></li>
+<li><a href="#call_once-和-once_flag">call_once 和 once_flag</a></li>
+</ul></li>
+<li><a href="#单例对象自动释放">单例对象自动释放</a>
+<ul>
+<li><a href="#call_once-和-once_flag-结合-atexit线程安全">call_once 和
+once_flag 结合 atexit（线程安全）</a></li>
+</ul></li>
+<li><a href="#通用的单例模板类">通用的单例模板类</a></li>
+<li><a href="#引入智能指针">引入智能指针</a></li>
+<li><a href="#如果使用-unique_ptr">如果使用 unique_ptr</a></li>
+<li><a href="#智能指针-和-atexit-比较">智能指针 和 atexit 比较
+？</a></li>
+<li><a href="#产生的愚蠢想法">产生的愚蠢想法</a>
+<ul>
+<li><a href="#返回-m_instance-是调用的什么函数">返回 m_instance
+是调用的什么函数？</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="单例模式">单例模式</span></h1>
+<h2><span id="饿汉式">饿汉式</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">static</span> Singleton* <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">return</span> m_instance;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printAddr</span><span class="hljs-params">()</span></span>&#123;<br>   std::cout &lt;&lt; m_instance &lt;&lt; std::endl;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除拷贝构造和拷贝赋值</span><br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  <span class="hljs-comment">// 删除移动构造和移动赋值构造</span><br>  <span class="hljs-built_in">Singleton</span>(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">static</span> Singleton* m_instance;<br>&#125;;<br>Singleton* Singleton::m_instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Singleton</span>(); <span class="hljs-comment">// 提前创建，调用 getInstance 必然已经初始化成功</span><br></code></pre></td></tr></table></figure>
+<p>饿汉式<strong>本质</strong>上就是线程安全。饿汉单例模式在类加载时就创建实例，因为它是在类加载时就初始化的，所以即使在多线程环境中，它的实例创建也是线程安全的。</p>
+<p>然而，饿汉单例有一个缺点，就是无论是否使用该单例，它都会在程序启动时就被创建，可能会导致资源浪费，特别是在该单例较为庞大或初始化较为复杂时。</p>
+<p> </p>
+<p>为了和下面要讲的懒汉式进行区分，这里提前讲讲区别。饿汉会提前创建
+static
+对象，并在类外初始化，这就是为了在类加载时就创建实例，等到外部调用
+getInstance 的时候必然已经把
+单例对象创建好，也就必然是线程安全，得到的单例都是同一个单例对象，不线程安全才怪。</p>
+<h2><span id="懒汉式">懒汉式</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">static</span> Singleton* <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">if</span> (!m_instance)&#123;<br>      m_instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Singleton</span>();	<span class="hljs-comment">// 需要的时候再创建，存在线程安全问题</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> m_instance;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printAddr</span><span class="hljs-params">()</span></span>&#123;<br>    std::cout &lt;&lt; m_instance &lt;&lt; std::endl;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除拷贝构造和拷贝赋值</span><br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  <span class="hljs-comment">// 删除移动构造和移动赋值构造</span><br>  <span class="hljs-built_in">Singleton</span>(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">static</span> Singleton* m_instance;<br>&#125;;<br>Singleton* Singleton::m_instance = <span class="hljs-literal">nullptr</span>;<br></code></pre></td></tr></table></figure>
+<p>懒汉式会在用户实际调用 getinstance 的时候才会创建 static
+对象，所以原生的懒汉式存在线程安全问题。</p>
+<h2><span id="懒汉传参问题">懒汉传参问题</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">static</span> Singleton* <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">if</span> (!m_instance)&#123;<br>      m_instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Singleton</span>(m_num);<br>    &#125;<br>    <span class="hljs-keyword">return</span> m_instance;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printAddr</span><span class="hljs-params">()</span></span>&#123;<br>    std::cout &lt;&lt; m_instance &lt;&lt; std::endl;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span></span>&#123;<br>    m_num = num;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除拷贝构造和拷贝赋值</span><br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  <span class="hljs-comment">// 删除移动构造和移动赋值构造</span><br>  <span class="hljs-built_in">Singleton</span>(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">int</span> num)&#123;<br>    std::cout &lt;&lt;<span class="hljs-string">&quot;num = &quot;</span>&lt;&lt;num &lt;&lt;std::endl;<br>  &#125;<br>  ~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">static</span> <span class="hljs-type">int</span> m_num;<br>  <span class="hljs-type">static</span> Singleton* m_instance;<br>&#125;;<br>Singleton* Singleton::m_instance = <span class="hljs-literal">nullptr</span>;<br><span class="hljs-type">int</span> Singleton::m_num = <span class="hljs-number">10</span>;<br></code></pre></td></tr></table></figure>
+<p>创建一个共有的 init
+函数，进而提前把传输传递到类中，等到创建对象的时候就可以传参初始化。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">static</span> <span class="hljs-type">int</span> num = <span class="hljs-number">100</span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test</span><span class="hljs-params">()</span></span>&#123;<br>  Singleton::<span class="hljs-built_in">getInstance</span>()-&gt;<span class="hljs-built_in">init</span>(num + <span class="hljs-number">10</span>);<br>  Singleton::<span class="hljs-built_in">getInstance</span>()-&gt;<span class="hljs-built_in">printAddr</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="线程安全的单例">线程安全的单例</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">static</span> Singleton&amp; <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">static</span> Singleton m_instance;<br>    <span class="hljs-keyword">return</span> m_instance;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除拷贝构造和拷贝赋值</span><br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  <span class="hljs-comment">// 删除移动构造和移动赋值构造</span><br>  <span class="hljs-built_in">Singleton</span>(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>为什么它是线程安全的？</p>
+<p>C++11及以后，静态<strong>局部</strong>变量的初始化是线程安全的。</p>
+<figure>
+<img src="/images/2024/11/23/ad2809f0-a968-11ef-9ea0-5f006b2534cb.png" alt="单例汇编.png">
+<figcaption aria-hidden="true">单例汇编.png</figcaption>
+</figure>
+<p>采用了线程安全的方式（使用 <code>__cxa_guard_acquire</code> 和
+<code>__cxa_guard_release</code>）来确保单例实例的初始化过程只会发生一次，避免多线程并发时的初始化问题。</p>
+<h2><span id="call_once-和-once_flag">call_once 和 once_flag</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">static</span> Singleton&amp; <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">static</span> std::once_flag m_flag; <span class="hljs-comment">// 必须得被实际修改，也就是说 once_flag 必须得是全局或静态</span><br>    std::<span class="hljs-built_in">call_once</span>(m_flag,[&amp;]()&#123;<br>      m_instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Singleton</span>();<br>    &#125;);<br>    <span class="hljs-keyword">return</span> *m_instance;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除拷贝构造和拷贝赋值</span><br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  <span class="hljs-comment">// 删除移动构造和移动赋值构造</span><br>  <span class="hljs-built_in">Singleton</span>(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">static</span> Singleton* m_instance;<br>&#125;;<br>Singleton* Singleton::m_instance = <span class="hljs-literal">nullptr</span>;<br></code></pre></td></tr></table></figure>
+<p>前面的那种 创建静态局部对象的方式不推荐，原因如下：</p>
+<ul>
+<li>在程序结束时，静态局部变量的析构函数会被调用。对于
+<strong>静态局部变量</strong>（即局部静态变量
+<code>static Singleton instance</code>），它们的析构时间通常是在
+<code>main</code> 函数或程序结束时，而这一点在多线程环境中可能引发潜在的
+<strong>析构顺序问题</strong>，尤其是在存在其他全局或静态对象的情况下。</li>
+<li>如果你的单例对象依赖于其他资源或全局对象，且这些资源在析构时被销毁，而
+<code>Singleton</code>
+被销毁时它们尚未销毁，就可能出现问题。例如，如果单例的析构过程中需要依赖其他全局对象时，可能会访问到已经销毁的资源。</li>
+</ul>
+<p>因此，我们这里用的是堆内存来创建的对象。那这个堆对象如何进行回收？进入下一个主题！</p>
+<h1><span id="单例对象自动释放">单例对象自动释放</span></h1>
+<h2><span id="call_once-和once_flag-结合-atexit线程安全">call_once 和
+once_flag 结合 atexit（线程安全）</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">static</span> Singleton* <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">static</span> std::once_flag m_flag;<br>    std::<span class="hljs-built_in">call_once</span>(m_flag,[&amp;]()&#123;<br>      m_instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Singleton</span>();<br>      <span class="hljs-built_in">atexit</span>(&amp;destroy);<br>    &#125;);<br>    <span class="hljs-keyword">return</span> m_instance;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除拷贝构造和拷贝赋值</span><br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  <span class="hljs-comment">// 删除移动构造和移动赋值构造</span><br>  <span class="hljs-built_in">Singleton</span>(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">if</span> (m_instance)&#123;<br>      <span class="hljs-keyword">delete</span> m_instance;<br>      m_instance = <span class="hljs-literal">nullptr</span>;<br>    &#125;<br>  &#125;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">static</span> Singleton* m_instance;<br>&#125;;<br>Singleton* Singleton::m_instance = <span class="hljs-literal">nullptr</span>;<br></code></pre></td></tr></table></figure>
+<p>我们在 call_once 中 调用 atexit 注册（保证只会被注册一次）自实现的
+destroy 方法回收静态对象指向的堆内存，可以确保程序结束会调用。</p>
+<figure>
+<img src="/images/2024/11/23/b52c7fa0-a968-11ef-9ea0-5f006b2534cb.png" alt="静态回收.png">
+<figcaption aria-hidden="true">静态回收.png</figcaption>
+</figure>
+<h1><span id="通用的单例模板类">通用的单例模板类</span></h1>
+<p>我们到这里已经解决线程安全问题，回收单例资源（通过堆创建的对象）。但是，每次要给某个类赋予单例的能力未免太麻烦，直接实现一个模板单例类，派生类继承之后调用
+getInstance 就可以得到单例了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">static</span> T* <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">static</span> std::once_flag m_flag;<br>    std::<span class="hljs-built_in">call_once</span>(m_flag,[&amp;]()&#123;<br>      m_instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">T</span>();<br>      <span class="hljs-built_in">atexit</span>(&amp;destroy);<br>    &#125;);<br>    <span class="hljs-keyword">return</span> m_instance;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除拷贝构造和拷贝赋值</span><br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  <span class="hljs-comment">// 删除移动构造和移动赋值构造</span><br>  <span class="hljs-built_in">Singleton</span>(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br> <span class="hljs-keyword">protected</span>:			<span class="hljs-comment">// 因为要继承，所以从 private 改为 protected</span><br>  <span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">if</span> (m_instance)&#123;<br>      <span class="hljs-keyword">delete</span> m_instance;<br>      m_instance = <span class="hljs-literal">nullptr</span>;<br>    &#125;<br>  &#125;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">static</span> T* m_instance;<br>&#125;;<br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br>T* Singleton&lt;T&gt;::m_instance = <span class="hljs-literal">nullptr</span>;<br></code></pre></td></tr></table></figure>
+<p>如何使用？</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> : <span class="hljs-keyword">public</span> Singleton&lt;Student&gt; &#123;<br>  <span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&lt;Student&gt;;<br> <span class="hljs-keyword">public</span>:<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-built_in">Student</span>() &#123;<br>    cout &lt;&lt; <span class="hljs-string">&quot;Student&quot;</span> &lt;&lt; endl;<br>  &#125;<br>  ~<span class="hljs-built_in">Student</span>()&#123;<br>   cout &lt;&lt; <span class="hljs-string">&quot;~Student&quot;</span> &lt;&lt; endl;<br> &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>然后 Student 就可以调用 getInstance 获取单例对象了。</p>
+<h1><span id="引入智能指针">引入智能指针</span></h1>
+<p>利用智能指针把 atexit 优化掉。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">static</span> std::shared_ptr&lt;T&gt; <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">static</span> std::once_flag m_flag;<br>    std::<span class="hljs-built_in">call_once</span>(m_flag,[&amp;]()&#123;<br>      m_instance = std::<span class="hljs-built_in">make_shared</span>&lt;T&gt;();<br>    &#125;);<br>    <span class="hljs-keyword">return</span> m_instance;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除拷贝构造和拷贝赋值</span><br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  <span class="hljs-comment">// 删除移动构造和移动赋值构造</span><br>   <span class="hljs-built_in">Singleton</span>(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>   Singleton&amp; <span class="hljs-keyword">operator</span>=(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-type">static</span> std::shared_ptr&lt;T&gt; m_instance;<br>&#125;;<br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br>std::shared_ptr&lt;T&gt; Singleton&lt;T&gt;::m_instance = <span class="hljs-literal">nullptr</span>;<br></code></pre></td></tr></table></figure>
+<h1><span id="如果使用-unique_ptr">如果使用 unique_ptr</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">static</span> std::unique_ptr&lt;T&gt; <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">static</span> std::once_flag m_flag;<br>    std::<span class="hljs-built_in">call_once</span>(m_flag,[&amp;]()&#123;<br>      m_instance = std::<span class="hljs-built_in">make_unique</span>&lt;T&gt;();<br>    &#125;);<br>    <span class="hljs-keyword">return</span> m_instance;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除拷贝构造和拷贝赋值</span><br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  <span class="hljs-comment">// 删除移动构造和移动赋值构造</span><br>   <span class="hljs-built_in">Singleton</span>(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>   Singleton&amp; <span class="hljs-keyword">operator</span>=(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-type">static</span> std::unique_ptr&lt;T&gt; m_instance;<br>&#125;;<br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br>std::unique_ptr&lt;T&gt; Singleton&lt;T&gt;::m_instance = <span class="hljs-literal">nullptr</span>;<br></code></pre></td></tr></table></figure>
+<p>unique智能指针本身就已经删除拷贝构造和拷贝赋值，当我们
+<code>return m_instance</code> 的时候会触发拷贝构造，进而出现错误。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Test</span><span class="hljs-params">()</span></span>&#123;<br>  Student::<span class="hljs-built_in">getInstance</span>();	<span class="hljs-comment">// 报错</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>所以我们返回的时候，通过 move 返回就可以使用了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">static</span> std::unique_ptr&lt;T&gt; <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">static</span> std::once_flag m_flag;<br>	std::<span class="hljs-built_in">call_once</span>( m_flag, [&amp;]() &#123;<br>				m_instance = std::<span class="hljs-built_in">make_unique</span>&lt;T&gt;();<br>			&#125; );<br>	<span class="hljs-keyword">return</span>(std::<span class="hljs-built_in">move</span>( m_instance ) );	<span class="hljs-comment">// move</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>但是，我们不会用 unique
+来管理我们的单例类，因为通常我们需要把单例类对象交给多个人使用。单例是保证只生成一个对象，但是并非希望某时刻只能由一个类使用，因此共享智能指针管理是我们想要的。</p>
+<p>除非你能保证这个单例类永远只在当前类使用，那就没问题，毕竟 unique_ptr
+比 shared_ptr 更轻量。</p>
+<h1><span id="智能指针-和-atexit-比较">智能指针 和 atexit 比较 ？</span></h1>
+<p>智能指针存在被误用导致的双重 delete 问题 或 free 问题，但是 atexit
+没有，因为它注册的 destory
+函数会检查。但是这个优点智能指针不是不可以做到，只需要把下面的方法注册为智能指针的删除器即可。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> ( m_instance )<br>	&#123;<br>		<span class="hljs-keyword">delete</span> m_instance;<br>		m_instance = <span class="hljs-literal">nullptr</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>再有就是我们智能指针管理会有多个指针对一个堆对象进行管理以及引用计数资源，但是采用
+atexit
+来管理单例资源就只需要一个指针，也没有额外的引用计数资源要考虑，空间利用上
+atexit 也更合理。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">static</span> T* <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">static</span> std::once_flag m_flag;<br>    std::<span class="hljs-built_in">call_once</span>(m_flag,[&amp;]()&#123;<br>      m_instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">T</span>();<br>      <span class="hljs-built_in">atexit</span>(&amp;destroy);<br>    &#125;);<br>    <span class="hljs-keyword">return</span> m_instance;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除拷贝构造和拷贝赋值</span><br>  <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton&amp;) = <span class="hljs-keyword">delete</span>;<br>  <span class="hljs-comment">// 删除移动构造和移动赋值构造</span><br>  <span class="hljs-built_in">Singleton</span>(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>  Singleton&amp; <span class="hljs-keyword">operator</span>=(Singleton&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  ~<span class="hljs-built_in">Singleton</span>() = <span class="hljs-keyword">default</span>;<br>  <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">if</span> (m_instance)&#123;<br>      <span class="hljs-keyword">delete</span> m_instance;<br>      m_instance = <span class="hljs-literal">nullptr</span>;<br>    &#125;<br>  &#125;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">static</span> T* m_instance;<br>&#125;;<br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br>T* Singleton&lt;T&gt;::m_instance = <span class="hljs-literal">nullptr</span>;<br></code></pre></td></tr></table></figure>
+<h1><span id="产生的愚蠢想法">产生的愚蠢想法</span></h1>
+<h2><span id="返回-m_instance是调用的什么函数">返回 m_instance
+是调用的什么函数？</span></h2>
+<p>我的意思是已经把 拷贝构造/拷贝赋值/移动构造/移动赋值 都 delete
+了，这里不是要触发拷贝构造？</p>
+<p>但是这里弄混了，<code>m_instance</code> 是一个
+<code>std::shared_ptr&lt;T&gt;</code>，而 <code>std::shared_ptr</code>
+实现了智能指针的拷贝和移动语义。</p>
+<p>具体来说：</p>
+<ol type="1">
+<li><strong>拷贝构造和拷贝赋值</strong>：<code>std::shared_ptr</code>
+会通过引用计数的方式共享对象，<strong>而不是拷贝对象本身</strong>。当
+<code>shared_ptr</code>
+被拷贝时，拷贝的只是智能指针的控制块（包含引用计数等信息），不会触发原对象的拷贝构造。因此，<code>return m_instance;</code>
+会将 <code>m_instance</code> 中保存的
+<code>std::shared_ptr&lt;T&gt;</code> 返回，并不会拷贝实际的
+<code>T</code> 对象，<strong>只是增加引用计数</strong>。</li>
+<li><strong>移动构造和移动赋值</strong>：如果 <code>m_instance</code>
+是通过移动构造或移动赋值创建的（例如在某些优化情况下，编译器可能会选择使用移动语义），它会转移对原对象的所有权，而不是拷贝。移动语义会转移
+<code>shared_ptr</code> 的控制权，而不会拷贝管理的资源。</li>
+</ol>
+<p>在你提供的代码中，<code>std::shared_ptr&lt;T&gt; m_instance;</code>
+在 <code>getInstance</code> 中返回时，<code>m_instance</code>
+的引用计数被递增，但没有涉及到原始对象的构造、复制、赋值或销毁过程，智能指针只是通过引用计数机制确保资源在多个地方共享。</p>
+<p>所以，<code>return m_instance;</code>
+在这里不会触发任何的拷贝或移动构造/赋值，只有智能指针本身的管理机制（即引用计数）会发生变化。</p>
+<p> </p>
+<p>再者，抛开智能指针，这里也不会发生拷贝构造，因为这是静态对象。</p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/%E6%8B%B7%E8%B4%9D%E8%B5%8B%E5%80%BC%E5%87%BD%E6%95%B0/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>拷贝赋值函数</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/%E5%BA%8F%E5%88%97%E5%BC%8F%E5%AE%B9%E5%99%A8/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      序列式容器
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\C-中的多态\" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\C-中的友元类\" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\C-杂谈（一）\" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>

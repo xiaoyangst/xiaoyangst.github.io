@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        第四章：并发 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">第四章：并发</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a><a href="/tags/OS/" class="post-tag">#OS</a>
+
+
+          <span class="post-date">2024-08-22</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#并发介绍">并发：介绍</a></li>
+<li><a href="#锁">锁</a></li>
+<li><a href="#条件变量">条件变量</a></li>
+<li><a href="#信号量">信号量</a></li>
+<li><a href="#常见并发问题">常见并发问题</a></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="并发介绍">并发：介绍</span></h2>
+<p>同一进程下的多线程共享内存地址，对同一块内存地址的读不会引发数据竞争，但是修改会引发数据竞争。常用的办法是加锁保护临界区或保证修改的动作是原子的。</p>
+<p>原子性是指当指令执行时，它会像期望那样执行更新。它不能在指令中间中断，因为这正是我们从硬件获得的保证：发生中断时，指令根本没有运行，或者运行完成，没有中间状态。</p>
+<figure>
+<img src="/images/2024/08/22/d02433f0-606d-11ef-b5d8-395e250ad2a7.png" alt="多线程.png">
+<figcaption aria-hidden="true">多线程.png</figcaption>
+</figure>
+<h2><span id="锁">锁</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++">没有加锁<br>    balance = balance + <span class="hljs-number">1</span>;<br><br>加锁<br>    <span class="hljs-type">lock_t</span> mutex; <br>    ...<br>    <span class="hljs-built_in">lock</span>(&amp;mutex); <br>    balance = balance + <span class="hljs-number">1</span>; 	<br>    <span class="hljs-built_in">unlock</span>(&amp;mutex);<br></code></pre></td></tr></table></figure>
+<p>没有加锁前，balance = balance + 1
+这个指令可以被多线程同时访问；加锁之后，保证只有一个线程访问到 balance =
+balance + 1 指令，确保 balance 的值正确 加 1，不会遗漏。</p>
+<p><strong>锁就是一个变量</strong>，因此我们需要声明一个某种类型的锁变量（lock
+variable，如上面的mutex），才能使用。这个<strong>锁变量（简称锁）保存了锁在某一时刻的状态</strong>。它要么是可用的（available，或
+unlocked，或 free），表示没有线程持有锁，要么是被占用的（acquired，或
+locked，或
+held），表示有一个线程持有锁，正处于临界区。我们也可以保存其他的信息，比如持有锁的线程，或请求获取锁的线程队列，但这些信息会隐藏起来，锁的使用者不会发现。</p>
+<p>lock 和 unlock
+函数会传入一个变量，因为我们可能用不同的锁来保护不同的变量。这样可以增加并发：不同于任何临界区都使用同一个大锁（粗粒度的锁策略），通常大家会用不同的锁保护不同的数据和结构，从而允许更多的线程进入临界区（细粒度的方案）。</p>
+<p>调用
+lock()尝试获取锁，如果没有其他线程持有锁（即它是可用的），该线程会获得锁，进入临界区。这个线程有时被称为锁的持有者（owner）。如果另外一个线程对相同的锁变量（本例中的
+mutex）调用
+lock()，因为锁被另一线程持有，该调用不会返回。这样，当持有锁的线程在临界区时，其他线程就无法进入临界区。</p>
+<p>锁的持有者一旦调用
+unlock()，锁就变成可用了。如果没有其他等待线程（即没有其他线程调用过
+lock()并卡在那里），锁的状态就变成可用了。如果有等待线程（卡在
+lock()里），其中一个会（最终）注意到（或收到通知）锁状态的变化，获取该锁，进入临界区。</p>
+<p>锁为程序员提供了最小程度的调度控制。我们把线程视为程序员创建的实体，但是被操作系统调度，具体方式由操作系统选择。<strong>锁让程序员获得一些控制权</strong>。通过给临界区加锁，可以保证临界区内只有一个线程活跃。<strong>锁将原本由操作系统调度的混乱状态变得更为可控</strong>。</p>
+<h2><span id="条件变量">条件变量</span></h2>
+<p>线程可以使用条件变量（condition
+variable），来等待一个条件变成真。条件变量是一个显式队列，当某些执行状态（即条件，condition）不满足时，线程可以把自己加入队列，等待（waiting）该条件。另外某个线程，当它改变了上述状态时，就可以唤醒一个或者多个等待线程（通过在该条件上发信号），让它们继续执行。</p>
+<p>条件变量有两种相关操作：wait()和
+signal()。线程要睡眠的时候（等待条件被满足，条件满足会被唤醒，即后面的signal指令），调用
+wait()。当线程想唤醒等待在某个条件变量上的睡眠线程时，调用
+signal()。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-comment">// 定义全局变量和同步原语</span><br><span class="hljs-type">int</span> done = <span class="hljs-number">0</span>;<br><span class="hljs-type">pthread_mutex_t</span> m = PTHREAD_MUTEX_INITIALIZER;<br><span class="hljs-type">pthread_cond_t</span> c = PTHREAD_COND_INITIALIZER;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">thr_exit</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-built_in">pthread_mutex_lock</span>(&amp;m);  <span class="hljs-comment">// 锁住互斥锁</span><br>    done = <span class="hljs-number">1</span>;               <br>    <span class="hljs-built_in">pthread_cond_signal</span>(&amp;c); <span class="hljs-comment">// 发出条件变量信号</span><br>    <span class="hljs-built_in">pthread_mutex_unlock</span>(&amp;m); <span class="hljs-comment">// 解锁互斥锁</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> *<span class="hljs-title">child</span><span class="hljs-params">(<span class="hljs-type">void</span> *arg)</span> </span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;child\n&quot;</span>);<br>    <span class="hljs-built_in">thr_exit</span>();<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">thr_join</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-built_in">pthread_mutex_lock</span>(&amp;m); <span class="hljs-comment">// 锁住互斥锁</span><br>    <span class="hljs-keyword">while</span> (done == <span class="hljs-number">0</span>) &#123;     <span class="hljs-comment">// 等待条件满足</span><br>        <span class="hljs-built_in">pthread_cond_wait</span>(&amp;c, &amp;m); <span class="hljs-comment">// 等待条件变量信号</span><br>    &#125;<br>    <span class="hljs-built_in">pthread_mutex_unlock</span>(&amp;m); <span class="hljs-comment">// 解锁互斥锁</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> </span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;parent: begin\n&quot;</span>);<br>    <span class="hljs-type">pthread_t</span> p;<br>    <span class="hljs-built_in">pthread_create</span>(&amp;p, <span class="hljs-literal">NULL</span>, child, <span class="hljs-literal">NULL</span>); <span class="hljs-comment">// 创建子线程</span><br>    <span class="hljs-built_in">thr_join</span>(); <span class="hljs-comment">// 等待子线程完成</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;parent: end\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>你可能注意到一点，wait()调用有一个参数，它是互斥量。它假定在
+wait()调用时，这个互斥量是已上锁状态。wait()的职责是释放锁，并让调用线程休眠（原子地）。当线程被唤醒时（在另外某个线程发信号给它后），它必须重新获取锁，再返回调用者。这样复杂的步骤也是为了避免在线程陷入休眠时，产生一些竞态条件。</p>
+<h2><span id="信号量">信号量</span></h2>
+<p>信号量是有一个整数值的对象，可以用两个函数来操作它。在 POSIX
+标准中，是 sem_wait() 和
+sem_post()。因为信号量的初始值能够决定其行为，所以首先要初始化信号量，才能调用其他函数与之交互。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;semaphore.h&gt;</span> </span><br><span class="hljs-type">sem_t</span> s; <br><span class="hljs-built_in">sem_init</span>(&amp;s, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+<p>其中申明了一个信号量 s，通过第三个参数，将它的值初始化为
+1。sem_init() 的第二个参数，在我们看到的所有例子中都设置为
+0，表示信号量是在同一进程的多个线程共享的。</p>
+<p>信号量初始化之后，我们可以调用 sem_wait()或 sem_post()与之交互：</p>
+<ul>
+<li>首先，sem_wait()要么立刻返回（调用 sem_wait()时，信号量的值大于等于
+1），要么会让调用线程挂起，直到之后的一个 post
+操作。当然，也可能多个调用线程都调用
+sem_wait()，因此都在队列中等待被唤醒</li>
+<li>其次，sem_post()并没有等待某些条件满足。它直接增加信号量的值，如果有等待线程，唤醒其中一个</li>
+<li>最后，当信号量的值为负数时，这个值就是等待线程的个数。虽然这个值通常不会暴露给信号量的使用者，但这个恒定的关系值得了解，可能有助于记住信号量的工作原理</li>
+</ul>
+<p>下面开始应用信号量</p>
+<p>（一）用信号量作为锁</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">sem_t</span> m; <br><span class="hljs-built_in">sem_init</span>(&amp;m, <span class="hljs-number">0</span>, X); <span class="hljs-comment">// initialize semaphore to X; what should X be? </span><br><br><span class="hljs-built_in">sem_wait</span>(&amp;m); <br><span class="hljs-comment">// 临界区</span><br><span class="hljs-built_in">sem_post</span>(&amp;m);<br></code></pre></td></tr></table></figure>
+<p>我们直接把临界区用一对
+sem_wait()/sem_post()环绕。但是，为了使这段代码正常工作，信号量 m
+的初始值（图中初始化为 <em>X</em>）是至关重要的。<em>X</em>
+应该是多少呢？</p>
+<p>如果信号量 m 的初始化值 X 初始化为 1，线程 A 调用 sem_wait()
+不会阻塞，调用之后会将 X -
+1，并进入临界区。其它线程如果想要进入临界区，发现 X 为
+0，会阻塞在临界区之外，因为X 为 0 ，sem_wait()会阻塞。线程
+A已经进入临界区，完成相关操作之后，继续执行到 sem_post()，调用之后 X +
+1，这个时候 X = 1，其它线程调用sem_wait()
+不会阻塞，会有其中一个线程会被允许进入临界区。综上所述，X 初始化为 1
+能够通过信号量实现锁的功能，因为锁只有两个状态（持有和没持有），所以这种用法有时也叫作二值信号量（binary
+semaphore）。</p>
+<p>（二）用信号量作为条件变量</p>
+<p>信号量也可以用在一个线程暂停执行，等待某一条件成立的场景。例如，一个线程要等待一个链表非空，然后才能删除一个元素。在这种场景下，通常一个线程等待条件成立，另外一个线程修改条件并发信号给等待线程，从而唤醒等待线程。因为等待线程在等待某些条件（condition）发生变化，所以我们将信号量作为条件变量（condition
+variable）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;semaphore.h&gt;</span></span><br><br><span class="hljs-comment">// 全局信号量</span><br><span class="hljs-type">sem_t</span> s;<br><br><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-title">child</span><span class="hljs-params">(<span class="hljs-type">void</span>* arg)</span> </span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;child\n&quot;</span>);<br>    <span class="hljs-built_in">sem_post</span>(&amp;s); <span class="hljs-comment">// 子线程完成后发出信号</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> </span>&#123;<br>    <span class="hljs-comment">// 初始化信号量，初始值为0</span><br>    <span class="hljs-built_in">sem_init</span>(&amp;s, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;parent: begin\n&quot;</span>);<br><br>    <span class="hljs-type">pthread_t</span> c;<br>    <span class="hljs-built_in">pthread_create</span>(&amp;c, <span class="hljs-literal">NULL</span>, child, <span class="hljs-literal">NULL</span>); <span class="hljs-comment">// 创建子线程</span><br><br>    <span class="hljs-built_in">sem_wait</span>(&amp;s); <span class="hljs-comment">// 等待子线程完成</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;parent: end\n&quot;</span>);<br><br>    <span class="hljs-comment">// 销毁信号量</span><br>    <span class="hljs-built_in">sem_destroy</span>(&amp;s);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>利用信号量实现父进程等待子进程再退出的功能，即父进程等待一个条件，如果条件满足就往下执行代码。比方说这里初始化信号量的值为
+0，创建一个子线程去执行内部代码，主线程调用 sem_wait 等待子线程调用
+sem_post之后才解除阻塞，才继续往下执行。</p>
+<hr>
+<p>信号量还可以用于解决生产者/消费者问题，互斥锁+条件变量同样可以用于解决生产者/消费者问题。实际上，我们完全可以利用互斥锁+条件变量封装出信号量。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">int</span> count;<br>    <span class="hljs-type">pthread_mutex_t</span> mutex;<br>    <span class="hljs-type">pthread_cond_t</span> cond;<br>&#125; Semaphore;<br><br><span class="hljs-comment">// 初始化信号量</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">sem_init</span><span class="hljs-params">(Semaphore *sem, <span class="hljs-type">int</span> value)</span> &#123;<br>    sem-&gt;count = value;<br>    pthread_mutex_init(&amp;sem-&gt;mutex, <span class="hljs-literal">NULL</span>);<br>    pthread_cond_init(&amp;sem-&gt;cond, <span class="hljs-literal">NULL</span>);<br>&#125;<br><br><span class="hljs-comment">// 等待信号量</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">sem_wait</span><span class="hljs-params">(Semaphore *sem)</span> &#123;<br>    pthread_mutex_lock(&amp;sem-&gt;mutex);<br>    <span class="hljs-keyword">while</span> (sem-&gt;count == <span class="hljs-number">0</span>) &#123;<br>        pthread_cond_wait(&amp;sem-&gt;cond, &amp;sem-&gt;mutex);<br>    &#125;<br>    sem-&gt;count--;<br>    pthread_mutex_unlock(&amp;sem-&gt;mutex);<br>&#125;<br><br><span class="hljs-comment">// 发出信号</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">sem_post</span><span class="hljs-params">(Semaphore *sem)</span> &#123;<br>    pthread_mutex_lock(&amp;sem-&gt;mutex);<br>    sem-&gt;count++;<br>    pthread_cond_signal(&amp;sem-&gt;cond);<br>    pthread_mutex_unlock(&amp;sem-&gt;mutex);<br>&#125;<br><br><span class="hljs-comment">// 销毁信号量</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">sem_destroy</span><span class="hljs-params">(Semaphore *sem)</span> &#123;<br>    pthread_mutex_destroy(&amp;sem-&gt;mutex);<br>    pthread_cond_destroy(&amp;sem-&gt;cond);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="常见并发问题">常见并发问题</span></h2>
+<figure>
+<img src="/images/2024/08/22/f0219850-606d-11ef-b5d8-395e250ad2a7.png" alt="现代应用程序的缺陷统计.png">
+<figcaption aria-hidden="true">现代应用程序的缺陷统计.png</figcaption>
+</figure>
+<p>我们现在来深入分析这两种类型的缺陷。对于第一类非死锁的缺陷，我们通过该研究的例子来讨论。对于第二类死锁缺陷，我们讨论人们在阻止、避免和处理死锁上完成的大量工作。</p>
+<p>（一）非死锁缺陷</p>
+<p>我们现在主要讨论其中两种：违反原子性缺陷和错误顺序缺陷</p>
+<p>违反原子性可以加锁，错误顺序可以用条件变量</p>
+<p>（二）死锁缺陷</p>
+<p>双方各持有对方所需的资源，同时不会为了满足对方需求而自动释放来满足对方的需求，导致死锁（僵持不下，代码无法推进），对方更不可能从自己的手中抢占资源来满足个人，然后彼此傻傻等待需求被满足（即对方把资源释放）。</p>
+<figure>
+<img src="/images/2024/08/22/e95cce90-606d-11ef-b5d8-395e250ad2a7.png" alt="死锁.png">
+<figcaption aria-hidden="true">死锁.png</figcaption>
+</figure>
+<p>死锁的产生需要如下 4 个条件：</p>
+<ul>
+<li>互斥：线程对于需要的资源进行互斥的访问（例如一个线程抢到锁）</li>
+<li>持有并等待：线程持有了资源（例如已将持有的锁），同时又在等待其他资源（例如，需要获得的锁）</li>
+<li>非抢占：线程获得的资源（例如锁），不能被抢占</li>
+<li>循环等待：线程之间存在一个环路，环路上每个线程都额外持有一个资源，而这个资源又是下一个线程要申请的</li>
+</ul>
+<p><strong>如上 4
+个条件的任何一个没有满足，死锁就不会产生</strong>。因此，我们首先研究一下预防死锁的方法；每个策略都设法阻止某一个条件，从而解决死锁的问题。</p>
+<p>（一）破坏互斥</p>
+<p>通过强大的硬件指令，我们可以构造出不需要锁的数据结构。</p>
+<p>（二）破坏持有并等待</p>
+<p>通过原子地抢锁来避免</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">lock</span>(prevention); <br><span class="hljs-built_in">lock</span>(L1); <br><span class="hljs-built_in">lock</span>(L2); <br>... <br><span class="hljs-built_in">unlock</span>(prevention);<br></code></pre></td></tr></table></figure>
+<p>先抢到 prevention
+这个锁之后，代码保证了在抢锁的过程中，不会有不合时宜的线程切换，从而避免了死锁。当然，这需要任何线程在任何时候抢占锁时，先抢到全局的
+prevention锁。但是这种方法存在的问题是，你需要知道所有的锁，来保证所有锁的申请被
+lock，不适宜于封装。</p>
+<p>（三）破坏非抢占</p>
+<p>trylock()函数会尝试获得锁，或者返回−1，表示锁已经被占有。你可以稍后重试一下。</p>
+<p>注意，另一个线程可以使用相同的加锁方式，但是不同的加锁顺序（L2 然后
+L1），程序仍然不会产生死锁。但是会引来一个新的问题：活锁（livelock）。两个线程有可能一直重复这一序列，又同时都抢锁失败。这种情况下，系统一直在运行这段代码（因此不是死锁），但是又不会有进展，因此名为活锁。也有活锁的解决方法：例如，可以在循环结束的时候，先随机等待一个时间，然后再重复整个动作，这样可以降低线程之间的重复互相干扰。</p>
+<p>关于这个方案的最后一点：使用 trylock
+方法可能会有一些困难。第一个问题仍然是封装：如果其中的某一个锁，是封装在函数内部的，那么这个跳回开始处就很难实现。如果代码在中途获取了某些资源，必须要确保也能释放这些资源。例如，在抢到
+L1 后，我们的代码分配了一些内存，当抢 L2
+失败时，并且在返回开头之前，需要释放这些内存。当然，在某些场景下，这种方法很有效。</p>
+<p>（四）破坏循环等待</p>
+<p>最直接的方法就是获取锁时提供一个全序（total
+ordering）。假如系统共有两个锁（L1 和 L2），那么我们每次都先申请 L1
+然后申请
+L2，就可以避免死锁。这样严格的顺序避免了循环等待，也就不会产生死锁。但是这种方法存在的问题是，你需要知道所有的锁，来保证申请锁的顺序，不适宜于封装。</p>
+<hr>
+<p>⭐️内容取自译者王海鹏《操作系统导论》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书</p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>第五章：文件系统</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      第三章：内存虚拟化
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a><a href="/tags/OS/" class="post-tag">#OS</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\第一章：操作系统概述\" title="第一章：操作系统概述" rel="bookmark">第一章：操作系统概述</a></div></div><div class="null-item"><div class="null-title"><a href="\第三章：内存虚拟化\" title="第三章：内存虚拟化" rel="bookmark">第三章：内存虚拟化</a></div></div><div class="null-item"><div class="null-title"><a href="\第二章：CPU虚拟化\" title="第二章：CPU虚拟化" rel="bookmark">第二章：CPU虚拟化</a></div></div><div class="null-item"><div class="null-title"><a href="\AOF持久化\" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\Base64-和-MD5-的使用\" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
