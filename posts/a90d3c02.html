@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        C++中的多态 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">C++中的多态</div>
+        <div class="post-info">
+          
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+
+          <span class="post-date">2024-12-02</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#虚函数">虚函数</a>
+<ul>
+<li><a href="#实现原理">实现原理</a>
+<ul>
+<li><a href="#虚函数指针">虚函数指针</a></li>
+<li><a href="#虚函数的覆盖">虚函数的覆盖</a></li>
+<li><a href="#重载-隐藏-覆盖的区分">重载、隐藏、覆盖的区分</a></li>
+<li><a href="#动态多态虚函数机制被激活的条件">动态多态（虚函数机制）被激活的条件</a></li>
+<li><a href="#虚函数表">虚函数表</a></li>
+<li><a href="#常见问题">常见问题</a></li>
+</ul></li>
+<li><a href="#虚函数的限制">虚函数的限制</a></li>
+<li><a href="#虚函数各种访问情况">虚函数各种访问情况</a></li>
+<li><a href="#抽象类">抽象类</a>
+<ul>
+<li><a href="#纯虚函数">纯虚函数</a></li>
+<li><a href="#只定义了protected型构造函数的类">只定义了protected型构造函数的类</a></li>
+</ul></li>
+<li><a href="#析构函数定义为虚函数">析构函数定义为虚函数</a></li>
+<li><a href="#带虚函数的多继承">带虚函数的多继承</a>
+<ul>
+<li><a href="#内存布局">内存布局</a></li>
+<li><a href="#带虚函数的多重继承的二义性">带虚函数的多重继承的二义性</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#虚继承">虚继承</a>
+<ul>
+<li><a href="#虚函数-与-虚继承">虚函数 与 虚继承</a></li>
+<li><a href="#虚拟继承时派生类对象的构造和析构">虚拟继承时派生类对象的构造和析构</a></li>
+<li><a href="#效率分析">效率分析</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="虚函数">虚函数</span></h1>
+<p>虚函数的定义：在一个成员函数的前面加上 virtual
+关键字，该函数就成为虚函数。</p>
+<p>用基类指针指向派生类对象后，通过这个基类对象竟然可以调用派生类的成员函数。而且，基类和派生类对象所占空间的大小都改变了，说明其内存结构发生了变化。</p>
+<figure>
+<img src="/images/2024/12/02/7f637200-b0a9-11ef-9861-0fd0602585dc.png" alt="多态01.png">
+<figcaption aria-hidden="true">多态01.png</figcaption>
+</figure>
+<h2><span id="实现原理">实现原理</span></h2>
+<h3><span id="虚函数指针">虚函数指针</span></h3>
+<p>有虚函数的类会有一张虚函数表（本质是一个数组），那么此类（基类）及其派生类的<font color="red">对象</font>会有一个虚函数指针，这个指针指向自己归属的类拥有的那张虚函数表（简称虚表），<font color="red">其中存放的是虚函数的入口地址。</font></p>
+<p><font color="red">至于派生类会有多少张虚表，可以提前预告，即当下我们讨论的是单继承，那派生类肯定就是只有一张虚表，但到后面讲到派生类继承多个含有虚函数的基类的时候，派生类可就不止一张虚表了。</font></p>
+<p>Derived 继承了 Base 类，那么创建一个 Derived 对象，依然会创建出一个
+Base 类的基类子对象。</p>
+<p>如果说 Derived（派生类）没有自己定义 display
+（重名的函数，且基类中为虚函数），那么 Derived
+对象的虚函数指针指向的虚函数表（这张虚函数表和基类完全一致，但是属于派生类自己的），虚表中指向的就是基类的
+display，就是 Derived 从基类那里继承来的。</p>
+<figure>
+<img src="/images/2024/12/02/86e08f40-b0a9-11ef-9861-0fd0602585dc.png" alt="多态02.png">
+<figcaption aria-hidden="true">多态02.png</figcaption>
+</figure>
+<p>如果在 Derived 类中定义了 display
+函数，就会发生覆盖机制（override），<font color="red">覆盖的是虚函数表中虚函数的入口地址。</font>也就是用自己的
+display 函数覆盖掉之前从 基类那里继承来的 display 函数。</p>
+<figure>
+<img src="/images/2024/12/02/8c9d37d0-b0a9-11ef-9861-0fd0602585dc.png" alt="多态03.png">
+<figcaption aria-hidden="true">多态03.png</figcaption>
+</figure>
+<p>Base* p 去指向 Derived 对象，用指针 p 去调用 display
+函数，发现是一个虚函数，那么会<font color="red">通过 vfptr
+找到虚表</font>，此时虚表中存放的是 Derived::display
+的入口地址，所以调用到 Derived 的 display 函数。</p>
+<p>至此，我们可以明确以下观点：<font color="red">单继承情况下</font></p>
+<ol type="1">
+<li>含有虚函数的类会有一张虚函数表，此类的实例化对象共享这张虚函数表，这些实例化对象会有一个虚函数指针，实例化对象就是通过虚函数指针找到这张虚函数表。</li>
+<li>派生类继承基类（含有虚函数）之后，不管有没有重写虚函数，派生类都会拥有自己的一张虚函数表。</li>
+<li>如果派生类不重写基类的虚函数，那么自己的虚函数表就和基类的虚函数表别无二致。如果派生类重写基类的虚函数，那么重写的部分就会覆盖基类的虚函数（覆盖的是虚函数表中的入口地址，并不是覆盖函数本身），没有重写的依旧和基类的别无二致。</li>
+<li>类（含有虚函数）的实例化对象的虚函数指针永远是指向自己的类的虚表。</li>
+</ol>
+<h3><span id="虚函数的覆盖">虚函数的覆盖</span></h3>
+<p>如果一个基类的成员函数定义为虚函数，那么它在所有派生类中也保持为虚函数，即使在派生类中省略了
+virtual
+关键字，也仍然是虚函数。虚函数一般用于灵活拓展，所以需要派生类中对此虚函数进行覆盖。覆盖的格式有一定的要求：</p>
+<ul>
+<li>与基类的虚函数有相同的函数名</li>
+<li>与基类的虚函数有相同的参数个数</li>
+<li>与基类的虚函数有相同的参数类型</li>
+<li>与基类的虚函数有相同的返回类型</li>
+</ul>
+<p>总结一句话，要和基类的虚函数完全一致（但不需要加 virtual
+关键字，前面刚刚讲编译器会自动处理这件事情）。</p>
+<p>正因为这个强要求，为了避免程序员犯错，C++提供一个关键字
+override，能辅助我们。</p>
+<p><font color="red">在虚函数的函数参数列表之后，函数体的大括号之前，加上
+override
+关键字，告诉编译器此处定义的函数是要对基类的虚函数进行覆盖。</font></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">public</span> Base<br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">display</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span>；</span><br><span class="hljs-function">&#125;</span>;<br></code></pre></td></tr></table></figure>
+<p>这个时候你在派生类的源文件中去定义，如果和基类的虚函数不匹配就会报错，这就是
+C++ 提供给我们的检测手段。</p>
+<h3><span id="重载-隐藏-覆盖的区分">重载、隐藏、覆盖的区分</span></h3>
+<p>我们要和重载进行区分。重载发生在一个类中，覆盖发生在继承关系且还有
+virtual
+关键字的类中。重载是<font color="red">同名函数且参数列表不同</font>，覆盖是<font color="red">同名函数+参数列表+返回类型相同</font>。</p>
+<p>那么隐藏呢？隐藏是发生在继承关系的类中，只要函数名相同就会发生隐藏行为，把基类的同名函数隐藏，进而调用自己的。</p>
+<h3><span id="动态多态虚函数机制被激活的条件">动态多态（虚函数机制）被激活的条件</span></h3>
+<p>虚函数机制是如何被激活的呢，或者说动态多态是怎么表现出来的呢？其实激活条件还是比较严格的，需要满足以下全部要求：</p>
+<ol type="1">
+<li>基类定义虚函数（这是最基本的）</li>
+<li><font color="red">派生类中要覆盖虚函数
+</font>（覆盖的是虚函数表中的地址信息，不然你只是全部调用基类中继承过来的虚函数，而没有覆盖行为，那不就只是调用基类的虚函数吗？没有同一个接口调用而呈现不同的行为的现象，谈何动态多态？）</li>
+<li>创建派生类对象（没有派生类，我还玩个鸡毛）</li>
+<li>基类的指针指向派生类对象（或基类引用绑定派生类对象）</li>
+<li><font color="red">通过基类指针（引用）调用虚函数</font>（如果你是通过派生类指针，那你必然是调用自己的成员函数，没有动态多态可言）</li>
+</ol>
+<p>最终的效果：基类指针调用到了派生类实现的虚函数。（如果没有虚函数机制，基类指针只能调用到基类的成员函数）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++">Base* basePtr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Derived</span>();          <span class="hljs-comment">/* 基类指针指向派生类对象 */</span><br>basePtr-&gt;<span class="hljs-built_in">display</span>();                    	<span class="hljs-comment">/* 调用的是派生类的 display() */</span><br><br>Base* basePtr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Base</span>();             <span class="hljs-comment">/* 基类指针指向基类对象 */</span><br>basePtr-&gt;<span class="hljs-built_in">display</span>();                     <span class="hljs-comment">/* 调用基类的方法 */</span><br><br>Derived* derivedPtr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Derived</span>();    <span class="hljs-comment">/* 派生类指针指向派生类对象 */</span><br>derivedPtr-&gt;<span class="hljs-built_in">display</span>();                  <span class="hljs-comment">/* 调用派生类的方法 */</span><br></code></pre></td></tr></table></figure>
+<h3><span id="虚函数表">虚函数表</span></h3>
+<p><strong>在虚函数机制中 virtual 关键字的含义</strong></p>
+<p>1、虚函数是<strong>存在</strong>的</p>
+<p>2、通过<strong>间接</strong>的方式去访问</p>
+<p>3、通过基类的指针访问到派生类的函数，基类的指针<strong>共享</strong>了派生类的方法</p>
+<p>如果没有虚函数，当通过 pbase
+指针去调用一个普通的成员函数，那么就不会通过虚函数指针和虚表，直接到程序代码区中找到该函数。</p>
+<p>有了虚函数，去找这个虚函数的方式就成了间接的方式。</p>
+<h3><span id="常见问题">常见问题</span></h3>
+<p><strong>1、虚表存放在哪里？</strong></p>
+<p>编译完成时，虚表应该已经存在；在使用的过程中，虚函数表不应该被修改掉（如果能修改，将会找不到对应的虚函数）——应该存在<strong>只读段</strong>——具体位置<strong>不同厂家有不同实现</strong>。</p>
+<p><strong>2、一个类中虚函数表有几张？</strong></p>
+<p><strong>虚函数表（虚表）可以理解为是一个数组，存放的是一个个虚函数的地址</strong></p>
+<ul>
+<li><p>一个类可以没有虚函数表（没有虚函数就没有虚函数表）</p></li>
+<li><p>可以有一张虚函数表（<font color="red">即使这个类有多个虚函数，将这些虚函数的地址都存在虚函数表中</font>）</p></li>
+<li><p>也可以有多张虚函数表（继承多个 有虚函数的
+基类，后面我们会讲到的虚函数的多继承）</p></li>
+</ul>
+<p>3、虚函数机制的底层实现是怎样的？</p>
+<p>虚函数机制的底层是通过<strong>虚函数表</strong>实现的。当类中定义了虚函数之后，就会在对象的存储开始位置多一个虚函数指针，该虚函数指针指向一张虚函数表，虚函数表中存储的是虚函数入口地址。</p>
+<h2><span id="虚函数的限制">虚函数的限制</span></h2>
+<p>虚函数机制给C++提供了灵活的用法，但仍然受到了一些约束，以下几种函数不能设为虚函数：</p>
+<p><strong>1.构造函数不能设为虚函数</strong></p>
+<p>构造函数的作用是创建对象时完成数据的初始化，而虚函数机制被激活的条件之一就是要先创建对象，有了对象才能表现出动态多态。如果将构造函数设为虚函数，那此时构造未执行完，对象还没完成初始化，存在矛盾。</p>
+<p><strong>2.静态成员函数不能设为虚函数</strong></p>
+<p>虚函数的实际调用：<code>this -&gt; vfptr -&gt; vtable -&gt; virtual function</code>，但是<strong>静态成员函数没有
+this 指针</strong>，所以无法访问到 vfptr。vfptr
+是属于一个特定对象的部分，虚函数机制起作用必然需要通过 vfptr
+去间接调用虚函数。静态成员函数找不到这样特定的对象。</p>
+<p><strong>3.Inline 函数不能设为虚函数</strong></p>
+<p>因为 inline
+函数在编译期间完成替换，而在编译期间无法展现动态多态机制，所以起作用的时机是冲突的。如果同时存在，inline
+失效。</p>
+<p><strong>4.普通函数不能设为虚函数</strong></p>
+<p>虚函数要解决的是对象多态的问题，与普通函数无关。</p>
+<h2><span id="虚函数各种访问情况">虚函数各种访问情况</span></h2>
+<h2><span id="抽象类">抽象类</span></h2>
+<h3><span id="纯虚函数">纯虚函数</span></h3>
+<p><strong>纯虚函数</strong>是一种特殊的虚函数，在许多情况下，在基类中不能对虚函数给出有意义的实现，而把它声明为纯虚函数，<strong>它的实现留给该基类的派生类去做</strong>。这就是纯虚函数的作用。纯虚函数的格式如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> 类名 &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-keyword">virtual</span> 返回类型 函数名(参数 ...) = <span class="hljs-number">0</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>在基类中声明纯虚函数就是在<strong>告诉派生类</strong>的设计者 ——
+<strong>你必须</strong>提供一个纯虚函数的实现，但我不知道你会怎样实现它。多个派生类可以对纯虚函数进行多种不同的实现，但是都需要遵循基类给出的接口（纯虚函数的声明）。</p>
+<p><span style="color:red">声明了纯虚函数的类成为抽象类，抽象类不能实例化对象。</span></p>
+<p>基类（声明纯虚函数的类）虽然无法创建对象，但是可以定义此类型的指针，指向派生类对象，去调用派生类实现好的纯虚函数。这种使用方式也归类为动态多态，尽管不符合第一个条件（基类中声明纯虚函数，而非定义），最终的效果仍然是基类指针调用到了派生类实现的虚函数，属于动态多态的特殊情况。</p>
+<h3><span id="只定义了protected型构造函数的类">只定义了protected型构造函数的类</span></h3>
+<p>如果一个类只定义了 protected 型的构造函数而没有提供 public
+构造函数，无论是在外部还是在派生类中作为其对象成员都不能创建该类的对象，但可以由其派生出新的类，这种能派生新类，却不能创建自己对象的类是另一种形式的抽象类。</p>
+<p>Base 类只定义了 protected 属性的构造函数，不能创建 Base
+类的对象，但是可以定义 Base 类的指针—— Base 类是抽象类。</p>
+<p>如果 Derived 类也只定义了 protected 属性的构造函数，Derived
+类也是抽象类，无法创建对象，<span style="color:red">但是可以定义指针指向派生类对象</span>。那么还需要再往下派生，一直到某一层提供了
+public 的构造函数，才能创建对象。</p>
+<h2><span id="析构函数定义为虚函数">析构函数定义为虚函数</span></h2>
+<p>如果不把基类的析构函数设置为虚函数，那么派生类的析构函数将不会得到自动调用（基类指针指向派生类对象）。尤其是类内有申请的动态内存，需要清理和释放的时候，这点务必做好。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span>&#123;<br>    Base * pbase = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Derived</span>();<br>    pbase-&gt;<span class="hljs-built_in">display</span>();<br><br>    <span class="hljs-keyword">delete</span> pbase;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>当基类的析构函数为非虚函数时，删除一个基类指针指向的派生类实例时，只清理了派生类从基类继承过来的资源，而派生类自己独有的资源却没有被清理，这显然不是我们希望的。</p>
+<p>把基类的析构函数为虚函数时，在派生类析构函数执行完毕后，会自动调用基类析构函数（毕竟我们调用派生类构造的时候，先完成基类的构造，再完成派生类的构造，但要注意我们是先调用的派生类的构造哦）。这是由编译器在析构函数调用序列中隐式安排的，这个过程不依赖于虚函数表，属于C++的语言规则。</p>
+<h2><span id="带虚函数的多继承">带虚函数的多继承</span></h2>
+<h3><span id="内存布局">内存布局</span></h3>
+<p>先是 Base1、Base2、Base3 都拥有虚函数 f、g、h，Derived
+公有继承以上三个类，在 Derived 中覆盖了虚函数 f，还有一个普通的成员函数
+g1，四个类各有一个 double 成员。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span> <br>	: <span class="hljs-keyword">public</span> Base1<br>	, <span class="hljs-keyword">public</span> Base2<br>	, <span class="hljs-keyword">public</span> Base3<br>&#123;<br><span class="hljs-keyword">public</span>:<span class="hljs-built_in">Derived</span>()<br>	: _iDerived(<span class="hljs-number">10000</span>) <br>	&#123; cout &lt;&lt; <span class="hljs-string">&quot;Derived()&quot;</span> &lt;&lt; endl; &#125;<br><br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;Derived::f()&quot;</span> &lt;&lt; endl; &#125;<br><br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">g1</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;Derived::g1()&quot;</span> &lt;&lt; endl; &#125;<br><span class="hljs-keyword">private</span>:<br>	<span class="hljs-type">double</span> _iDerived;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>通过 VS 平台展示类对象内存布局的功能，我们可以总结出以下规则：</p>
+<ol type="1">
+<li>每个基类都有自己的虚函数表（前提是基类定义了虚函数），继承这三个基类的派生类会拥有三张虚表。（这很容易理解，不同的基类（基类定义了虚函数）有独属于自己的虚函数，不管名字是否相同，派生类在继承这些基类的时候，肯定会各自拷贝（继承）一份过来，等到派生类对象被不同的基类指针指向的时候，调用相同的函数（我们暂且假设这个时候派生类还没有去覆盖），会因为基类指针的不同而去调用对应的基类指针的虚函数）</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++">Derived d;<br>Base1* pBase1 = &amp;d;<br>Base2* pBase2 = &amp;d;<br>Base3* pBase3 = &amp;d;<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>派生类如果有自己的虚函数（即已经覆盖基类的虚函数），会被加入到第一个虚函数表之中。（希望尽快访问到虚函数）</li>
+<li>内存布局中，其基类的布局按照基类被声明时的顺序进行排列，但是<font color="red">有虚函数的基类会往上放，希望尽快访问到虚函数</font>，没有虚函数的基类往下放。（如果继承顺序为
+Base1/Base2/Base3，在 Derived 对象的内存布局中就会先是 Base1
+类的基类子对象，然后是 Base2、Base3 基类子对象。此时，如果 Base1
+中没有定义虚函数，那么内存排布上会将 Base1 基类子对象排在 Base2、Base3
+基类子对象之后）</li>
+<li>派生类会覆盖基类的虚函数，只有第一个虚函数表中存放的是真实的被覆盖的函数的地址；其它的虚函数表中对应位置存放的并不是真实的对应的虚函数的地址，而是一条跳转指令
+——
+指示到哪里去寻找被覆盖的虚函数的地址。（我们前面不是讲，派生类会有三张虚表嘛，那么如果这三个基类带有相同的虚函数，派生类在覆盖的时候，实际只会覆盖第一张虚表的那个虚函数的地址，其他两张虚表的这个虚函数并不是真实的对应的虚函数地址（没有被覆盖），而是一条跳转指令，跳转到派生类的第一张虚表的那个被派生类覆盖的虚函数地址）</li>
+</ol>
+<figure>
+<img src="/images/2024/12/02/a16c0fb0-b0a9-11ef-9861-0fd0602585dc.png" alt="虚函数多继承.png">
+<figcaption aria-hidden="true">虚函数多继承.png</figcaption>
+</figure>
+<h3><span id="带虚函数的多重继承的二义性">带虚函数的多重继承的二义性</span></h3>
+<p>假设我们有两个基类 <code>A</code> 和
+<code>B</code>，它们都定义了同名的虚函数 <code>foo()</code>，并且
+<code>C</code> 类继承了这两个类。如果我们在 <code>C</code>
+类中没有明确指定要调用哪个父类的
+<code>foo()</code>，就会产生二义性。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">()</span> </span>&#123;<br>        cout &lt;&lt; <span class="hljs-string">&quot;A&#x27;s foo&quot;</span> &lt;&lt; endl;<br>    &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">()</span> </span>&#123;<br>        cout &lt;&lt; <span class="hljs-string">&quot;B&#x27;s foo&quot;</span> &lt;&lt; endl;<br>    &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">C</span> : <span class="hljs-keyword">public</span> A, <span class="hljs-keyword">public</span> B &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 这里如果没有重写foo()，会导致二义性</span><br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    C c;<br>    <span class="hljs-comment">// c.foo(); // 会产生编译错误：二义性</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在上面的代码中，<code>C</code> 继承了 <code>A</code> 和
+<code>B</code>，而这两个类都有一个虚函数
+<code>foo()</code>。当你尝试调用 <code>c.foo()</code>
+时，编译器无法判断应该调用 <code>A</code> 的 <code>foo()</code> 还是
+<code>B</code> 的 <code>foo()</code>，从而导致二义性。</p>
+<p>我们来看看具体的示例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">a</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;A::a()&quot;</span> &lt;&lt; endl; &#125;<br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">b</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;A::b()&quot;</span> &lt;&lt; endl; &#125;<br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">c</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;A::c()&quot;</span> &lt;&lt; endl; &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">a</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;B::a()&quot;</span> &lt;&lt; endl; &#125;<br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">b</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;B::b()&quot;</span> &lt;&lt; endl; &#125;<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">c</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;B::c()&quot;</span> &lt;&lt; endl; &#125;<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">d</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;B::d()&quot;</span> &lt;&lt; endl; &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">C</span><br>    : <span class="hljs-keyword">public</span> A, <span class="hljs-keyword">public</span> B &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">a</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;C::a()&quot;</span> &lt;&lt; endl; &#125;  <br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">c</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;C::c()&quot;</span> &lt;&lt; endl; &#125;	<span class="hljs-comment">// 覆</span><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">d</span><span class="hljs-params">()</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;C::d()&quot;</span> &lt;&lt; endl; &#125; <br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>内存结构示意图：</p>
+<figure>
+<img src="/images/2024/12/02/a7dfac30-b0a9-11ef-9861-0fd0602585dc.png" alt="多态04.png">
+<figcaption aria-hidden="true">多态04.png</figcaption>
+</figure>
+<h4><span id="调用情况">调用情况</span></h4>
+<p><strong>对象</strong></p>
+<figure>
+<img src="/images/2024/12/02/af12a110-b0a9-11ef-9861-0fd0602585dc.png" alt="多态05.png">
+<figcaption aria-hidden="true">多态05.png</figcaption>
+</figure>
+<p><strong>基类指针指向派生类对象</strong></p>
+<figure>
+<img src="/images/2024/12/02/b5a31460-b0a9-11ef-9861-0fd0602585dc.png" alt="多态06.png">
+<figcaption aria-hidden="true">多态06.png</figcaption>
+</figure>
+<p><strong>基类指针指向派生类对象</strong></p>
+<figure>
+<img src="/images/2024/12/02/ba646d00-b0a9-11ef-9861-0fd0602585dc.png" alt="多态07.png">
+<figcaption aria-hidden="true">多态07.png</figcaption>
+</figure>
+<p><strong>派生类指针指向派生类对象</strong></p>
+<figure>
+<img src="/images/2024/12/02/c01ecba0-b0a9-11ef-9861-0fd0602585dc.png" alt="多态08.png">
+<figcaption aria-hidden="true">多态08.png</figcaption>
+</figure>
+<h4><span id="总结">总结</span></h4>
+<ul>
+<li>如果<strong>通过对象来调用虚函数，那么不会通过虚表来找虚函数</strong>，因为编译器从一开始就确定调用函数的对象是什么类型，直接到程序代码区中找到对应函数的实现。</li>
+<li>如果基类指针指向派生类对象，通过基类指针调用虚函数，若派生类中对这个虚函数进行了覆盖（重写-override），那么<font color="red"><strong>符合动态多态的触发机制</strong></font>，最终的效果是基类指针调用到了派生类定义的虚函数；如果派生类对这个虚函数没有进行覆盖，也会通过虚表访问，访问到的是基类自己定义的虚函数的入口地址。（但是要切记，不可以用另一个基类的指针企图去访问另一个基类的成员函数）</li>
+<li>如果是派生类指针指向本类对象，调用虚函数时，也会通过虚表去访问虚函数。若本类中对基类的虚函数进行覆盖，那么调用到的就是本类的虚函数实现，如果没有覆盖，那么会调用到基类实现的虚函数。</li>
+</ul>
+<p>通过派生类对象或者派生类指针指向本类对象，如果调用的函数没有被覆盖且两个基类拥有相同的成员函数（返回类型+函数名+参数列表），就会出现二义性冲突。但是这两种的区别是派生类对象不走虚表，派生类指针指向本类对象走虚表（尽管如此，却算不上是运行时多态行为）。</p>
+<p>而对于不同的基类指针指向派生类的情况，切记不可以用另一个基类的指针企图去访问另一个基类的成员函数。</p>
+<h1><span id="虚继承">虚继承</span></h1>
+<h2><span id="虚函数-与-虚继承">虚函数 与 虚继承</span></h2>
+<p>虚函数指针指向虚函数表。（只要成员函数有 virtual 关键字）</p>
+<p>虚基类指针指向虚基类表。（只要继承的时候有 virtual 关键字）</p>
+<p>注意：虚基类的说法，如果 B 类虚拟继承了 A 类，那么说 A 类是 B
+类虚基类，而不要说 A 类是虚基类，因为 A
+类还可以以非虚拟的方式派生其他类。</p>
+<p>（1）虚继承的内存结构--单继承</p>
+<p>基类和派生类没有虚函数，自然没有虚函数表的存在。但是有虚继承（单继承），那么就会有一张虚基类表。</p>
+<p>因此，派生类实例对象 B 中有一个虚基类指针。</p>
+<figure>
+<img src="/images/2024/12/02/c81bc740-b0a9-11ef-9861-0fd0602585dc.png" alt="虚拟继承1.png">
+<figcaption aria-hidden="true">虚拟继承1.png</figcaption>
+</figure>
+<p>（2）如果虚基类中包含了虚函数--单继承</p>
+<p>基类有虚函数，派生类没有写明有虚函数，派生类将会有一张虚函数表。有虚继承（单继承），那么还会有一张虚基类表。</p>
+<p>因此，派生类实例对象 B 有一个虚函数指针和一个虚基类指针。</p>
+<figure>
+<img src="/images/2024/12/02/cdf127f0-b0a9-11ef-9861-0fd0602585dc.png" alt="虚拟继承2.png">
+<figcaption aria-hidden="true">虚拟继承2.png</figcaption>
+</figure>
+<p>（3）如果派生类中又定义了新的虚函数，会在内存中多出一个属于派生类的虚函数指针，指向一张新的虚表（VS
+的实现）--单继承</p>
+<p>基类有虚函数，派生也有虚函数，派生类将会有两张虚函数表。有虚继承，那么还会有一张虚基类表。</p>
+<p>因此，派生类实例对象 B 有两个虚函数指针和一个虚基类指针。</p>
+<figure>
+<img src="/images/2024/12/02/d3228070-b0a9-11ef-9861-0fd0602585dc.png" alt="虚拟继承3.png">
+<figcaption aria-hidden="true">虚拟继承3.png</figcaption>
+</figure>
+<p>（4）带虚函数的菱形继承——虚拟继承方式--多继承</p>
+<figure>
+<img src="/images/2024/12/02/d9883a40-b0a9-11ef-9861-0fd0602585dc.png" alt="虚拟继承4.png">
+<figcaption aria-hidden="true">虚拟继承4.png</figcaption>
+</figure>
+<p>真实情况：</p>
+<figure>
+<img src="/images/2024/12/02/ddd685c0-b0a9-11ef-9861-0fd0602585dc.png" alt="虚拟继承5.png">
+<figcaption aria-hidden="true">虚拟继承5.png</figcaption>
+</figure>
+<h2><span id="虚拟继承时派生类对象的构造和析构">虚拟继承时派生类对象的构造和析构</span></h2>
+<p>在虚拟继承的结构中，最底层的派生类不仅需要显式调用中间层基类的构造函数，还要在初始化列表最开始调用顶层基类的构造函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">D</span><br>: <span class="hljs-keyword">public</span> B<br>, <span class="hljs-keyword">public</span> C<br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">D</span>(<span class="hljs-type">double</span> a,<span class="hljs-type">double</span> b,<span class="hljs-type">double</span> c,<span class="hljs-type">double</span> d)<br>    : <span class="hljs-built_in">A</span>(a)		<span class="hljs-comment">// 顶层基类</span><br>    , <span class="hljs-built_in">B</span>(a,b)	<span class="hljs-comment">// 中间基类</span><br>    , <span class="hljs-built_in">C</span>(a,c)	<span class="hljs-comment">// 中间基类</span><br>    , _d(d)<br>    &#123;<br>        cout &lt;&lt; <span class="hljs-string">&quot;D(double * 4)&quot;</span> &lt;&lt; endl;<br>    &#125;<br><br>    ~<span class="hljs-built_in">D</span>()&#123; cout &lt;&lt; <span class="hljs-string">&quot;~D()&quot;</span> &lt;&lt; endl; &#125;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">double</span> _d;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>——那么 A 类构造岂不是会调用 3 次？</p>
+<p>并不会，有了 A 类的构造之后会压抑 B、C 构造时调用 A 类构造，A
+类构造只会调用一次。可以对照菱形继承的内存模型理解，D 类对象中只有一份 A
+类对象的内容。</p>
+<p>对于析构函数，同样存在这样的压抑效果，D
+类析构执行完后，根据继承声明顺序的反序调用 C 类的析构函数，C
+的析构函数执行完后并没有自动调用 A 的析构函数，而是接下来调用 B
+的析构函数，最后调用 A 的析构函数。</p>
+<h2><span id="效率分析">效率分析</span></h2>
+<p>多重继承和虚拟继承对象模型较单一继承复杂的对象模型，造成了成员访问低效率，表现在两个方面：对象构造时
+vptr 的多次设定，以及 this 指针的调整。</p>
+<figure>
+<img src="/images/2024/12/02/eaed8150-b0a9-11ef-9861-0fd0602585dc.png" alt="性能分析.png">
+<figcaption aria-hidden="true">性能分析.png</figcaption>
+</figure>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/posts/217356bf.html">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>火焰图</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/7b510e10.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      代理模式
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\7d8fe760.html" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\58edccbc.html" title="C++杂谈（一）" rel="bookmark">C++杂谈（一）</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\f4d5d606.html" title="C++输入输出流" rel="bookmark">C++输入输出流</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>

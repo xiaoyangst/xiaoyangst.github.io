@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        第二章：函数式编程之旅 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">第二章：函数式编程之旅</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
+
+
+          <span class="post-date">2024-08-16</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#函数使用函数">函数使用函数</a></li>
+<li><a href="#stl实例">STL实例</a>
+<ul>
+<li><a href="#求平均值">求平均值</a></li>
+<li><a href="#折叠">折叠</a></li>
+<li><a href="#删除字符串空白符">删除字符串空白符</a></li>
+<li><a href="#基于谓词分割集合">基于谓词分割集合</a></li>
+<li><a href="#过滤和转换">过滤和转换</a></li>
+</ul></li>
+<li><a href="#stl算法的可组合性">STL算法的可组合性</a></li>
+<li><a href="#编写自己的高阶函数">编写自己的高阶函数</a>
+<ul>
+<li><a href="#接收函数作为参数">接收函数作为参数</a></li>
+<li><a href="#用循环实现">用循环实现</a></li>
+<li><a href="#递归和尾调用优化">递归和尾调用优化</a></li>
+<li><a href="#使用折叠实现">使用折叠实现</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="函数使用函数">函数使用函数</span></h2>
+<p>所有函数式编程语言的主要特色就是函数可被看作一个普通的值。它们可被存储于变量中，放到集合或结构中，作为参数传递给其他函数，并可以作为其他函数的返回结果中。能够接收函数作为参数或返回函数作为结果的函数称为<strong>高阶函数</strong>。</p>
+<p>我们来看一个实例：假设有一组人，需要写出组内所有女性的名字。如下图所示。</p>
+<figure>
+<img src="/images/2024/08/16/0b7c66c0-5b78-11ef-ad1f-31ad8bab6002.png" alt="一个实例.png">
+<figcaption aria-hidden="true">一个实例.png</figcaption>
+</figure>
+<p>也就是说组内由男性和女性组成，先要把男性过滤掉而剩下女性（过滤），然后获取这些女生的名字（转换）。</p>
+<p>这里使用的首个高阶结构是集合过滤。通俗地讲，过滤是一个简单的算法，它主要检查原集合中的每个条目是否满足一定的条件。如果满足，则该条件被放入结果集中。<strong>过滤算法并不能事先知道用户对他们的集合使用什么样的谓词函数进行过滤</strong>。过滤可以针对一个特定的属性（如本例中的性别属性的值），也可以同时针对多个属性（如找到所有黑头发的女性），或更复杂的过滤条件（获取最近购买新车的所有女性）。因此，这种结构必须提供一种方法，可以让用户指定所需的谓词。在这个例子中，这个结构需要提供一个接收人的谓词，并返回这个人是不是女性。因为过滤允许传递一个谓词函数，按照定义，它是一个高阶函数。如果想从
+STL 中找到具体的例子，常用的 sort
+的第三个参数接受谓词，用户可以自实现谓词来筛选集合中的元素满足条件的情况下返回，比方说集合中所有元素从小到大进行排序。</p>
+<p>过滤任务完成后，还有获取姓名的任务。需要一个结构，它接收一组人并可返回他们的名字。与过滤类似，这个结构也不能事先知道要从原集合中选取哪些值。用户可能想获取一个特定的属性(如这个例子中的姓名)、多个属性组合(可能需要找到姓和名并把它们拼接起来)，或更复杂的操作(获取一个人的所有孩子)。同样，这个结构也需要允许用户指定一个函数，从集合中获取一个条目，对条目进行某些操作，并返回一个值，把这个值放在结果集中。请注意，输出集合没必要与输入集合包含相同的类型（这一点与过滤不同）。这种结构称为映射（map）或转换（transform）。</p>
+<h2><span id="stl实例">STL实例</span></h2>
+<p>STL
+中有很多高阶函数，这里简单介绍几个，后续有可能会单独写一篇实践常用的 STL
+中提供的高阶函数</p>
+<h3><span id="求平均值">求平均值</span></h3>
+<p>std::accumulate 用来求和，其中：</p>
+<ul>
+<li>first 和 fast 代表容器的起始迭代器和结尾迭代器</li>
+<li>init 指定累加器的初始值</li>
+<li>二元运算符，用于指定累加操作的类型。如果不指定，默认为加法（二进制操作将类型为T的元素（即
+init）作为第一个参数，将范围内的元素作为第二个参数，并返回可以分配给类型T的值）</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">InputIterator</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;  <br><span class="hljs-function">T <span class="hljs-title">accumulate</span> <span class="hljs-params">(InputIterator first, InputIterator last, T init)</span></span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">InputIterator</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">BinaryOperation</span>&gt;   <br><span class="hljs-function">T <span class="hljs-title">accumulate</span> <span class="hljs-params">(InputIterator first, InputIterator last, T init,BinaryOperation binary_op)</span></span>;<br><br><br><span class="hljs-comment">// 等价于</span><br><br>&#123;<br>  <span class="hljs-keyword">while</span> (first!=last) &#123;<br>    init = init + *first;  <span class="hljs-comment">// or: init=binary_op(init,*first) for the binary_op version</span><br>    ++first;<br>  &#125;<br>  <span class="hljs-keyword">return</span> init;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>不指定函数对象的实践代码。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numeric&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>  vector&lt;<span class="hljs-type">int</span>&gt; s = &#123;<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">25</span>,<span class="hljs-number">-32</span>,<span class="hljs-number">78</span>,<span class="hljs-number">-21</span>,<span class="hljs-number">-10</span>,<span class="hljs-number">21</span>&#125;;<br>  <span class="hljs-type">int</span> result = <span class="hljs-number">0</span>;<br>  result = std::<span class="hljs-built_in">accumulate</span>(s.<span class="hljs-built_in">begin</span>(),s.<span class="hljs-built_in">end</span>(),<span class="hljs-number">0</span>);<br><br>  std::cout&lt;&lt;<span class="hljs-string">&quot;result = &quot;</span>&lt;&lt;result&lt;&lt;std::endl;<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	result = 64</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<p>指定函数对象的实践代码，使用了乘法运算符
+<code>std::multiplies&lt;int&gt;()</code>，计算了所有元素的乘积。</p>
+<p>本质上是将 init 和 容器中每一个元素逐一相乘，如下代码含义为 2 * 1 * 2
+* 3 * 4 * 5。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numeric&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>  vector&lt;<span class="hljs-type">int</span>&gt; s = &#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>&#125;;<br>  <span class="hljs-type">int</span> result = <span class="hljs-number">0</span>;<br>  result = std::<span class="hljs-built_in">accumulate</span>(s.<span class="hljs-built_in">begin</span>(),s.<span class="hljs-built_in">end</span>(),<span class="hljs-number">2</span>,std::<span class="hljs-built_in">multiplies</span>&lt;<span class="hljs-type">int</span>&gt;());<br>    <br>   <span class="hljs-comment">/*</span><br><span class="hljs-comment">   	等价于</span><br><span class="hljs-comment">   	  result = std::accumulate(s.begin(),s.end(),2,[](int a,int b)&#123;</span><br><span class="hljs-comment">    	return a * b;</span><br><span class="hljs-comment"> 	 &#125;);</span><br><span class="hljs-comment">   */</span><br><br>  std::cout&lt;&lt;<span class="hljs-string">&quot;result = &quot;</span>&lt;&lt;result&lt;&lt;std::endl;<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	result = 240</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<h3><span id="折叠">折叠</span></h3>
+<p>std::accumulate
+算法是折叠的一种实现。这是一个高阶函数，它提供了对递归结构，如向量、列表和树等的遍历处理，并允许逐步构建自己需要的结果。</p>
+<figure>
+<img src="/images/2024/08/16/01cfbf50-5b78-11ef-ad1f-31ad8bab6002.png" alt="折叠计算.png">
+<figcaption aria-hidden="true">折叠计算.png</figcaption>
+</figure>
+<p>上面关于 std::accumulate 的实践代码，会让大家决定 init 的类型 要和
+容器中元素的类型相同，实际上并没有这个要求，类型可以不同。下面的代码中，我们统计字符串
+data 中字母的个数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numeric&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>  std::string data = <span class="hljs-string">&quot;www.baidu.com&quot;</span>;<br>  <span class="hljs-keyword">auto</span> result = std::<span class="hljs-built_in">accumulate</span>(data.<span class="hljs-built_in">begin</span>(),data.<span class="hljs-built_in">end</span>(),<span class="hljs-number">0</span>,[](<span class="hljs-type">int</span> count,<span class="hljs-type">char</span> c)&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">isalpha</span>(c))&#123;<br>      count++;<br>    &#125;<br>    <span class="hljs-keyword">return</span> count;<br>  &#125;);<br><br>  std::cout&lt;&lt;<span class="hljs-string">&quot;result = &quot;</span>&lt;&lt;result&lt;&lt;std::endl;<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	result = 11</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<p>折叠中有两种类型，一种是左折叠（从左往右开始遍历元素），一种是右折叠（从右往左开始遍历元素）。前面都是左折叠，C++
+也没有也没有提供独立的右折叠算法，但是我们可以通过传递反向迭代器来实现右折叠算法（crbegin
+和 crend）。</p>
+<h3><span id="删除字符串空白符">删除字符串空白符</span></h3>
+<p>std::find_if：查找集合中第一个满足指定谓词的元素。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">InputIterator</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">UnaryPredicate</span>&gt;   <br><span class="hljs-function">InputIterator <span class="hljs-title">find_if</span> <span class="hljs-params">(InputIterator first, InputIterator last, UnaryPredicate pred)</span></span>;<br><br><span class="hljs-comment">//等价于</span><br><br>&#123;<br>  <span class="hljs-keyword">while</span> (first!=last) &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">pred</span>(*first)) <span class="hljs-keyword">return</span> first;<br>    ++first;<br>  &#125;<br>  <span class="hljs-keyword">return</span> last;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>下面演示删除一个字符串左右两边的空白。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numeric&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function">std::string <span class="hljs-title">trim_left</span><span class="hljs-params">(std::string str)</span></span>&#123;<br>  str.<span class="hljs-built_in">erase</span>(str.<span class="hljs-built_in">begin</span>(),std::<span class="hljs-built_in">find_if</span>(str.<span class="hljs-built_in">begin</span>(),str.<span class="hljs-built_in">end</span>(),[](<span class="hljs-type">char</span> c)&#123;<br>    <span class="hljs-keyword">return</span> !<span class="hljs-built_in">isspace</span>(c);<br>  &#125;));<br>  <span class="hljs-keyword">return</span> str;<br>&#125;<br><br><span class="hljs-function">std::string <span class="hljs-title">trim_right</span><span class="hljs-params">(std::string str)</span></span>&#123;<br>  str.<span class="hljs-built_in">erase</span>(std::<span class="hljs-built_in">find_if</span>(str.<span class="hljs-built_in">rbegin</span>(),str.<span class="hljs-built_in">rend</span>(),[](<span class="hljs-type">char</span> c)&#123;<br>    <span class="hljs-keyword">return</span> !<span class="hljs-built_in">isspace</span>(c);<br>  &#125;).<span class="hljs-built_in">base</span>(),str.<span class="hljs-built_in">end</span>());<br>  <span class="hljs-keyword">return</span> str;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>  std::string data = <span class="hljs-string">&quot;   www.baidu.com   &quot;</span>;<br><br>  std::cout&lt;&lt;<span class="hljs-built_in">trim_right</span>(<span class="hljs-built_in">trim_left</span>(data));<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	www.baidu.com</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<p>std::find_if 返回值为满足条件的所处位置的迭代器。trim_right 有用到
+反向迭代器，<code>.base()</code>
+返回的是反向迭代器的正向迭代器，指向找到的非空白字符的下一个位置。</p>
+<h3><span id="基于谓词分割集合">基于谓词分割集合</span></h3>
+<p>在学习更多知识之前，假设有一个人的集合，需要把所有女性移到集合的前面。为了实现这一功能，可以使用
+std::partition 和它的变体
+std::stable_partition（相较于std::partition，可以保持集合中原来的顺序）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">ForwardIterator</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">UnaryPredicate</span>&gt;  <br><span class="hljs-function">ForwardIterator <span class="hljs-title">partition</span> <span class="hljs-params">(ForwardIterator first,ForwardIterator last, UnaryPredicate pred)</span></span>;<br><br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">BidirectionalIterator</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">UnaryPredicate</span>&gt;  <br><span class="hljs-function">BidirectionalIterator <span class="hljs-title">stable_partition</span> <span class="hljs-params">(BidirectionalIterator first,BidirectionalIterator last,UnaryPredicate pred)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>两个算法都接收一个集合和一个谓词。它们对原集合中的元素进行重排，把符合条件的与不符合条件的分开。符合谓词条件的元素移动到集合的前面，不符合条件的元素移动到集合的后面。算法返回一个迭代器，指向第二部分的第一个元素(不符合谓词条件的第一个元素)。返回的迭代器和原集合开头的迭代器配合，获取集合中满足谓词条件的元素(构成的集合)，与原集合尾端迭代器配合，可获得原集合中不符合谓词条件的元素(构成的合)。即使这些集合中存在空集合也是正确的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>  vector&lt;<span class="hljs-type">int</span>&gt; data = &#123;<span class="hljs-number">1</span>,<span class="hljs-number">7</span>,<span class="hljs-number">-2</span>,<span class="hljs-number">10</span>,<span class="hljs-number">-10</span>,<span class="hljs-number">43</span>,<span class="hljs-number">55</span>,<span class="hljs-number">-99</span>,<span class="hljs-number">-89</span>&#125;;<br>  <span class="hljs-keyword">auto</span> its = std::<span class="hljs-built_in">partition</span>(data.<span class="hljs-built_in">begin</span>(),data.<span class="hljs-built_in">end</span>(),[](<span class="hljs-type">int</span> num)&#123;<br>    <span class="hljs-keyword">return</span> num &gt; <span class="hljs-number">0</span>;<br>  &#125;);<br><br>  std::cout&lt;&lt;<span class="hljs-string">&quot;正数集合 = &quot;</span>;<br>  <span class="hljs-keyword">auto</span> itBegin = data.<span class="hljs-built_in">begin</span>();<br>  <span class="hljs-keyword">for</span> (; itBegin != its ; itBegin++) &#123;<br>    std::cout&lt;&lt; *itBegin &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;<br>  &#125;<br><br>  std::cout &lt;&lt; std::endl;<br><br>  std::cout&lt;&lt;<span class="hljs-string">&quot;负数集合 = &quot;</span>;<br>  <span class="hljs-keyword">for</span> (; its != data.<span class="hljs-built_in">end</span>(); its++) &#123;    <br>    std::cout&lt;&lt; *its &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;<br>  &#125;<br>  <br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	正数集合 = 1 7 55 10 43 </span><br><span class="hljs-comment">	负数集合 = -10 -2 -99 -89 </span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<p>可以看到 std::partition 返回的迭代器 its 就是一个分界线，data.begin()
+~ its 是符合条件的元素，its ~ data.end() 是不符合条件以外的元素。</p>
+<p>还有明显看到输出没有保持顺序性，只需要把 std::partition 替换成
+std::stable_partition 即可。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++">正数集合 = <span class="hljs-number">1</span> <span class="hljs-number">7</span> <span class="hljs-number">10</span> <span class="hljs-number">43</span> <span class="hljs-number">55</span> <br>负数集合 = <span class="hljs-number">-2</span> <span class="hljs-number">-10</span> <span class="hljs-number">-99</span> <span class="hljs-number">-89</span><br></code></pre></td></tr></table></figure>
+<h3><span id="过滤和转换">过滤和转换</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">ForwardIterator</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">UnaryPredicate</span>&gt;  <br><span class="hljs-function">ForwardIterator <span class="hljs-title">remove_if</span> <span class="hljs-params">(ForwardIterator first, ForwardIterator last, UnaryPredicate pred)</span></span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">InputIterator</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">OutputIterator</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">UnaryPredicate</span>&gt;  <br><span class="hljs-function">OutputIterator <span class="hljs-title">copy_if</span> <span class="hljs-params">(InputIterator first, InputIterator last, OutputIterator result, UnaryPredicate pred)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>remove_if 删除指定范围内满足条件的元素，对容器会有改动。</p>
+<p>copy_if
+复制指定范围内满足条件的元素到另一个容器中，对容器不会有改动。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>  std::vector&lt;<span class="hljs-type">int</span>&gt; data = &#123;<span class="hljs-number">1</span>,<span class="hljs-number">7</span>,<span class="hljs-number">-2</span>,<span class="hljs-number">10</span>,<span class="hljs-number">-10</span>,<span class="hljs-number">43</span>,<span class="hljs-number">55</span>,<span class="hljs-number">-99</span>,<span class="hljs-number">-89</span>&#125;;<br><br>  <span class="hljs-comment">// 复制负数到 Fdata</span><br>  std::vector&lt;<span class="hljs-type">int</span>&gt; Fdata;<br>  std::<span class="hljs-built_in">copy_if</span>(data.<span class="hljs-built_in">begin</span>(), data.<span class="hljs-built_in">end</span>(), std::<span class="hljs-built_in">back_inserter</span>(Fdata), [](<span class="hljs-type">int</span> num) &#123;<br>    <span class="hljs-keyword">return</span> num &lt; <span class="hljs-number">0</span>;<br>  &#125;);<br><br>  std::cout &lt;&lt; <span class="hljs-string">&quot;复制负数到指定容器中 = &quot;</span>;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i : Fdata) &#123;<br>    std::cout &lt;&lt; i &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;<br>  &#125;<br>  std::cout &lt;&lt; std::endl;<br><br>  <span class="hljs-comment">// 移除 data 中的负数</span><br>  <span class="hljs-keyword">auto</span> it = std::<span class="hljs-built_in">remove_if</span>(data.<span class="hljs-built_in">begin</span>(), data.<span class="hljs-built_in">end</span>(), [](<span class="hljs-type">int</span> num) &#123;<br>    <span class="hljs-keyword">return</span> num &lt; <span class="hljs-number">0</span>;<br>  &#125;);<br>  data.<span class="hljs-built_in">erase</span>(it, data.<span class="hljs-built_in">end</span>());<br><br>  std::cout &lt;&lt; <span class="hljs-string">&quot;移除容器中负数后 = &quot;</span>;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i : data) &#123;<br>    std::cout &lt;&lt; i &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;<br>  &#125;<br>  std::cout &lt;&lt; std::endl;<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	复制负数到指定容器中 = -2 -10 -99 -89 </span><br><span class="hljs-comment">	移除容器中负数后 = 1 7 10 43 55 </span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<p>std::copy_if 和 std::back_inserter ：使用 std::back_inserter
+可以直接将元素追加到 Fdata 中，因此不需要手动调整容器大小。</p>
+<p>std::remove_if 和 erase：在 std::remove_if 后，通过 erase
+函数真正删除负数元素，因为 std::remove_if
+是把移除的元素放到后面并没有真正移除。</p>
+<h2><span id="stl算法的可组合性">STL算法的可组合性</span></h2>
+<p>基于 STL 的实现会生成不必要的 people
+集合的副本（这是一个耗时的操作，甚至可能在拷贝构造函数被删除或私有时被禁用），并且会创建一个实际上并不需要的附加向量。为了解决这些问题，可使用引用或指针而不是副本，或者创建一个智能的迭代器，它可跳过所有不是女性的人员等。但这些额外的工作表明STL在这场战斗中已经输了，手写循环更好、更省力。</p>
+<figure>
+<img src="/images/2024/08/16/f7765d20-5b77-11ef-ad1f-31ad8bab6002.png" alt="STL可组合性.png">
+<figcaption aria-hidden="true">STL可组合性.png</figcaption>
+</figure>
+<p>虽然标准的算法提供了一种编写函数式风格代码的方式，而没必要手动编写循环和分支，但它们并没有设计成其他函数式编程库或语言一样的可组合的。后续使用
+range 可以有所改观，到时候再谈。</p>
+<h2><span id="编写自己的高阶函数">编写自己的高阶函数</span></h2>
+<h3><span id="接收函数作为参数">接收函数作为参数</span></h3>
+<p>在 C++
+中，许多东西的行为类似于函数，但没有通用的类型用于存放类似函数的东西，而不损害程序的性能。可以把函数类型用作模板参数，让编译器在编译时确定具体的类型，而不是猜测哪种类型更好：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> FilterFun&gt;<br><span class="hljs-function">std::vector&lt;std::string&gt; <span class="hljs-title">names_for</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">	<span class="hljs-type">const</span> std::vector&lt;<span class="hljs-type">person_t</span>&gt; &amp; people,</span></span><br><span class="hljs-params"><span class="hljs-function">	FilterFun filter)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>这将允许用户传递任何类似函数的东西作为参数，可以向普通的函数一样调用它。</p>
+<h3><span id="用循环实现">用循环实现</span></h3>
+<p>几乎所有的STL算法都是由循环实现的，当你决定自己实现某个算法需要考量这样做的必要性，否则应该使用STL算法。这有几个原因。首先是简单。使用别人的代码节省时间。这也就引出了第二个好处：正确性。如果同样的东西写了一遍又一遍，一时疏忽产生错误也理所当然。STL经过了严格的测试，对于任何输入都能正常工作。基于同样的原因，使用硬编码循环实现的常用函数（我们自己实现的），也必须通过测试。</p>
+<p>虽然很多STL算法不是纯的，但它们被设计成高阶函数，这样它们就更通用，适用于更多的场合。如果某些东西被经常使用，它也不太可能包含前面不可见的缺陷。</p>
+<h3><span id="递归和尾调用优化">递归和尾调用优化</span></h3>
+<p>前面的解决方案从外面看是“纯”的，但具体的实现却不是。当发现一个新的符合条件的人员时，它就要修改结果向量。在纯函数式编程语言中是不存在循环的，遍历集合的函数通常是由递归实现的。本书并不深入研究递归，因为读者并不常用到它，但需要说明一些重要的东西。</p>
+<p>对于一个非空向量，可以递归地处理它的头（第一个元素）和尾（所有其他元素），这又可以被看作一个向量。如果头满足谓词，则把它包含在结果中。如果接收到一个空向量，则什么也不需要处理，也就返回一个空向量。</p>
+<figure>
+<img src="/images/2024/08/16/eebc7a20-5b77-11ef-ad1f-31ad8bab6002.png" alt="相互递归实现.png">
+<figcaption aria-hidden="true">相互递归实现.png</figcaption>
+</figure>
+<p>这种实现是低效的。首先，由于某种原因导致向量的 tail
+函数不存在：它需要创建一个新向量并将旧向量中的所有数据复制到其中（第一个元素除外）。tail
+函数的问题可用一对迭代器代替向量作为输入来解决。在这种情况下，获取向量尾变得很简单--只需要移动迭代器，使它指向第一个元素即可如下图所示。</p>
+<figure>
+<img src="/images/2024/08/16/e8d69eb0-5b77-11ef-ad1f-31ad8bab6002.png" alt="递归实现.png">
+<figcaption aria-hidden="true">递归实现.png</figcaption>
+</figure>
+<p>这种实现的第二个问题是，把元素插入在向量的前端。这种情况并不多。在硬编码的循环中使用添加，在向量连接时，比前置(插入)更高效。最后也可能是最重要的问题是如果集合大量调用这个函数，可能会出现问题。每次递归都要占用堆栈中的内存，如果堆栈溢出则程序崩溃。即使集合不够大，不会导致堆溢出，但函数调用也要付出代价，简单的循环比它更高效。</p>
+<p>虽然前面的问题容易解决，但这个不同。这里需要<strong>依赖编译器把递归转换成循环</strong>。<strong>为了让编译器进行转换，必须实现称为尾递归的形式</strong>。在尾递归中，递归调用是函数的最后一件事情：递归后不能做任何事情。</p>
+<p><strong>尾递归函数</strong>是一种递归函数，其中递归调用发生在函数的最后一步。在尾递归中，递归调用之后不再需要执行任何其他操作，因此可以直接返回递归调用的结果。尾递归函数的一个重要特性是，它可以被编译器或解释器优化为迭代形式，从而节省栈空间，避免递归调用过深导致的栈溢出。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++">普通递归<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">factorial</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (n == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> n * <span class="hljs-built_in">factorial</span>(n - <span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br><br>尾递归<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">factorial_tail</span><span class="hljs-params">(<span class="hljs-type">int</span> n, <span class="hljs-type">int</span> acc = <span class="hljs-number">1</span>)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (n == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> acc;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">factorial_tail</span>(n - <span class="hljs-number">1</span>, n * acc);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>普通递归的实现中，<code>factorial(n - 1)</code> 的结果需要与
+<code>n</code> 相乘，然后才返回给上层调用，因此这不是尾递归。</p>
+<p>在尾递归的实现中，递归调用
+<code>factorial_tail(n - 1, n * acc)</code>
+是函数的最后一步操作，并且将累积的结果通过 <code>acc</code>
+参数传递下去。这里没有其他操作依赖于递归调用的返回值，因此这是尾递归。</p>
+<p>递归是一种强大的机制，可以让用户在不支持循环的语言中实现循环。但递归仍然属于低水平的结构。可以通过递归实现内部的“纯洁”性，但在许多情况下这样做没有意义。递归，就像手写循环，有它的一席之地。但在C++中，代码评审时就会出现问题。需要C++函数式编程检查它的正确性，并且保证在所有情况下都不会堆栈溢出。</p>
+<h3><span id="使用折叠实现">使用折叠实现</span></h3>
+<p>前面已经见过折叠，但还没有从根本上理解它。折叠（Folding）一次取得一个元素，并对以前积累的值（是一个集合）和当前元素施加指定的函数，产生一个新的累积值。实质上，折叠只不过是编写尾递归函数遍历集合的一种更好的方式。共同的部分被抽取出来，用户只需要指定集合、初始值和必需的累加处理过程，而没必要编写递归函数。</p>
+<figure>
+<img src="/images/2024/08/16/e30e5d60-5b77-11ef-ad1f-31ad8bab6002.png" alt="折叠实现.png">
+<figcaption aria-hidden="true">折叠实现.png</figcaption>
+</figure>
+<hr>
+<p>⭐️内容取自译者程继洪、孙玉梅、娄山佑《函数式编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书。</p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/posts/38a918c7.html">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>智能指针</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/da1f1078.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      946.验证栈序列
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag">#函数式编程</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\d3d389cc.html" title="第一章：函数式编程简介" rel="bookmark">第一章：函数式编程简介</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\4552ce1e.html" title="第三章：函数对象" rel="bookmark">第三章：函数对象</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\fb826aee.html" title="第五章：纯洁性--避免可变状态" rel="bookmark">第五章：纯洁性--避免可变状态</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\a90d3c02.html" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>

@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        基于锁的并发数据结构 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">基于锁的并发数据结构</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
+
+
+          <span class="post-date">2024-10-24</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#设计并发数据结构的指南">设计并发数据结构的指南</a></li>
+<li><a href="#基于锁的并发数据结构">基于锁的并发数据结构</a>
+<ul>
+<li><a href="#使用锁的线程安全栈">使用锁的线程安全栈</a>
+<ul>
+<li><a href="#有锁安全栈的初版">有锁安全栈的初版</a></li>
+<li><a href="#有锁安全栈的第一次优化">有锁安全栈的第一次优化</a></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
+<li><a href="#使用锁和条件变量的安全队列">使用锁和条件变量的安全队列</a>
+<ul>
+<li><a href="#有锁和条件变量组合的安全队列初版">有锁和条件变量组合的安全队列初版</a></li>
+<li><a href="#有锁和条件变量组合的安全队列进行第一次优化">有锁和条件变量组合的安全队列进行第一次优化</a></li>
+<li><a href="#有细粒度锁和条件变量组合的安全队列进行第二次优化">有细粒度锁和条件变量组合的安全队列进行第二次优化</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#设计更复杂的基于锁的数据结构">设计更复杂的基于锁的数据结构</a>
+<ul>
+<li><a href="#使用锁实现的线程安全的查找表">使用锁实现的线程安全的查找表</a></li>
+<li><a href="#使用锁实现的线程安全的链表">使用锁实现的线程安全的链表</a>
+<ul>
+<li><a href="#添加一个对象到链表-头插法">添加一个对象到链表--头插法</a></li>
+<li><a href="#从链表中删除满足某个条件的项">从链表中删除满足某个条件的项</a></li>
+<li><a href="#更新链表中满足某个条件的项">更新链表中满足某个条件的项</a></li>
+<li><a href="#从链表中查找满足某个条件的项">从链表中查找满足某个条件的项</a></li>
+</ul></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<p>互斥锁提供了互斥：一次只能有一个线程获得互斥锁。互斥锁保护数据结构是通过显式地阻止对它所保护数据的真正并发访问来实现的。这称为<strong>串行化</strong>：线程轮流访问被互斥锁保护的数据。它们必须串行而非并发的访问它。</p>
+<p>因此，必须仔细考虑数据结构的设计，使得能够真正的并发访问。虽然有些数据结构比其他数据结构具有更大的并发范围，但在所有情况下，其思想都是相同的：<strong>受保护的区域越小，串行化的操作就越少，并发的潜力也就越大。</strong></p>
+<h1><span id="设计并发数据结构的指南">设计并发数据结构的指南</span></h1>
+<p>当设计并发访问的数据结构时，需要考虑两个方面：确保访问安全以及允许真正的并发访问。</p>
+<p>（一）如何确保访问安全？</p>
+<ul>
+<li>确保没有线程能够看到数据结构的不变量被另一个线程破坏的状态。</li>
+<li>通过提供完整操作的函数，而非一个个操作步骤的函数来小心避免接口固有的竞争条件。</li>
+<li>注意数据结构在有异常时的行为，从而确保不变量不会被破坏。</li>
+<li>通过限制锁的范围以及避免嵌套锁，将死锁的概率降到最低。</li>
+</ul>
+<p>（二）如何允许真正的并发访问？</p>
+<ul>
+<li>是否可以限制锁的作用范围，以允许操作的某些部分在锁外执行？</li>
+<li>数据结构不同部分能否被不同的互斥锁保护？</li>
+<li>所有的操作需要同一级别的保护吗？</li>
+<li>是否可以对数据结构进行简单的修改，以增加并发访问的机会，并且不影响操作语义？</li>
+</ul>
+<h1><span id="基于锁的并发数据结构">基于锁的并发数据结构</span></h1>
+<h2><span id="使用锁的线程安全栈">使用锁的线程安全栈</span></h2>
+<h3><span id="有锁安全栈的初版">有锁安全栈的初版</span></h3>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E6%9C%89%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%A0%88%EF%BC%88%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%89/%E5%88%9D%E7%89%88">有锁安全栈的初版</a></p>
+<p>如你所见，基本的线程安全是通过使用互斥锁 m
+上的锁保护每个成员函数提供的。这将确保在任何时候只有一个线程在访问数据，因此只要每个成员函数保持不变量，就没有线程能看到被破坏的不变量。</p>
+<p>在 empty() 和 pop() 成员函数之间有潜在的竞争条件。即在调用 empty()
+方法和 pop()
+方法之间有其他线程同时修改栈的状态（例如，将一个元素弹出），这可能导致
+empty() 方法返回 false，而随后调用的 pop()
+方法却发现栈已经为空，从而导致未定义行为。不过我们的代码会在 pop()
+函数持有锁的时候，显式的查询栈是否为空，所以这里的竞争条件没有问题。这意味着即使有其他线程尝试访问栈，只有在
+pop() 方法完成时，锁才会释放，因此不会出现问题。</p>
+<p>栈中也有一些潜在抛异常的地方。对互斥锁上锁可能会抛出异常，但这种情况不仅极其罕见的（这意味着互斥锁有问题，或者缺乏系统资源），而且它是每个成员函数的第一个操作。由于没有数据被修改，所以是安全的。解锁互斥锁不会失败，所以总是安全的，并且使用
+std::lock_guard&lt;&gt; 确保了互斥锁不会一直处于上锁的状态。</p>
+<p>对 m_stack.push()
+的调用可能会抛出一个异常，只要拷贝/移动数据值抛出一个异常，或者可分配的内存不足。不管是哪种情况，std::stack&lt;&gt;
+都能保证是安全的，所以也没有问题。</p>
+<p>empty() 不会修改任何数据，所以也是异常安全的。</p>
+<p>改进建议如下：</p>
+<ol type="1">
+<li>无需单独维护一个 m_size 变量，作者提供的代码中根据 stack 原生的接口
+empty 和 size 方法实现 安全判空和 获取栈大小。即 单独维护一个 m_size
+变量实属多余，应当删除以及相关代码。</li>
+<li>作者提供的代码中提供有异常代码，用于在 pop
+栈为空的情况下抛出异常，也就是我们的线程安全栈需要内部对这个问题进行异常检测，这也是该接口的责任。只不过，我们不在内部处理异常，而是选择抛出这个异常，由上一层函数去处理或继续抛出（main
+无论如何都得处理，不能继续抛出了）。</li>
+<li>std::move 用以转移对象到另一个对象，可以节省内存资源。push 应该支持
+把传递的对象 std::move 进来，这同样就要求添加对象内部要自实现
+移动构造函数和移动赋值运算符。</li>
+<li>我们的 pop 和 STL
+中的有些不同，即是有返回值，返回弹出的对象。既然是要删除它，其生命周期需要被管理，用智能指针管理即可。</li>
+<li>作者还额外提供一种 pop 接口，即传递一个引用参数，这个参数用以存储
+top 元素，但是该接口没有返回值，这边也添加该接口。</li>
+</ol>
+<h3><span id="有锁安全栈的第一次优化">有锁安全栈的第一次优化</span></h3>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E6%9C%89%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%A0%88%EF%BC%88%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%89/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%BC%98%E5%8C%96">有锁安全栈的第一次优化</a></p>
+<p>通过将弹出的数据作为 pop() 方法的一部分，避免了先调用 top()
+方法再调用 pop() 方法之间的潜在竞争条件。这样，pop()
+方法在确保栈不为空的情况下直接弹出元素，降低了出错的风险。这种设计方式是尽可能减少提供给外界的接口，从而避免可能存在的竞态条件。但明显，top
+语义确实被删除了，因为 top
+本意是获取栈顶元素，而不包含删除的含义，但我们这里合并之后，如果你要获取栈顶元素，你同时还表明要移除栈顶元素。最新的优化已移除
+top 接口。</p>
+<p>在第一个重载的 pop() 中，代码本身可能会抛出一个 empty_stack
+的异常，但由于什么都没有修改，所以是安全的。创建 result
+可能会抛出一个异常，有几个方面的原因：对 std::make_shared
+的调用，可能因为无法为新对象以及引用计数需要的内部数据分配出足够的内存而抛出异常；或者在拷贝/移动到新分配内存的时候，返回的数据项的拷贝构造或移动构造函数可能抛出异常。两种情况下，C++运行库和标准库会确保没有内存泄露，并且新创建的对象（如果有的话）会被正确的销毁。因为仍然没有对栈进行任何修改，所以也不会有问题。调用
+m_stack.pop() 保证不会抛出异常，随后是返回结果，所以这个重载的 pop()
+函数是异常安全的。</p>
+<p>第二个重载的 pop()
+类似，不过这次是在拷贝赋值或移动赋值时可能抛出异常，而不是在构造新对象和
+std::shared_ptr 实例时。再次，直到调用 m_stack.pop()（pop
+仍然保证不会抛出异常）前，没有修改数据结构，所以这个函数也是异常安全的。</p>
+<p>这里有几个可能导致死锁的机会，因为你在持有锁的时候调用了用户代码：数据项上的拷贝构造或移动构造和拷贝赋值或移动赋值操作，也可能是用户自定义的
+new
+操作符。如果这些函数或者调用了栈上的成员函数（而栈正在插入或移除数据项），或者需要任何类型的锁，而在调用栈成员函数时又持有了另一把锁，那么就有可能出现死锁。但明智的做法是<strong>要求栈的用户负责确保这一点</strong>；你不能期望在不拷贝或不为它分配内存的情况下将数据项添加到栈或从栈中删除。</p>
+<h3><span id="总结">总结</span></h3>
+<p>由于所有成员函数都使用 std::lock_guard&lt;&gt;
+保护数据，所以不管多少线程调用栈成员函数都是安全的。唯一不安全的成员函数是构造函数和析构函数，但这不是问题；对象只能被构造一次，也只能被销毁一次。不管并发与否，调用一个不完全构造的对象或是部分销毁的对象的成员函数永远都不可取。因此，用户必须确保其他线程直到栈完全构造才能访问它，并且必须确保在栈对象销毁前，所有线程都已经停止访问栈。</p>
+<p>尽管多个线程并发调用成员函数是安全的，但由于使用了锁，每次只有一个线程在栈数据结构中做一些工作。线程的串行化会潜在的限制应用程序的性能，因为在栈上有严重的争用：当一个线程在等待锁时，它没有做任何有用的工作。同样，栈也没有提供什么方法等待添加一个数据项，所以如果线程需要等待时，它必须周期性地调用
+empty() 或pop()，并且捕获 empty_stack 异常。</p>
+<p>如果这种场景是必须的，那这种栈实现就是个糟糕的选择，因为等待线程要么消耗宝贵的资源去检查数据，要么要求用户编写外部等待和通知的代码（例如，使用条件变量），这就使内部上锁没有必要，因而造成浪费。接下来的队列展示了一种使用数据结构内部的条件变量将这种等待合并到数据结构本身的方法，接下来我们看一下这个。</p>
+<h2><span id="使用锁和条件变量的安全队列">使用锁和条件变量的安全队列</span></h2>
+<h3><span id="有锁和条件变量组合的安全队列初版">有锁和条件变量组合的安全队列初版</span></h3>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E6%9C%89%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E9%98%9F%E5%88%97%EF%BC%88%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%2B%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%89/%E5%88%9D%E7%89%88">有锁和条件变量组合的安全队列初版</a></p>
+<p>有之前线程安全栈的代码经验，部分代码无需重复讲解，这里重点谈一谈条件变量的引入会给我们的代码带来怎样的变化？这里关注围绕
+pop 方法定义的接口：try_pop 和 wait_pop，前者就是实现安全栈的两个 pop
+方法，几乎区别，只是有个方法返回值为 bool。我们重点关注对象是
+wait_pop。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-type">void</span> SafeQueue&lt;T&gt;::<span class="hljs-built_in">wait_pop</span>(T &amp;data) &#123;<br>  <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">ul</span><span class="hljs-params">(m_mtx)</span></span>;<br>  m_have.<span class="hljs-built_in">wait</span>(ul,[<span class="hljs-keyword">this</span>]()&#123;<br>    <span class="hljs-keyword">return</span> !m_queue.<span class="hljs-built_in">empty</span>();<br>  &#125;); <span class="hljs-comment">// m_queue have data</span><br>  data = std::<span class="hljs-built_in">move</span>(m_queue.<span class="hljs-built_in">front</span>());<br>  m_queue.<span class="hljs-built_in">pop</span>();<br>&#125;<br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br>std::shared_ptr&lt;T&gt; SafeQueue&lt;T&gt;::<span class="hljs-built_in">wait_pop</span>() &#123;<br>  <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">ul</span><span class="hljs-params">(m_mtx)</span></span>;<br>  m_have.<span class="hljs-built_in">wait</span>(ul,[<span class="hljs-keyword">this</span>]()&#123;<br>    <span class="hljs-keyword">return</span> !m_queue.<span class="hljs-built_in">empty</span>();<br>  &#125;); <span class="hljs-comment">// m_queue have data</span><br>  <span class="hljs-function">std::shared_ptr&lt;T&gt; <span class="hljs-title">result</span><span class="hljs-params">(std::make_shared&lt;T&gt;(std::move(m_queue.front())))</span></span>;<br>  m_queue.<span class="hljs-built_in">pop</span>();<br>  <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在之前的栈中，如果没有元素就会抛出异常，这实在是不恰当的做法，面对这种情况，我们还需要处理这个异常，我想不会因为栈中没有数据就不去获取吧？毕竟这可能是暂时的，往往我们就得去循环判断
+empty 情况。</p>
+<p>新的 wait_pop()
+函数解决了在栈中碰到的等待队列条目的问题；比起持续调用
+empty()，等待线程调用 wait_pop()
+函数并且数据结构使用条件变量来处理等待。对 m_have.wait()
+的调用，直到队列中至少有一个元素时才会返回，所以不用担心会出现空队列的情况，并且数据仍然被互斥锁保护。因此，这些函数不会添加任何新的竞争条件或死锁的可能性，并且将支持不变量。</p>
+<h3><span id="有锁和条件变量组合的安全队列进行第一次优化">有锁和条件变量组合的安全队列进行第一次优化</span></h3>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E6%9C%89%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E9%98%9F%E5%88%97%EF%BC%88%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%2B%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%89/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%BC%98%E5%8C%96">有锁和条件变量组合的安全队列进行第一次优化</a></p>
+<p>前面我们采用的是<code>notify_one</code>的方式，所以仅有一个线程被激活，<strong>如果被激活的线程异常了</strong>，就不能保证该数据被其他线程消费了，解决这个问题，可以采用几个方案：</p>
+<ol type="1">
+<li><code>wai_pop</code>失败的线程修复后再次取一次数据。</li>
+<li>将<code>notify_one</code>改为<code>notify_all</code>，这样能保证通知所有线程。但是<code>notify_all</code>将导致所有线程竞争，并不可取。</li>
+<li>我们可以通过队列存储智能指针的方式进行，因为智能指针在赋值的时候不会引发异常。</li>
+</ol>
+<p>经过考量，作者采用第三种方式来进行优化。</p>
+<p>从此，我们的队列中存储的所有元素全部都是 智能指针管理的对象。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">std::queue&lt;std::shared_ptr&lt;T&gt;&gt; m_queue;<br></code></pre></td></tr></table></figure>
+<p>我们在 push 的时候先构造智能指针，如果构造的过程失败了也就不会 push
+到队列中，不会污染队列中的数据。再者，之前是把构造智能指针对象放在加锁之后，但这是没有必要的，应该放在加锁之前。</p>
+<p>你可能会问难道没有并发安全问题？当然没有，我们只需要在放入队列之前加锁即可，但是构造对象无需加锁，因为每次调用
+push
+都是在第一个独立的栈中，共享的资源是队列，我们只要管好队列的添加和删除元素时候的并发安全问题就可以了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-type">void</span> SafeQueue&lt;T&gt;::<span class="hljs-built_in">push</span>(T data) &#123;<br>  <span class="hljs-function">std::shared_ptr&lt;T&gt; <span class="hljs-title">new_data</span><span class="hljs-params">(std::make_shared&lt;T&gt;(std::move(data)))</span></span>;<br>  <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lg</span><span class="hljs-params">(m_mtx)</span></span>;<br>  m_queue.<span class="hljs-built_in">push</span>(std::<span class="hljs-built_in">move</span>(new_data));<br>  m_have.<span class="hljs-built_in">notify_one</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>还有，我们队列中既然存储的是智能指针，那么我们 pop系列
+的接口本身也是要返回 pop 的对象的，我们需要通过 *
+获取智能指针管理的对象本身。就像下面这样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">data = std::<span class="hljs-built_in">move</span>(*m_queue.<span class="hljs-built_in">front</span>());<br></code></pre></td></tr></table></figure>
+<p>但是我们分析上面的代码，队列 push 和 pop 时采用的是一个mutex，导致
+push 和 pop 等操作串行化（pop 和 push
+不能独立执行），我们要考虑的是优化锁的精度，提高并发。</p>
+<h3><span id="有细粒度锁和条件变量组合的安全队列进行第二次优化">有细粒度锁和条件变量组合的安全队列进行第二次优化</span></h3>
+<p>部分限制来源于 STL 提供的 std::queue
+容器，如果我们自实现队列，那么可以掌控其中的细节，从而提供更细粒度的锁从而实现更高级别的开发。</p>
+<p>队列可以基于数组进行开发，也可以基于单链表进行开发，这边选择单链表。</p>
+<figure>
+<img src="/images/2024/10/24/1ebf3ca0-91cc-11ef-a820-1d6e743bb670.png" alt="队列1.png">
+<figcaption aria-hidden="true">队列1.png</figcaption>
+</figure>
+<p>数据项从队列的另一端添加到队列。为了做到这点，队列还有一个 tail
+指针，它指向链表中的最后一项。新节点的添加是通过改变最后一项的 next
+指针，让它指向新的节点，然后更新 tail
+指针指向这个新的数据项。当链表为空时，头/尾指针都为 NULL。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E6%9C%89%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E8%87%AA%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%EF%BC%88%E7%BB%86%E7%B2%92%E5%BA%A6%E9%94%81%2B%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%EF%BC%89/%E5%8D%95%E7%BA%BF%E7%A8%8B%E5%9F%BA%E4%BA%8E%E9%93%BE%E8%A1%A8%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%AE%80%E5%8D%95%E9%98%9F%E5%88%97">单线程基于链表实现的简单队列</a></p>
+<p>使用了 std::unique_ptr&lt;node&gt;
+来管理节点，因为这能保证当不再需要它们的时候，它们（以及它们引用的数据）会自动删除，而不必使用显式的
+delete。这个所有权链的管理从 head 开始，tail
+是指向最后一个节点的裸指针，因为它需要引用 std::unique_ptr&lt;node&gt;
+已经拥有的节点。</p>
+<p>这个队列在单线程下可以正常工作，但是多线程是万万不可的，有几个事情会带来麻烦。</p>
+<p>我们有两个成员变量 head 和
+tail，原则上可以使用两个锁分别保护头和尾指针，但这样做有几个问题。</p>
+<p>最明显的问题就是 push() 可能同时修改 head 和
+tail，所以它必须锁住两个互斥锁。尽管很不幸，但这倒不算是太大的问题，因为锁住两个互斥锁是可能的。关键的问题是
+push() 和 pop() 都能访问 next 指针指向的节点：push() 更新
+tail-&gt;next，然后 try_pop() 读取
+head-&gt;next。如果队列中只有一个元素，那么 head == tail，所以
+head-&gt;next 和 tail-&gt;next
+是同一个对象，并且这个对象需要保护。由于不同时读取 head 和 tail
+的话，没法区分它们是否是同一个对象，你现在必须在 push() 和 try_pop()
+中锁住同一个锁，所以，也没比以前好多少。</p>
+<p>那有什么办法摆脱这个困境吗 ? 通过分离数据使并发成为可能。</p>
+<p>你可以通过<strong>预先分配一个没有数据的虚拟节点</strong>来解决这个问题，以确保队列中至少有一个节点将头部访问的节点与尾部访问的节点分开。对一个空队列，head
+和 tail 都指向虚拟节点，而非 NULL
+指针。这很好，因为如果队列为空，try_pop() 就不会访问 head-&gt;next
+了。如果添加一个节点到队列中（所以有一个真实节点），那 head 和 tail
+现在会指向不同的节点，所以在 head-&gt;next 和 tail-&gt;next
+上不会有竞争。但缺点是，为了允许虚拟节点的存在，需要增加额外的一层间接性——通过指针来存储数据。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E6%9C%89%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E8%87%AA%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%EF%BC%88%E7%BB%86%E7%B2%92%E5%BA%A6%E9%94%81%2B%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%EF%BC%89/%E5%8D%95%E7%BA%BF%E7%A8%8B%E5%9F%BA%E4%BA%8E%E9%93%BE%E8%A1%A8%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%AE%80%E5%8D%95%E9%98%9F%E5%88%97%E6%95%B0%E6%8D%AE%E5%88%86%E7%A6%BB">分离数据</a></p>
+<p>尽管我们还是基于单线程，还没有并发安全的考虑，但本次代码改动还是很大的，很多值得聊的地方。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span>&#123;  <span class="hljs-comment">// 定义节点</span><br>  std::shared_ptr&lt;T&gt; data;<br>  std::unique_ptr&lt;<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span>&gt; next;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>最初 data 变量 没有采用智能指针管理，这边补充。</p>
+<p>通过引入虚拟节点，我们的 push 仅访问 tail 指针，而无需访问 head
+指针。try_pop 需要访问 tail 和 head 指针，但 head 只需要在 与 tail
+进行比较的时候需要用到，往后不需要。重大的收益在于虚拟节点的引入，使得
+try_pop() 和 push()
+<strong>永远不用对同一节点进行操作</strong>，所以就不再需要一个总的互斥锁了。你<strong>可以给
+head 和 tail 分别分配一个互斥锁</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-type">void</span> StrongestSafeQueue&lt;T&gt;::<span class="hljs-built_in">push</span>(T data) &#123;<br>  std::shared_ptr&lt;T&gt; new_data = std::<span class="hljs-built_in">make_shared</span>&lt;T&gt;(std::<span class="hljs-built_in">move</span>(data)); <span class="hljs-comment">// 构造 data</span><br>  <span class="hljs-function">std::unique_ptr&lt;Node&gt; <span class="hljs-title">new_node</span><span class="hljs-params">(std::make_unique&lt;Node&gt;())</span></span>; <span class="hljs-comment">// 构造 Node</span><br>  tail-&gt;data = new_data;<br>  Node* <span class="hljs-type">const</span> new_tail = new_node.<span class="hljs-built_in">get</span>();<br>  tail-&gt;next = std::<span class="hljs-built_in">move</span>(new_node);<br>  tail = new_tail;<br>&#125;<br><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br>std::shared_ptr&lt;T&gt; StrongestSafeQueue&lt;T&gt;::<span class="hljs-built_in">try_pop</span>() &#123;<br>  <span class="hljs-keyword">if</span> (head.<span class="hljs-built_in">get</span>() == tail)&#123;  <span class="hljs-comment">// 只有虚拟节点，代表队列为空</span><br>    <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">shared_ptr</span>&lt;T&gt;();<br>  &#125;<br>  <span class="hljs-function">std::shared_ptr&lt;T&gt; <span class="hljs-type">const</span> <span class="hljs-title">result</span><span class="hljs-params">(head-&gt;data)</span></span>;  <span class="hljs-comment">// data 成员已经是 shared_ptr 指针了</span><br>  std::unique_ptr&lt;Node&gt; <span class="hljs-type">const</span> old_head = std::<span class="hljs-built_in">move</span>(head);<br>  head = std::<span class="hljs-built_in">move</span>(old_head-&gt;next); <span class="hljs-comment">// 更新头指针</span><br>  <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>下面通过示意图来解释核心流程：</p>
+<figure>
+<img src="/images/2024/10/24/175a8960-91cc-11ef-a820-1d6e743bb670.png" alt="队列2.png">
+<figcaption aria-hidden="true">队列2.png</figcaption>
+</figure>
+<p>我们创建 StrongestSafeQueue&lt;T&gt;
+对象，就会在构造函数中默认初始化得到一个虚拟节点，这个节点不包含任何有效数据。</p>
+<p>添加一个节点，但是这个节点并不是包含有效数据，而是像之前的虚拟节点那样，添加到有效数据放在虚拟节点中（这里现在是这样），那么等到下一次存储有效数据的时候，就是当前创建的这个节点用来存储了：</p>
+<figure>
+<img src="/images/2024/10/24/0e576860-91cc-11ef-a820-1d6e743bb670.png" alt="队列3.png">
+<figcaption aria-hidden="true">队列3.png</figcaption>
+</figure>
+<p>这就是为什么等我们 try_pop 数据的时候，直接从 head 开始，然后记得更新
+head 指向下一个节点即可。</p>
+<p>最初还没有弄清楚作者的代码逻辑，我想虚拟头结点不是没有有效数据吗？为什么去访问数据呢？因为我想着是通过虚拟头结点的下一个节点去存储有效数据的，导致出现误会了，绘图之后才算弄清楚了。只要有一个有效节点，那么
+tail 和 head 始终不会访问同一个节点，head 指向有效的节点；tail
+指向的节点不包含有效数据，但是是用来存储下一个有效数据。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E6%9C%89%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E8%87%AA%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%EF%BC%88%E7%BB%86%E7%B2%92%E5%BA%A6%E9%94%81%2B%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%EF%BC%89/%E5%8A%A0%E9%94%81">开始加锁</a></p>
+<p>push() 很简单，访问 tail
+期间都需要互斥锁被锁住，也就是在新分配节点后，对当前尾节点进行赋值之前上锁。锁需要持有到函数结束。</p>
+<p>try_pop() 就没那么简单了。首先，需要使用互斥锁锁住
+head，一直到不再访问head。这个互斥锁决定了哪一个线程进行弹出操作，所以你会第一时间锁上它。一旦
+head
+改变，就可以解锁互斥锁；在返回结果时，互斥锁就不需要上锁了。这使得对
+tail 的访问需要锁住 tail 互斥锁。因为只需要访问 tail
+一次，且只有在读取时才需要互斥锁。所以最好的做法是把它包装到函数中。实际上，因为需要
+head
+互斥锁被锁住的代码只是成员的一个子集，把它包装到函数中也会更清晰。</p>
+<p>因为没有修改任何接口，所以没有新的外部机会导致死锁。在实现内部也不会有死锁；唯一需要获取两个锁的是
+pop_head()，这个函数都是先获取 head_mutex 然后
+tail_mutex，所以永远不会死锁。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E6%9C%89%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E8%87%AA%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%EF%BC%88%E7%BB%86%E7%B2%92%E5%BA%A6%E9%94%81%2B%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%EF%BC%89/%E5%8A%A0%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F">等待数据项弹出</a></p>
+<p>把之前的 wait_pop 接口给实现，即引入条件变量。</p>
+<h1><span id="设计更复杂的基于锁的数据结构">设计更复杂的基于锁的数据结构</span></h1>
+<h2><span id="使用锁实现的线程安全的查找表">使用锁实现的线程安全的查找表</span></h2>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E6%9C%89%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%9F%A5%E6%89%BE%E8%A1%A8%EF%BC%88%E5%85%B1%E4%BA%AB%E9%94%81%EF%BC%89">使用锁实现的线程安全的查找表</a></p>
+<p>我们实现的查找表是链地址法，见下：</p>
+<figure>
+<img src="/images/2024/10/24/03e43ca0-91cc-11ef-a820-1d6e743bb670.png" alt="链地址法.png">
+<figcaption aria-hidden="true">链地址法.png</figcaption>
+</figure>
+<p>就是把
+桶中的节点，即链表进行加锁，来保证互斥安全。我们的查找表可以支持并发读，并发写，并发读的时候不会阻塞其他线程。但是并发写的时候会卡住其他线程。基本的并发读写没有问题。</p>
+<p>但是对于bucket_type中链表的操作加锁精度并不精细，因为我们采用的是std提供的list容器，所以增删改查等操作都要加同一把锁，导致锁过于粗糙。</p>
+<h2><span id="使用锁实现的线程安全的链表">使用锁实现的线程安全的链表</span></h2>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E6%9C%89%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E9%93%BE%E8%A1%A8%EF%BC%88%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%89">使用锁实现的线程安全的链表</a></p>
+<h3><span id="添加一个对象到链表-头插法">添加一个对象到链表--头插法</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push_front</span><span class="hljs-params">(T data)</span> </span>&#123;<br>    std: :unique_ptr &lt; Node &gt; new_node = std: :make_unique &lt; Node &gt; (data);<br>    std: :lock_guard &lt; std: :mutex &gt; <span class="hljs-built_in">lg</span>(head.mtx);<br>    new_node - &gt;next = std: :<span class="hljs-built_in">move</span>(head.next);<br>    head.next = std: :<span class="hljs-built_in">move</span>(new_node);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>准备插入节点之前：</p>
+<figure>
+<img src="/images/2024/10/24/fcc2d3f0-91cb-11ef-a820-1d6e743bb670.png" alt="链表1.png">
+<figcaption aria-hidden="true">链表1.png</figcaption>
+</figure>
+<p>我们锁住虚拟头结点，那么对该节点成员的访问就是线程安全的。因此，让新节点的
+next 指向虚拟头结点 next 指向的节点，这是线程安全的。</p>
+<figure>
+<img src="/images/2024/10/24/f804afa0-91cb-11ef-a820-1d6e743bb670.png" alt="链表2.png">
+<figcaption aria-hidden="true">链表2.png</figcaption>
+</figure>
+<p>新节点就插入成功，但还需要更新虚拟头结点，来确保这是一个合理的单链表。由于虚拟头结点依旧还在锁中，不会被外人访问到，而其它接口本身也只能从访问
+head 开始，不用担心线程安全问题。</p>
+<p>我们可以正常且安全更新 head 的 next 指针，即指向新节点，因为 head 的
+next 指针可以安全访问，而后续节点访问必须从 head 开始。</p>
+<figure>
+<img src="/images/2024/10/24/f43a6130-91cb-11ef-a820-1d6e743bb670.png" alt="链表3.png">
+<figcaption aria-hidden="true">链表3.png</figcaption>
+</figure>
+<h3><span id="从链表中删除满足某个条件的项">从链表中删除满足某个条件的项</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Predicate&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">remove_if</span><span class="hljs-params">(Predicate P)</span></span>&#123;<br>  Node* current = &amp;head;<br>  <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">ul</span><span class="hljs-params">(head.mtx)</span></span>;<br>  <span class="hljs-keyword">while</span> (Node* <span class="hljs-type">const</span> next = current-&gt;next.<span class="hljs-built_in">get</span>()) &#123;<br>    <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">ul_next</span><span class="hljs-params">(next-&gt;mtx)</span></span>;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">P</span>(*next-&gt;data)) &#123;	<span class="hljs-comment">// 满足删除条件</span><br>      std::unique_ptr&lt;Node&gt; old_next = std::<span class="hljs-built_in">move</span>(current-&gt;next);<br>      current-&gt;next = std::<span class="hljs-built_in">move</span>(next-&gt;next);<br>      ul_next.<span class="hljs-built_in">unlock</span>();<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      ul.<span class="hljs-built_in">unlock</span>();<br>      current = next;<br>      ul = std::<span class="hljs-built_in">move</span>(ul_next);  <span class="hljs-comment">// 保证 current 的访问是线程安全，因为之前的 ul 已经被 unlock</span><br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>未加锁之前，我们先存储当前虚拟头结点为
+current。这可能存在一个问题，就是最新的虚拟头结点可能会被更换，导致
+current 并不一定存储的最新的虚拟头结点？</p>
+<p>非也，虚拟头结点本质是一个指针，并不会被更换。回顾之前的插入节点，我们只是先把新节点指向
+虚拟头结点的下一个节点，再去把
+头结点指向这个新节点，从头到尾是线程安全，并且本质上没有更改虚拟头结点本身，所以不存在上述问题。</p>
+<p>要访问 head-&gt;next 或者 current-&gt;next，需要对 head
+加锁。需要访问 next-&gt;next ，所以要对 next
+加锁。至此，我们已经加两把锁了。</p>
+<figure>
+<img src="/images/2024/10/24/ec9a52a0-91cb-11ef-a820-1d6e743bb670.png" alt="链表4.png">
+<figcaption aria-hidden="true">链表4.png</figcaption>
+</figure>
+<p><strong>满足删除条件</strong>：</p>
+<p>需要安全访问两个节点，暂时不解开任何一把锁，等安全删除 next
+节点之后才考虑解锁。先把 current - &gt;next
+节点用智能指针管理，待离开作用域自行删除。</p>
+<p>接下来就是通过更改 current 的 next 指向来安全删除满足条件的节点
+next，随后就可以解开 next 的锁了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">std: :unique_ptr &lt; Node &gt; old_next = std: :<span class="hljs-built_in">move</span>(current - &gt;next);<br>current - &gt;next = std: :<span class="hljs-built_in">move</span>(next - &gt;next);<br>ul_next.<span class="hljs-built_in">unlock</span>();<br></code></pre></td></tr></table></figure>
+<p><strong>不满足删除条件</strong>：</p>
+<p>不需要删除任何节点，只需要移动 current / head 指针到 next
+节点上即可。由于 current / head 指针已经不需要访问，解锁即可。让 current
+指向 下一个节点，即 next。在下一次的循环里会访问
+current，为了安全性，我们需要把锁给到 ul，这样它就保证 current
+访问的安全性，这点赋值锁是相当巧妙的，因为在最外层就是一把锁，这个锁通过这种方式，就已经锁住
+current 了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">ul.unlock();<br>current = next;<br>ul = std::move(ul_next);  // 保证 current 的访问是线程安全，因为之前的 ul 已经被 unlock<br></code></pre></td></tr></table></figure>
+<h3><span id="更新链表中满足某个条件的项">更新链表中满足某个条件的项</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt; <span class="hljs-keyword">typename</span> Function &gt; <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">for_each</span><span class="hljs-params">(Function F)</span> </span>&#123;<br>    Node * current = &amp;head;<br>    std: :unique_lock &lt; std: :mutex &gt; <span class="hljs-built_in">ul</span>(head.mtx); <span class="hljs-comment">// 方便随时解锁</span><br>    <span class="hljs-keyword">while</span> (Node * <span class="hljs-type">const</span> next = current - &gt;next.<span class="hljs-built_in">get</span>()) &#123;<br>        <span class="hljs-comment">// 要操作 current 下一个 节点，自然要 加其锁</span><br>        std: :unique_lock &lt; std: :mutex &gt; <span class="hljs-built_in">ul_next</span>(next - &gt;mtx);<br>        ul.<span class="hljs-built_in">unlock</span>(); <span class="hljs-comment">// 已经可以安全访问到 current 下一个节点</span><br>        <span class="hljs-built_in">F</span>( * next - &gt;data);<br>        current = next;<br>        ul = std: :<span class="hljs-built_in">move</span>(ul_next); <span class="hljs-comment">// 保证 current 的访问是线程安全，因为之前的 ul 已经被 unlock</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果明白上面更新锁的操作，这个地方就很好理解。</p>
+<p>但我们能够安全访问到 next 节点，就可以安心释放 ul
+锁，因为我们无需访问 current 节点。等到更新 next
+节点数据之后，就交换锁，把 ul_next 锁 换到 ul 锁，回到循环开始访问
+current 的时候，就是已经加锁状态，可以继续安全访问 current 节点了。</p>
+<h3><span id="从链表中查找满足某个条件的项">从链表中查找满足某个条件的项</span></h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt; <span class="hljs-keyword">typename</span> Predicate &gt; std: :shared_ptr &lt; T &gt; <span class="hljs-built_in">find_first_if</span>(Predicate P) &#123;<br>    Node * current = &amp;head;<br>    std: :unique_lock &lt; std: :mutex &gt; <span class="hljs-built_in">ul</span>(head.mtx);<br>    <span class="hljs-keyword">while</span> (Node * <span class="hljs-type">const</span> next = current - &gt;next.<span class="hljs-built_in">get</span>()) &#123;<br>        std: :unique_lock &lt; std: :mutex &gt; <span class="hljs-built_in">ul_next</span>(next - &gt;mtx);<br>        ul.<span class="hljs-built_in">unlock</span>();<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">P</span>( * next - &gt;data)) &#123;<br>            <span class="hljs-keyword">return</span> next - &gt;data;<br>        &#125;<br>        current = next;<br>        ul = std: :<span class="hljs-built_in">move</span>(ul_next); <span class="hljs-comment">// 保证 current 的访问是线程安全，因为之前的 ul 已经被 unlock</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> std: :shared_ptr &lt; T &gt; ();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/posts/f91535f.html">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>MySQL事务</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/651664ee.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      Redis哨兵
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\2e4990f4.html" title="CAS机制" rel="bookmark">CAS机制</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\749f31c1.html" title="多线程中的虚假唤醒" rel="bookmark">多线程中的虚假唤醒</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\a90d3c02.html" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>

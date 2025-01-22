@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        第七章：Beast网络库实现WebSocket服务器 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">第七章：Beast网络库实现WebSocket服务器</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a><a href="/tags/Asio/" class="post-tag">#Asio</a>
+
+
+          <span class="post-date">2024-09-19</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#接口">接口</a>
+<ul>
+<li><a href="#connecting连接">Connecting（连接）</a></li>
+<li><a href="#handshaking握手">Handshaking（握手）</a></li>
+<li><a href="#decorator装饰器">Decorator（装饰器）</a></li>
+<li><a href="#message">Message</a></li>
+<li><a href="#timeouts">Timeouts</a></li>
+<li><a href="#重要注意事项">重要注意事项</a></li>
+</ul></li>
+<li><a href="#代码实现和测试">代码实现和测试</a></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="接口">接口</span></h2>
+<h3><span id="connecting连接">Connecting（连接）</span></h3>
+<p>处理 WebSocket 流的连接和接收。</p>
+<p>（一）连接到 WebSocket 服务器</p>
+<p>要与 WebSocket 服务器建立连接，首先需要连接到服务器，然后执行
+WebSocket 握手。Boost.Beast 提供了一个 <code>stream</code> 类来管理
+WebSocket 连接。你可以使用 <code>tcp_stream</code>
+作为底层流来实现这一点。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/beast.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">namespace</span> net = boost::asio;<br><span class="hljs-keyword">namespace</span> beast = boost::beast;<br><span class="hljs-keyword">using</span> tcp = net::ip::tcp;<br><br><span class="hljs-comment">// 创建 WebSocket 客户端并连接到服务器</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        net::io_context ioc;<br><br>        <span class="hljs-comment">// 创建 WebSocket 流</span><br>        beast::<span class="hljs-function">websocket::stream&lt;tcp::socket&gt; <span class="hljs-title">ws</span><span class="hljs-params">(ioc)</span></span>;<br>        <span class="hljs-function">tcp::resolver <span class="hljs-title">resolver</span><span class="hljs-params">(ioc)</span></span>;<br><br>        <span class="hljs-comment">// 解析主机名和端口</span><br>        <span class="hljs-keyword">auto</span> <span class="hljs-type">const</span> results = resolver.<span class="hljs-built_in">resolve</span>(<span class="hljs-string">&quot;example.com&quot;</span>, <span class="hljs-string">&quot;ws&quot;</span>);<br><br>        <span class="hljs-comment">// 连接到服务器</span><br>        beast::<span class="hljs-built_in">get_lowest_layer</span>(ws).<span class="hljs-built_in">connect</span>(results);<br><br>        <span class="hljs-comment">// 执行 WebSocket 握手</span><br>        ws.<span class="hljs-built_in">handshake</span>(<span class="hljs-string">&quot;example.com&quot;</span>, <span class="hljs-string">&quot;/&quot;</span>);<br><br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Connected and handshake completed&quot;</span> &lt;&lt; std::endl;<br><br>        <span class="hljs-comment">// 在这里你可以发送和接收消息</span><br><br>    &#125; <span class="hljs-built_in">catch</span> (std::exception <span class="hljs-type">const</span>&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>（二）接收来自客户端的连接</p>
+<p>要接受传入的 WebSocket 连接，你需要创建一个 <code>acceptor</code>
+对象来监听连接请求。接受到连接后，你可以创建一个 <code>stream</code>
+对象来处理 WebSocket 连接。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/beast.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">namespace</span> net = boost::asio;<br><span class="hljs-keyword">namespace</span> beast = boost::beast;<br><span class="hljs-keyword">using</span> tcp = net::ip::tcp;<br><br><span class="hljs-comment">// 创建 WebSocket 服务器并接受连接</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        net::io_context ioc;<br><br>        <span class="hljs-comment">// 创建接受器</span><br>        <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(ioc, tcp::endpoint(tcp::v4(), <span class="hljs-number">0</span>))</span></span>;<br>        acceptor.<span class="hljs-built_in">listen</span>();<br><br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Listening for connections on port &quot;</span> &lt;&lt; acceptor.<span class="hljs-built_in">local_endpoint</span>().<span class="hljs-built_in">port</span>() &lt;&lt; std::endl;<br><br>        <span class="hljs-comment">// 等待并接受连接</span><br>        <span class="hljs-function">tcp::socket <span class="hljs-title">socket</span><span class="hljs-params">(ioc)</span></span>;<br>        acceptor.<span class="hljs-built_in">accept</span>(socket);<br><br>        <span class="hljs-comment">// 创建 WebSocket 流对象</span><br>        beast::<span class="hljs-function">websocket::stream&lt;tcp::socket&gt; <span class="hljs-title">ws</span><span class="hljs-params">(std::move(socket))</span></span>;<br><br>        <span class="hljs-comment">// 执行 WebSocket 握手</span><br>        ws.<span class="hljs-built_in">accept</span>();<br><br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Connection accepted and handshake completed&quot;</span> &lt;&lt; std::endl;<br><br>        <span class="hljs-comment">// 在这里你可以发送和接收消息</span><br><br>    &#125; <span class="hljs-built_in">catch</span> (std::exception <span class="hljs-type">const</span>&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>（三）使用 <code>acceptor</code> 直接接收连接到 WebSocket 流</p>
+<p>如果你希望 WebSocket 流在接受连接时直接使用
+<code>acceptor</code>，可以这样做：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/beast.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">namespace</span> net = boost::asio;<br><span class="hljs-keyword">namespace</span> beast = boost::beast;<br><span class="hljs-keyword">using</span> tcp = net::ip::tcp;<br><br><span class="hljs-comment">// 创建 WebSocket 服务器并接受连接</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        net::io_context ioc;<br><br>        <span class="hljs-comment">// 创建接受器</span><br>        <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(ioc, tcp::endpoint(tcp::v4(), <span class="hljs-number">0</span>))</span></span>;<br>        acceptor.<span class="hljs-built_in">listen</span>();<br><br>        <span class="hljs-comment">// 创建 WebSocket 流，并使用 strand 保证线程安全</span><br>        beast::<span class="hljs-function">websocket::stream&lt;tcp::socket&gt; <span class="hljs-title">ws</span><span class="hljs-params">(net::make_strand(ioc))</span></span>;<br><br>        <span class="hljs-comment">// 直接将套接字传递给 WebSocket 流</span><br>        acceptor.<span class="hljs-built_in">accept</span>(beast::<span class="hljs-built_in">get_lowest_layer</span>(ws).<span class="hljs-built_in">socket</span>());<br><br>        <span class="hljs-comment">// 执行 WebSocket 握手</span><br>        ws.<span class="hljs-built_in">accept</span>();<br><br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Connection accepted and handshake completed&quot;</span> &lt;&lt; std::endl;<br><br>        <span class="hljs-comment">// 在这里你可以发送和接收消息</span><br><br>    &#125; <span class="hljs-built_in">catch</span> (std::exception <span class="hljs-type">const</span>&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3><span id="handshaking握手">Handshaking（握手）</span></h3>
+<p>（一）客户端</p>
+<p>WebSocket 会话开始于客户端发送一个 HTTP/1.1
+升级请求，通过建立的连接请求 WebSocket
+协议。服务器收到请求后，发送一个表示接受请求并将连接升级的响应。这个升级请求必须包含
+<code>Host</code> 字段和请求的目标资源。下面是一个典型的 HTTP
+升级请求的示例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++">GET / HTTP/<span class="hljs-number">1.1</span><br>Host: www.example.com<br>Upgrade: websocket<br>Connection: upgrade<br>Sec-WebSocket-Key: <span class="hljs-number">2</span>pGeTR0DsE4dfZs2pH<span class="hljs-number">+8</span>MA==<br>Sec-WebSocket-Version: <span class="hljs-number">13</span><br>User-Agent: Boost.Beast/<span class="hljs-number">216</span><br></code></pre></td></tr></table></figure>
+<p>使用 <code>websocket::stream</code> 类的 <code>handshake</code> 和
+<code>async_handshake</code> 成员函数可以发送带有所需 <code>Host</code>
+和目标字符串的请求。下面的代码展示了如何在客户端角色中连接到服务器，并执行
+WebSocket 握手：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/beast.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">namespace</span> net = boost::asio;<br><span class="hljs-keyword">namespace</span> beast = boost::beast;<br><span class="hljs-keyword">using</span> tcp = net::ip::tcp;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        net::io_context ioc;<br><br>        <span class="hljs-comment">// 创建 WebSocket 流</span><br>        beast::<span class="hljs-function">websocket::stream&lt;tcp::socket&gt; <span class="hljs-title">ws</span><span class="hljs-params">(ioc)</span></span>;<br>        <span class="hljs-function">tcp::resolver <span class="hljs-title">resolver</span><span class="hljs-params">(ioc)</span></span>;<br><br>        <span class="hljs-comment">// 连接到服务器</span><br>        beast::<span class="hljs-built_in">get_lowest_layer</span>(ws).<span class="hljs-built_in">connect</span>(resolver.<span class="hljs-built_in">resolve</span>(<span class="hljs-string">&quot;www.example.com&quot;</span>, <span class="hljs-string">&quot;ws&quot;</span>));<br><br>        <span class="hljs-comment">// 在客户端角色中执行 WebSocket 握手</span><br>        ws.<span class="hljs-built_in">handshake</span>(<span class="hljs-string">&quot;www.example.com&quot;</span>, <span class="hljs-string">&quot;/&quot;</span>);<br><br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Connected and handshake completed&quot;</span> &lt;&lt; std::endl;<br><br>        <span class="hljs-comment">// 这里可以发送和接收消息</span><br><br>    &#125; <span class="hljs-built_in">catch</span> (std::exception <span class="hljs-type">const</span>&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在客户端收到 HTTP 升级响应后，可能希望对收到的 HTTP
+响应消息执行额外的验证。例如，检查基本认证挑战的响应是否有效。可以通过重载的
+<code>handshake</code> 成员函数，将收到的 HTTP 消息存储到
+<code>response_type</code> 类型的输出引用参数中：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/beast.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">namespace</span> net = boost::asio;<br><span class="hljs-keyword">namespace</span> beast = boost::beast;<br><span class="hljs-keyword">using</span> tcp = net::ip::tcp;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        net::io_context ioc;<br><br>        <span class="hljs-comment">// 创建 WebSocket 流</span><br>        beast::<span class="hljs-function">websocket::stream&lt;tcp::socket&gt; <span class="hljs-title">ws</span><span class="hljs-params">(ioc)</span></span>;<br>        <span class="hljs-function">tcp::resolver <span class="hljs-title">resolver</span><span class="hljs-params">(ioc)</span></span>;<br><br>        <span class="hljs-comment">// 连接到服务器</span><br>        beast::<span class="hljs-built_in">get_lowest_layer</span>(ws).<span class="hljs-built_in">connect</span>(resolver.<span class="hljs-built_in">resolve</span>(<span class="hljs-string">&quot;www.example.com&quot;</span>, <span class="hljs-string">&quot;ws&quot;</span>));<br><br>        <span class="hljs-comment">// 用于接收 HTTP 响应的变量</span><br>        beast::http::response&lt;beast::http::string_body&gt; res;<br><br>        <span class="hljs-comment">// 执行 WebSocket 握手</span><br>        ws.<span class="hljs-built_in">handshake</span>(res, <span class="hljs-string">&quot;www.example.com&quot;</span>, <span class="hljs-string">&quot;/&quot;</span>);<br><br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Connected and handshake completed with response&quot;</span> &lt;&lt; std::endl;<br><br>        <span class="hljs-comment">// 这里可以发送和接收消息</span><br><br>    &#125; <span class="hljs-built_in">catch</span> (std::exception <span class="hljs-type">const</span>&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>（二）服务端</p>
+<p>使用 <code>accept</code> 和 <code>async_accept</code>
+成员函数可以读取 WebSocket HTTP 升级请求握手，并发送 WebSocket HTTP
+升级响应：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/beast.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">namespace</span> net = boost::asio;<br><span class="hljs-keyword">namespace</span> beast = boost::beast;<br><span class="hljs-keyword">using</span> tcp = net::ip::tcp;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        net::io_context ioc;<br><br>        <span class="hljs-comment">// 创建接受器</span><br>        <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(ioc, tcp::endpoint(tcp::v4(), <span class="hljs-number">0</span>))</span></span>;<br>        acceptor.<span class="hljs-built_in">listen</span>();<br><br>        <span class="hljs-comment">// 等待并接受连接</span><br>        <span class="hljs-function">tcp::socket <span class="hljs-title">socket</span><span class="hljs-params">(ioc)</span></span>;<br>        acceptor.<span class="hljs-built_in">accept</span>(socket);<br><br>        <span class="hljs-comment">// 创建 WebSocket 流对象</span><br>        beast::<span class="hljs-function">websocket::stream&lt;tcp::socket&gt; <span class="hljs-title">ws</span><span class="hljs-params">(std::move(socket))</span></span>;<br><br>        <span class="hljs-comment">// 执行 WebSocket 握手</span><br>        ws.<span class="hljs-built_in">accept</span>();<br><br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Connection accepted and handshake completed&quot;</span> &lt;&lt; std::endl;<br><br>        <span class="hljs-comment">// 这里可以发送和接收消息</span><br><br>    &#125; <span class="hljs-built_in">catch</span> (std::exception <span class="hljs-type">const</span>&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>（三）握手缓冲</p>
+<p>服务器可以从流中读取数据，并在后续决定这些缓冲的字节是否应该解释为
+WebSocket 升级请求。为此，提供了接受额外缓冲序列参数的
+<code>accept</code> 和 <code>async_accept</code> 重载函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/beast.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><br><span class="hljs-keyword">namespace</span> net = boost::asio;<br><span class="hljs-keyword">namespace</span> beast = boost::beast;<br><span class="hljs-keyword">using</span> tcp = net::ip::tcp;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        net::io_context ioc;<br><br>        <span class="hljs-comment">// 创建接受器</span><br>        <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(ioc, tcp::endpoint(tcp::v4(), <span class="hljs-number">0</span>))</span></span>;<br>        acceptor.<span class="hljs-built_in">listen</span>();<br><br>        <span class="hljs-comment">// 等待并接受连接</span><br>        <span class="hljs-function">tcp::socket <span class="hljs-title">socket</span><span class="hljs-params">(ioc)</span></span>;<br>        acceptor.<span class="hljs-built_in">accept</span>(socket);<br><br>        <span class="hljs-comment">// 创建 WebSocket 流对象</span><br>        beast::<span class="hljs-function">websocket::stream&lt;tcp::socket&gt; <span class="hljs-title">ws</span><span class="hljs-params">(std::move(socket))</span></span>;<br><br>        <span class="hljs-comment">// 用于存储 HTTP 请求的缓冲区</span><br>        std::string s;<br><br>        <span class="hljs-comment">// 读取缓冲区中的 HTTP 请求，直到遇到请求结束标志</span><br>        net::<span class="hljs-built_in">read_until</span>(ws, net::<span class="hljs-built_in">dynamic_buffer</span>(s), <span class="hljs-string">&quot;\r\n\r\n&quot;</span>);<br><br>        <span class="hljs-comment">// 使用缓冲的数据接受连接</span><br>        ws.<span class="hljs-built_in">accept</span>(net::<span class="hljs-built_in">buffer</span>(s));<br><br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Connection accepted and handshake completed with buffered data&quot;</span> &lt;&lt; std::endl;<br><br>    &#125; <span class="hljs-built_in">catch</span> (std::exception <span class="hljs-type">const</span>&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>（四）检查 HTTP 请求</p>
+<p>当实现一个支持 WebSocket 的 HTTP
+服务器时，服务器通常会读取来自客户端的 HTTP 请求。可以使用
+<code>websocket::is_upgrade</code> 函数来检测传入的 HTTP 请求是否为
+WebSocket 升级请求。</p>
+<p>如果 HTTP 请求是 WebSocket 升级请求，可以使用重载的
+<code>accept</code> 和 <code>async_accept</code> 函数，这些函数接受整个
+HTTP 请求头作为对象，以执行握手。通过手动读取请求，可以处理普通的 HTTP
+请求以及升级请求。示例如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/beast.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">namespace</span> net = boost::asio;<br><span class="hljs-keyword">namespace</span> beast = boost::beast;<br><span class="hljs-keyword">using</span> tcp = net::ip::tcp;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        net::io_context ioc;<br><br>        <span class="hljs-comment">// 创建接受器</span><br>        <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(ioc, tcp::endpoint(tcp::v4(), <span class="hljs-number">0</span>))</span></span>;<br>        acceptor.<span class="hljs-built_in">listen</span>();<br><br>        <span class="hljs-comment">// 等待并接受连接</span><br>        <span class="hljs-function">tcp::socket <span class="hljs-title">socket</span><span class="hljs-params">(ioc)</span></span>;<br>        acceptor.<span class="hljs-built_in">accept</span>(socket);<br><br>        <span class="hljs-comment">// 用于读取 HTTP 消息的缓冲区</span><br>        beast::flat_buffer buffer;<br><br>        <span class="hljs-comment">// 读取 HTTP 请求</span><br>        beast::http::request&lt;beast::http::string_body&gt; req;<br>        beast::http::<span class="hljs-built_in">read</span>(socket, buffer, req);<br><br>        <span class="hljs-comment">// 检查是否为 WebSocket 升级请求</span><br>        <span class="hljs-keyword">if</span> (beast::websocket::<span class="hljs-built_in">is_upgrade</span>(req)) &#123;<br>            <span class="hljs-comment">// 创建 WebSocket 流对象</span><br>            beast::<span class="hljs-function">websocket::stream&lt;tcp::socket&gt; <span class="hljs-title">ws</span><span class="hljs-params">(std::move(socket))</span></span>;<br><br>            <span class="hljs-comment">// 确保缓冲区为空</span><br>            <span class="hljs-built_in">BOOST_ASSERT</span>(buffer.<span class="hljs-built_in">size</span>() == <span class="hljs-number">0</span>);<br><br>            <span class="hljs-comment">// 接受升级请求</span><br>            ws.<span class="hljs-built_in">accept</span>(req);<br><br>            std::cout &lt;&lt; <span class="hljs-string">&quot;WebSocket upgrade request accepted&quot;</span> &lt;&lt; std::endl;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// 不是 WebSocket 升级请求，处理为普通 HTTP 请求</span><br>            std::cout &lt;&lt; <span class="hljs-string">&quot;Normal HTTP request received&quot;</span> &lt;&lt; std::endl;<br>        &#125;<br><br>    &#125; <span class="hljs-built_in">catch</span> (std::exception <span class="hljs-type">const</span>&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>（五）子协议</p>
+<p>如果客户端请求一组子协议中的一个，客户端将在初始 WebSocket 升级 HTTP
+请求中设置 <code>Sec-WebSocket-Protocol</code>
+头。服务器需要解析该头并选择一个接受的协议。服务器通过在接受头中设置
+<code>Sec-WebSocket-Protocol</code> 头来指示选定的协议。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/asio.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/beast.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;array&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><br><span class="hljs-keyword">namespace</span> net = boost::asio;<br><span class="hljs-keyword">namespace</span> beast = boost::beast;<br><span class="hljs-keyword">using</span> tcp = net::ip::tcp;<br><br><span class="hljs-comment">// 选择最优协议的函数</span><br><span class="hljs-keyword">auto</span> select_protocol = [](beast::string_view offered_tokens) -&gt; std::string &#123;<br>    beast::http::token_list <span class="hljs-built_in">offered</span>(offered_tokens);<br><br>    <span class="hljs-comment">// 支持的协议数组，按优先级顺序排列</span><br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> std::array&lt;beast::string_view, 3&gt; supported = &#123;&#123;<br>        <span class="hljs-string">&quot;v3.my.chat&quot;</span>,<br>        <span class="hljs-string">&quot;v2.my.chat&quot;</span>,<br>        <span class="hljs-string">&quot;v1.my.chat&quot;</span><br>    &#125;&#125;;<br><br>    std::string result;<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> proto : supported) &#123;<br>        <span class="hljs-keyword">auto</span> iter = std::<span class="hljs-built_in">find</span>(offered.<span class="hljs-built_in">begin</span>(), offered.<span class="hljs-built_in">end</span>(), proto);<br>        <span class="hljs-keyword">if</span> (iter != offered.<span class="hljs-built_in">end</span>()) &#123;<br>            <span class="hljs-comment">// 找到客户端提供的支持的协议</span><br>            result.<span class="hljs-built_in">assign</span>(proto.<span class="hljs-built_in">begin</span>(), proto.<span class="hljs-built_in">end</span>());<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> result;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        net::io_context ioc;<br><br>        <span class="hljs-comment">// 创建接受器</span><br>        <span class="hljs-function">tcp::acceptor <span class="hljs-title">acceptor</span><span class="hljs-params">(ioc, tcp::endpoint(tcp::v4(), <span class="hljs-number">0</span>))</span></span>;<br>        acceptor.<span class="hljs-built_in">listen</span>();<br><br>        <span class="hljs-comment">// 等待并接受连接</span><br>        <span class="hljs-function">tcp::socket <span class="hljs-title">socket</span><span class="hljs-params">(ioc)</span></span>;<br>        acceptor.<span class="hljs-built_in">accept</span>(socket);<br><br>        <span class="hljs-comment">// 用于读取 HTTP 消息的缓冲区</span><br>        beast::flat_buffer buffer;<br><br>        <span class="hljs-comment">// 读取 HTTP 请求</span><br>        beast::http::request&lt;beast::http::string_body&gt; req;<br>        beast::http::<span class="hljs-built_in">read</span>(socket, buffer, req);<br><br>        <span class="hljs-comment">// 检查是否为 WebSocket 升级请求</span><br>        <span class="hljs-keyword">if</span> (beast::websocket::<span class="hljs-built_in">is_upgrade</span>(req)) &#123;<br>            std::string protocol = <span class="hljs-built_in">select_protocol</span>(req[beast::http::field::sec_websocket_protocol]);<br><br>            <span class="hljs-keyword">if</span> (protocol.<span class="hljs-built_in">empty</span>()) &#123;<br>                <span class="hljs-comment">// 没有提供有效的协议</span><br>                beast::http::response&lt;beast::http::string_body&gt; res;<br>                res.<span class="hljs-built_in">result</span>(beast::http::status::bad_request);<br>                res.<span class="hljs-built_in">body</span>() = <span class="hljs-string">&quot;No valid sub-protocol was offered. This server implements v3.my.chat, v2.my.chat, and v1.my.chat&quot;</span>;<br>                beast::http::<span class="hljs-built_in">write</span>(socket, res);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-comment">// 创建 WebSocket 流对象</span><br>                beast::websocket::stream&lt;tcp::socket&gt; <span class="hljs-built_in">ws</span>(std::<span class="hljs-built_in">move</span>(socket));<br><br>                ws.<span class="hljs-built_in">set_option</span>(beast::websocket::stream_base::<span class="hljs-built_in">decorator</span>(<br>                    [protocol](beast::http::response_header&lt;&gt;&amp; hdr) &#123;<br>                        hdr.<span class="hljs-built_in">set</span>(beast::http::field::sec_websocket_protocol, protocol);<br>                    &#125;<br>                ));<br><br>                <span class="hljs-comment">// 接受升级请求</span><br>                ws.<span class="hljs-built_in">accept</span>(req);<br><br>                std::cout &lt;&lt; <span class="hljs-string">&quot;WebSocket upgrade request accepted with selected protocol: &quot;</span> &lt;&lt; protocol &lt;&lt; std::endl;<br>            &#125;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// 不是 WebSocket 升级请求，处理为普通 HTTP 请求</span><br>            std::cout &lt;&lt; <span class="hljs-string">&quot;Normal HTTP request received&quot;</span> &lt;&lt; std::endl;<br>        &#125;<br><br>    &#125; <span class="hljs-built_in">catch</span> (std::exception <span class="hljs-type">const</span>&amp; e) &#123;<br>        std::cerr &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; e.<span class="hljs-built_in">what</span>() &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3><span id="decorator装饰器">Decorator（装饰器）</span></h3>
+<p>使用 Boost.Beast 提供的装饰器（decorator）功能来修改 WebSocket 的
+HTTP 升级请求和响应。装饰器允许程序在发送 HTTP
+消息之前修改这些消息，从而实现自定义的 HTTP 头字段或其他行为。</p>
+<p><strong>装饰器</strong>：可以是函数指针或可调用对象，在 WebSocket
+实现发送 HTTP 消息之前被调用。</p>
+<p><strong>装饰对象类型</strong>：</p>
+<ul>
+<li><code>request_type</code>：代表 HTTP 升级请求的类型。</li>
+<li><code>response_type</code>：代表 HTTP 升级响应的类型。</li>
+<li><code>stream_base::decorator</code>：用于持有装饰器对象，通过
+<code>set_option</code> 方法应用到流上。</li>
+</ul>
+<p>可以通过 <code>set_option</code> 将装饰器设置到 <code>stream</code>
+对象上。装饰器必须在握手（handshake）或接受连接（accept）之前设置。以下是几个典型的使用方式：</p>
+<p>（一）普通函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">set_user_agent</span><span class="hljs-params">(request_type&amp; req)</span></span><br><span class="hljs-function"></span>&#123;<br>    req.<span class="hljs-built_in">set</span>(http::field::user_agent, <span class="hljs-string">&quot;My User Agent&quot;</span>);<br>&#125;<br><br><span class="hljs-function">stream&lt;tcp_stream&gt; <span class="hljs-title">ws</span><span class="hljs-params">(ioc)</span></span>;<br>ws.<span class="hljs-built_in">set_option</span>(stream_base::<span class="hljs-built_in">decorator</span>(&amp;set_user_agent));<br></code></pre></td></tr></table></figure>
+<p>（二）函数对象</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">set_server</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(response_type&amp; res)</span></span><br><span class="hljs-function">    </span>&#123;<br>        res.<span class="hljs-built_in">set</span>(http::field::user_agent, <span class="hljs-string">&quot;My Server&quot;</span>);<br>    &#125;<br>&#125;;<br><br>ws.<span class="hljs-built_in">set_option</span>(stream_base::<span class="hljs-built_in">decorator</span>(set_server&#123;&#125;));<br></code></pre></td></tr></table></figure>
+<p>（三）Lambda 表达式</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">ws.<span class="hljs-built_in">set_option</span>(stream_base::<span class="hljs-built_in">decorator</span>(<br>    [](response_type&amp; res)<br>    &#123;<br>        res.<span class="hljs-built_in">set</span>(http::field::user_agent, <span class="hljs-string">&quot;My Server&quot;</span>);<br>    &#125;));<br></code></pre></td></tr></table></figure>
+<p>（四）同时处理请求和响应</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">set_message_fields</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(request_type&amp; req)</span></span><br><span class="hljs-function">    </span>&#123;<br>        req.<span class="hljs-built_in">set</span>(http::field::user_agent, <span class="hljs-string">&quot;My User Agent&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(response_type&amp; res)</span></span><br><span class="hljs-function">    </span>&#123;<br>        res.<span class="hljs-built_in">set</span>(http::field::user_agent, <span class="hljs-string">&quot;My Server&quot;</span>);<br>    &#125;<br>&#125;;<br><br>ws.<span class="hljs-built_in">set_option</span>(stream_base::<span class="hljs-built_in">decorator</span>(set_message_fields&#123;&#125;));<br></code></pre></td></tr></table></figure>
+<p>装饰器对象通过 <strong>衰退复制（decay-copy）</strong> 转移到
+<code>stream</code>，因此支持移动类型。可以使用
+<code>std::unique_ptr</code> 等资源管理对象：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">set_auth</span><br>&#123;<br>    std::unique_ptr&lt;std::string&gt; key;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(request_type&amp; req)</span></span><br><span class="hljs-function">    </span>&#123;<br>        req.<span class="hljs-built_in">set</span>(http::field::authorization, *key);<br>    &#125;<br>&#125;;<br><br>ws.<span class="hljs-built_in">set_option</span>(stream_base::<span class="hljs-built_in">decorator</span>(<br>    set_auth&#123;boost::<span class="hljs-built_in">make_unique</span>&lt;std::string&gt;(<span class="hljs-string">&quot;Basic QWxhZGRpbjpPcGVuU2VzYW1l&quot;</span>)&#125;));<br></code></pre></td></tr></table></figure>
+<p>注意：装饰器<strong>不应</strong>修改 WebSocket 升级特定的字段（如
+<code>Upgrade</code> 或 <code>Connection</code>
+字段），否则会导致未定义行为。</p>
+<h3><span id="message">Message</span></h3>
+<p>消息可以是文本（UTF-8 编码）或二进制。文本消息必须是有效的 UTF-8
+字符串，这在接收时会进行验证，但在发送时不会检查。</p>
+<p>（一）发送消息</p>
+<p><strong>发送完整消息</strong>：可以使用 <code>write</code> 或
+<code>async_write</code> 函数一次性发送完整的消息。</p>
+<p><strong>发送部分消息</strong>：可以通过 <code>write_some</code> 或
+<code>async_write_some</code>
+函数分段发送消息，适用于将消息分割为多个帧的情况。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">net::const_buffer <span class="hljs-title">b</span><span class="hljs-params">(<span class="hljs-string">&quot;Hello, world!&quot;</span>, <span class="hljs-number">13</span>)</span></span>;<br>ws.<span class="hljs-built_in">text</span>(<span class="hljs-literal">true</span>);  <span class="hljs-comment">// 设置消息为文本模式</span><br>ws.<span class="hljs-built_in">write</span>(b);    <span class="hljs-comment">// 发送消息</span><br></code></pre></td></tr></table></figure>
+<p>（二）接收消息</p>
+<p><strong>读取完整消息</strong>：可以使用 <code>read</code> 或
+<code>async_read</code> 函数将完整消息读取到动态缓冲区中。</p>
+<p><strong>读取部分消息</strong>：如果消息较大或者需要逐步处理，可以使用
+<code>read_some</code> 或 <code>async_read_some</code>
+函数分段读取。这适用于流媒体或处理无法一次加载到内存中的大型数据。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++">flat_buffer buffer;<br>ws.<span class="hljs-built_in">read</span>(buffer);<br>ws.<span class="hljs-built_in">text</span>(ws.<span class="hljs-built_in">got_text</span>());<br>ws.<span class="hljs-built_in">write</span>(buffer.<span class="hljs-built_in">data</span>());<br>buffer.<span class="hljs-built_in">consume</span>(buffer.<span class="hljs-built_in">size</span>());<br></code></pre></td></tr></table></figure>
+<p>注：<code>websocket::stream</code> 类是
+<strong>非线程安全的</strong>，因此其成员函数的调用必须在同一
+strand（线程或任务序列）中进行，以避免竞争条件。</p>
+<h3><span id="timeouts">Timeouts</span></h3>
+<p>与基础的 <code>tcp_stream</code> 或 <code>basic_stream</code>
+的通用超时机制不同，WebSocket 流提供了一套更复杂的超时配置，专门用于
+WebSocket 通信。</p>
+<p><strong>stream_base::timeout</strong>：表示 WebSocket
+流的超时设置。</p>
+<figure>
+<img src="/images/2024/09/19/5b440a30-767d-11ef-ad8a-396c11c32935.png" alt="timeout.png">
+<figcaption aria-hidden="true">timeout.png</figcaption>
+</figure>
+<p><strong>stream_base::timeout::suggested</strong>：根据角色（客户端或服务端）返回建议的超时设置。</p>
+<p><strong>stream::set_option</strong>：用于将超时和其他设置应用到
+WebSocket 流上。</p>
+<p>（一）设置建议的超时</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 为服务端角色应用建议的超时选项</span><br>ws.<span class="hljs-built_in">set_option</span>(stream_base::timeout::<span class="hljs-built_in">suggested</span>(role_type::server));<br></code></pre></td></tr></table></figure>
+<p>（二）手动设置超时</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++">stream_base::timeout opt&#123;<br>    std::chrono::<span class="hljs-built_in">seconds</span>(<span class="hljs-number">30</span>),   <span class="hljs-comment">// 握手超时</span><br>    stream_base::<span class="hljs-built_in">none</span>(),        <span class="hljs-comment">// 禁用空闲超时</span><br>    <span class="hljs-literal">false</span>                       <span class="hljs-comment">// 不启用 keep_alive_pings</span><br>&#125;;<br><br><span class="hljs-comment">// 将自定义的超时设置应用到 WebSocket 流</span><br>ws.<span class="hljs-built_in">set_option</span>(opt);<br></code></pre></td></tr></table></figure>
+<p>（三）超时通知</p>
+<p>当超时发生时，系统会关闭套接字或流，并通过 <code>async_read</code>
+的完成处理器传递超时错误（<code>error::timeout</code>）。</p>
+<p>不需要手动关闭连接，系统会自动关闭。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">ws.<span class="hljs-built_in">async_read</span>(b,<br>    [](error_code ec, std::<span class="hljs-type">size_t</span>)<br>    &#123;<br>        <span class="hljs-keyword">if</span>(ec == beast::error::timeout)<br>            std::cerr &lt;&lt; <span class="hljs-string">&quot;timeout, connection closed!&quot;</span>;<br>    &#125;);<br></code></pre></td></tr></table></figure>
+<h3><span id="重要注意事项">重要注意事项</span></h3>
+<ul>
+<li>WebSocket 的超时功能仅在<strong>异步 I/O</strong>操作时可用。</li>
+<li>WebSocket 流的超时机制与 <code>tcp_stream</code>
+的超时机制<strong>不兼容</strong>。如果从一个启用了超时的
+<code>tcp_stream</code> 构造 WebSocket 流，应首先禁用
+<code>tcp_stream</code> 的超时</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 禁用 tcp_stream 上的任何超时</span><br>sock.<span class="hljs-built_in">expires_never</span>();<br><br><span class="hljs-comment">// 构造 WebSocket 流并接管现有的 tcp_stream</span><br><span class="hljs-function">stream&lt;tcp_stream&gt; <span class="hljs-title">ws</span><span class="hljs-params">(std::move(sock))</span></span>;<br></code></pre></td></tr></table></figure>
+<h2><span id="代码实现和测试">代码实现和测试</span></h2>
+<p>在输入框中输入
+ws:://127.0.0.1:8080，点击连接，网站会提示连接成功。然后到输入框中输入你要发送的数据，服务器接收到之后会回复相同的信息。</p>
+<figure>
+<img src="/images/2024/09/19/54075150-767d-11ef-ad8a-396c11c32935.png" alt="websocket.png">
+<figcaption aria-hidden="true">websocket.png</figcaption>
+</figure>
+<p>测试网址：http://websocket-test.com/</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/Asio%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/13-WebSocketServer">实现WebSocketServer</a></p>
+<hr>
+<p>⭐️内容取自 B 站 UP 恋恋风辰和 mmoaay 的《Boost.Asio C++
+网络编程》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议看原视频或者读原书。</p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/posts/95495db.html">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>文件操作</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/1f238108.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      第六章：Beast网络库实现HTTP服务器
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a><a href="/tags/Asio/" class="post-tag">#Asio</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\e775e62d.html" title="第一章：Asio 建立网络连接基本 API" rel="bookmark">第一章：Asio 建立网络连接基本 API</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\4381577.html" title="第三章：粘包和反序列化" rel="bookmark">第三章：粘包和反序列化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\1724d9d8.html" title="第二章：同步和异步" rel="bookmark">第二章：同步和异步</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\a90d3c02.html" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>

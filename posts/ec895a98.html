@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        第三章：内存虚拟化 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">第三章：内存虚拟化</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a><a href="/tags/OS/" class="post-tag">#OS</a>
+
+
+          <span class="post-date">2024-08-22</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#抽象地址空间">抽象：地址空间</a></li>
+<li><a href="#机制地址转换">机制：地址转换</a></li>
+<li><a href="#分段">分段</a></li>
+<li><a href="#分页">分页</a>
+<ul>
+<li><a href="#分页快速地址转换tlb">分页：快速地址转换（TLB）</a></li>
+<li><a href="#分页较小的表">分页：较小的表</a></li>
+</ul></li>
+<li><a href="#超越物理内存机制">超越物理内存：机制</a></li>
+<li><a href="#超越物理内存策略">超越物理内存：策略</a></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="抽象地址空间">抽象：地址空间</span></h2>
+<p>当我们描述地址空间时，所描述的是操作系统<strong>提供给运行程序的抽象</strong>。程序不在物理地址
+0～16KB
+的内存中，而是加载在任意的物理地址。当操作系统这样做时，我们说操作系统在虚拟化内存，因为运行的程序<strong>自认为</strong>它被加载到特定地址（例如
+0）的内存中，并且具有非常大的地址空间。</p>
+<p>比方说下图中进程 A 尝试在地址
+0（我们将称其为虚拟地址）执行加载操作时，然而操作系统在硬件的支持下，出于某种原因，必须确保不是加载到物理地址
+0，而是物理地址 320KB（这是 A 载入内存的地址）。</p>
+<figure>
+<img src="/images/2024/08/22/7f264150-606d-11ef-b5d8-395e250ad2a7.png" alt="地址空间.png">
+<figcaption aria-hidden="true">地址空间.png</figcaption>
+</figure>
+<p>虚拟系统内存的目标：</p>
+<ul>
+<li>透明：操作系统实现虚拟内存的方式，应该让运行的程序看不见。因此，程序不应该感知到内存被虚拟化的事实，相反，程序的行为就好像它拥有自己的私有物理内存。在幕后，操作系统（和硬件）完成了所有的工作，让不同的工作复用内存，从而实现这个假象</li>
+<li>效率：操作系统应该追求虚拟化尽可能高效，包括时间上（即不会使程序运行得更慢）和空间上（即不需要太多额外的内存来支持虚拟化）。在实现高效率虚拟化时，操作系统将不得不依靠硬件支持，包括
+TLB 这样的硬件功能</li>
+<li>保护：操作系统应确保进程受到保护，不会受其他进程影响，操作系统本身也不会受进程影响。当一个进程执行加载、存储或指令提取时，它不应该以任何方式访问或影响任何其他进程或操作系统本身的内存内容（即在它的地址空间之外的任何内容）。因此，保护让我们能够在进程之间提供隔离的特性，每个进程都应该在自己的独立环境中运行，避免其他出错或恶意进程的影响</li>
+</ul>
+<h2><span id="机制地址转换">机制：地址转换</span></h2>
+<p>利用地址转换，硬件对每次内存访问进行处理（即指令获取、数据读取或写入），将<strong>指令中的虚拟地址转换为数据实际存储的物理地址</strong>。因此，在每次内存引用时，硬件都会进行地址转换，将应用程序的内存引用重定位到内存中实际的位置。</p>
+<p>仅仅依靠硬件不足以实现虚拟内存，因为它只是提供了底层机制来提高效率。操作系统必须在关键的位置介入，设置好硬件，以便完成正确的地址转换。因此它<strong>必须管理内存</strong>，记录被占用和空闲的内存位置，并明智而谨慎地介入，保持对内存使用的控制。</p>
+<figure>
+<img src="/images/2024/08/22/7750f1f0-606d-11ef-b5d8-395e250ad2a7.png" alt="地址转换.png">
+<figcaption aria-hidden="true">地址转换.png</figcaption>
+</figure>
+<p>综述的一切，只是为了给程序营造一种假象，即每个程序都拥有私有的内存，那里存放着它自己的代码和数据。实际情况是，许多程序是在同一时间共享着内存。</p>
+<hr>
+<p>为了一步步推导出当前操作系统真实的内存虚拟化情况，我们需要暂时做出如下假设：</p>
+<ul>
+<li>设用户的地址空间必须连续地放在物理内存中</li>
+<li>地址空间不是很大，具体来说，小于物理内存的大小</li>
+<li>每个地址空间的大小完全一样</li>
+</ul>
+<hr>
+<p>前面介绍的基于硬件的地址转换，又称为动态重定位。具体来说，每个 CPU
+需要两个硬件寄存器：基址（base）寄存器和界限（bound）寄存器。这组基址和界限寄存器，让我们能够将地址空间放在物理内存的任何位置，同时又能确保进程只能访问自己的地址空间。</p>
+<p>注：起始地址记录在基址寄存器中。</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic">physical address = virtual address + <span class="hljs-keyword">base</span><br></code></pre></td></tr></table></figure>
+<p>进程中使用的内存引用都是虚拟地址（virtual
+address），硬件接下来将虚拟地址加上基址寄存器中的内容，得到物理地址（physical
+address），再发给内存系统。如果进程需要访问超过这个界限或者为负数的虚拟地址，CPU
+将触发异常，进程最终可能被终止。界限寄存器的用处在于，它确保了进程产生的所有地址都在进程的地址“界限”中。</p>
+<p>一个基址寄存器（重定位寄存器）将虚拟地址转换为物理地址，一个界限寄存器确保这个地址在进程地址空间的范围内。它们一起提供了既简单又高效的虚拟内存机制。</p>
+<figure>
+<img src="/images/2024/08/22/70519030-606d-11ef-b5d8-395e250ad2a7.png" alt="动态重定位.png">
+<figcaption aria-hidden="true">动态重定位.png</figcaption>
+</figure>
+<p>这种基址寄存器配合界限寄存器的硬件结构是芯片中的（每个 CPU
+一对）。有时我们将CPU
+的这个负责地址转换的部分统称为内存管理单元（MMU）。</p>
+<p>补充：界限寄存器通常有两种使用方式。在一种方式中（像上面那样），它记录地址空间的大小，硬件在将虚拟地址与基址寄存器内容求和前，就检查这个界限。另一种方式是界限寄存器中记录地址空间结束的物理地址，硬件在转化虚拟地址到物理地址之后才去检查这个界限。这两种方式在逻辑上是等价的。</p>
+<p>简单总结一下需要的硬件支持，见下表。</p>
+<figure>
+<img src="/images/2024/08/22/6a1864a0-606d-11ef-b5d8-395e250ad2a7.png" alt="硬件支持.png">
+<figcaption aria-hidden="true">硬件支持.png</figcaption>
+</figure>
+<p>为了支持动态重定位，硬件添加了新的功能，使得操作系统有了一些必须处理的新问题。硬件支持和操作系统管理结合在一起，实现了一个简单的虚拟内存。具体来说，在一些关键的时刻操作系统需要介入，以实现基址和界限方式的虚拟内存。</p>
+<figure>
+<img src="/images/2024/08/22/658fcf40-606d-11ef-b5d8-395e250ad2a7.png" alt="操作系统的职责.png">
+<figcaption aria-hidden="true">操作系统的职责.png</figcaption>
+</figure>
+<p>对于基址/界限管理中，每个 CPU
+毕竟只有一个基址寄存器和一个界限寄存器，但对于每个运行的程序，它们的值都不同，因为每个程序被加载到内存中不同的物理地址。因此，在切换进程时，操作系统必须保存和恢复基础和界限寄存器。具体来说，当操作系统决定中止当前的运行进程时，它必须将当前基址和界限寄存器中的内容保存在内存中，放在某种每个进程都有的结构中，如进程结构（process
+structure）或进程控制块（PCB）中。类似地，当操作系统恢复执行某个进程时（或第一次执行），也必须给基址和界限寄存器设置正确的值。</p>
+<hr>
+<p>遗憾的是，这个简单的动态重定位技术有效率低下的问题。从下图中可以看到，重定位的进程使用了从
+32KB 到 48KB
+的物理内存，但<strong>由于该进程的栈区和堆区并不很大，导致这块内存区域中大量的空间被浪费</strong>（即图中<em>已分配但未使用</em>）。这种浪费通常称为内部碎片，指的是已经分配的内存单元内部有未使用的空间（即碎片），造成了浪费。</p>
+<p>在我们当前的方式中，即使有足够的物理内存容纳更多进程，但我们目前要求将地址空间放在固定大小的槽块中，因此会出现内部碎片。所以，我们需要更复杂的机制，以便更好地利用物理内存，避免内部碎片。第一次尝试是<strong>将基址加界限的概念稍稍泛化，得到分段的概念</strong>。</p>
+<figure>
+<img src="/images/2024/08/22/5f099520-606d-11ef-b5d8-395e250ad2a7.png" alt="单个重定位.png">
+<figcaption aria-hidden="true">单个重定位.png</figcaption>
+</figure>
+<h2><span id="分段">分段</span></h2>
+<p>我们依旧需要用到前面那张图，来引出为什么需要考虑分段（尽管这还完全不够）。</p>
+<p>到目前为止，我们一直假设将所有进程的地址空间完整地加载到内存中。利用基址和界限寄存器，操作系统很容易将不同进程重定位到不同的物理内存区域。但是，对于这些内存区域，你可能已经注意到一件有趣的事：栈和堆之间，有一大块“空闲”空间。</p>
+<p>如果我们将整个地址空间放入物理内存，那么栈和堆之间的空间并没有被进程使用，却依然占用了实际的物理内存。因此，简单的通过基址寄存器和界限寄存器实现的虚拟内存很浪费。另外，如果剩余物理内存无法提供连续区域来放置完整的地址空间，进程便无法运行。这种基址加界限的方式看来并不像我们期望的那样灵活。</p>
+<p>没错，如果分配的物理内存没有被实际使用，又不能分配给他人使用就会浪费。为了解决这个问题，分段的概念应运而生。</p>
+<p>这个想法很简单，在 <strong>MMU
+中引入<u>不止一个</u>基址和界限寄存器对</strong>，而是给地址空间内的每个逻辑段（segment）一对。一个段只是地址空间里的一个连续定长的区域，在典型的地址空间里有
+3
+个逻辑不同的段：代码、栈和堆。<strong>分段的机制使得操作系统能够将不同的段放到不同的物理内存区域，从而避免了虚拟地址空间中的未使用部分占用物理内存</strong>。</p>
+<figure>
+<img src="/images/2024/08/22/551647c0-606d-11ef-b5d8-395e250ad2a7.png" alt="一个地址空间.png">
+<figcaption aria-hidden="true">一个地址空间.png</figcaption>
+</figure>
+<p>上面是一个进程被分配内存大小的情况，有许多为使用的内存空间，我们用三组寄存器就能够把已经使用的内存空间（图中程序代码、栈和堆）标记出来，那么其余部分就是可以被利用的内存了。</p>
+<figure>
+<img src="/images/2024/08/22/4db19480-606d-11ef-b5d8-395e250ad2a7.png" alt="记录值.png">
+<figcaption aria-hidden="true">记录值.png</figcaption>
+</figure>
+<hr>
+<p>硬件在地址转换时使用段寄存器。它如何知道段内的偏移量，以及地址引用了哪个段？</p>
+<p>一种常见的方式，就是用虚拟地址的开头几位来标识不同的段。在我们之前的例子中，有
+3 个段，因此需要两位来标识。如果我们用 14
+位虚拟地址的前两位来标识，那么虚拟地址如下所示：</p>
+<figure>
+<img src="/images/2024/08/22/4461b310-606d-11ef-b5d8-395e250ad2a7.png" alt="虚拟地址.png">
+<figcaption aria-hidden="true">虚拟地址.png</figcaption>
+</figure>
+<p>那么在我们的例子中，如果前两位是
+00，硬件就知道这是属于<strong>代码段的地址</strong>，因此使用代码段的基址和界限来重定位到正确的物理地址。如果前两位是
+01，则是<strong>堆地址</strong>，对应地，使用堆的基址和界限。</p>
+<p>从下图中可以看到，前两位（01）告诉硬件我们引用哪个段。剩下的 12
+位是段内偏移：0000 0110 1000（即十六进制 0x068 或十进制
+104）。因此，硬件就用前两位来决定使用哪个段寄存器，然后用后 12
+位作为段内偏移。偏移量与基址寄存器相加，硬件就得到了最终的物理地址。请注意，偏移量也简化了对段边界的判断。我们只要检查偏移量是否小于界限，大于界限的为非法地址。</p>
+<p>你或许已经注意到，上面使用两位来区分段，但实际只有 3
+个段（代码、堆、栈），因此有一个段的地址空间被浪费。因此有些系统中会将堆和栈当作同一个段，因此只需要一位来做标识。</p>
+<figure>
+<img src="/images/2024/08/22/3dc9ecc0-606d-11ef-b5d8-395e250ad2a7.png" alt="二进制形式.png">
+<figcaption aria-hidden="true">二进制形式.png</figcaption>
+</figure>
+<p>我们似乎还没有提及栈，这是因为栈的增长方向还需要进行识别。首先，我们需要一点硬件支持。除了基址和界限外，硬件还需要知道段的增长方向（用一位区分，比如
+1 代表自小而大增长，0 反之）。</p>
+<figure>
+<img src="/images/2024/08/22/377b8b80-606d-11ef-b5d8-395e250ad2a7.png" alt="栈增长方向.png">
+<figcaption aria-hidden="true">栈增长方向.png</figcaption>
+</figure>
+<p>随着分段机制的不断改进，系统设计人员很快意识到，通过再多一点的硬件支持，就能实现新的效率提升。具体来说，要节省内存，有时候在地址空间之间<strong>共享某些内存段</strong>是有用的。尤其是，代码共享很常见，今天的系统仍然在使用。</p>
+<p>为了支持共享，需要一些额外的硬件支持，这就是保护位（protection
+bit）。基本为每个段增加了几个位，标识程序是否能够读写该段，或执行其中的代码。通过将代码段标记为只读，同样的代码可以被多个进程共享，而不用担心破坏隔离。虽然每个进程都认为自己独占这块内存，但操作系统秘密地共享了内存，进程不能修改这些内存，所以假象得以保持。</p>
+<figure>
+<img src="/images/2024/08/22/2bb37e20-606d-11ef-b5d8-395e250ad2a7.png" alt="保护位.png">
+<figcaption aria-hidden="true">保护位.png</figcaption>
+</figure>
+<hr>
+<p>现在你应该大致了解了分段的基本原理。系统运行时，地址空间中的不同段被重定位到物理内存中。与我们之前介绍的整个地址空间只有一个基址/界限寄存器对的方式相比，大量节省了物理内存。具体来说，栈和堆之间没有使用的区域就不需要再分配物理内存，让我们能将更多地址空间放进物理内存。</p>
+<p>分段也带来了一些新的问题，重点谈外部碎片的产生。前面我们没有讲分段的时候，之前的基址/界限寄存器对的方式会产生内部碎片，因为分配给进程的内存有大部分没有被使用。现在我们用分段机制解决内部碎片问题，却引出外部碎片问题，即物理内存很快充满了许多空闲空间的小洞，因而很难分配给新的段，或扩大已有的段。比方说，一个进程需要分配一个
+20KB 的段。当前有 24KB 空闲，但并不连续（是3
+个不相邻的块）。因此，操作系统无法满足这个 20KB 的请求。</p>
+<p>后面我们会谈解决内部碎片问题，但提前预告，无论算法多么精妙，都无法完全消除外部碎片，因此，好的算法只是试图减小它。</p>
+<p>比方说接下来要介绍的分页机制。内存分页由于内存空间都是预先划分好的，也就不会像内存分段一样，在段与段之间会产生间隙非常小的内存，这正是分段会产生外部内存碎片的原因。而<strong>采用了分页，页与页之间是紧密排列的，所以不会有外部碎片。</strong>但是，因为内存分页机制分配内存的最小单位是一页，即使程序不足一页大小，我们最少只能分配一个页，所以页内会出现内存浪费，所以针对<strong>内存分页机制会有内部内存碎片</strong>的现象。</p>
+<h2><span id="分页">分页</span></h2>
+<p>将空间分割成固定长度的分片。在虚拟内存中，我们称这种思想为分页。分页不是将一个进程的地址空间分割成几个不同长度的逻辑段（即代码、堆、段），而是分割成固定大小的单元，每个单元称为一页。相应地，我们把物理内存看成是定长槽块的阵列，叫作页帧。每个这样的页帧包含一个虚拟内存页。</p>
+<p><strong>为了记录地址空间的每个虚拟页放在物理内存中的位置，操作系统通常为每个进程保存一个数据结构，称为页表。页表的主要作用是为地址空间的每个虚拟页面保存地址转换，从而让我们知道每个页在物理内存中的位置</strong>。</p>
+<p>在分页机制下，虚拟地址分为两部分，<strong>页号</strong>和<strong>页内偏移</strong>。页号作为页表的索引，<strong>页表</strong>包含物理页每页所在<strong>物理内存的基地址</strong>（物理页号），这个基地址与页内偏移的组合就形成了物理内存地址。</p>
+<figure>
+<img src="/images/2024/08/22/14c98e70-606d-11ef-b5d8-395e250ad2a7.png" alt="分页地址转换.png">
+<figcaption aria-hidden="true">分页地址转换.png</figcaption>
+</figure>
+<p>总结一下，对于一个内存地址转换，其实就是这样三个步骤：</p>
+<ul>
+<li>把虚拟内存地址，切分成页号和偏移量</li>
+<li>根据页号，从页表里面，查询对应的物理页号</li>
+<li>直接拿物理页号，加上前面的偏移量，就得到了物理内存地址</li>
+</ul>
+<p>注：暂时假定页表信息存储在物理内存中</p>
+<h3><span id="分页快速地址转换tlb">分页：快速地址转换（TLB）</span></h3>
+<p>使用分页作为核心机制来实现虚拟内存，可能会带来较高的性能开销。因为要使用分页，就要将内存地址空间切分成大量固定大小的单元（页），并且需要记录这些单元的地址映射信息。因为这些映射信息一般存储在物理内存中，所以在转换虚拟地址时，分页逻辑上需要一次额外的内存访问。每次指令获取、显式加载或保存，都要额外读一次内存以得到转换信息，这慢得无法接受。</p>
+<p>利用缓存来加速访问，即TLB（它就是频繁发生的虚拟到物理地址转换的硬件缓存）。对每次内存访问，硬件先检查
+TLB，看看其中是否有期望的转换映射，如果有，就完成转换（很快），不用访问页表（其中有全部的转换映射）。</p>
+<p>那如果TLB没有命中，由谁来处理呢？可能有两个答案：硬件或软件（操作系统）</p>
+<ul>
+<li>硬件处理：为了做到这一点，硬件必须知道页表在内存中的确切位置（通过页表基址寄存器），以及页表的确切格式。发生未命中时，硬件会“遍历”页表，找到正确的页表项，取出想要的转换映射，用它更新
+TLB，并重试该指令</li>
+<li>软件处理：更现代的体系结构。发生 TLB
+未命中时，硬件系统会抛出一个异常，这会暂停当前的指令流，将特权级提升至内核模式，跳转至陷阱处理程序。接下来你可能已经猜到了，这个陷阱处理程序是操作系统的一段代码，用于处理
+TLB
+未命中。这段代码在运行时，会查找页表中的转换映射，然后用特别的“特权”指令更新
+TLB，并从陷阱返回。此时，硬件会重试该指令（导致 TLB 命中）</li>
+</ul>
+<p>接下来讨论几个重要的细节：</p>
+<ol type="1">
+<li>这里的从陷阱返回指令稍稍不同于之前提到的服务于系统调用的从陷阱返回。在后一种情况下，从陷阱返回应该继续执行陷入操作系统之后那条指令，就像从函数调用返回后，会继续执行此次调用之后的语句。在前一种情况下，在从
+TLB
+未命中的陷阱返回后，硬件必须从导致陷阱的指令继续执行。这次重试因此导致该指令再次执行，但这次会命中
+TLB。因此，根据陷阱或异常的原因，系统在陷入内核时必须保存不同的程序计数器，以便将来能够正确地继续执行</li>
+<li>在运行 TLB 未命中处理代码时，操作系统需要格外小心避免引起 TLB
+未命中的无限递归</li>
+</ol>
+<p>软件管理的方法，主要优势是灵活性：操作系统可以用任意数据结构来实现页表，不需要改变硬件。另一个优势是简单性。从
+TLB
+控制流中可以看出，硬件不需要对未命中做太多工作，它抛出异常，操作系统的未命中处理程序会负责剩下的工作。</p>
+<p>有了
+TLB，在进程间切换时（因此有地址空间切换），会面临一些新问题。具体来说，<strong>TLB
+中包含的虚拟到物理的地址映射只对当前进程有效，对其他进程是没有意义的</strong>。所以在发生进程切换时，硬件或操作系统（或二者）必须注意确保即将运行的进程不要误读了之前进程的地址映射。</p>
+<p>当一个进程（P1）正在运行时，假设TLB 缓存了对它有效的地址映射，即来自
+P1 的页表。对这个例子，假设 P1 的 10 号虚拟页映射到了 100
+号物理帧。假设还有一个进程（P2），操作系统不久后决定进行一次上下文切换，运行
+P2。这里假定 P2 的 10 号虚拟页映射到 170
+号物理帧。如果这两个进程的地址映射都在 TLB 中，TLB
+的内容如下图所示。</p>
+<figure>
+<img src="/images/2024/08/22/f9ae0300-606c-11ef-b5d8-395e250ad2a7.png" alt="TLB中的内容.png">
+<figcaption aria-hidden="true">TLB中的内容.png</figcaption>
+</figure>
+<p>这里很明显有一个问题：VPN 10 被转换成了 PFN 100（P1）和 PFN
+170（P2），但硬件分不清哪个项属于哪个进程。所以我们还需要做一些工作，让
+TLB 正确而高效地支持跨多进程的虚拟化。这个问题有些可能的解决方案：</p>
+<p>（一）上下文切换的时候清空 TLB</p>
+<p>上下文切换时，简单地清空（flush）TLB，这样在新进程运行前 TLB
+就变成了空的。如果是软件管理 TLB
+的系统，可以在发生上下文切换时，通过一条显式（特权）指令来完成。如果是硬件管理
+TLB，则可以在页表基址寄存器内容发生变化时清空
+TLB。不论哪种情况，清空操作都是把全部有效位（valid）置为 0，本质上清空了
+TLB。</p>
+<p>上下文切换的时候清空
+TLB，这是一个可行的解决方案，进程不会再读到错误的地址映射。但是，有一定开销：每次进程运行，当它访问数据和代码页时，都会触发
+TLB 未命中。如果操作系统频繁地切换进程，这种开销会很高。</p>
+<p>（二）增加硬件支持，实现跨上下文切换的 TLB 共享</p>
+<p>为了减少这种开销（上下文切换的时候清空
+TLB，进程频繁切换开销很高），一些系统增加了硬件支持，实现跨上下文切换的
+TLB 共享。比如有的系统在 TLB
+中添加了一个地址空间标识符（ASID）。可以把ASID
+看作是进程标识符（PID），但通常比 PID 位数少（PID 一般 32 位，ASID
+一般是 8 位）。</p>
+<figure>
+<img src="/images/2024/08/22/f2e604f0-606c-11ef-b5d8-395e250ad2a7.png" alt="ASID.png">
+<figcaption aria-hidden="true">ASID.png</figcaption>
+</figure>
+<p>因此，有了地址空间标识符，TLB
+可以同时缓存不同进程的地址空间映射，没有任何冲突。当然，硬件也需要知道当前是哪个进程正在运行，以便进行地址转换，因此操作系统在上下文切换时，必须将某个特权寄存器设置为当前进程的
+ASID。</p>
+<p>补充一下，你可能想到了另一种情况，TLB
+中某两项非常相似。如下图中，属于两个不同进程的两项，将两个不同的 VPN
+指向了相同的物理页。</p>
+<figure>
+<img src="/images/2024/08/22/eefeb8a0-606c-11ef-b5d8-395e250ad2a7.png" alt="包含相似两项的TLB.png">
+<figcaption aria-hidden="true">包含相似两项的TLB.png</figcaption>
+</figure>
+<p>如果两个进程共享同一物理页（例如代码段的页），就可能出现这种情况。在上面的例子中，进程
+P1 和进程 P2 共享 101 号物理页，但是 P1 将自己的 10
+号虚拟页映射到该物理页，而 P2 将自己的 50
+号虚拟页映射到该物理页。共享代码页（以二进制或共享库的方式）是有用的，因为它减少了物理页的使用，从而减少了内存开销。</p>
+<p>注：TLB 和其他缓存一样，还有一个问题要考虑，即缓存替换。具体来说，向
+TLB
+中插入新项时，会替换一个旧项，这样问题就来了：应该替换那一个？在讨论页换出到磁盘的问题时，我们将详细研究这样的策略。</p>
+<h3><span id="分页较小的表">分页：较小的表</span></h3>
+<p>（一）混合方法：分页和分段</p>
+<p>分段解决内部碎片引出外部碎片，分页解决外部碎片引出内部碎片，我们能否结合二者的优点而避开缺点呢？</p>
+<p>我们的杂合方法不是为进程的整个地址空间提供单个页表，而是为每个逻辑分段提供一个。在这个例子中，我们可能有
+3 个页表，地址空间的代码、堆和栈部分各有一个。</p>
+<p>现在，回忆在分段中，有一个基址（base）寄存器，告诉我们每个段在物理内存中的位置，还有一个界限（bound）或限制（limit）寄存器，告诉我们该段的大小。在杂合方案中，我们仍然在
+MMU
+中拥有这些结构。在这里，我们使用基址不是指向段本身，而是保存该段的页表的物理地址。界限寄存器用于指示页表的结尾（即它有多少有效页）。</p>
+<figure>
+<img src="/images/2024/08/22/e92e12e0-606c-11ef-b5d8-395e250ad2a7.png" alt="段页结合.png">
+<figcaption aria-hidden="true">段页结合.png</figcaption>
+</figure>
+<p>我们通过一个简单的例子来澄清。假设 32 位虚拟地址空间包含 4KB
+页面，并且地址空间分为 4 个段。在这个例子中，我们只使用 3
+个段：一个用于代码，另一个用于堆，还有一个用于栈。</p>
+<p>要确定地址引用哪个段，我们会用地址空间的前两位。假设 00
+是未使用的段，01 是代码段，10 是堆段，11
+是栈段。因此，虚拟地址如下所示：</p>
+<figure>
+<img src="/images/2024/08/22/e52757b0-606c-11ef-b5d8-395e250ad2a7.png" alt="段页结合例子.png">
+<figcaption aria-hidden="true">段页结合例子.png</figcaption>
+</figure>
+<p>在硬件中，假设有 3
+个基本/界限对，代码、堆和栈各一个。当进程正在运行时，每个段的基址寄存器都包含该段的线性页表的物理地址。因此，系统中的每个进程现在都有
+3
+个与其关联的页表。在上下文切换时，必须更改这些寄存器，以反映新运行进程的页表的位置。</p>
+<p>在 TLB 未命中时（假设硬件管理的 TLB，即硬件负责处理 TLB
+未命中），硬件使用分段位（SN）来确定要用哪个基址和界限对。然后硬件将其中的物理地址与
+VPN 结合起来，形成页表项（PTE）的地址。</p>
+<figure>
+<img src="/images/2024/08/22/df8933a0-606c-11ef-b5d8-395e250ad2a7.png" alt="计算地址.png">
+<figcaption aria-hidden="true">计算地址.png</figcaption>
+</figure>
+<p>杂合方案的关键区别在于，每个分段都有界限寄存器，每个界限寄存器保存了段中最大有效页的值。例如，如果代码段使用它的前
+3 个页（0、1 和 2），则代码段页表将只有
+3个项分配给它，并且界限寄存器将被设置为
+3。内存访问超出段的末尾将产生一个异常，并可能导致进程终止。</p>
+<p>但是，你可能会注意到，这种方法并非没有问题。首先，它仍然要求使用分段。正如我们讨论的那样，分段并不像我们需要的那样灵活，因为它假定地址空间有一定的使用模式。例如，如果有一个大而稀疏的堆，仍然可能导致大量的页表浪费。其次，这种杂合导致外部碎片再次出现。尽管大部分内存是以页面大小单位管理的，但页表现在可以是任意大小（是
+PTE
+的倍数）。因此，在内存中为它们寻找自由空间更为复杂。出于这些原因，人们继续寻找更好的方式来实现更小的页表。</p>
+<p>（二）多级页表</p>
+<p>多级页表的基本思想很简单。首先，将页表分成页大小的单元。然后，如果整页的页表项（PTE）无效，就完全不分配该页的页表。为了追踪页表的页是否有效（以及如果有效，它在内存中的位置），使用了名为页目录的新结构。页目录因此可以告诉你页表的页在哪里，或者页表的整个页不包含有效页。</p>
+<p>下图的左边是经典的线性页表。即使地址空间的大部分中间区域无效，我们仍然需要为这些区域分配页表空间（即页表的中间两页）。右侧是一个多级页表。页目录仅将页表的两页标记为有效（第一个和最后一个）；因此，页表的这两页就驻留在内存中。因此，你可以形象地看到多级页表的工作方式：它只是让线性页表的一部分消失（释放这些帧用于其他用途），并用页目录来记录页表的哪些页被分配。</p>
+<figure>
+<img src="/images/2024/08/22/d87cb280-606c-11ef-b5d8-395e250ad2a7.png" alt="线性与多级比较.png">
+<figcaption aria-hidden="true">线性与多级比较.png</figcaption>
+</figure>
+<p>多级页表虽然解决了空间上的问题，但是虚拟地址到物理地址的转换就多了几道转换的工序，这显然就降低了虚拟地址到物理地址转换的速度，也就是带来了时间上的开销。比方说二级页表中，在
+TLB
+未命中时，需要从内存加载两次，才能从页表中获取正确的地址转换信息（一次用于页目录，另一次用于
+PTE 本身），而用线性页表只需要一次加载。</p>
+<h2><span id="超越物理内存机制">超越物理内存：机制</span></h2>
+<p>到目前为止，我们一直假定地址空间非常小，能放入物理内存。事实上，我们假设每个正在运行的进程的地址空间都能放入内存。实际情况是内存并没有想象中那么大，特别是在当前上百个进程运行的电脑上，我们需要把目标放到更大的磁盘空间上，尽管磁盘访问要比内存访问慢的多。</p>
+<p>为什么我们要为进程支持巨大的地址空间？答案还是方便和易用性。有了巨大的地址空间，你不必担心程序的数据结构是否有足够空间存储，只需自然地编写程序，根据需要分配内存。这是操作系统提供的一个强大的假象，使你的生活简单很多。</p>
+<p>我们要做的第一件事情就是，在硬盘上开辟一部分空间用于物理页的移入和移出。在操作系统中，一般这样的空间称为<strong>交换空间</strong>（swap
+space），因为我们将内存中的页交换到其中，并在需要的时候又交换回去。因此，我们会假设操作系统能够以页大小为单元读取或者写入交换空间。为了达到这个目的，操作系统需要记住给定页的硬盘地址。</p>
+<figure>
+<img src="/images/2024/08/22/d1312c90-606c-11ef-b5d8-395e250ad2a7.png" alt="物理内存和交换空间.png">
+<figcaption aria-hidden="true">物理内存和交换空间.png</figcaption>
+</figure>
+<p>从上图中你可以看到一个 4 页的物理内存和一个 8
+页的交换空间。在这个例子中，3 个进程（进程 0、进程 1 和进程
+2）主动共享物理内存。但 3
+个中的每一个，都只有一部分有效页在内存中，剩下的在硬盘的交换空间中。第 4
+个进程（进程
+3）的所有页都被交换到硬盘上，因此很清楚它目前没有运行。有一块交换空间是空闲的，从这你应该也能看出，使用交换空间如何让系统假装内存比实际物理内存更大。</p>
+<p>（一）存在位</p>
+<p>如果希望允许页交换到硬盘，必须添加更多的机制。具体来说，当硬件在
+PTE中查找时，可能<strong>发现页不在物理内存中</strong>。硬件（或操作系统，在软件管理
+TLB
+时）判断是否在内存中的方法，是通过页表项中的一条新信息，即<strong>存在位</strong>。如果存在位设置为
+1，则表示该页存在于物理内存中，并且所有内容都如上所述进行。如果存在位设置为零，则页不在内存中，而在硬盘上。访问不在物理内存中的页，这种行为通常被称为<strong>页错误</strong>。</p>
+<p>（二）页错误</p>
+<p>在页错误时，<strong>操作系统被唤起来处理页错误</strong>。一段称为“页错误处理程序”的代码会执行，来处理页错误。如果一个页不存在，它已被交换到硬盘，在处理页错误的时候，操作系统需要将该页交换到内存中。那么，问题来了：操作系统如何知道所需的页在哪儿？在许多系统中，页表是存储这些信息最自然的地方。因此，操作系统<strong>可以用
+PTE 中的某些位来存储硬盘地址</strong>，这些位通常用来存储像页的 PFN
+这样的数据。当操作系统接收到页错误时，它会在 PTE
+中查找地址，并将请求发送到硬盘，将页读取到内存中。</p>
+<p>当硬盘 I/O
+完成时，操作系统会更新页表，将此页标记为存在，更新页表项（PTE）的PFN
+字段以记录新获取页的内存位置，并重试指令。下一次重新访问 TLB
+还是未命中，然而这次因为页在内存中，因此会将页表中的地址更新到 TLB
+中（也可以在处理页错误时更新 TLB 以避免此步骤）。最后的重试操作会在 TLB
+中找到转换映射，从已转换的内存物理地址，获取所需的数据或指令。</p>
+<p>注意： I/O
+在运行时，进程将处于阻塞状态。因此，当页错误正常处理时，操作系统可以自由地运行其他可执行的进程。因为
+I/O
+操作是昂贵的，一个进程进行I/O（页错误）时会执行另一个进程，这种交叠是多道程序系统充分利用硬件的一种方式。</p>
+<p>再注：如果内存满了，操作系统可能希望先交换出（page
+out）一个或多个页，以便为操作系统即将交换入的新页留出空间。选择哪些页被交换出或被替换（replace）的过程，被称为页交换策略（后面详解）。</p>
+<p>（三）页错误处理流程</p>
+<p>首先，操作系统必须为将要换入的页找到一个物理帧，如果没有这样的物理帧，我们将不得不等待交换算法运行，并从内存中踢出一些页，释放帧供这里使用。在获得物理帧后，处理程序发出
+I/O
+请求从交换空间读取页。最后，当这个慢操作完成时，操作系统更新页表并重试指令。重试将导致
+TLB 未命中，然后再一次重试时，TLB 命中，此时硬件将能够访问所需的值。</p>
+<p>到目前为止，我们一直描述的是操作系统会等到内存已经完全满了以后才会执行交换流程，然后才替换（踢出）一个页为其他页腾出空间。正如你想象的那样，这有点不切实际的，因为操作系统可以更主动地预留一小部分空闲内存。</p>
+<p>为了保证有少量的空闲内存，大多数操作系统会设置高水位线和低水位线，来帮助决定何时从内存中清除页。原理是这样：当操作系统发现有少于低水位线个页可用时，后台负责释放内存的线程会开始运行，直到有高水位线个可用的物理页。这个后台线程有时称为交换守护进程或页守护进程，它然后会很开心地进入休眠状态，因为它毕竟为操作系统释放了一些内存。</p>
+<h2><span id="超越物理内存策略">超越物理内存：策略</span></h2>
+<p>由于内存只包含系统中所有页的子集，因此可以将其视为系统中虚拟内存页的缓存（cache）。因此，在为这个缓存选择替换策略时，我们的目标是让缓存未命中（cache
+miss）最少，即使得从磁盘获取页的次数最少。或者，可以将目标看成让缓存命中（cache
+hit）最多，即在内存中找到待访问页的次数最多。</p>
+<p>下面简单介绍一些缓存未命中的情况下的页交换策略。</p>
+<p>（一）简单策略：FIFO</p>
+<p>当发生替换时，队列尾部的页（“先入”页）被踢出。</p>
+<figure>
+<img src="/images/2024/08/22/c89b9a70-606c-11ef-b5d8-395e250ad2a7.png" alt="FIFO.png">
+<figcaption aria-hidden="true">FIFO.png</figcaption>
+</figure>
+<p>（二）简单策略：随机</p>
+<p>在内存满的时候它随机选择一个页进行替换。</p>
+<figure>
+<img src="/images/2024/08/22/c30c9190-606c-11ef-b5d8-395e250ad2a7.png" alt="随机.png">
+<figcaption aria-hidden="true">随机.png</figcaption>
+</figure>
+<p>（三）利用历史数据：LRU</p>
+<p>页替换策略可以使用的一个历史信息是频率（frequency）。如果一个页被访问了很多次，也许它不应该被替换，因为它显然更有价值。页更常用的属性是访问的近期性（recency），越近被访问过的页，也许再次访问的可能性也就越大。</p>
+<figure>
+<img src="/images/2024/08/22/bd0858b0-606c-11ef-b5d8-395e250ad2a7.png" alt="LRU.png">
+<figcaption aria-hidden="true">LRU.png</figcaption>
+</figure>
+<hr>
+<p>⭐️内容取自译者王海鹏《操作系统导论》，仅从中取出个人以为需要纪录的内容。不追求内容的完整性，却也不会丢失所记内容的逻辑性。如果需要了解细致，建议读原书</p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/posts/db3b5d31.html">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>第四章：并发</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/3d2d4908.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      第二章：CPU虚拟化
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" class="post-tag">#操作系统导论</a><a href="/tags/OS/" class="post-tag">#OS</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\cdb66549.html" title="第一章：操作系统概述" rel="bookmark">第一章：操作系统概述</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\3d2d4908.html" title="第二章：CPU虚拟化" rel="bookmark">第二章：CPU虚拟化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\1f1b046a.html" title="第五章：文件系统" rel="bookmark">第五章：文件系统</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\a90d3c02.html" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
