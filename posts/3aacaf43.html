@@ -233,6 +233,11 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++">string <span class="hljs-keyword">operator</span>+(<span class="hljs-type">const</span> string&amp; s, <span class="hljs-type">char</span> ch)<br>&#123;<br><span class="hljs-function">string <span class="hljs-title">ret</span><span class="hljs-params">(s)</span></span>;<br>ret.<span class="hljs-built_in">push_back</span>(ch);<br><span class="hljs-keyword">return</span> ret;<br>&#125;<br><br><span class="hljs-comment">// 拿现在这个函数来举例：ret是函数内的局部对象，出了函数作用域后会被析构，即被销毁了</span><br><span class="hljs-comment">// 若此时再返回它的别名（左值引用），也就是再拿这个对象来用，就会出问题</span><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">①：不能返回局部变量的引用。局部变量会在函数返回后被销毁，此时对 局部变量的引用就会成为“无所指”的引用，程序会进入未知状态。</span><br><span class="hljs-comment">②：不能返回函数内部通过 new 分配的内存的引用。虽然不存在局部变量的被动销毁问题，但如果被返回的函数的引用只是作为一个临时变量出现，而没有将其赋值给一个实际的变量，    那么就可能造成这个引用所指向的空间（有 new 分配）无法释放的情况（由于没有具体的变量名，故无法用 delete 手动释放该内存），从而造成内存泄漏。</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -324,11 +329,6 @@
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

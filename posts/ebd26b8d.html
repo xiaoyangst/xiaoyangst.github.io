@@ -186,6 +186,11 @@ pair&lt;int,int&gt; 只需一个栈；加入元素就与 top 元素 进行 min
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MinStack</span>&#123;<br> <span class="hljs-keyword">private</span>:<br>  stack&lt;pair&lt;<span class="hljs-type">int</span>,<span class="hljs-type">int</span>&gt;&gt; minStack_;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-built_in">MinStack</span>()&#123;<br><br>  &#125;<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-type">int</span> val)</span></span>&#123;<br>    pair&lt;<span class="hljs-type">int</span>,<span class="hljs-type">int</span>&gt; result;<br>    <span class="hljs-keyword">if</span> (minStack_.<span class="hljs-built_in">empty</span>())&#123;<br>      result = <span class="hljs-built_in">pair</span>&lt;<span class="hljs-type">int</span>,<span class="hljs-type">int</span>&gt;(val,<span class="hljs-built_in">min</span>(val,val));<br>    &#125;<span class="hljs-keyword">else</span>&#123;<br>      result = <span class="hljs-built_in">pair</span>&lt;<span class="hljs-type">int</span>,<span class="hljs-type">int</span>&gt;(val,<span class="hljs-built_in">min</span>(val,minStack_.<span class="hljs-built_in">top</span>().second));<br>    &#125;<br>    minStack_.<span class="hljs-built_in">push</span>(result);<br>  &#125;<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span></span>&#123;<br>    minStack_.<span class="hljs-built_in">pop</span>();<br>  &#125;<br>  <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">top</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">return</span> minStack_.<span class="hljs-built_in">top</span>().first;<br>  &#125;<br>  <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getMin</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">return</span> minStack_.<span class="hljs-built_in">top</span>().second;<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -277,11 +282,6 @@ pair&lt;int,int&gt; 只需一个栈；加入元素就与 top 元素 进行 min
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

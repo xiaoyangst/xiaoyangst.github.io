@@ -226,6 +226,11 @@ timerfd_create 设置 flags 选项为 TFD_NONBLOCK。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">while</span> ( <span class="hljs-number">1</span> )<br>&#123;<br>	<span class="hljs-type">ssize_t</span> s = <span class="hljs-built_in">read</span>( tfd, &amp;expirations, <span class="hljs-built_in">sizeof</span>(expirations) );<br>	<span class="hljs-keyword">if</span> ( s == <span class="hljs-number">-1</span> )<br>	&#123;<br>		<span class="hljs-keyword">if</span> ( errno == EAGAIN )	<span class="hljs-comment">// 没有定时器事件发生</span><br>		&#123;<br>			<span class="hljs-built_in">printf</span>( <span class="hljs-string">&quot;No timer event yet, doing other work...\n&quot;</span> );<br>			<span class="hljs-keyword">continue</span>;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-built_in">perror</span>( <span class="hljs-string">&quot;read&quot;</span> );<br>			<span class="hljs-keyword">return</span>(<span class="hljs-number">-1</span>);<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">printf</span>( <span class="hljs-string">&quot;Timer expired %llu times\n&quot;</span>, (<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span>) expirations );<br>	<span class="hljs-keyword">break</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -317,11 +322,6 @@ timerfd_create 设置 flags 选项为 TFD_NONBLOCK。</p>
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

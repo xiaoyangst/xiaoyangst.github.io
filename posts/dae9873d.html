@@ -255,6 +255,11 @@ triggerEvent 方法）。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">myCallbackFunction</span><span class="hljs-params">(<span class="hljs-type">int</span> value)</span> </span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Callback function called with value: &quot;</span> &lt;&lt; value &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    EventSystem eventSystem;<br><br>    <span class="hljs-comment">// 注册普通函数回调</span><br>    eventSystem.<span class="hljs-built_in">registerCallback</span>(myCallbackFunction);<br><br>    <span class="hljs-comment">// 触发事件（系统执行回调）</span><br>    eventSystem.<span class="hljs-built_in">triggerEvent</span>(<span class="hljs-number">42</span>);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -346,11 +351,6 @@ triggerEvent 方法）。</p>
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

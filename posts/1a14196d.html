@@ -483,6 +483,11 @@ current 的时候，就是已经加锁状态，可以继续安全访问 current 
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt; <span class="hljs-keyword">typename</span> Predicate &gt; std: :shared_ptr &lt; T &gt; <span class="hljs-built_in">find_first_if</span>(Predicate P) &#123;<br>    Node * current = &amp;head;<br>    std: :unique_lock &lt; std: :mutex &gt; <span class="hljs-built_in">ul</span>(head.mtx);<br>    <span class="hljs-keyword">while</span> (Node * <span class="hljs-type">const</span> next = current - &gt;next.<span class="hljs-built_in">get</span>()) &#123;<br>        std: :unique_lock &lt; std: :mutex &gt; <span class="hljs-built_in">ul_next</span>(next - &gt;mtx);<br>        ul.<span class="hljs-built_in">unlock</span>();<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">P</span>( * next - &gt;data)) &#123;<br>            <span class="hljs-keyword">return</span> next - &gt;data;<br>        &#125;<br>        current = next;<br>        ul = std: :<span class="hljs-built_in">move</span>(ul_next); <span class="hljs-comment">// 保证 current 的访问是线程安全，因为之前的 ul 已经被 unlock</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> std: :shared_ptr &lt; T &gt; ();<br>&#125;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -574,11 +579,6 @@ current 的时候，就是已经加锁状态，可以继续安全访问 current 
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

@@ -208,6 +208,11 @@ QJsonObject。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonDocument&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonObject&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonArray&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonValue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QDebug&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">parseJson</span><span class="hljs-params">(<span class="hljs-type">const</span> QByteArray &amp;jsonData)</span> </span>&#123;<br>    QJsonParseError jsonError;<br>    QJsonDocument jsonDoc = QJsonDocument::<span class="hljs-built_in">fromJson</span>(jsonData, &amp;jsonError);	 <span class="hljs-comment">// 将 JSON 解析为 UTF-8 编码的 JSON 文档，并从中创建 QJsonDocument</span><br><br>    <span class="hljs-keyword">if</span> (jsonError.error != QJsonParseError::NoError) &#123;	<span class="hljs-comment">// 如果 解析有误，退出</span><br>        <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;JSON parse error:&quot;</span> &lt;&lt; jsonError.<span class="hljs-built_in">errorString</span>();<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (jsonDoc.<span class="hljs-built_in">isObject</span>()) &#123;	<span class="hljs-comment">// 确保是一个对象</span><br>        QJsonObject jsonObj = jsonDoc.<span class="hljs-built_in">object</span>();	<span class="hljs-comment">// 得到 JSON 对象</span><br>        <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Parsed JSON object:&quot;</span> &lt;&lt; jsonObj;<br><br>        <span class="hljs-keyword">if</span> (jsonObj.<span class="hljs-built_in">contains</span>(<span class="hljs-string">&quot;name&quot;</span>)) &#123;	<span class="hljs-comment">// 确保 key 是合法的</span><br>            <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Name:&quot;</span> &lt;&lt; jsonObj.<span class="hljs-built_in">value</span>(<span class="hljs-string">&quot;name&quot;</span>).<span class="hljs-built_in">toString</span>();	<span class="hljs-comment">//获取 key 对应的  v</span><br>        &#125;<br>        <span class="hljs-keyword">if</span> (jsonObj.<span class="hljs-built_in">contains</span>(<span class="hljs-string">&quot;age&quot;</span>)) &#123;<br>            <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Age:&quot;</span> &lt;&lt; jsonObj.<span class="hljs-built_in">value</span>(<span class="hljs-string">&quot;age&quot;</span>).<span class="hljs-built_in">toInt</span>();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -299,11 +304,6 @@ QJsonObject。</p>
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

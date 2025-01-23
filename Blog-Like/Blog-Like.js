@@ -7,7 +7,7 @@
     var url = encodeURIComponent(window.location.href);
 
     var enableLimit = true; 
-    var maxLikes = 1;  
+    var maxLikes = 5;  
 
     function getVisitorLikes(url) {
         var likes = getCookie("likes_" + url);

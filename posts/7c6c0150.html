@@ -221,6 +221,11 @@ elts 指针指向。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>  <span class="hljs-type">int</span> value;<br>&#125; <span class="hljs-type">test_element_t</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">test_list</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// 创建内存池</span><br>    <span class="hljs-type">ngx_pool_t</span> *ngx_pool = ngx_create_pool(<span class="hljs-number">2048</span>, <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-type">ngx_list_t</span>* ngx_list = ngx_list_create(ngx_pool,<span class="hljs-number">2</span>,<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">test_element_t</span>));<br><br>    <span class="hljs-type">test_element_t</span>* index1 = ngx_list_push(ngx_list);<br>    index1-&gt;value = <span class="hljs-number">10</span>;<br>    <span class="hljs-type">test_element_t</span>* index2 = ngx_list_push(ngx_list);<br>    index2-&gt;value = <span class="hljs-number">20</span>;<br>    <br>    <span class="hljs-comment">// 扩容，看到 last 的变化</span><br>    <span class="hljs-type">test_element_t</span>* index3 = ngx_list_push(ngx_list);<br>    index3-&gt;value = <span class="hljs-number">30</span>;<br><br>    <span class="hljs-comment">// 遍历 ngx_list_t</span><br>    <span class="hljs-type">ngx_list_part_t</span> *part = &amp;ngx_list-&gt;part;<br>    <span class="hljs-type">test_element_t</span> *data = part-&gt;elts;  <span class="hljs-comment">// 当前部分的元素数组</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; ; i++) &#123;<br>        <span class="hljs-keyword">if</span> (i &gt;= part-&gt;nelts) &#123; <span class="hljs-comment">// 当前部分遍历结束，切换到下一部分</span><br>            <span class="hljs-keyword">if</span> (part-&gt;next == <span class="hljs-literal">NULL</span>) &#123;<br>                <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 没有下一部分，退出循环</span><br>            &#125;<br>            part = part-&gt;next;<br>            data = part-&gt;elts;<br>            i = <span class="hljs-number">0</span>; <span class="hljs-comment">// 重置索引为 0</span><br>        &#125;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Element value: %d\n&quot;</span>, data[i].value);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -312,11 +317,6 @@ elts 指针指向。</p>
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

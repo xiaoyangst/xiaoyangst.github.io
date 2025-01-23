@@ -259,6 +259,11 @@ elts 指向最新的内存。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test_multi_array</span><span class="hljs-params">()</span>&#123;<br><br>  <span class="hljs-comment">// 初始化内存池</span><br>  <span class="hljs-type">ngx_pool_t</span> *pool = ngx_create_pool(<span class="hljs-number">1024</span>, <span class="hljs-literal">NULL</span>); <span class="hljs-comment">// 创建大小为 1024 字节的内存池</span><br>  <span class="hljs-keyword">if</span> (pool == <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Failed to create memory pool\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> ;<br>  &#125;<br><br>  <span class="hljs-comment">// 创建数组</span><br>  <span class="hljs-type">ngx_array_t</span> *<span class="hljs-built_in">array</span> = ngx_array_create(pool, <span class="hljs-number">5</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">test_element_t</span>)); <span class="hljs-comment">// 初始容量为 5</span><br><br>  <span class="hljs-comment">// 批量添加元素</span><br>  <span class="hljs-type">test_element_t</span> *batch = ngx_array_push_n(<span class="hljs-built_in">array</span>, <span class="hljs-number">5</span>);<br><br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">ngx_uint_t</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;<br>    batch[i].value = <span class="hljs-number">100</span> + i;<br>  &#125;<br><br>  <span class="hljs-comment">// 打印数组中的所有元素</span><br>  <span class="hljs-type">test_element_t</span>* elem = <span class="hljs-built_in">array</span>-&gt;elts;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">ngx_uint_t</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">array</span>-&gt;nelts; i++) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Element %d: %d\n&quot;</span>, i, elem[i].value);<br>  &#125;<br><br>  <span class="hljs-comment">// 销毁数组</span><br>  ngx_array_destroy(<span class="hljs-built_in">array</span>);<br><br>  <span class="hljs-comment">// 销毁内存池</span><br>  ngx_destroy_pool(pool);<br>&#125;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -350,11 +355,6 @@ elts 指向最新的内存。</p>
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

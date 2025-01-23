@@ -376,6 +376,11 @@ NULL，代表这块内存被释放了”，实际上就是 ngx_free 去释放掉
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span><br><span class="hljs-title function_">ngx_pool_delete_file</span><span class="hljs-params">(<span class="hljs-type">void</span> *data)</span><br>&#123;<br>    <span class="hljs-type">ngx_pool_cleanup_file_t</span>  *c = data;<br><br>    <span class="hljs-type">ngx_err_t</span>  err;<br><br>    <span class="hljs-comment">// ngx_delete_file 就是 unlink，删除单个文件的硬链接</span><br>    <span class="hljs-comment">// 它作用于文件系统的链接计数，当减少到0时，文件实质上会被删除</span><br>    <span class="hljs-keyword">if</span> (ngx_delete_file(c-&gt;name) == NGX_FILE_ERROR) &#123;<br>        err = ngx_errno;<br><br>        <span class="hljs-keyword">if</span> (err != NGX_ENOENT) &#123;<br>            ngx_log_error(NGX_LOG_CRIT, c-&gt;<span class="hljs-built_in">log</span>, err,<br>                          ngx_delete_file_n <span class="hljs-string">&quot; \&quot;%s\&quot; failed&quot;</span>, c-&gt;name);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// 关闭文件描述符</span><br>    <span class="hljs-comment">// 如果 fd 是引用底层打开文件描述的最后一个文件描述符（参见 open (2)），则释放与打开文件描述相关的资源</span><br>    <span class="hljs-comment">// 如果描述符是对已使用 unlink 删除的文件的最后一个引用，则删除该文件</span><br>    <span class="hljs-keyword">if</span> (ngx_close_file(c-&gt;fd) == NGX_FILE_ERROR) &#123;<br>        ngx_log_error(NGX_LOG_ALERT, c-&gt;<span class="hljs-built_in">log</span>, ngx_errno,<br>                      ngx_close_file_n <span class="hljs-string">&quot; \&quot;%s\&quot; failed&quot;</span>, c-&gt;name);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -467,11 +472,6 @@ NULL，代表这块内存被释放了”，实际上就是 ngx_free 去释放掉
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

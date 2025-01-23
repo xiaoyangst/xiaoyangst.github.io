@@ -201,6 +201,11 @@ protected。派生类以 public 继承之后，自然会让其成为 private</li
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> : <span class="hljs-keyword">public</span> Singleton&lt;Student&gt; &#123;<br>    <span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&lt;Student&gt;;	<span class="hljs-comment">// 将 Singleton&lt;Student&gt; 声明为友元类，其私有的构造函数和析构函数都可以被 Singleton 调用了</span><br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doSomething</span><span class="hljs-params">()</span> </span>&#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot; Student do&quot;</span> &lt;&lt; std::endl;<br>	&#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">testSingleton</span><span class="hljs-params">()</span> </span>&#123;<br>	std::shared_ptr&lt;Student&gt; instance1 = Student::<span class="hljs-built_in">getInstance</span>();<br>	std::shared_ptr&lt;Student&gt; instance2 = Student::<span class="hljs-built_in">getInstance</span>();<br><br>	<span class="hljs-keyword">if</span> (instance1 == instance2) &#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot;Singleton test passed: Both instances are the same.&quot;</span> &lt;&lt; std::endl;<br>	&#125;<br>	<span class="hljs-keyword">else</span> &#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot;Singleton test failed: Instances are different.&quot;</span> &lt;&lt; std::endl;<br>	&#125;<br><br>	instance1-&gt;<span class="hljs-built_in">doSomething</span>();<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>	<span class="hljs-function">std::thread <span class="hljs-title">t1</span><span class="hljs-params">(testSingleton)</span></span>;<br>	<span class="hljs-function">std::thread <span class="hljs-title">t2</span><span class="hljs-params">(testSingleton)</span></span>;<br><br>	t<span class="hljs-number">1.</span><span class="hljs-built_in">join</span>();<br>	t<span class="hljs-number">2.</span><span class="hljs-built_in">join</span>();<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	Singleton test passed: Both instances are the same.</span><br><span class="hljs-comment"> 	 Student do</span><br><span class="hljs-comment">	Singleton test passed: Both instances are the same.</span><br><span class="hljs-comment">       Student do</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -292,11 +297,6 @@ protected。派生类以 public 继承之后，自然会让其成为 private</li
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

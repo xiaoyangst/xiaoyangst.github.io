@@ -187,6 +187,11 @@ key 的排序，即 map 本身是自动机械能 key 排序的。如果要进行
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">int</span> maxCount = <span class="hljs-number">0</span>; <span class="hljs-comment">// 最大频率</span><br>    <span class="hljs-type">int</span> count = <span class="hljs-number">0</span>; <span class="hljs-comment">// 统计频率</span><br>    TreeNode* pre = <span class="hljs-literal">NULL</span>;<br>    vector&lt;<span class="hljs-type">int</span>&gt; result;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">searchBST</span><span class="hljs-params">(TreeNode* cur)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (cur == <span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span> ;<br><br>        <span class="hljs-built_in">searchBST</span>(cur-&gt;left);    <br><br>        <span class="hljs-keyword">if</span> (pre == <span class="hljs-literal">NULL</span>) &#123; <span class="hljs-comment">// 第一个节点</span><br>            count = <span class="hljs-number">1</span>;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (pre-&gt;val == cur-&gt;val) &#123; <span class="hljs-comment">// 与前一个节点数值相同</span><br>            count++;<br>        &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 与前一个节点数值不同</span><br>            count = <span class="hljs-number">1</span>;<br>        &#125;<br>        pre = cur; <span class="hljs-comment">// 更新上一个节点</span><br><br>        <span class="hljs-keyword">if</span> (count == maxCount) &#123; <span class="hljs-comment">// 如果和最大值相同，放进result中</span><br>            result.<span class="hljs-built_in">push_back</span>(cur-&gt;val);<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (count &gt; maxCount) &#123; <span class="hljs-comment">// 如果计数大于最大值频率</span><br>            maxCount = count;   <span class="hljs-comment">// 更新最大频率</span><br>            result.<span class="hljs-built_in">clear</span>();   <br>            result.<span class="hljs-built_in">push_back</span>(cur-&gt;val);<br>        &#125;<br><br>        <span class="hljs-built_in">searchBST</span>(cur-&gt;right);   <br>        <span class="hljs-keyword">return</span> ;<br>    &#125;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">findMode</span><span class="hljs-params">(TreeNode* root)</span> </span>&#123;<br>        <span class="hljs-built_in">searchBST</span>(root);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -278,11 +283,6 @@ key 的排序，即 map 本身是自动机械能 key 排序的。如果要进行
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

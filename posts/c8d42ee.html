@@ -255,6 +255,11 @@ nullptr
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	Point * pt1 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Point</span>(<span class="hljs-number">11</span>, <span class="hljs-number">12</span>);<br>	pt1-&gt;<span class="hljs-built_in">print</span>();<br>	<span class="hljs-keyword">delete</span> pt1;<br>	pt1 = <span class="hljs-literal">nullptr</span>;<br>    <br>	Point * pt2 = <span class="hljs-keyword">new</span> Point[<span class="hljs-number">5</span>]();<span class="hljs-comment">//注意</span><br>	pt2-&gt;<span class="hljs-built_in">print</span>();<br>	(pt2 + <span class="hljs-number">1</span>)-&gt;<span class="hljs-built_in">print</span>();<br>	<span class="hljs-keyword">delete</span> [] pt2;<br>    pt2 = <span class="hljs-literal">nullptr</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -346,11 +351,6 @@ nullptr
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>

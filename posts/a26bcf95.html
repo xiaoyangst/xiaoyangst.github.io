@@ -225,6 +225,11 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;TemplateStudy.h&quot;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>  Test&lt;<span class="hljs-type">int</span>&gt; intTem;<br>  Test&lt;<span class="hljs-type">double</span>&gt; doubleTem;<br>  <span class="hljs-type">int</span> result1 = intTem.<span class="hljs-built_in">add</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>);  <span class="hljs-comment">// 调用 add&lt;int, int&gt;</span><br>  <span class="hljs-type">double</span> result2 = doubleTem.<span class="hljs-built_in">add</span>(<span class="hljs-number">3.5</span>, <span class="hljs-number">4.2</span>);  <span class="hljs-comment">// 调用 add&lt;double, double&gt;</span><br><br>  std::cout &lt;&lt; <span class="hljs-string">&quot;Result 1: &quot;</span> &lt;&lt; result1 &lt;&lt; std::endl;<br>  std::cout &lt;&lt; <span class="hljs-string">&quot;Result 2: &quot;</span> &lt;&lt; result2 &lt;&lt; std::endl;<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
     
       <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
@@ -316,11 +321,6 @@
     
       <div id="gitalk-container"></div>
     
-  </div>
-  <div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
   </div>
 
     </div>
