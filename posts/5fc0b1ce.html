@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        Redis 事件驱动框架思路浅读 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">Redis 事件驱动框架思路浅读</div>
+        <div class="post-info">
+          
+  <a href="/tags/Redis/" class="post-tag">#Redis</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag">#源码剖析</a>
+
+
+          <span class="post-date">2025-01-23</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#核心源码解读">核心源码解读</a>
+<ul>
+<li><a href="#initserver">initServer</a></li>
+<li><a href="#initlisteners">initListeners</a></li>
+<li><a href="#aemain">aeMain</a></li>
+<li><a href="#aecreatefileevent">aeCreateFileEvent</a></li>
+<li><a href="#总结">总结</a></li>
+<li><a href="#多线程支持">多线程支持</a></li>
+</ul></li>
+<li><a href="#参考内容">参考内容</a></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="核心源码解读">核心源码解读</span></h1>
+<p>server.c 中是 redis 服务启动的入口，main
+函数就在该文件中，主要完成下面几件事：</p>
+<ol type="1">
+<li>基本初始化</li>
+<li>检查哨兵模式，并检查是否要执行 RDB 检测或 AOF 检测</li>
+<li>运行参数解析</li>
+<li>初始化 server</li>
+<li><font color="red">执行事件驱动框架</font></li>
+</ol>
+<figure>
+<img src="/images/2025/01/23/a9e206f0-d99d-11ef-ae18-c78f89f10524.png" alt="image20250123142642703.png">
+<figcaption aria-hidden="true">image20250123142642703.png</figcaption>
+</figure>
+<h2><span id="initserver">initServer</span></h2>
+<p>initServer 函数：创建 eventLoop 和 创建 Redis 数据库并初始化</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">initServer</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    <span class="hljs-type">int</span> j;<br><br>    server.el = aeCreateEventLoop(server.maxclients+CONFIG_FDSET_INCR);	<span class="hljs-comment">// 创建 eventLoop（事件循环框架）</span><br><br>    server.db = zmalloc(<span class="hljs-keyword">sizeof</span>(redisDb)*server.dbnum);	<span class="hljs-comment">// 创建 Redis 数据库</span><br><br>    <span class="hljs-keyword">for</span> (j = <span class="hljs-number">0</span>; j &lt; server.dbnum; j++) &#123;	<span class="hljs-comment">// 为每个 Redis 数据库进行初始化</span><br>        server.db[j].keys = kvstoreCreate(&amp;dbDictType, slot_count_bits, flags);<br>        server.db[j].expires = kvstoreCreate(&amp;dbExpiresDictType, slot_count_bits, flags);<br>        server.db[j].hexpires = ebCreate();<br>        server.db[j].expires_cursor = <span class="hljs-number">0</span>;<br>        server.db[j].blocking_keys = dictCreate(&amp;keylistDictType);<br>        server.db[j].blocking_keys_unblock_on_nokey = dictCreate(&amp;objectKeyPointerValueDictType);<br>        server.db[j].ready_keys = dictCreate(&amp;objectKeyPointerValueDictType);<br>        server.db[j].watched_keys = dictCreate(&amp;keylistDictType);<br>        server.db[j].id = j;<br>        server.db[j].avg_ttl = <span class="hljs-number">0</span>;<br>        server.db[j].defrag_later = listCreate();<br>        listSetFreeMethod(server.db[j].defrag_later,(<span class="hljs-type">void</span> (*)(<span class="hljs-type">void</span>*))sdsfree);<br>    &#125;<br>    <br>    aeSetBeforeSleepProc(server.el,beforeSleep);<br>    aeSetAfterSleepProc(server.el,afterSleep);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="initlisteners">initListeners</span></h2>
+<p>initListeners
+函数：用于设置通信协议的监听器并确保系统能够正确接受客户端请求</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">initListeners</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    connListener *listener;<br><br>    <span class="hljs-type">int</span> listen_fds = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; CONN_TYPE_MAX; j++) &#123;<br>        listener = &amp;server.listeners[j];<br><br>        connListen(listener);	<span class="hljs-comment">// --&gt; listenToPort --&gt; anetListen --&gt; 监听端口</span><br><br>        createSocketAcceptHandler(listener, connAcceptHandler(listener-&gt;ct));	<span class="hljs-comment">// 用于向事件循环注册 listen fd，并设置回调函数</span><br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// bind + listen</span><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">anetListen</span><span class="hljs-params">(<span class="hljs-type">char</span> *err, <span class="hljs-type">int</span> s, <span class="hljs-keyword">struct</span> sockaddr *sa, <span class="hljs-type">socklen_t</span> len, <span class="hljs-type">int</span> backlog, <span class="hljs-type">mode_t</span> perm)</span> &#123;<br>    <span class="hljs-keyword">if</span> (bind(s,sa,len) == <span class="hljs-number">-1</span>) &#123;<br>        anetSetError(err, <span class="hljs-string">&quot;bind: %s&quot;</span>, strerror(errno));<br>        close(s);<br>        <span class="hljs-keyword">return</span> ANET_ERR;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (sa-&gt;sa_family == AF_LOCAL &amp;&amp; perm)<br>        chmod(((<span class="hljs-keyword">struct</span> sockaddr_un *) sa)-&gt;sun_path, perm);<br><br>    <span class="hljs-keyword">if</span> (listen(s, backlog) == <span class="hljs-number">-1</span>) &#123;<br>        anetSetError(err, <span class="hljs-string">&quot;listen: %s&quot;</span>, strerror(errno));<br>        close(s);<br>        <span class="hljs-keyword">return</span> ANET_ERR;<br>    &#125;<br>    <span class="hljs-keyword">return</span> ANET_OK;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>connAcceptHandler 函数：这个函数就是前面设置的回调函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-keyword">inline</span> aeFileProc *<span class="hljs-title function_">connAcceptHandler</span><span class="hljs-params">(ConnectionType *ct)</span> &#123;<br>    <span class="hljs-keyword">if</span> (ct)<br>        <span class="hljs-keyword">return</span> ct-&gt;accept_handler;	<span class="hljs-comment">// connSocketAcceptHandler --&gt; anetTcpAccept --&gt; anetGenericAccept</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-comment">// accept</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">connSocketAcceptHandler</span><span class="hljs-params">(aeEventLoop *el, <span class="hljs-type">int</span> fd, <span class="hljs-type">void</span> *privdata, <span class="hljs-type">int</span> mask)</span> &#123;<br>    <span class="hljs-type">int</span> cport, cfd; <br>    <span class="hljs-type">int</span> max = server.max_new_conns_per_cycle;<br>    <span class="hljs-type">char</span> cip[NET_IP_STR_LEN];<br><br>    <span class="hljs-comment">// 循环处理新的客户端连接，直到达到最大限制或没有新的连接。</span><br>    <span class="hljs-keyword">while</span> (max--) &#123;<br>        <span class="hljs-comment">// 本质上调用 accept，获取一个客户端连接后的 fd</span><br>        anetTcpAccept(server.neterr, fd, cip, <span class="hljs-keyword">sizeof</span>(cip), &amp;cport);<br><br>        <span class="hljs-comment">// 创建一个 conn，并初始化</span><br>        acceptCommonHandler(connCreateAcceptedSocket(cfd, <span class="hljs-literal">NULL</span>), <span class="hljs-number">0</span>, cip);<br>    &#125;<br>&#125;<br><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">anetGenericAccept</span><span class="hljs-params">(<span class="hljs-type">char</span> *err, <span class="hljs-type">int</span> s, <span class="hljs-keyword">struct</span> sockaddr *sa, <span class="hljs-type">socklen_t</span> *len)</span> &#123;<br>    <span class="hljs-type">int</span> fd;<br>    fd = accept(s,sa,len);<br>    <span class="hljs-keyword">return</span> fd;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">acceptCommonHandler</span><span class="hljs-params">(connection *conn, <span class="hljs-type">int</span> flags, <span class="hljs-type">char</span> *ip)</span> &#123;<br>    client *c; <br><br>    <span class="hljs-comment">// 创建一个客户端对象，并设置回调 readQueryFromClient</span><br>    c = createClient(conn);	<span class="hljs-comment">// connSocketSetReadHandler --&gt; aeCreateFileEvent --&gt; connSetReadHandler</span><br><br>    <span class="hljs-comment">// 执行 clientAcceptHandler 回调函数，即处理客户端连接的接收和验证</span><br>    connAccept(conn, clientAcceptHandler);	<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>截止到目前，我们已经创建一个事件循环对象，尽管这个事件循环还没有正式启动。接着，开始监听客户端的连接，如果有连接过来就会触发
+connAcceptHandler 回调，这个回调函数会 accept
+得到一个用于后续通信的连接。</p>
+<p>我们有看到 创建一个客户端对象，并设置回调
+readQueryFromClient，这是一个读的回调函数，那写的回调函数呢？</p>
+<p>readQueryFromClient 在读取到客户端命令后，进行解析，解析完成就会调用
+processInputBuffer --&gt; processCommandAndResetClient --&gt;
+processCommand --&gt;
+addReply，把要回复的数据写入到客户端的缓冲区（注意，这个时候还没有设置写回调）。</p>
+<p>前面我们注册过一个回调函数 beforeSleep，也就是 Redis
+事件驱动框架每次循环进入事件处理函数前，也就是在框架主函数 aeMain 中调用
+aeProcessEvents，来处理监听到的已触发事件或是到时的时间事件之前都会调用它。这其中就包括了调用
+handleClientsWithPendingWrites 函数，它会将Redis
+sever客户端缓冲区中的数据写回客户端。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">handleClientsWithPendingWrites</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    listIter li;<br>    listNode *ln;<br>    <span class="hljs-type">int</span> processed = listLength(server.clients_pending_write);<br><br>    listRewind(server.clients_pending_write,&amp;li);<br>    <span class="hljs-keyword">while</span>((ln = listNext(&amp;li))) &#123;<br>        client *c = listNodeValue(ln);<br>        c-&gt;flags &amp;= ~CLIENT_PENDING_WRITE;<br>        listUnlinkNode(server.clients_pending_write,ln);<br>        <br>        <span class="hljs-comment">/* 写回客户端 */</span><br>        <span class="hljs-keyword">if</span> (writeToClient(c,<span class="hljs-number">0</span>) == C_ERR) <span class="hljs-keyword">continue</span>;<br><br>        <span class="hljs-comment">/* 还有没写完的，注册一个写回调，下次处理 */</span><br>        <span class="hljs-keyword">if</span> (clientHasPendingReplies(c)) &#123;<br>            installClientWriteHandler(c);	<span class="hljs-comment">// 注册写回调  --&gt; connSetWriteHandlerWithBarrier --&gt; sendReplyToClient --&gt; writeToClient（注册的写回调）</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> processed;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="aemain">aeMain</span></h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">aeMain</span><span class="hljs-params">(aeEventLoop *eventLoop)</span> &#123;<br>    eventLoop-&gt;stop = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (!eventLoop-&gt;stop) &#123;<br>        aeProcessEvents(eventLoop, AE_ALL_EVENTS|<br>                                   AE_CALL_BEFORE_SLEEP|<br>                                   AE_CALL_AFTER_SLEEP);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">aeProcessEvents</span><span class="hljs-params">(aeEventLoop *eventLoop, <span class="hljs-type">int</span> flags)</span><br>&#123;<br>    <span class="hljs-type">int</span> processed = <span class="hljs-number">0</span>, numevents;<br><br>    <span class="hljs-keyword">if</span> (eventLoop-&gt;maxfd != <span class="hljs-number">-1</span> ||<br>        ((flags &amp; AE_TIME_EVENTS) &amp;&amp; !(flags &amp; AE_DONT_WAIT))) &#123;<br>        <span class="hljs-type">int</span> j;<br>        <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">timeval</span> <span class="hljs-title">tv</span>, *<span class="hljs-title">tvp</span> =</span> <span class="hljs-literal">NULL</span>; <span class="hljs-comment">/* NULL means infinite wait. */</span><br>        <span class="hljs-type">int64_t</span> usUntilTimer;<br><br>        numevents = aeApiPoll(eventLoop, tvp);	<span class="hljs-comment">// epoll_wait</span><br><br>        <span class="hljs-keyword">for</span> (j = <span class="hljs-number">0</span>; j &lt; numevents; j++) &#123;		<span class="hljs-comment">// 遍历发生事件的 fd</span><br>            <span class="hljs-comment">// 处理事件</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">/* 检查定时器事件 */</span><br>    <span class="hljs-keyword">if</span> (flags &amp; AE_TIME_EVENTS)<br>        processed += processTimeEvents(eventLoop);<br><br>    <span class="hljs-keyword">return</span> processed; <span class="hljs-comment">/* return the number of processed file/time events */</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>epoll_wait 解除阻塞，如果有事件发生就去处理即可。</p>
+<h2><span id="aecreatefileevent">aeCreateFileEvent</span></h2>
+<p>该接口的作用就是添加 fd 到 epoll 中监听，并设置事件回调函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">aeCreateFileEvent</span><span class="hljs-params">(aeEventLoop *eventLoop, <span class="hljs-type">int</span> fd, <span class="hljs-type">int</span> mask,</span></span><br><span class="hljs-params"><span class="hljs-function">        aeFileProc *proc, <span class="hljs-type">void</span> *clientData)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span> (fd &gt;= eventLoop-&gt;setsize) &#123;<br>        errno = ERANGE;<br>        <span class="hljs-keyword">return</span> AE_ERR;<br>    &#125;<br>    aeFileEvent *fe = &amp;eventLoop-&gt;events[fd];<br><br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">aeApiAddEvent</span>(eventLoop, fd, mask) == <span class="hljs-number">-1</span>)<br>        <span class="hljs-keyword">return</span> AE_ERR;<br>    fe-&gt;mask |= mask;<br>    <span class="hljs-keyword">if</span> (mask &amp; AE_READABLE) fe-&gt;rfileProc = proc;	<span class="hljs-comment">// 读回调</span><br>    <span class="hljs-keyword">if</span> (mask &amp; AE_WRITABLE) fe-&gt;wfileProc = proc;	<span class="hljs-comment">// 写回调</span><br>    fe-&gt;clientData = clientData;<br>    <span class="hljs-keyword">if</span> (fd &gt; eventLoop-&gt;maxfd)<br>        eventLoop-&gt;maxfd = fd;<br>    <span class="hljs-keyword">return</span> AE_OK;<br>&#125;<br><br><span class="hljs-comment">// epoll_ctl</span><br><span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">aeApiAddEvent</span><span class="hljs-params">(aeEventLoop *eventLoop, <span class="hljs-type">int</span> fd, <span class="hljs-type">int</span> mask)</span> </span>&#123;<br>    aeApiState *state = eventLoop-&gt;apidata;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">epoll_event</span> ee = &#123;<span class="hljs-number">0</span>&#125;; <br>    <span class="hljs-type">int</span> op = eventLoop-&gt;events[fd].mask == AE_NONE ?		<span class="hljs-comment">// EPOLL_CTL_ADD 或 EPOLL_CTL_MOD</span><br>            EPOLL_CTL_ADD : EPOLL_CTL_MOD;<br><br>    ee.events = <span class="hljs-number">0</span>;<br>    mask |= eventLoop-&gt;events[fd].mask; <span class="hljs-comment">/* Merge old events */</span><br>    <span class="hljs-keyword">if</span> (mask &amp; AE_READABLE) ee.events |= EPOLLIN;<br>    <span class="hljs-keyword">if</span> (mask &amp; AE_WRITABLE) ee.events |= EPOLLOUT;<br>    ee.data.fd = fd;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">epoll_ctl</span>(state-&gt;epfd,op,fd,&amp;ee) == <span class="hljs-number">-1</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="总结">总结</span></h2>
+<figure>
+<img src="/images/2025/01/23/b7618850-d99d-11ef-ae18-c78f89f10524.png" alt="04152516e73f473df754a5c7a8f6841d.png">
+<figcaption aria-hidden="true">04152516e73f473df754a5c7a8f6841d.png</figcaption>
+</figure>
+<h2><span id="多线程支持">多线程支持</span></h2>
+<p>InitServerLast --&gt; initThreadedIO</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">initThreadedIO</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    server.io_threads_active = <span class="hljs-number">0</span>;<br>    io_threads_op = IO_THREADS_OP_IDLE;<br><br>    <span class="hljs-keyword">if</span> (server.io_threads_num == <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span>;	<span class="hljs-comment">// 单线程直接返回</span><br><br>    <span class="hljs-keyword">if</span> (server.io_threads_num &gt; IO_THREADS_MAX_NUM) &#123;	<span class="hljs-comment">// 超过最大线程数(128)，直接退出</span><br>        serverLog(LL_WARNING,<span class="hljs-string">&quot;Fatal: too many I/O threads configured. &quot;</span><br>                             <span class="hljs-string">&quot;The maximum number is %d.&quot;</span>, IO_THREADS_MAX_NUM);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;<br><br>    <span class="hljs-comment">/* Spawn and initialize the I/O threads. */</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; server.io_threads_num; i++) &#123;<br>        <span class="hljs-comment">/* Things we do for all the threads including the main thread. */</span><br>        io_threads_list[i] = listCreate();<br>        <span class="hljs-keyword">if</span> (i == <span class="hljs-number">0</span>) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">/* Thread 0 is the main thread. */</span><br><br>        <span class="hljs-comment">/* Things we do only for the additional threads. */</span><br>        <span class="hljs-type">pthread_t</span> tid;<br>        pthread_mutex_init(&amp;io_threads_mutex[i],<span class="hljs-literal">NULL</span>);<br>        setIOPendingCount(i, <span class="hljs-number">0</span>);<br>        pthread_mutex_lock(&amp;io_threads_mutex[i]); <span class="hljs-comment">/* Thread will be stopped. */</span><br>        <span class="hljs-keyword">if</span> (pthread_create(&amp;tid,<span class="hljs-literal">NULL</span>,IOThreadMain,(<span class="hljs-type">void</span>*)(<span class="hljs-type">long</span>)i) != <span class="hljs-number">0</span>) &#123;	<span class="hljs-comment">// 创建线程</span><br>            serverLog(LL_WARNING,<span class="hljs-string">&quot;Fatal: Can&#x27;t initialize IO thread.&quot;</span>);<br>            <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>        &#125;<br>        io_threads[i] = tid;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>创建的线程池中，每个线程都会调用 IOThreadMain：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> *<span class="hljs-title function_">IOThreadMain</span><span class="hljs-params">(<span class="hljs-type">void</span> *myid)</span> &#123;<br>    <span class="hljs-comment">/* The ID is the thread number (from 0 to server.io_threads_num-1), and is</span><br><span class="hljs-comment">     * used by the thread to just manipulate a single sub-array of clients. */</span><br>    <span class="hljs-type">long</span> id = (<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span>)myid;<br>    <span class="hljs-type">char</span> thdname[<span class="hljs-number">16</span>];<br><br>    <span class="hljs-built_in">snprintf</span>(thdname, <span class="hljs-keyword">sizeof</span>(thdname), <span class="hljs-string">&quot;io_thd_%ld&quot;</span>, id);<br>    redis_set_thread_title(thdname);<br>    redisSetCpuAffinity(server.server_cpulist);<br>    makeThreadKillable();<br><br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>) &#123;		<span class="hljs-comment">// 循环</span><br>        <span class="hljs-comment">/* Wait for start */</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">1000000</span>; j++) &#123;<br>            <span class="hljs-keyword">if</span> (getIOPendingCount(id) != <span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;<br>        &#125;<br><br>        <span class="hljs-comment">/* Give the main thread a chance to stop this thread. */</span><br>        <span class="hljs-keyword">if</span> (getIOPendingCount(id) == <span class="hljs-number">0</span>) &#123;<br>            pthread_mutex_lock(&amp;io_threads_mutex[id]);<br>            pthread_mutex_unlock(&amp;io_threads_mutex[id]);<br>            <span class="hljs-keyword">continue</span>;<br>        &#125;<br><br>        serverAssert(getIOPendingCount(id) != <span class="hljs-number">0</span>);<br><br>        listIter li;<br>        listNode *ln;<br>        listRewind(io_threads_list[id],&amp;li);<br>        <span class="hljs-keyword">while</span>((ln = listNext(&amp;li))) &#123;	<span class="hljs-comment">// 读取客户端列表，并处理相应的事件回调</span><br>            client *c = listNodeValue(ln);<br>            <span class="hljs-keyword">if</span> (io_threads_op == IO_THREADS_OP_WRITE) &#123;<br>                writeToClient(c,<span class="hljs-number">0</span>);<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (io_threads_op == IO_THREADS_OP_READ) &#123;<br>                readQueryFromClient(c-&gt;conn);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                serverPanic(<span class="hljs-string">&quot;io_threads_op value is unknown&quot;</span>);<br>            &#125;<br>        &#125;<br>        listEmpty(io_threads_list[id]);<br>        setIOPendingCount(id, <span class="hljs-number">0</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>每一个IO线程运行时，都会不断检查是否有等待它处理的客户端。如果有，就根据操作类型，从客户端读取数据或是将数据写回客户端。</p>
+<p>那么等待它处理的客户端是谁搞进来的？</p>
+<p>这就要说到 Redis server 对应的全局变量 server了。server
+变量中有两个List类型的成员变量：clients_pending_write 和
+clients_pending_read，它们分别记录了待写回数据的客户端和待读取数据的客户端。</p>
+<p>Redis server
+在接收到客户端请求和给客户端返回数据的过程中，会根据一定条件，推迟客户端的读写操作，并分别把待读写的客户端保存到这两个列表中。然后，Redis
+server 在每次进入事件循环前，会再把列表中的客户端添加到 io_threads_list
+数组中，交给 IO 线程进行处理。</p>
+<figure>
+<img src="/images/2025/01/23/bf7c4520-d99d-11ef-ae18-c78f89f10524.png" alt="image20250123215844369.png">
+<figcaption aria-hidden="true">image20250123215844369.png</figcaption>
+</figure>
+<p><strong>多IO线程本身并不会执行命令，它们只是利用多核并行地读取数据和解析命令，或是将server数据写回。所以，Redis执行命令的线程还是主IO线程。</strong>这一点对于你理解多IO线程机制很重要，可以避免你误解Redis有多线程同时执行命令。</p>
+<figure>
+<img src="/images/2025/01/23/c4f1d290-d99d-11ef-ae18-c78f89f10524.png" alt="9332b6c0cd56c9467111609cce1d4b92.png">
+<figcaption aria-hidden="true">9332b6c0cd56c9467111609cce1d4b92.png</figcaption>
+</figure>
+<p>明显看得出，Redis 并不是一个规范的多线程 Reactor
+模型，明显看到只有主线程是
+eventLoop，并且执行命令。而其他多线程只是解析命令和回复数据。这显然是
+Redis 的历史原因，谁让他之前是单线程呢。</p>
+<figure>
+<img src="/images/2025/01/23/ca3a83a0-d99d-11ef-ae18-c78f89f10524.png" alt="image20250123223752634.png">
+<figcaption aria-hidden="true">image20250123223752634.png</figcaption>
+</figure>
+<h1><span id="参考内容">参考内容</span></h1>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6989109527886954527">Redis 6.0
+新特性：带你 100% 掌握多线程模型</a></p>
+<p><a target="_blank" rel="noopener" href="https://time.geekbang.org/column/intro/430">Redis源码剖析与实战</a></p>
+
+      </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/6d234252.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      63. 不同路径 II
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag">#源码剖析</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\9c91e4fe.html" title="RDB 持久化" rel="bookmark">RDB 持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\b7e51ad7.html" title="Redis主从复制" rel="bookmark">Redis主从复制</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7d8fe760.html" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
