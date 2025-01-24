@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        63. 不同路径 II | 
+        343. 整数拆分 | 
       
     </title>
     <meta name="description" content="" />
@@ -157,13 +157,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">63. 不同路径 II</div>
+        <div class="post-title">343. 整数拆分</div>
         <div class="post-info">
           
   <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="post-tag">#动态规划</a>
 
 
-          <span class="post-date">2025-01-21</span>
+          <span class="post-date">2025-01-24</span>
         </div>
       </div>
       
@@ -173,23 +173,19 @@
             
           </div>
         
-        <h2><span id="62-不同路径">62. 不同路径</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">uniquePaths</span><span class="hljs-params">(<span class="hljs-type">int</span> m, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">data</span>(m, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(n, <span class="hljs-number">1</span>));<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; m; i++)&#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt; n; j++)&#123;<br>                data[i][j] = data[i<span class="hljs-number">-1</span>][j] + data[i][j<span class="hljs-number">-1</span>];<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> data[m<span class="hljs-number">-1</span>][n<span class="hljs-number">-1</span>];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-<p>第一行和第一列初始化为
-1（这里全部初始化为1，返回除开第一行和第一列都会被动态改变，且不影响公式）。这是因为，第一行只能从左边过来，第一列只能从上面过来，在没有其他路径。</p>
-<p>除开第一行和第一列，它们都遵循一个公式，图解见下：<code>data[i][j] = data[i-1][j] + data[i][j-1]</code></p>
-<figure>
-<img src="63.%20不同路径%20II.assets/image-20250121174221805.png" alt="image-20250121174221805">
-<figcaption aria-hidden="true">image-20250121174221805</figcaption>
-</figure>
-<h2><span id="63-不同路径-ii">63. 不同路径 II</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">uniquePathsWithObstacles</span><span class="hljs-params">(vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; obstacleGrid)</span> </span>&#123;<br>        <span class="hljs-type">int</span> m = obstacleGrid.<span class="hljs-built_in">size</span>();    <span class="hljs-comment">// 行</span><br>        <span class="hljs-type">int</span> n = obstacleGrid[<span class="hljs-number">0</span>].<span class="hljs-built_in">size</span>(); <span class="hljs-comment">// 列</span><br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">data</span>(m, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(n, <span class="hljs-number">0</span>));<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) &#123;<br>            <span class="hljs-keyword">if</span> (obstacleGrid[<span class="hljs-number">0</span>][i] != <span class="hljs-number">1</span>) &#123;<br>                data[<span class="hljs-number">0</span>][i] = <span class="hljs-number">1</span>;<br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; m; i++) &#123;<br>            <span class="hljs-keyword">if</span> (obstacleGrid[i][<span class="hljs-number">0</span>] != <span class="hljs-number">1</span>) &#123;<br>                data[i][<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;<br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; m; i++) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt; n; j++) &#123;<br>                <span class="hljs-keyword">if</span> (obstacleGrid[i][j] == <span class="hljs-number">1</span>) &#123;  <span class="hljs-comment">// 遇到障碍物</span><br>                    data[i][j] = <span class="hljs-number">0</span>;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    data[i][j] = data[i - <span class="hljs-number">1</span>][j] + data[i][j - <span class="hljs-number">1</span>];<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> data[m - <span class="hljs-number">1</span>][n - <span class="hljs-number">1</span>];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-<p>把二维数组所有元素初始化为
-0，提前处理第一行和第二行存在障碍物情况。</p>
-<p>没有遇到障碍物，代表通行没有问题，标记为 1，否则标记为
-0，因为不可能有路径能走到这里了。</p>
-<p>至于中间的障碍物，我们在遍历的过程中再去处理，如果遇到障碍物标记为 0
-就好了，表示其他路径不可能从这里通过，好不影响公式的正确使用。</p>
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">integerBreak</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">dp</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>)</span></span>;<br>        <span class="hljs-type">int</span> left, right;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= (i / <span class="hljs-number">2</span>); j++) &#123;<br>                left = <span class="hljs-built_in">max</span>(j, dp[j]);<br>                right = <span class="hljs-built_in">max</span>(i - j, dp[i - j]);<br>                dp[i] = <span class="hljs-built_in">max</span>(dp[i], left * right);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp[n];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>一个数有机会拆分成多个组合，0 和 1 没有拆分意义，结果为 0。</p>
+<p>拆分从 1 开始，截止到 n /
+2，因为再往后就只是重复行为，故而拆分范围为<code>[1,n / 2]</code>。</p>
+<p>dp 记录的是这个数拆分之后的最大值，我们在每次循环中，把一个数拆分成 j
+和 i - j，然后依次求出 j 和 dp[j] 的最大值 left， i - j 和 dp[i - j]
+的最大值 right。</p>
+<p>left 和 right 相乘，把这个结果与当前 dp[i] 比较取得最大值，并存储到
+dp[i] 中，等到这次循环结束，就彻底得到 dp[i] 的最大值了。</p>
+<p> </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">left = <span class="hljs-built_in">max</span>(j, dp[j]);<br>right = <span class="hljs-built_in">max</span>(i - j, dp[i - j]);<br>dp[i] = <span class="hljs-built_in">max</span>(dp[i], left * right);<br></code></pre></td></tr></table></figure>
+<p>这样一个行为，就把这些情况都考虑进去了：<code>j * (i - j)</code>
+、<code>dp[j] * dp[i - j]</code>、<code>j * dp[i - j]</code>、<code>dp[j] * (i - j)</code>，求这四种情况的最大值。</p>
 
       </div>
 	<div id="zan" class="clearfix">
@@ -238,23 +234,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/posts/5fc0b1ce.html">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>Redis 事件驱动框架思路浅读</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/posts/baa9374.html">
+    <a class="post-nav-item-right" href="/posts/5fc0b1ce.html">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -266,7 +250,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      为思想找到一片空间
+      Redis 事件驱动框架思路浅读
     </a>
   
 </div>
@@ -279,7 +263,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\4eac4b9f.html" title="746. 使用最小花费爬楼梯" rel="bookmark">746. 使用最小花费爬楼梯</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\fe88ce30.html" title="343. 整数拆分" rel="bookmark">343. 整数拆分</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\b55528ce.html" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ea776ace.html" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\6d234252.html" title="63. 不同路径 II" rel="bookmark">63. 不同路径 II</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\4eac4b9f.html" title="746. 使用最小花费爬楼梯" rel="bookmark">746. 使用最小花费爬楼梯</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\b55528ce.html" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ea776ace.html" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
     
   </div>
 </div>
