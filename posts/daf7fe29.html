@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        343. 整数拆分 | 
+        96. 不同的二叉搜索树 | 
       
     </title>
     <meta name="description" content="" />
@@ -157,7 +157,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">343. 整数拆分</div>
+        <div class="post-title">96. 不同的二叉搜索树</div>
         <div class="post-info">
           
   <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="post-tag">#动态规划</a>
@@ -173,19 +173,34 @@
             
           </div>
         
-        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">integerBreak</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">dp</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>)</span></span>;<br>        <span class="hljs-type">int</span> left, right;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= (i / <span class="hljs-number">2</span>); j++) &#123;<br>                left = <span class="hljs-built_in">max</span>(j, dp[j]);<br>                right = <span class="hljs-built_in">max</span>(i - j, dp[i - j]);<br>                dp[i] = <span class="hljs-built_in">max</span>(dp[i], left * right);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp[n];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-<p>一个数有机会拆分成多个组合，0 和 1 没有拆分意义，结果为 0。</p>
-<p>拆分从 1 开始，截止到 n /
-2，因为再往后就只是重复行为，故而拆分范围为<code>[1,n / 2]</code>。</p>
-<p>dp 记录的是这个数拆分之后的最大值，我们在每次循环中，把一个数拆分成 j
-和 i - j，然后依次求出 j 和 dp[j] 的最大值 left， i - j 和 dp[i - j]
-的最大值 right。</p>
-<p>left 和 right 相乘，把这个结果与当前 dp[i] 比较取得最大值，并存储到
-dp[i] 中，等到这次循环结束，就彻底得到 dp[i] 的最大值了。</p>
-<p> </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">left = <span class="hljs-built_in">max</span>(j, dp[j]);<br>right = <span class="hljs-built_in">max</span>(i - j, dp[i - j]);<br>dp[i] = <span class="hljs-built_in">max</span>(dp[i], left * right);<br></code></pre></td></tr></table></figure>
-<p>这样一个行为，就把这些情况都考虑进去了：<code>j * (i - j)</code>
-、<code>dp[j] * dp[i - j]</code>、<code>j * dp[i - j]</code>、<code>dp[j] * (i - j)</code>，求这四种情况的最大值。</p>
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">numTrees</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">dp</span><span class="hljs-params">(n + <span class="hljs-number">1</span>)</span></span>;<br>        dp[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;    <br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)&#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; i; j++)&#123;<br>                dp[i] += dp[i-j<span class="hljs-number">-1</span>] * dp[j];<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> dp[n];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>首先 必然需要拿出 1
+个节点作为根节点开始（确定不变的节点），因此还剩下 2
+个节点可分配。存在的可能有：</p>
+<ul>
+<li>左子树 2 个节点，右子树为 0 个节点</li>
+<li>左子树 1 个节点，右子树为 1 个节点</li>
+<li>左子树 0 个节点，右子树为 2 个节点</li>
+</ul>
+<p>由于之前我们已经计算出dp[2]、dp[1]、dp[0]，这里就能直接利用起来了。一般网上分析到这点之后就会选择停止，按理讲也没问题，但我想继续深究一下：</p>
+<p>当我们拿到节点数的时候（比方说这里的N =
+3），我们必然会选择用1个节点作为根节点，其余 2 个节点拿去分配。因此 1
+个节点已经被确定，2 个节点没有被确定，多样性就体现在可分配的
+2个节点上，按照不同的分配来形成不同的二叉搜索树。</p>
+<p>可是，不确定只有变成确定才能得出我们想要的结果。我们要把不确定变成确定，所以才会在上面进行各种可能的讨论，这种抽象的讨论下已经逐渐开始具体，尽管这里面还存在多样性，可你会发现这种多样性已经如泡影，在
+dp 中早已有实际的记录（确定性），直接取出来用即可。</p>
+<p>我简单举例：左子树 2 个节点，右子树为 0 个节点。</p>
+<p>这是前面分类讨论中的一种情况，对于 0 个节点没有讨论价值，对于 2
+个节点就有的说。</p>
+<p>对于左子树的2 个节点，拿出 1 个节点作为 根节点，剩余 1
+个节点带来多样性（不确定），明眼人都知道这里能够制造两种可能，因此对于这棵左子树有
+2 种形态（确定）。相应的，我们的 dp[2] 早就有记录了，关于节点为 2
+会有多少种情况。</p>
+<p>这就是从不确定到确定的过程，由于dp中记录着之前不确定的具体结果，拿过来用就可以了。</p>
+<figure>
+<img src="/images/2025/01/24/a1b41790-da5e-11ef-89c3-5d9a906c6cc7.png" alt="509a104bf466524457cdf2e5a08dea50.png">
+<figcaption aria-hidden="true">509a104bf466524457cdf2e5a08dea50.png</figcaption>
+</figure>
 
       </div>
 	<div id="zan" class="clearfix">
@@ -234,23 +249,11 @@ dp[i] 中，等到这次循环结束，就彻底得到 dp[i] 的最大值了。<
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/posts/daf7fe29.html">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>96. 不同的二叉搜索树</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/posts/5fc0b1ce.html">
+    <a class="post-nav-item-right" href="/posts/fe88ce30.html">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -262,7 +265,7 @@ dp[i] 中，等到这次循环结束，就彻底得到 dp[i] 的最大值了。<
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      Redis 事件驱动框架思路浅读
+      343. 整数拆分
     </a>
   
 </div>
@@ -275,7 +278,7 @@ dp[i] 中，等到这次循环结束，就彻底得到 dp[i] 的最大值了。<
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\6d234252.html" title="63. 不同路径 II" rel="bookmark">63. 不同路径 II</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\4eac4b9f.html" title="746. 使用最小花费爬楼梯" rel="bookmark">746. 使用最小花费爬楼梯</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\daf7fe29.html" title="96. 不同的二叉搜索树" rel="bookmark">96. 不同的二叉搜索树</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\b55528ce.html" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ea776ace.html" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\6d234252.html" title="63. 不同路径 II" rel="bookmark">63. 不同路径 II</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\4eac4b9f.html" title="746. 使用最小花费爬楼梯" rel="bookmark">746. 使用最小花费爬楼梯</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\fe88ce30.html" title="343. 整数拆分" rel="bookmark">343. 整数拆分</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\b55528ce.html" title="1. 两数之和" rel="bookmark">1. 两数之和</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ea776ace.html" title="108.将有序数组转换为二叉搜索树" rel="bookmark">108.将有序数组转换为二叉搜索树</a></div></div></div>
     
   </div>
 </div>
