@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /archives/
+Allow: /categories/
+Allow: /tags/
+Allow: /about/
+Allow: /technology/
+Allow: /leetcode/
+Allow: /knowledge/
+Allow: /life/
+Sitemap: https://xiaoyangst.github.io/sitemap.xml
