@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        实现海量数据快速查找之哈希表 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">实现海量数据快速查找之哈希表</div>
+        <div class="post-info">
+          
+  <a href="/tags/Redis/" class="post-tag">#Redis</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag">#源码剖析</a><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+
+
+          <span class="post-date">2025-01-31</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#哈希函数">哈希函数</a></li>
+<li><a href="#哈希冲突以及解决方案">哈希冲突以及解决方案</a>
+<ul>
+<li><a href="#线性探测">线性探测</a></li>
+<li><a href="#拉链法">拉链法</a></li>
+</ul></li>
+<li><a href="#redis-字典的实现">Redis 字典的实现</a>
+<ul>
+<li><a href="#结构体">结构体</a></li>
+<li><a href="#rehash">rehash</a>
+<ul>
+<li><a href="#什么时候触发-rehash">什么时候触发 rehash？</a></li>
+<li><a href="#渐进式-rehash-如何进行">渐进式 rehash 如何进行？</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#cpp-手写哈希表">CPP 手写哈希表</a>
+<ul>
+<li><a href="#拉链法-1">拉链法</a></li>
+<li><a href="#线性探测-1">线性探测</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<p>使用哈希查找算法分为两步：</p>
+<ol type="1">
+<li>用散列函数将被查找的键（key）转换为哈希表的一个索引。理想情况下，不同的键都能转换成不同的索引值。实际上我们需要面对两个或多个键都会散列到相同的索引值的情况。</li>
+<li>处理碰撞冲突的过程。常见的两种方式：拉链法和线性探测法。</li>
+</ol>
+<h1><span id="哈希函数">哈希函数</span></h1>
+<p>一般拥有如下特征：</p>
+<ol type="1">
+<li>相同的输入经哈希计算后得出相同输出。</li>
+<li>不同的输入经哈希计算后一般得出不同输出值，但也可能会出现相同输出值。</li>
+</ol>
+<figure>
+<img src="/images/2025/01/31/cad1ea80-dfa4-11ef-ab80-15ccc39739a6.png" alt="28971f3cacf598bcfa5fa6f85dc0cdb9.png">
+<figcaption aria-hidden="true">28971f3cacf598bcfa5fa6f85dc0cdb9.png</figcaption>
+</figure>
+<p>我们要找的散列函数应该易于计算并且能够均匀分布所有的键。</p>
+<h1><span id="哈希冲突以及解决方案">哈希冲突以及解决方案</span></h1>
+<h2><span id="线性探测">线性探测</span></h2>
+<figure>
+<img src="/images/2025/01/31/d17c2760-dfa4-11ef-ab80-15ccc39739a6.png" alt="a1320d1df331a04be04a9c2526988a02.png">
+<figcaption aria-hidden="true">a1320d1df331a04be04a9c2526988a02.png</figcaption>
+</figure>
+<p>插入：插入元素 a2，哈希计算得到的索引发现和 a1
+存在冲突（即已经被占用），往后寻找，发现下一个位置被 b
+占用，继续往下寻找到 arr[3] 有空位，存储 a2。</p>
+<p>删除：删除元素 a2，哈希计算得到索引，
+发现并不是要删除的元素，继续往下找，找到 arr[3] 并标记为
+del。之所以不实际删除，是数组只能从后往前覆盖，这就打乱整个哈希表的记录了，故标记为
+del 即可。</p>
+<p>查找：查找元素 a2，哈希计算得到索引，
+发现并不是要查找的元素，继续往下找，找到 arr[3]，返回查询结果。</p>
+<h2><span id="拉链法">拉链法</span></h2>
+<figure>
+<img src="/images/2025/01/31/d7633b50-dfa4-11ef-ab80-15ccc39739a6.png" alt="b8826396f5f5e0d16814a152d5ac8e4a.png">
+<figcaption aria-hidden="true">b8826396f5f5e0d16814a152d5ac8e4a.png</figcaption>
+</figure>
+<p>插入不同元素相同哈希的结果，通过单链表串联起来。对于删除和查找很容易理解，不多赘述。</p>
+<h1><span id="redis-字典的实现">Redis 字典的实现</span></h1>
+<figure>
+<img src="/images/2025/01/31/e67320b0-dfa4-11ef-ab80-15ccc39739a6.png" alt="image20250131152347650.png">
+<figcaption aria-hidden="true">image20250131152347650.png</figcaption>
+</figure>
+<h2><span id="结构体">结构体</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">dictEntry</span> &#123;<br>    <span class="hljs-type">void</span> *key;<br>    <span class="hljs-keyword">union</span> &#123;<br>        <span class="hljs-type">void</span> *val;<br>        <span class="hljs-type">uint64_t</span> u64;<br>        <span class="hljs-type">int64_t</span> s64;<br>        <span class="hljs-type">double</span> d;<br>    &#125; v;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">dictEntry</span> *next;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>dictEntry 成员 v
+的设计是一种节省内存的开发小技巧。因为当值为整数或双精度浮点数时，由于其本身就是
+64
+位，就可以不用指针指向了，而是可以直接存在键值对的结构体中，这样就避免了再用一个指针，从而节省了内存空间。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">dict</span> &#123;<br>    dictEntry **ht_table[<span class="hljs-number">2</span>];  		 <span class="hljs-comment">// 哈希表数组，包含两个哈希表，用于实现渐进式 rehash</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> ht_used[<span class="hljs-number">2</span>];		 <span class="hljs-comment">// 每个哈希表中已有元素个数</span><br>    <span class="hljs-type">long</span> rehashidx; 				<span class="hljs-comment">// rehash 的索引，如果 rehashidx == -1，表示当前没有进行 rehash</span><br>    <span class="hljs-type">signed</span> <span class="hljs-type">char</span> ht_size_exp[<span class="hljs-number">2</span>]; 	 <span class="hljs-comment">// 哈希表大小，即多少个 bucket</span><br>    <span class="hljs-type">int16_t</span> pauseAutoResize; 		 <span class="hljs-comment">// 如果 &gt; 0 则不允许自动调整大小（&lt;0 表示编码错误），即禁止 rehash</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>首先，在正常服务请求阶段，所有的键值对写入哈希表
+<code>ht_table[0]</code></li>
+<li>接着，当进行 rehash 时，键值对被迁移到哈希表
+<code>ht_table[1]</code></li>
+<li>最后，当迁移完成后，ht_table[0] 的空间会被释放，并把 ht_table[1]
+的地址赋值给 ht_table[0]，ht_table[1] 的表大小设置为
+0。这样一来，又回到了正常服务请求的阶段，ht_table[0]
+接收和服务请求，ht_table[1] 作为下一次 rehash 时的迁移表</li>
+</ul>
+<figure>
+<img src="/images/2025/01/31/ecbbdca0-dfa4-11ef-ab80-15ccc39739a6.png" alt="image20250130161526520.png">
+<figcaption aria-hidden="true">image20250130161526520.png</figcaption>
+</figure>
+<h2><span id="rehash">rehash</span></h2>
+<h3><span id="什么时候触发-rehash">什么时候触发 rehash？</span></h3>
+<p>_dictExpandIfNeeded 只有在 dictFindPositionForInsert
+中被调用，即插入数据或修改数据的时候。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Expand the hash table if needed */</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> _dictExpandIfNeeded(dict *d) &#123;<br>    <span class="hljs-keyword">if</span> (d-&gt;pauseAutoResize &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>;	<span class="hljs-comment">// 禁止 rehash，直接返回</span><br><br>    dictExpandIfNeeded(d);	<span class="hljs-comment">// 关键看这个</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>dictExpandIfNeeded 可看出三个可扩容的条件：</p>
+<ol type="1">
+<li>哈希表 ht_table[0] 大小为 0</li>
+<li>哈希表允许扩容，并且 ht_table[0] 已有元素大于等于 ht_table[0]
+的大小</li>
+<li>哈希表虽然不允许扩容，但是 ht_table[0] 已有元素 和 ht_table[0]
+的大小 比例大于等于
+dict_force_resize_ratio（4）就说明哈希表已经严重负载，得扩容</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">dictExpandIfNeeded</span><span class="hljs-params">(dict *d)</span> &#123;<br>    <span class="hljs-comment">/* 如果正在进行增量 rehash，直接返回，不进行扩展 */</span><br>    <span class="hljs-keyword">if</span> (dictIsRehashing(d)) <span class="hljs-keyword">return</span> DICT_OK;<br><br>    <span class="hljs-comment">/* 如果哈希表为空，则扩展到初始大小 */</span><br>    <span class="hljs-keyword">if</span> (DICTHT_SIZE(d-&gt;ht_size_exp[<span class="hljs-number">0</span>]) == <span class="hljs-number">0</span>) &#123;<br>        dictExpand(d, DICT_HT_INITIAL_SIZE);<br>        <span class="hljs-keyword">return</span> DICT_OK;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> ((dict_can_resize == DICT_RESIZE_ENABLE &amp;&amp;<br>         d-&gt;ht_used[<span class="hljs-number">0</span>] &gt;= DICTHT_SIZE(d-&gt;ht_size_exp[<span class="hljs-number">0</span>])) ||<br>        (dict_can_resize != DICT_RESIZE_FORBID &amp;&amp;<br>         d-&gt;ht_used[<span class="hljs-number">0</span>] &gt;= dict_force_resize_ratio * DICTHT_SIZE(d-&gt;ht_size_exp[<span class="hljs-number">0</span>])))<br>    &#123;<br>        <span class="hljs-comment">/* 如果当前字典类型允许调整大小，则扩展哈希表 */</span><br>        <span class="hljs-keyword">if</span> (dictTypeResizeAllowed(d, d-&gt;ht_used[<span class="hljs-number">0</span>] + <span class="hljs-number">1</span>))<br>            dictExpand(d, d-&gt;ht_used[<span class="hljs-number">0</span>] + <span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">return</span> DICT_OK;<br>    &#125;<br>    <br>    <span class="hljs-keyword">return</span> DICT_ERR;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>dict_can_resize 代表是否开启 rehash。updateDictResizePolicy
+会根据实际情况来判断是否需要 rehash。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">dictSetResizeEnabled</span><span class="hljs-params">(dictResizeEnable enable)</span> &#123;<br>    dict_can_resize = enable;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">updateDictResizePolicy</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    <span class="hljs-comment">/* 如果当前进程本身是一个 fork 产生的子进程，则完全禁止哈希表扩容 */</span><br>    <span class="hljs-keyword">if</span> (server.in_fork_child != CHILD_TYPE_NONE)<br>        dictSetResizeEnabled(DICT_RESIZE_FORBID);<br>    <span class="hljs-comment">/* 如果存在正在运行的子进程（如 RDB、AOF 或模块后台进程），避免哈希表扩容 */</span><br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (hasActiveChildProcess())<br>        dictSetResizeEnabled(DICT_RESIZE_AVOID);<br>    <span class="hljs-comment">/* 如果没有子进程，则允许哈希表自由调整大小 */</span><br>    <span class="hljs-keyword">else</span><br>        dictSetResizeEnabled(DICT_RESIZE_ENABLE);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3><span id="渐进式-rehash-如何进行">渐进式 rehash 如何进行？</span></h3>
+<p>哈希表在执行 rehash 时，由于 Hash
+表空间扩大，原本映射到某一位置的键可能会被映射到一个新的位置上，因此，很多键就需要从原来的位置拷贝到新的位置。而在键拷贝时，由于
+Redis 主线程无法执行其他请求，所以键拷贝会阻塞主线程，这样就会产生
+rehash 开销。</p>
+<p>为了降低 rehash 开销，Redis 就提出了渐进式 rehash 的方法。</p>
+<p>渐进式 rehash 的意思就是<font color="red"> Redis
+并不会一次性把当前哈希表中的所有键，都拷贝到新位置，而是会分批拷贝，每次的键拷贝只拷贝哈希表中一个
+bucket
+中的哈希项</font>。这样一来，每次键拷贝的时长有限，对主线程的影响也就有限了。</p>
+<p>dictRehash 的核心代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 执行 N 步增量 rehashing。如果仍然有键需要从旧哈希表迁移到新哈希表，则返回 1，否则返回 0。</span><br><span class="hljs-comment">// d 代表哈希表，n 代表处理桶的个数</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">dictRehash</span><span class="hljs-params">(dict *d, <span class="hljs-type">int</span> n)</span> &#123;<br>    <span class="hljs-type">int</span> empty_visits = n * <span class="hljs-number">10</span>; <span class="hljs-comment">/* 最大允许访问的空桶数量。 */</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> s0 = DICTHT_SIZE(d-&gt;ht_size_exp[<span class="hljs-number">0</span>]); <span class="hljs-comment">/* 旧哈希表的大小 */</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> s1 = DICTHT_SIZE(d-&gt;ht_size_exp[<span class="hljs-number">1</span>]); <span class="hljs-comment">/* 新哈希表的大小 */</span><br><br>    <span class="hljs-comment">/* 进行 N 步 rehashing，直到处理完旧哈希表中的所有键 */</span><br>    <span class="hljs-keyword">while</span> (n-- &amp;&amp; d-&gt;ht_used[<span class="hljs-number">0</span>] != <span class="hljs-number">0</span>) &#123;<br><br>        <span class="hljs-comment">/* 跳过空桶，最多访问 empty_visits 次空桶 */</span><br>        <span class="hljs-keyword">while</span> (d-&gt;ht_table[<span class="hljs-number">0</span>][d-&gt;rehashidx] == <span class="hljs-literal">NULL</span>) &#123;<br>            d-&gt;rehashidx++;<br>            <span class="hljs-keyword">if</span> (--empty_visits == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>        &#125;<br><br>        <span class="hljs-comment">/* 将当前桶的所有键迁移到新哈希表 */</span><br>        rehashEntriesInBucketAtIndex(d, d-&gt;rehashidx);<br><br>        <span class="hljs-comment">/* 迁移完成后，继续处理下一个桶 */</span><br>        d-&gt;rehashidx++;<br>    &#125;<br><br>    <span class="hljs-comment">/* 如果 rehashing 仍未完成，则返回 1，否则返回 0 */</span><br>    <span class="hljs-keyword">return</span> !dictCheckRehashingCompleted(d);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>需要注意的是，一次 rehashing
+步骤是将一个桶（可能包含多个键，因为使用了链式存储）。从旧哈希表迁移到新哈希表。然而，由于部分哈希表可能由空桶组成，该函数不能保证每次调用都能
+rehash 至少一个桶，因为它最多会访问 N*10
+个<strong>空桶</strong>。这样做是为了避免该函数执行的工作量无法界定，从而可能导致长时间阻塞。</p>
+<p>我们不知道哈希表中究竟已经有多少个
+桶，通过这种不一次性把所有哈希表中的数据都拷贝来新哈希表中，避免长时间阻塞。</p>
+<figure>
+<img src="/images/2025/01/31/f80bacc0-dfa4-11ef-ab80-15ccc39739a6.png" alt="image20250131142103413.png">
+<figcaption aria-hidden="true">image20250131142103413.png</figcaption>
+</figure>
+<p>dictRehash 会被两个函数调用，即 dictRehashMicroseconds 和
+_dictRehashStep，主要看后面这个。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">void</span> _dictRehashStep(dict *d) &#123;<br>    <span class="hljs-keyword">if</span> (d-&gt;pauserehash == <span class="hljs-number">0</span>) dictRehash(d, <span class="hljs-number">1</span>);	<span class="hljs-comment">// 每次只对一个 bucket 执行rehash</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>调用情况：</p>
+<figure>
+<img src="/images/2025/01/31/fd54abf0-dfa4-11ef-ab80-15ccc39739a6.png" alt="image20250131151318315.png">
+<figcaption aria-hidden="true">image20250131151318315.png</figcaption>
+</figure>
+<p>该函数由字典的常见查找或更新操作调用，使哈希表在被主动使用时 自动从
+旧哈希表 迁移到 新哈希表</p>
+<h1><span id="cpp-手写哈希表">CPP 手写哈希表</span></h1>
+<h2><span id="拉链法">拉链法</span></h2>
+<p>完整代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%AE%9E%E7%8E%B0%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BE%E4%B9%8B%E5%93%88%E5%B8%8C%E8%A1%A8/HashTableLink">拉链法解决哈希冲突</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;list&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;functional&gt;</span> <span class="hljs-comment">// std::hash</span></span><br><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Key, <span class="hljs-keyword">typename</span> Val&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">HashTableLink</span> &#123;<br>  <span class="hljs-keyword">using</span> HashTable = std::vector&lt;std::list&lt;std::pair&lt;Key, Val&gt;&gt;&gt;;<br><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-built_in">HashTableLink</span>() : <span class="hljs-built_in">hash_table_</span>(INIT_TABLE_SIZE), <span class="hljs-built_in">elements_</span>(<span class="hljs-number">0</span>) &#123;&#125;<br><br>  <span class="hljs-comment">// 插入</span><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">const</span> Key &amp;key, <span class="hljs-type">const</span> Val &amp;val)</span> </span>&#123;<br>      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">isRehash</span>()) &#123;<br>          <span class="hljs-built_in">rehash</span>();<br>      &#125;<br><br>      <span class="hljs-keyword">auto</span> index = <span class="hljs-built_in">hashFun</span>(key);<br>      <span class="hljs-keyword">auto</span> &amp;find_list = hash_table_[index];<br><br>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;item : find_list) &#123;<br>          <span class="hljs-keyword">if</span> (item.first == key) &#123;<br>              item.second = val;<br>              <span class="hljs-keyword">return</span>;<br>          &#125;<br>      &#125;<br><br>      find_list.<span class="hljs-built_in">emplace_back</span>(key, val);<br>      ++elements_;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除</span><br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">remove</span><span class="hljs-params">(<span class="hljs-type">const</span> Key &amp;key)</span> </span>&#123;<br>      <span class="hljs-keyword">auto</span> index = <span class="hljs-built_in">hashFun</span>(key);<br>      <span class="hljs-keyword">auto</span> &amp;find_list = hash_table_[index];<br><br>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> it = find_list.<span class="hljs-built_in">begin</span>(); it != find_list.<span class="hljs-built_in">end</span>(); ++it) &#123;<br>          <span class="hljs-keyword">if</span> (it-&gt;first == key) &#123;<br>              find_list.<span class="hljs-built_in">erase</span>(it);<br>              --elements_;<br>              <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>          &#125;<br>      &#125;<br><br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>  &#125;<br><br>  <span class="hljs-comment">// 查找</span><br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">const</span> Key &amp;key, Val &amp;val)</span> <span class="hljs-type">const</span> </span>&#123;<br>      <span class="hljs-keyword">auto</span> index = <span class="hljs-built_in">hashFun</span>(key);<br>      <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;find_list = hash_table_[index];<br><br>      <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;item : find_list) &#123;<br>          <span class="hljs-keyword">if</span> (item.first == key) &#123;<br>              val = item.second;<br>              <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>          &#125;<br>      &#125;<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>  &#125;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-comment">// 哈希函数</span><br>  <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">hashFun</span><span class="hljs-params">(<span class="hljs-type">const</span> Key &amp;key)</span> <span class="hljs-type">const</span> </span>&#123;<br>      <span class="hljs-keyword">return</span> std::hash&lt;Key&gt;&#123;&#125;(key) % hash_table_.<span class="hljs-built_in">size</span>();<br>  &#125;<br><br>  <span class="hljs-comment">// 是否需要 rehash</span><br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isRehash</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>      <span class="hljs-keyword">return</span> (<span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">double</span>&gt;(elements_) / hash_table_.<span class="hljs-built_in">size</span>()) &gt;= LOAD_FACTOR_THRESHOLD;<br>  &#125;<br><br>  <span class="hljs-comment">// rehash</span><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">rehash</span><span class="hljs-params">()</span> </span>&#123;<br>      <span class="hljs-comment">//　两倍扩容</span><br>      <span class="hljs-keyword">auto</span> new_size = hash_table_.<span class="hljs-built_in">size</span>() * <span class="hljs-number">2</span>;<br>      <span class="hljs-function">HashTable <span class="hljs-title">new_hash_table</span><span class="hljs-params">(new_size)</span></span>;<br><br>      <span class="hljs-comment">// 旧哈希表中元素 通过重新计算 哈希，并加入到 新哈希表中</span><br>      <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;bucket : hash_table_) &#123;<br>          <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;pair : bucket) &#123;<br>              <span class="hljs-type">int</span> newIndex = std::hash&lt;Key&gt;&#123;&#125;(pair.first) % new_size;   <span class="hljs-comment">// 容易犯错，误认为可以直接调用 hashFun</span><br>              new_hash_table[newIndex].<span class="hljs-built_in">emplace_back</span>(pair);<br>          &#125;<br>      &#125;<br><br>      hash_table_ = std::<span class="hljs-built_in">move</span>(new_hash_table);<br>  &#125;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">const</span> <span class="hljs-type">int</span> INIT_TABLE_SIZE = <span class="hljs-number">10</span>;               <span class="hljs-comment">// 初始哈希表大小</span><br>  <span class="hljs-type">const</span> <span class="hljs-type">double</span> LOAD_FACTOR_THRESHOLD = <span class="hljs-number">0.75</span>;    <span class="hljs-comment">// 负载因子阈值</span><br>  HashTable hash_table_;                        <span class="hljs-comment">// 哈希表</span><br>  <span class="hljs-type">size_t</span> elements_;                             <span class="hljs-comment">// 元素数量</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>容易犯错的地方
+rehash：<code>int newIndex = std::hash&lt;Key&gt;&#123;&#125;(pair.first) % new_size</code></p>
+<p>旧哈希表中元素 通过重新计算 哈希，并加入到 新哈希表中。这个过程中
+哈希计算不能再用 之前写好的 hashFun，因为 hashFun 中的 hash_table_ 的
+size 还没有被更新，得用当前 new_size 参与计算才合理。</p>
+<h2><span id="线性探测">线性探测</span></h2>
+<p>完整代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%AE%9E%E7%8E%B0%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BE%E4%B9%8B%E5%93%88%E5%B8%8C%E8%A1%A8/HashTableArray">线性探测解决哈希冲突</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;functional&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;optional&gt;</span></span><br><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Key, <span class="hljs-keyword">typename</span> Val&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">HashTableArray</span> &#123;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Entry</span> &#123;    <span class="hljs-comment">// 单个元素</span><br>    Key key;<br>    Val value;<br>    <span class="hljs-type">bool</span> isActive = <span class="hljs-literal">false</span>;  <span class="hljs-comment">// 标记是否已经被使用</span><br><br>    <span class="hljs-built_in">Entry</span>(<span class="hljs-type">const</span> Key &amp;k, <span class="hljs-type">const</span> Val &amp;v) : <span class="hljs-built_in">key</span>(k), <span class="hljs-built_in">value</span>(v), <span class="hljs-built_in">isActive</span>(<span class="hljs-literal">true</span>) &#123;&#125;<br>  &#125;;<br><br>  <span class="hljs-keyword">using</span> Table = std::vector&lt;std::optional&lt;Entry&gt;&gt;;<br><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-built_in">HashTableArray</span>() : <span class="hljs-built_in">table_</span>(INIT_TABLE_SIZE), <span class="hljs-built_in">elements_</span>(<span class="hljs-number">0</span>) &#123;&#125;<br><br>  <span class="hljs-comment">// 插入</span><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">const</span> Key &amp;key, <span class="hljs-type">const</span> Val &amp;val)</span> </span>&#123;<br>      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">isRehashNeeded</span>()) &#123;<br>          <span class="hljs-built_in">rehash</span>();<br>      &#125;<br><br>      <span class="hljs-type">size_t</span> index = <span class="hljs-built_in">findSlot</span>(key);<br><br>      <span class="hljs-keyword">if</span> (!table_[index].<span class="hljs-built_in">has_value</span>()) &#123;<br>          table_[index] = <span class="hljs-built_in">Entry</span>(key, val);<br>          ++elements_;<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>          table_[index]-&gt;value = val; <span class="hljs-comment">// 存在则更新</span><br>      &#125;<br>  &#125;<br><br>  <span class="hljs-comment">// 删除</span><br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">remove</span><span class="hljs-params">(<span class="hljs-type">const</span> Key &amp;key)</span> </span>&#123;<br>      <span class="hljs-type">size_t</span> index = <span class="hljs-built_in">findSlot</span>(key);<br><br>      <span class="hljs-comment">// 有值 且 不是删除状态</span><br>      <span class="hljs-keyword">if</span> (table_[index].<span class="hljs-built_in">has_value</span>() &amp;&amp; table_[index]-&gt;isActive) &#123;<br>          table_[index]-&gt;isActive = <span class="hljs-literal">false</span>;<br>          --elements_;<br>          <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>      &#125;<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>  &#125;<br><br>  <span class="hljs-comment">// 查找</span><br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">const</span> Key &amp;key, Val &amp;val)</span> <span class="hljs-type">const</span> </span>&#123;<br>      <span class="hljs-type">size_t</span> index = <span class="hljs-built_in">findSlot</span>(key);<br>      <span class="hljs-keyword">if</span> (table_[index].<span class="hljs-built_in">has_value</span>() &amp;&amp; table_[index]-&gt;isActive) &#123;<br>          val = table_[index]-&gt;value;<br>          <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>      &#125;<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>  &#125;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-comment">// 哈希函数</span><br>  <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">hashFun</span><span class="hljs-params">(<span class="hljs-type">const</span> Key &amp;key)</span> <span class="hljs-type">const</span> </span>&#123;<br>      <span class="hljs-keyword">return</span> std::hash&lt;Key&gt;&#123;&#125;(key) % table_.<span class="hljs-built_in">size</span>();<br>  &#125;<br><br>  <span class="hljs-comment">// 线性探测寻找插入/查找位置</span><br>  <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">findSlot</span><span class="hljs-params">(<span class="hljs-type">const</span> Key &amp;key)</span> <span class="hljs-type">const</span> </span>&#123;<br>      <span class="hljs-type">size_t</span> index = <span class="hljs-built_in">hashFun</span>(key);<br>      <span class="hljs-keyword">while</span> (table_[index].<span class="hljs-built_in">has_value</span>() &amp;&amp; table_[index]-&gt;key != key) &#123;<br>          index = (index + <span class="hljs-number">1</span>) % table_.<span class="hljs-built_in">size</span>();<br>      &#125;<br>      <span class="hljs-keyword">return</span> index;<br>  &#125;<br><br>  <span class="hljs-comment">// 是否需要 rehash</span><br>  <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isRehashNeeded</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">double</span>&gt;(elements_) / table_.<span class="hljs-built_in">size</span>() &gt;= LOAD_FACTOR_THRESHOLD;<br>  &#125;<br><br>  <span class="hljs-comment">// rehash</span><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">rehash</span><span class="hljs-params">()</span> </span>&#123;<br>      <span class="hljs-type">size_t</span> new_size = table_.<span class="hljs-built_in">size</span>() * <span class="hljs-number">2</span>;<br>      <span class="hljs-function">Table <span class="hljs-title">new_table</span><span class="hljs-params">(new_size)</span></span>;<br><br>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;entry : table_) &#123;<br>          <span class="hljs-keyword">if</span> (entry.<span class="hljs-built_in">has_value</span>() &amp;&amp; entry-&gt;isActive) &#123;<br>              <span class="hljs-type">size_t</span> index = std::hash&lt;Key&gt;&#123;&#125;(entry-&gt;key) % new_size;<br>              <span class="hljs-keyword">while</span> (new_table[index].<span class="hljs-built_in">has_value</span>()) &#123;<br>                  index = (index + <span class="hljs-number">1</span>) % new_size;<br>              &#125;<br>              new_table[index] = std::<span class="hljs-built_in">move</span>(entry);<br>          &#125;<br>      &#125;<br><br>      table_ = std::<span class="hljs-built_in">move</span>(new_table);<br>  &#125;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">const</span> <span class="hljs-type">size_t</span> INIT_TABLE_SIZE = <span class="hljs-number">10</span>;<br>  <span class="hljs-type">const</span> <span class="hljs-type">double</span> LOAD_FACTOR_THRESHOLD = <span class="hljs-number">0.75</span>;<br>  Table table_;<br>  <span class="hljs-type">size_t</span> elements_;<br>&#125;;<br><br></code></pre></td></tr></table></figure>
+
+      </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/daf7fe29.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      96. 不同的二叉搜索树
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag">#源码剖析</a><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\5fc0b1ce.html" title="Redis 事件驱动框架思路浅读" rel="bookmark">Redis 事件驱动框架思路浅读</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\9c91e4fe.html" title="RDB 持久化" rel="bookmark">RDB 持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7d8fe760.html" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
