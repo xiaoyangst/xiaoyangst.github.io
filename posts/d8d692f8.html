@@ -301,15 +301,21 @@ rehash 至少一个桶，因为它最多会访问 N*10
 <figcaption aria-hidden="true">image20250131142103413.png</figcaption>
 </figure>
 <p>dictRehash 会被两个函数调用，即 dictRehashMicroseconds 和
-_dictRehashStep，主要看后面这个。</p>
+_dictRehashStep。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">void</span> _dictRehashStep(dict *d) &#123;<br>    <span class="hljs-keyword">if</span> (d-&gt;pauserehash == <span class="hljs-number">0</span>) dictRehash(d, <span class="hljs-number">1</span>);	<span class="hljs-comment">// 每次只对一个 bucket 执行rehash</span><br>&#125;<br></code></pre></td></tr></table></figure>
 <p>调用情况：</p>
 <figure>
 <img src="/images/2025/01/31/fd54abf0-dfa4-11ef-ab80-15ccc39739a6.png" alt="image20250131151318315.png">
 <figcaption aria-hidden="true">image20250131151318315.png</figcaption>
 </figure>
-<p>该函数由字典的常见查找或更新操作调用，使哈希表在被主动使用时 自动从
-旧哈希表 迁移到 新哈希表</p>
+<p>_dictRehashStep
+函数由字典的常见查找或更新操作调用，使哈希表在被主动使用时 自动从
+旧哈希表 迁移到 新哈希表。</p>
+<p>下面再看看 dictRehashMicroseconds
+函数，会利用空闲时间调用该函数，即在服务器空闲时，利用 CPU
+剩余时间逐步完成哈希表数据迁移，<strong>减少一次性 rehashing
+的性能开销</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">dictRehashMicroseconds</span><span class="hljs-params">(dict *d, <span class="hljs-type">uint64_t</span> us)</span> &#123;<br>    <span class="hljs-comment">// 如果 rehashing 被暂停，则直接返回 0</span><br>    <span class="hljs-keyword">if</span> (d-&gt;pauserehash &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><br>    monotime timer;<br>    elapsedStart(&amp;timer); <span class="hljs-comment">// 记录起始时间</span><br>    <span class="hljs-type">int</span> rehashes = <span class="hljs-number">0</span>;<br><br>    <span class="hljs-comment">// 持续执行 rehash，每次处理 100 个键</span><br>    <span class="hljs-keyword">while</span> (dictRehash(d, <span class="hljs-number">100</span>)) &#123;<br>        rehashes += <span class="hljs-number">100</span>; <span class="hljs-comment">// 记录已处理的键数</span><br><br>        <span class="hljs-comment">// 如果执行时间超过 us，则终止 rehashing</span><br>        <span class="hljs-keyword">if</span> (elapsedUs(timer) &gt;= us) <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> rehashes; <span class="hljs-comment">// 返回实际 rehash 的键数量</span><br>&#125;<br></code></pre></td></tr></table></figure>
 <h1><span id="cpp-手写哈希表">CPP 手写哈希表</span></h1>
 <h2><span id="拉链法">拉链法</span></h2>
 <p>完整代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%AE%9E%E7%8E%B0%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BE%E4%B9%8B%E5%93%88%E5%B8%8C%E8%A1%A8/HashTableLink">拉链法解决哈希冲突</a></p>
@@ -370,7 +376,19 @@ size 还没有被更新，得用当前 new_size 参与计算才合理。</p>
     
     <div class="post-nav">
   
-    <div class="post-nav-item-left"></div>
+    <a class="post-nav-item-left" href="/posts/22a22b79.html">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>三大经典排序算法</div>
+    </a>
   
   <div class="vhr"></div>
   

@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        三大经典排序算法 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">三大经典排序算法</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+
+
+          <span class="post-date">2025-02-01</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#快速排序">快速排序</a>
+<ul>
+<li><a href="#步骤">步骤</a></li>
+<li><a href="#遇到的问题">遇到的问题</a></li>
+<li><a href="#优化">优化</a></li>
+</ul></li>
+<li><a href="#归并排序">归并排序</a>
+<ul>
+<li><a href="#步骤-1">步骤</a></li>
+<li><a href="#浅谈">浅谈</a></li>
+</ul></li>
+<li><a href="#堆排序">堆排序</a>
+<ul>
+<li><a href="#步骤-2">步骤</a></li>
+<li><a href="#排序之前为什么要堆化">排序之前为什么要堆化？</a></li>
+<li><a href="#代码中值得提及的地方">代码中值得提及的地方</a>
+<ul>
+<li><a href="#第一个问题为什么堆化只操作已有节点的一半">第一个问题：为什么堆化只操作已有节点的一半？</a></li>
+<li><a href="#第二个问题为什么从后往前选择节点-siftdown">第二个问题：为什么从后往前选择节点
+siftDown ？</a></li>
+</ul></li>
+<li><a href="#注意">注意</a></li>
+</ul></li>
+<li><a href="#参考文章">参考文章</a></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="快速排序">快速排序</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">partition</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt; &amp;data, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>    <span class="hljs-type">int</span> base = data[left];<br>    <span class="hljs-type">int</span> src_left = left, src_right = right;<br><br>    <span class="hljs-comment">// 先右后左</span><br>    <span class="hljs-keyword">while</span> (left &lt; right) &#123;<br>        <span class="hljs-keyword">while</span> (left &lt; right &amp;&amp; data[right] &gt;= base) &#123;    <span class="hljs-comment">// 找到一个右边可用于交换的元素</span><br>            right--;<br>        &#125;<br>        <span class="hljs-keyword">while</span> (left &lt; right &amp;&amp; data[left] &lt;= base) &#123;     <span class="hljs-comment">// 找到一个左边可用于交换的元素</span><br>            left++;<br>        &#125;<br>        std::<span class="hljs-built_in">swap</span>(data[left], data[right]);        <span class="hljs-comment">// 既然已经找到符合交换的两个元素，那就交换吧，来继续满足 左小右大 原则</span><br>    &#125;<br>    std::<span class="hljs-built_in">swap</span>(data[left], data[src_left]);<br>    <span class="hljs-keyword">return</span> left;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">QuickSort</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt; &amp;data, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (left &gt;= right) <span class="hljs-keyword">return</span>;<br>    <span class="hljs-type">int</span> mid = <span class="hljs-built_in">partition</span>(data, left, right);<br>    <span class="hljs-built_in">QuickSort</span>(data, left, mid - <span class="hljs-number">1</span>);<br>    <span class="hljs-built_in">QuickSort</span>(data, mid + <span class="hljs-number">1</span>, right);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">QuickSort</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt; &amp;data)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (data.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span>;<br>    <span class="hljs-built_in">QuickSort</span>(data, <span class="hljs-number">0</span>, data.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="步骤">步骤</span></h2>
+<ol type="1">
+<li>选择排序区间的第一个元素作为基准，每次排序结果是小于等于基准元素的在左边，大于等于基准元素的右边</li>
+<li>左指针指向排序区间第一个元素，右指针指向排序区间的最后一个元素</li>
+<li>从右往左遍历，直到遇到第一个小于基准元素 A</li>
+<li>从左往右遍历，直到遇到第一个大于基准元素 B</li>
+<li>交换得到的两个元素（A 和 B）</li>
+<li>重复 2-5 步骤</li>
+<li>直到退出循环，交换排序区间第一个元素 和
+左指针或右指针指向的元素。</li>
+</ol>
+<h2><span id="遇到的问题">遇到的问题</span></h2>
+<p>partition 中找到已经不合规的两个元素，即 left 下标指向的元素 大于
+base 值，right 下标指向的元素 小于 base 值。</p>
+<p>交换两个元素，达到符合 右小左大的原则。</p>
+<p>我接着往下写，就想着既然之前两个不合法的元素现在通过 swap
+已经合法，那就得接着往下找，left + 1 和 right - 1 来继续匹配元素。</p>
+<p>但是这样就会出现段错误，即让退出循环后的那个 swap
+操作出现段错误，根本原因是 left + 1 可能出现数组越界。</p>
+<p>合理的行为就是 swap 两个不合法元素之后，不进行 left + 1 和 right - 1
+来继续匹配元素。直接继续进入下一轮循环，反正之前交换的元素已经合法，会帮我们完成继续往下匹配，找到不合法的元素。</p>
+<h2><span id="优化">优化</span></h2>
+<p>在数组中选取三个候选元素（通常为数组的首、尾、中点元素），<strong>并将这三个候选元素的中位数作为基准数</strong>。这样一来，基准数“既不太小也不太大”的概率将大幅提升。当然，我们还可以选取更多候选元素，以进一步提高算法的稳健性。采用这种方法后，时间复杂度劣化至
+O(n2) 的概率大大降低。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//  选取三个候选元素的中的一个数 作为基准数</span><br><span class="hljs-comment">//  这个基准数应该介于另外两个数之间</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">medianThree</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt; &amp;data, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> mid, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>    <span class="hljs-type">int</span> left_val = data[left], mid_val = data[mid], right_val = data[right];<br>    <span class="hljs-keyword">if</span> ((left_val &lt;= mid_val &amp;&amp; mid_val &lt;= right_val)<br>        || (right_val &lt;= mid_val &amp;&amp; mid_val &lt;= left_val)) &#123;<br>        <span class="hljs-keyword">return</span> mid;<br>    &#125;<br>    <span class="hljs-keyword">if</span> ((mid_val &lt;= left_val &amp;&amp; left_val &lt;= right_val)<br>        || (right_val &lt;= left_val &amp;&amp; left_val &lt;= mid_val)) &#123;<br>        <span class="hljs-keyword">return</span> left;<br>    &#125;<br>    <span class="hljs-keyword">return</span> right;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">partition</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt; &amp;data, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>    <span class="hljs-type">int</span> mid = left - ((left - right) / <span class="hljs-number">2</span>);<br>    <span class="hljs-type">int</span> median = <span class="hljs-built_in">medianThree</span>(data, left, mid, right);  <span class="hljs-comment">// 得到一个合理的 base</span><br>    std::<span class="hljs-built_in">swap</span>(data[median], data[left]);<br>    <span class="hljs-type">int</span> base = data[left];<br>    <span class="hljs-type">int</span> src_left = left, src_right = right;<br><br>    <span class="hljs-comment">// 先右后左</span><br>    <span class="hljs-keyword">while</span> (left &lt; right) &#123;<br>        <span class="hljs-keyword">while</span> (left &lt; right &amp;&amp; data[right] &gt;= base) &#123;    <span class="hljs-comment">// 找到一个右边可用于交换的元素</span><br>            right--;<br>        &#125;<br>        <span class="hljs-keyword">while</span> (left &lt; right &amp;&amp; data[left] &lt;= base) &#123;     <span class="hljs-comment">// 找到一个左边可用于交换的元素</span><br>            left++;<br>        &#125;<br>        std::<span class="hljs-built_in">swap</span>(data[left], data[right]);        <span class="hljs-comment">// 既然已经找到符合交换的两个元素，那就交换吧，来继续满足 左小右大 原则</span><br>    &#125;<br>    std::<span class="hljs-built_in">swap</span>(data[left], data[src_left]);<br>    <span class="hljs-keyword">return</span> left;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1><span id="归并排序">归并排序</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">merge</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt; &amp;data, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> mid, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">tmp</span><span class="hljs-params">(right - left + <span class="hljs-number">1</span>)</span></span>;<br><br>    <span class="hljs-comment">// 将有序的两个数组 从小到大依次加入到 tmp 中</span><br>    <span class="hljs-comment">// 你可能疑惑哪里来的两个无序数组？[left,mid] [mid+1,right]</span><br>    <br>    <span class="hljs-comment">// 先把左数组的起始下标，右数组的起始下标 记录下来</span><br>    <span class="hljs-type">int</span> left_index = left, right_index = mid + <span class="hljs-number">1</span>, index = <span class="hljs-number">0</span>;<br>    <br>    <span class="hljs-comment">// 开始比较，谁小就依次保存它</span><br>    <span class="hljs-keyword">while</span> (left_index &lt;= mid &amp;&amp; right_index &lt;= right) &#123;<br>        data[left_index] &lt;= data[right_index] ? tmp[index++] = data[left_index++] : tmp[index++] = data[right_index++];<br>    &#125;<br>    <span class="hljs-comment">// 可能某一个数组还有元素没有被处理完毕</span><br>    <span class="hljs-keyword">while</span> (left_index &lt;= mid) &#123;<br>        tmp[index++] = data[left_index++];<br>    &#125;<br>    <span class="hljs-keyword">while</span> (right_index &lt;= right) &#123;<br>        tmp[index++] = data[right_index++];<br>    &#125;<br>    <span class="hljs-comment">// 把排序后的结果保存到 data 数组中去</span><br>    <span class="hljs-type">int</span> k = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = left; i &lt;= right;) &#123;<br>        data[i++] = tmp[k++];<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">mergeSort</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt; &amp;data, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (left &gt;= right) <span class="hljs-keyword">return</span>;  <span class="hljs-comment">// 只有一个元素，就停止继续递归</span><br>    <span class="hljs-type">int</span> mid = left - ((left - right) / <span class="hljs-number">2</span>);<br>    <span class="hljs-built_in">mergeSort</span>(data, left, mid);<br>    <span class="hljs-built_in">mergeSort</span>(data, mid + <span class="hljs-number">1</span>, right);<br>    <span class="hljs-built_in">merge</span>(data, left, mid, right);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">mergeSort</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt; &amp;data)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (data.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span>;<br>    <span class="hljs-built_in">mergeSort</span>(data, <span class="hljs-number">0</span>, data.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="步骤">步骤</span></h2>
+<ol type="1">
+<li>申请空间，使其大小能用来存放左右数组</li>
+<li>设定两个指针，最初位置分别为两个左右数组的起始位置</li>
+<li>比较两个指针所指向的元素，选择相对小的元素放入到合并空间，并移动指针到下一位置</li>
+<li>重复步骤 3 直到某一指针达到序列尾</li>
+<li>将另一序列剩下的所有元素直接复制到合并序列尾</li>
+<li>把存放有序数据的临时数组中的数据赋值到待排序数组中</li>
+</ol>
+<h2><span id="浅谈">浅谈</span></h2>
+<p>给你看到力扣题目：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/merge-sorted-array/">88.
+合并两个有序数组</a></p>
+<p>归并排序中的 merge
+实现就可以解决到这道题目，但有个问题却容易让人产生疑惑，什么时候这两个数组居然是有序了？</p>
+<p>mergeSort 的
+递归分割行为，保证两个数组最初的有序性（一个数组中只有一个元素的情况下，这个数组就必然是有序），但如果光有这个函数是不够的，还得
+merge 把两个有序数组合并成一个有序数组才可以，这就能让下一次 merge
+行为依旧是 合并两个有序数组的行为。</p>
+<figure>
+<img src="/images/2025/02/01/721a6c00-e0a3-11ef-9d70-c16d4941e421.png" alt="13b894f86d2694a92089fe5aa5217b67.png">
+<figcaption aria-hidden="true">13b894f86d2694a92089fe5aa5217b67.png</figcaption>
+</figure>
+<p>注：不谈归并优化，原地 merge 过于复杂，不推荐</p>
+<h1><span id="堆排序">堆排序</span></h1>
+<p>大根堆：当前节点大于等于左右孩子</p>
+<p>小根堆：当前节点小于等于左右孩子</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 从下标 0 开始，尽管网上有的下标从 1 开始（公式好推导）</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getLeft</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * i + <span class="hljs-number">1</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getRight</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * i + <span class="hljs-number">2</span>;<br>&#125;<br><br><span class="hljs-comment">// 下沉</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">siftDown</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt; &amp;data, <span class="hljs-type">int</span> len, <span class="hljs-type">int</span> cur)</span> </span>&#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>        <span class="hljs-comment">// 判断当前节点 当前节点左节点 当前节点右节点 谁最大</span><br>        <span class="hljs-type">int</span> max_index = cur;<br>        <span class="hljs-type">int</span> left_index = <span class="hljs-built_in">getLeft</span>(cur);<br>        <span class="hljs-type">int</span> right_index = <span class="hljs-built_in">getRight</span>(cur);<br>        <span class="hljs-keyword">if</span> (left_index &lt; len &amp;&amp; data[max_index] &lt; data[left_index]) &#123;<br>            max_index = left_index;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (right_index &lt; len &amp;&amp; data[max_index] &lt; data[right_index]) &#123;<br>            max_index = right_index;<br>        &#125;<br>        <span class="hljs-comment">// 此刻 max_index 指向 三个节点中的最大节点</span><br><br>        <span class="hljs-keyword">if</span> (max_index != cur) &#123; <span class="hljs-comment">// 只要 max_index != cur，就表明 max_index 已经被更改，那就意味着 还有堆化的必要</span><br>            std::<span class="hljs-built_in">swap</span>(data[max_index], data[cur]);<br>            cur = max_index;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">heapSort</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt; &amp;data)</span> </span>&#123;<br>    <span class="hljs-comment">// 先把数组堆化（大顶堆）,得到一个 当前节点 大于等于 左右节点</span><br>    <span class="hljs-comment">// 排除叶子节点，从后往上取出节点，每个节点进行一次 siftDown</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = (data.<span class="hljs-built_in">size</span>() / <span class="hljs-number">2</span>) - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) &#123;<br>        <span class="hljs-built_in">siftDown</span>(data, data.<span class="hljs-built_in">size</span>(), i);<br>    &#125;<br>    <span class="hljs-comment">// 再进行堆排序</span><br>    <span class="hljs-comment">// 依次 把堆顶元素和堆底元素进行交换</span><br>    <span class="hljs-comment">// 这时候的堆底元素往后将不参与排序，堆顶元素已经破坏堆，需要将堆顶元素进行 siftDown</span><br>    <span class="hljs-type">int</span> len = data.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = len; i &gt; <span class="hljs-number">0</span>; --i) &#123;<br>        std::<span class="hljs-built_in">swap</span>(data[<span class="hljs-number">0</span>], data[i]);<br>        <span class="hljs-built_in">siftDown</span>(data, i, <span class="hljs-number">0</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="步骤">步骤</span></h2>
+<ol type="1">
+<li>将无序数组堆化</li>
+<li>构建最大堆，通过将最大的元素放在未排序数组的末尾来对数组进行排序</li>
+</ol>
+<h2><span id="排序之前为什么要堆化">排序之前为什么要堆化？</span></h2>
+<p>那先看看堆排序的思路，即将最大的元素放在未排序数组的末尾来对数组进行排序。</p>
+<p>堆化可以保证，当前节点大于左右孩子节点（叶子节点没有左右孩子，可理解为必然大于左右孩子）。那么通过一次堆化行为，能够让堆排序顺理成章。但是，每排序一次，就会导致堆不规范，这也是为什么每次排序之后，都要
+siftDown 一次。</p>
+<p>我们是把堆顶元素和堆底元素进行交换达到排序效果，由于交换之后，堆底的元素已经排序完成，从此以后，不再纳入排序范围内。但是堆顶的元素此刻并不规范，但除此之外的其他待排序节点都是规范的，因此每次排序完成之后，都要
+siftDown 一次 就是针对交换后的堆顶节点。</p>
+<h2><span id="代码中值得提及的地方">代码中值得提及的地方</span></h2>
+<h3><span id="第一个问题为什么堆化只操作已有节点的一半">第一个问题：为什么堆化只操作已有节点的一半？</span></h3>
+<p>堆化究竟是在干啥？就是把一个数组看成一个具有完全二叉树性质的一棵树，只要所有节点具备大于左右孩子节点的性质，那就堆化成功。</p>
+<p>由于叶子节点不存在左右孩子节点，所以没有必要对叶子节点纳入到堆化范围。</p>
+<figure>
+<img src="/images/2025/02/01/69b38b00-e0a3-11ef-9d70-c16d4941e421.png" alt="image20250201214303973.png">
+<figcaption aria-hidden="true">image20250201214303973.png</figcaption>
+</figure>
+<h3><span id="第二个问题为什么从后往前选择节点siftdown">第二个问题：为什么从后往前选择节点
+siftDown ？</span></h3>
+<p><strong>子树已经是堆</strong>：</p>
+<p>当你从后往前调整时，对于每个非叶节点，其左右子节点已经在之前的步骤中被调整成堆。这意味着，在对当前节点进行
+siftDown
+调整时，可以确保其子树已经满足堆的性质，从而更容易将整个子树调整成一个堆。</p>
+<p><strong>避免重复调整</strong>：</p>
+<p>叶节点和子树中已经是堆的部分无需再次调整。从最后一个非叶节点开始可以确保每次调整时只需要处理当前节点与其子节点的关系，避免了不必要的重复操作，提高了整体构建堆的效率。</p>
+<h2><span id="注意">注意</span></h2>
+<p>将数组视为一颗完全二叉树：</p>
+<figure>
+<img src="/images/2025/02/01/63e52f30-e0a3-11ef-9d70-c16d4941e421.png" alt="5e1f1dfa6bdfe49456720cf2c5825195.png">
+<figcaption aria-hidden="true">5e1f1dfa6bdfe49456720cf2c5825195.png</figcaption>
+</figure>
+<p>对于大小为 n 的数组，根位于索引 0 处，索引 i 处元素的左子项 位于 2i +
+1，右子项位于 2i + 2 处。</p>
+<p>我在这里特别强调完全二叉树是有原因的，首先看看它的定义：如果二叉树除了最后一层有缺失外，其它是满的，且最后一层缺失的叶子结点只出现在右侧，则这样的二叉树叫完全二叉树。</p>
+<p>也就是说如有有个节点下面只有一个节点，那么这个节点应该作为左节点，而不是右节点，就像下面这样：</p>
+<figure>
+<img src="/images/2025/02/01/5cee58f0-e0a3-11ef-9d70-c16d4941e421.png" alt="image20250201135226600.png">
+<figcaption aria-hidden="true">image20250201135226600.png</figcaption>
+</figure>
+<p>但这并不是说堆一定是完全二叉树，平时使用完全二叉树的原因是易于存储，并且便于索引，也就是说堆利用完全二叉树的性质。</p>
+<h1><span id="参考文章">参考文章</span></h1>
+<p>https://www.hello-algo.com/chapter_sorting/quick_sort/#1153</p>
+<p>https://www.geeksforgeeks.org/heap-sort/</p>
+
+      </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/d8d692f8.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      实现海量数据快速查找之哈希表
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\ec6973f6.html" title="基于二叉搜索树实现Map容器的基本操作" rel="bookmark">基于二叉搜索树实现Map容器的基本操作</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\d8d692f8.html" title="实现海量数据快速查找之哈希表" rel="bookmark">实现海量数据快速查找之哈希表</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
