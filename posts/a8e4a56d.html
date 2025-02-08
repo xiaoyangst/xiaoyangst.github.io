@@ -143,6 +143,8 @@
               
                 <a class="nav-menu-item" href="/leetcode">力扣</a>
               
+                <a class="nav-menu-item" href="/OD">华为OD真题</a>
+              
                 <a class="nav-menu-item" href="/books">豆瓣读书</a>
               
             
@@ -176,8 +178,8 @@
         <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;algorithm&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> n;<br>    string s;<br>    cin &gt;&gt; n;<br>    cin &gt;&gt; s;<br>    <span class="hljs-type">int</span> len = s.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//获取长度</span><br><br>    <span class="hljs-built_in">reverse</span>(s.<span class="hljs-built_in">begin</span>(), s.<span class="hljs-built_in">end</span>()); 		<span class="hljs-comment">// 整体反转</span><br>    <span class="hljs-built_in">reverse</span>(s.<span class="hljs-built_in">begin</span>(), s.<span class="hljs-built_in">begin</span>() + n); 	<span class="hljs-comment">// 先反转前一段，长度n</span><br>    <span class="hljs-built_in">reverse</span>(s.<span class="hljs-built_in">begin</span>() + n, s.<span class="hljs-built_in">end</span>()); 	<span class="hljs-comment">// 再反转后一段</span><br><br>    cout &lt;&lt; s &lt;&lt; endl;<br><br>&#125; <br></code></pre></td></tr></table></figure>
 <p>使用<strong>整体反转+局部反转</strong>就可以实现反转单词顺序的目的，如下图：</p>
 <figure>
-<img src="右旋字符串.assets/4ffc66ec3cab6bb0c713809e010ce8c7.png" alt="4ffc66ec3cab6bb0c713809e010ce8c7">
-<figcaption aria-hidden="true">4ffc66ec3cab6bb0c713809e010ce8c7</figcaption>
+<img src="/images/2025/02/08/4c5b8300-e607-11ef-86e8-2b3ae15906b8.png" alt="4ffc66ec3cab6bb0c713809e010ce8c7.png">
+<figcaption aria-hidden="true">4ffc66ec3cab6bb0c713809e010ce8c7.png</figcaption>
 </figure>
 
       </div>
@@ -227,7 +229,19 @@
     
     <div class="post-nav">
   
-    <div class="post-nav-item-left"></div>
+    <a class="post-nav-item-left" href="/posts/1578526b.html">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>IPv4地址转换成整数</div>
+    </a>
   
   <div class="vhr"></div>
   

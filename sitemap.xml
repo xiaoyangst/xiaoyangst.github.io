@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>https://xiaoyangst.github.io/posts/dd14d712.html</loc>
+    <loc>https://xiaoyangst.github.io/posts/1578526b.html</loc>
     
     <lastmod>2025-02-08</lastmod>
     
@@ -21,6 +21,15 @@
   
   <url>
     <loc>https://xiaoyangst.github.io/posts/16f2a483.html</loc>
+    
+    <lastmod>2025-02-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xiaoyangst.github.io/posts/dd14d712.html</loc>
     
     <lastmod>2025-02-08</lastmod>
     
@@ -2613,6 +2622,13 @@
   
   <url>
     <loc>https://xiaoyangst.github.io/categories/knowledge/</loc>
+    <lastmod>2025-02-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xiaoyangst.github.io/categories/OD/</loc>
     <lastmod>2025-02-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
