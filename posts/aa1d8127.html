@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        简单动态字符串 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/OD">华为OD真题</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">简单动态字符串</div>
+        <div class="post-info">
+          
+  <a href="/tags/Redis/" class="post-tag">#Redis</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag">#源码剖析</a>
+
+
+          <span class="post-date">2025-02-18</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#结构体">结构体</a></li>
+<li><a href="#创建字符串">创建字符串</a></li>
+<li><a href="#释放字符串">释放字符串</a></li>
+<li><a href="#拼接字符串">拼接字符串</a></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="结构体">结构体</span></h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-type">char</span> *sds;<br><br><span class="hljs-comment">/* Note: sdshdr5 从未被使用过 */</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">attribute__</span> ((__<span class="hljs-title">packed__</span>)) <span class="hljs-title">sdshdr5</span> &#123;</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> flags; <span class="hljs-comment">/* 3 lsb of type, and 5 msb of string length */</span><br>    <span class="hljs-type">char</span> buf[];<br>&#125;;<br><span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">attribute__</span> ((__<span class="hljs-title">packed__</span>)) <span class="hljs-title">sdshdr8</span> &#123;</span><br>    <span class="hljs-type">uint8_t</span> len; <span class="hljs-comment">/* used */</span><br>    <span class="hljs-type">uint8_t</span> alloc; <span class="hljs-comment">/* excluding the header and null terminator */</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> flags; <span class="hljs-comment">/* 3 lsb of type, 5 unused bits */</span><br>    <span class="hljs-type">char</span> buf[];<br>&#125;;<br><span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">attribute__</span> ((__<span class="hljs-title">packed__</span>)) <span class="hljs-title">sdshdr16</span> &#123;</span><br>    <span class="hljs-type">uint16_t</span> len; <span class="hljs-comment">/* used */</span><br>    <span class="hljs-type">uint16_t</span> alloc; <span class="hljs-comment">/* excluding the header and null terminator */</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> flags; <span class="hljs-comment">/* 3 lsb of type, 5 unused bits */</span><br>    <span class="hljs-type">char</span> buf[];<br>&#125;;<br><span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">attribute__</span> ((__<span class="hljs-title">packed__</span>)) <span class="hljs-title">sdshdr32</span> &#123;</span><br>    <span class="hljs-type">uint32_t</span> len; <span class="hljs-comment">/* used */</span><br>    <span class="hljs-type">uint32_t</span> alloc; <span class="hljs-comment">/* excluding the header and null terminator */</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> flags; <span class="hljs-comment">/* 3 lsb of type, 5 unused bits */</span><br>    <span class="hljs-type">char</span> buf[];<br>&#125;;<br><span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">attribute__</span> ((__<span class="hljs-title">packed__</span>)) <span class="hljs-title">sdshdr64</span> &#123;</span><br>    <span class="hljs-type">uint64_t</span> len; <span class="hljs-comment">/* used */</span><br>    <span class="hljs-type">uint64_t</span> alloc; <span class="hljs-comment">/* excluding the header and null terminator */</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> flags; <span class="hljs-comment">/* 3 lsb of type, 5 unused bits */</span><br>    <span class="hljs-type">char</span> buf[];<br>&#125;;<br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SDS_TYPE_5  0</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SDS_TYPE_8  1</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SDS_TYPE_16 2</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SDS_TYPE_32 3</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SDS_TYPE_64 4</span><br></code></pre></td></tr></table></figure>
+<p>示意图：</p>
+<figure>
+<img src="/images/2025/02/18/fd091f10-edbd-11ef-ad38-055f1aa7c4f1.png" alt="image20250218122020595.png">
+<figcaption aria-hidden="true">image20250218122020595.png</figcaption>
+</figure>
+<p>alloc - len 就等于还有多少空闲空间，可用来存储数据。</p>
+<p>由于已经记录字符串的长度，可以通过 O(1)
+时间复杂度获取字符串长度。</p>
+<p><code>__attribute__ ((__packed__))</code> 避免结构体内存对齐，Redis
+选择牺牲一部分性能，节省内存。</p>
+<figure>
+<img src="/images/2025/02/18/024266d0-edbe-11ef-ad38-055f1aa7c4f1.png" alt="image20250218122800584.png">
+<figcaption aria-hidden="true">image20250218122800584.png</figcaption>
+</figure>
+<p>Redis
+的字符串经过这样设计，不仅可以存储字符串型的数据，还可以存储二进制数据。原生字符串是通过末尾的<code>\0</code>判断字符串的结束，但是这样就让二进制数据无法存储，因为你不确定字符串哪里是完整的部分。但现在我们通过
+len 成员就可以避免这个问题，实现二进制数据存储。</p>
+<h2><span id="创建字符串">创建字符串</span></h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* 创建一个新的 sds 字符串，内容由 `init` 指针和 `initlen` 指定。</span><br><span class="hljs-comment"> * - 如果 `init` 传入 NULL，则字符串初始化为空（填充 0）。</span><br><span class="hljs-comment"> * - 如果 `init` 传入 SDS_NOINIT，则不初始化 buffer（提高性能）。</span><br><span class="hljs-comment"> */</span><br>sds _sdsnewlen(<span class="hljs-type">const</span> <span class="hljs-type">void</span> *init, <span class="hljs-type">size_t</span> initlen, <span class="hljs-type">int</span> trymalloc) &#123;<br>    <span class="hljs-type">void</span> *sh; <span class="hljs-comment">// 指向 sds 结构头部的指针</span><br>    sds s;    <span class="hljs-comment">// 指向 sds 数据部分（字符串数据）的指针</span><br>    <span class="hljs-type">char</span> type = sdsReqType(initlen); <span class="hljs-comment">// 计算所需的 sds 类型</span><br>    <br>    <span class="hljs-comment">/* 空字符串通常用于后续追加，因此选择 SDS_TYPE_8 而不是 SDS_TYPE_5 */</span><br>    <span class="hljs-keyword">if</span> (type == SDS_TYPE_5 &amp;&amp; initlen == <span class="hljs-number">0</span>) type = SDS_TYPE_8;<br>    <br>    <span class="hljs-type">int</span> hdrlen = sdsHdrSize(type); <span class="hljs-comment">// 计算 sds 头部大小</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *fp; <span class="hljs-comment">// 指向 flags（类型标识符）的位置</span><br>    <span class="hljs-type">size_t</span> usable; <span class="hljs-comment">// 可用的分配空间大小</span><br><br>    <span class="hljs-comment">/* 分配内存（带 usable 空间计算），trymalloc 决定是否使用非失败分配 */</span><br>    sh = trymalloc ?<br>        s_trymalloc_usable(hdrlen + initlen + <span class="hljs-number">1</span>, &amp;usable) :<br>        s_malloc_usable(hdrlen + initlen + <span class="hljs-number">1</span>, &amp;usable);<br>    <span class="hljs-keyword">if</span> (sh == <span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>; <span class="hljs-comment">// 分配失败返回 NULL</span><br><br>    <span class="hljs-comment">/* 根据 SDS_NOINIT 规则决定是否清空已分配内存 */</span><br>    <span class="hljs-keyword">if</span> (init == SDS_NOINIT)<br>        init = <span class="hljs-literal">NULL</span>; <span class="hljs-comment">// 直接使用未初始化的 buffer</span><br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!init)<br>        <span class="hljs-built_in">memset</span>(sh, <span class="hljs-number">0</span>, hdrlen + initlen + <span class="hljs-number">1</span>); <span class="hljs-comment">// 清零整个 sds 结构（头部 + 数据）</span><br><br>    <span class="hljs-comment">/* 计算 sds 数据部分的起始地址 */</span><br>    s = (<span class="hljs-type">char</span>*)sh + hdrlen;<br>    fp = ((<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>*)s) - <span class="hljs-number">1</span>; <span class="hljs-comment">// `flags` 字节位于数据起始地址之前</span><br>    usable = usable - hdrlen - <span class="hljs-number">1</span>; <span class="hljs-comment">// 计算可用数据空间</span><br><br>    <span class="hljs-comment">/* 限制分配的 usable 大小，防止超出 sds 允许的最大容量 */</span><br>    <span class="hljs-keyword">if</span> (usable &gt; sdsTypeMaxSize(type))<br>        usable = sdsTypeMaxSize(type);<br><br>    <span class="hljs-comment">/* 根据 sds 类型填充结构体头部 */</span><br>    <span class="hljs-keyword">switch</span> (type) &#123;<br>        <span class="hljs-keyword">case</span> SDS_TYPE_5: &#123;<br>            *fp = type | (initlen &lt;&lt; SDS_TYPE_BITS); <span class="hljs-comment">// 5 位存储 len</span><br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-keyword">case</span> SDS_TYPE_8: &#123;<br>            SDS_HDR_VAR(<span class="hljs-number">8</span>, s);<br>            sh-&gt;len = initlen;<br>            sh-&gt;alloc = usable;<br>            *fp = type;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-keyword">case</span> SDS_TYPE_16: &#123;<br>            SDS_HDR_VAR(<span class="hljs-number">16</span>, s);<br>            sh-&gt;len = initlen;<br>            sh-&gt;alloc = usable;<br>            *fp = type;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-keyword">case</span> SDS_TYPE_32: &#123;<br>            SDS_HDR_VAR(<span class="hljs-number">32</span>, s);<br>            sh-&gt;len = initlen;<br>            sh-&gt;alloc = usable;<br>            *fp = type;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-keyword">case</span> SDS_TYPE_64: &#123;<br>            SDS_HDR_VAR(<span class="hljs-number">64</span>, s);<br>            sh-&gt;len = initlen;<br>            sh-&gt;alloc = usable;<br>            *fp = type;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">/* 如果提供了初始化数据，则拷贝到 sds 数据区域 */</span><br>    <span class="hljs-keyword">if</span> (initlen &amp;&amp; init)<br>        <span class="hljs-built_in">memcpy</span>(s, init, initlen);<br>    <br>    <span class="hljs-comment">/* 确保 sds 结尾是 `\0`，保证 printf 可用 */</span><br>    s[initlen] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br><br>    <span class="hljs-keyword">return</span> s; <span class="hljs-comment">// 返回指向 sds 数据部分的指针</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>核心步骤：</p>
+<ol type="1">
+<li>确定 SDS 类型</li>
+<li>分配内存，内存大小为
+头部长度（不同SDS类型对应的结构体大小）+申请长度+1（填充空字符）</li>
+<li>根据 SDS_NOINIT 规则决定是否清空已分配内存</li>
+<li>初始化 SDS 结构体</li>
+<li>如果提供了初始化数据，则拷贝到 sds 数据区域</li>
+<li>最后，返回字符串的起始地址（不是SDS 结构体的起始地址哦）</li>
+</ol>
+<h2><span id="释放字符串">释放字符串</span></h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">sdsfree</span><span class="hljs-params">(sds s)</span> &#123;<br>    <span class="hljs-keyword">if</span> (s == <span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span>;<br>    s_free((<span class="hljs-type">char</span>*)s-sdsHdrSize(s[<span class="hljs-number">-1</span>]));<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>sdsfree 会确确实实调用 free 回收内存，但 Redis 还提供 sdsclear
+操作来通过重新设置 len 来假装释放掉字符串对应的内存空间。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">void sdsclear(sds s) &#123;<br>    sdssetlen(s, 0);<br>    s[0] = &#x27;\0&#x27;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="拼接字符串">拼接字符串</span></h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c">sds <span class="hljs-title function_">sdscatsds</span><span class="hljs-params">(sds s, <span class="hljs-type">const</span> sds t)</span> &#123;<br>    <span class="hljs-keyword">return</span> sdscatlen(s, t, sdslen(t));<br>&#125;<br><br><span class="hljs-comment">/* 该函数会修改原来的 sds 字符串，并返回新的字符串指针。</span><br><span class="hljs-comment"> * 调用后，传入的原 sds 字符串不再有效，所有对其的引用必须替换为调用返回的新指针。</span><br><span class="hljs-comment"> */</span><br>sds <span class="hljs-title function_">sdscatlen</span><span class="hljs-params">(sds s, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *t, <span class="hljs-type">size_t</span> len)</span> &#123;<br>    <span class="hljs-type">size_t</span> curlen = sdslen(s);<br><br>    <span class="hljs-comment">// 为扩展空间申请足够的内存</span><br>    s = sdsMakeRoomFor(s, len);<br>    <span class="hljs-keyword">if</span> (s == <span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    <span class="hljs-built_in">memcpy</span>(s + curlen, t, len);<br>    sdssetlen(s, curlen + len);<br><br>    <span class="hljs-comment">// 确保字符串的结尾是 NULL 终止的</span><br>    s[curlen + len] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>    <span class="hljs-keyword">return</span> s;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果扩容，申请足够的内存之后，就会把原数据拷贝到新空间，并且把要拼接的数据也拼接到后面，返回给用户新指针。</p>
+<p>因此，重点看看 sdsMakeRoomFor 函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* 扩展 SDS 字符串末尾的空闲空间，确保调用该函数后，可以在字符串的末尾覆盖最多 addlen 字节，</span><br><span class="hljs-comment"> * 还会为末尾的 null 终止符保留一个字节。</span><br><span class="hljs-comment"> * 如果已经有足够的空闲空间，则该函数不会进行任何操作。如果空间不足，将为剩余空间分配内存，可能还会多分配一些：</span><br><span class="hljs-comment"> * - 当 greedy 为 1 时，将会分配超过需求的空间，避免频繁的重新分配。</span><br><span class="hljs-comment"> * - 当 greedy 为 0 时，仅分配足够的空间以容纳 &#x27;addlen&#x27; 字节。</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * 注意：此函数仅修改 SDS 字符串的空闲缓冲区空间，而不改变 `sdslen()` 返回的字符串长度。*/</span><br>sds _sdsMakeRoomFor(sds s, <span class="hljs-type">size_t</span> addlen, <span class="hljs-type">int</span> greedy) &#123;<br>    <span class="hljs-type">void</span> *sh, *newsh;<br>    <span class="hljs-type">size_t</span> avail = sdsavail(s);  <span class="hljs-comment">// 当前字符串末尾的可用空间</span><br>    <span class="hljs-type">size_t</span> len, newlen, reqlen;<br>    <span class="hljs-type">char</span> type, oldtype = s[<span class="hljs-number">-1</span>] &amp; SDS_TYPE_MASK;  <span class="hljs-comment">// 获取当前字符串的类型</span><br>    <span class="hljs-type">int</span> hdrlen;  <span class="hljs-comment">// 存储头部大小</span><br>    <span class="hljs-type">size_t</span> usable;  <span class="hljs-comment">// 可用内存</span><br><br>    <span class="hljs-comment">/* 如果已经有足够的空闲空间，直接返回原始字符串 */</span><br>    <span class="hljs-keyword">if</span> (avail &gt;= addlen) <span class="hljs-keyword">return</span> s;<br><br>    len = sdslen(s);  <span class="hljs-comment">// 获取当前字符串的长度</span><br>    sh = (<span class="hljs-type">char</span>*)s - sdsHdrSize(oldtype);  <span class="hljs-comment">// 获取字符串实际的内存地址（减去头部大小）</span><br>    reqlen = newlen = (len + addlen);  <span class="hljs-comment">// 计算新的总长度</span><br>    assert(newlen &gt; len);  <span class="hljs-comment">// 检查是否有溢出</span><br><br>    <span class="hljs-comment">/* 如果 greedy 为 1，表示需要更大程度地扩展内存，以避免频繁的重新分配 */</span><br>    <span class="hljs-keyword">if</span> (greedy == <span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-keyword">if</span> (newlen &lt; SDS_MAX_PREALLOC)<br>            newlen *= <span class="hljs-number">2</span>;  <span class="hljs-comment">// 如果新长度小于最大预分配大小，扩展为两倍</span><br>        <span class="hljs-keyword">else</span><br>            newlen += SDS_MAX_PREALLOC;  <span class="hljs-comment">// 否则加上预分配的常量</span><br>    &#125;<br><br>    <span class="hljs-comment">/* 根据新的长度确定字符串类型 */</span><br>    type = sdsReqType(newlen);<br><br>    <span class="hljs-comment">/* 不能使用类型 5，因为类型 5 无法记住空闲空间，每次追加时都必须调用 sdsMakeRoomFor() */</span><br>    <span class="hljs-keyword">if</span> (type == SDS_TYPE_5) type = SDS_TYPE_8;<br><br>    hdrlen = sdsHdrSize(type);  <span class="hljs-comment">// 计算新类型的头部大小</span><br>    assert(hdrlen + newlen + <span class="hljs-number">1</span> &gt; reqlen);  <span class="hljs-comment">// 检查是否有溢出</span><br><br>    <span class="hljs-comment">/* 如果原始类型与新类型相同，使用 realloc 调整内存 */</span><br>    <span class="hljs-keyword">if</span> (oldtype == type) &#123;<br>        newsh = s_realloc_usable(sh, hdrlen + newlen + <span class="hljs-number">1</span>, &amp;usable);<br>        <span class="hljs-keyword">if</span> (newsh == <span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;  <span class="hljs-comment">// 如果重新分配失败，返回 NULL</span><br>        s = (<span class="hljs-type">char</span>*)newsh + hdrlen;  <span class="hljs-comment">// 将 s 移动到新的内存位置</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-comment">/* 如果类型不同，无法使用 realloc，只能分配新的内存 */</span><br>        newsh = s_malloc_usable(hdrlen + newlen + <span class="hljs-number">1</span>, &amp;usable);<br>        <span class="hljs-keyword">if</span> (newsh == <span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;  <span class="hljs-comment">// 分配失败，返回 NULL</span><br>        <span class="hljs-built_in">memcpy</span>((<span class="hljs-type">char</span>*)newsh + hdrlen, s, len + <span class="hljs-number">1</span>);  <span class="hljs-comment">// 将原字符串内容复制到新内存</span><br>        s_free(sh);  <span class="hljs-comment">// 释放原内存</span><br>        s = (<span class="hljs-type">char</span>*)newsh + hdrlen;  <span class="hljs-comment">// 将 s 指向新内存位置</span><br>        s[<span class="hljs-number">-1</span>] = type;  <span class="hljs-comment">// 更新新的类型信息</span><br>        sdssetlen(s, len);  <span class="hljs-comment">// 保持原始长度不变</span><br>    &#125;<br><br>    <span class="hljs-comment">/* 计算可用空间，并确保不会超过最大类型限制 */</span><br>    usable = usable - hdrlen - <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">if</span> (usable &gt; sdsTypeMaxSize(type))<br>        usable = sdsTypeMaxSize(type);<br><br>    <span class="hljs-comment">/* 更新字符串的分配大小 */</span><br>    sdssetalloc(s, usable);<br><br>    <span class="hljs-comment">/* 返回新的 sds 字符串 */</span><br>    <span class="hljs-keyword">return</span> s;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>如果剩余空间能够容纳追加的字符串，就不会额外申请空间。否则，就额外申请空间。</p>
+<p>如果指定 greedy 为 0，就申请追加字符串长度大小空间；如果指定 greedy
+为
+1，就申请追加两倍字符串长度大小空间，避免后续再次分配，减少性能损耗。</p>
+
+      </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/29c8b6d6.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      TLV编码
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag">#源码剖析</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\5fc0b1ce.html" title="Redis 事件驱动框架思路浅读" rel="bookmark">Redis 事件驱动框架思路浅读</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\d8d692f8.html" title="实现海量数据快速查找之哈希表" rel="bookmark">实现海量数据快速查找之哈希表</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7d8fe760.html" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cloud.siliconflow.cn/i/lvbqskg1">siliconflow免费AI推理服务（点击注册，你有我有）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
