@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        华为OD真题 | 
+        磁盘容量排序 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,96 +156,129 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/huawei.svg)"></div>
-        华为OD真题
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">磁盘容量排序</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
+
+
+          <span class="post-date">2025-02-19</span>
+        </div>
       </div>
-      <div class="wall-category-description">douban read Record</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 1em;">字符串</a> <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" style="font-size: 1em;">容器的应用</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Disk</span> &#123;<br>  <span class="hljs-type">int</span> size_;<br>  std::string original_;<br><br>  <span class="hljs-built_in">Disk</span>(<span class="hljs-type">int</span> size, std::string original) : <span class="hljs-built_in">size_</span>(size), <span class="hljs-built_in">original_</span>(std::<span class="hljs-built_in">move</span>(original)) &#123;&#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> disk_num;<br>	cin &gt;&gt; disk_num;<br>	cin.<span class="hljs-built_in">ignore</span>();        <span class="hljs-comment">// 忽略换行符，避免影响下面的 getline</span><br><br>	vector&lt;Disk&gt; disk_vec;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; disk_num; ++i) &#123;<br>		std::string disk;<br>		<span class="hljs-built_in">getline</span>(cin, disk);<br>		<span class="hljs-type">int</span> sum = <span class="hljs-number">0</span>;<br>		<span class="hljs-type">int</span> left = <span class="hljs-number">0</span>;<br>		<span class="hljs-comment">// 解析磁盘实际大小，转换为 M 单位</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> right = <span class="hljs-number">0</span>; right &lt; disk.<span class="hljs-built_in">size</span>(); ++right) &#123;<br>			<span class="hljs-keyword">if</span> (disk[right] == <span class="hljs-string">&#x27;M&#x27;</span> || disk[right] == <span class="hljs-string">&#x27;G&#x27;</span> || disk[right] == <span class="hljs-string">&#x27;T&#x27;</span>) &#123;<br>				<span class="hljs-comment">// 确定已经找到单位，切割出数字</span><br>				<span class="hljs-keyword">auto</span> number = <span class="hljs-built_in">stoi</span>(disk.<span class="hljs-built_in">substr</span>(left, right - left));    <span class="hljs-comment">// 犯错</span><br>				<span class="hljs-keyword">if</span> (disk[right] == <span class="hljs-string">&#x27;M&#x27;</span>) &#123;<br>					sum += number;<br>				&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (disk[right] == <span class="hljs-string">&#x27;G&#x27;</span>) &#123;<br>					sum += number*<span class="hljs-number">1024</span>;<br>				&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (disk[right] == <span class="hljs-string">&#x27;T&#x27;</span>) &#123;<br>					sum += number*<span class="hljs-number">1024</span>*<span class="hljs-number">1024</span>;<br>				&#125;<br>				left = right + <span class="hljs-number">1</span>;<br>			&#125;<br>		&#125;<br><br>		<span class="hljs-comment">// 记录</span><br>		disk_vec.<span class="hljs-built_in">emplace_back</span>(sum, disk);<br>	&#125;<br><br>	<span class="hljs-comment">// 排序</span><br>	<span class="hljs-built_in">sort</span>(disk_vec.<span class="hljs-built_in">begin</span>(), disk_vec.<span class="hljs-built_in">end</span>(), [](<span class="hljs-type">const</span> Disk &amp;left_disk, <span class="hljs-type">const</span> Disk &amp;right_disk) &#123;<br>	  <span class="hljs-keyword">return</span> left_disk.size_ &lt; right_disk.size_;<br>	&#125;);<br>	<span class="hljs-comment">// 输出原始字符串</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> Disk &amp;disk : disk_vec) &#123;<br>		cout &lt;&lt; disk.original_ &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;<br>	&#125;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>题目中有要求说，保持稳定排序。那么如果输入的时候 1G 在 1024M
+之前，那么最后输出的时候，稳定排序要求 1G 必须在 1024M 之前输出。</p>
+<p>由于最后要输出的是原始字符串，因此定义一个结构体，把这个信息保留，排序之后再输出即可：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Disk</span> &#123;<br>  <span class="hljs-type">int</span> size_;<br>  std::string original_;<br><br>  <span class="hljs-built_in">Disk</span>(<span class="hljs-type">int</span> size, std::string original) : <span class="hljs-built_in">size_</span>(size), <span class="hljs-built_in">original_</span>(std::<span class="hljs-built_in">move</span>(original)) &#123;&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>还有 substr
+切割字符串要指定起始下标和终止下标，区间不是左闭右闭，而是左闭右开。</p>
+
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/ca8e88e1.html" class="post-title hover-line">单词接龙</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题如果没有容器的实战经验，我不认为是可以轻松拿下的题目</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-tag">#容器的应用</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/2cf7462c.html" class="post-title hover-line">磁盘容量排序</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">substr 切割字符串要指定起始下标和终止下标，区间不是左闭右闭，而是左闭右开</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/29c8b6d6.html" class="post-title hover-line">TLV编码</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">有个地方题目有些误解，再者核心是 index 的更新，画在图纸上并不难写出来</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/1578526b.html" class="post-title hover-line">IPv4地址转换成整数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">主要是先排除各种特殊情况，这些特殊情况意味着 IPV4 地址的不规范。拿到合法的 IPV4 之后，计算整数即可</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
-
-</div>
-    </div>
-  </div>
-
 
     
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/posts/ca8e88e1.html">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>单词接龙</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/aa1d8127.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      简单动态字符串
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\29e12c89.html" title="8. 字符串转换整数 (atoi)" rel="bookmark">8. 字符串转换整数 (atoi)</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\dd14d712.html" title="151. 反转字符串中的单词" rel="bookmark">151. 反转字符串中的单词</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\a8e4a56d.html" title="右旋转字符串" rel="bookmark">右旋转字符串</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\1578526b.html" title="IPv4地址转换成整数" rel="bookmark">IPv4地址转换成整数</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\29c8b6d6.html" title="TLV编码" rel="bookmark">TLV编码</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
     
   </div>
 
@@ -773,6 +807,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>

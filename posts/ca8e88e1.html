@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        华为OD真题 | 
+        单词接龙 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,96 +156,117 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/huawei.svg)"></div>
-        华为OD真题
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">单词接龙</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-tag">#容器的应用</a>
+
+
+          <span class="post-date">2025-02-19</span>
+        </div>
       </div>
-      <div class="wall-category-description">douban read Record</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 1em;">字符串</a> <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" style="font-size: 1em;">容器的应用</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unordered_map&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;queue&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-comment">// 当存在多个首字母相同的单词时，取长度最长的单词，如果长度也相等，则取字典序最小的单词</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Word</span> &#123;<br>  std::string word;<br><br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Word</span><span class="hljs-params">(std::string w)</span> : word(std::move(w)) &#123;</span>&#125;<br><br>  <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Word &amp;right_word) <span class="hljs-type">const</span> &#123;<br>	  <span class="hljs-comment">// 如果当前单词比右边的单词长，则当前单词较大</span><br>	  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;word.<span class="hljs-built_in">size</span>() &gt; right_word.word.<span class="hljs-built_in">size</span>()) &#123;<br>		  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	  &#125;<br>	  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;word.<span class="hljs-built_in">size</span>() &lt; right_word.word.<span class="hljs-built_in">size</span>()) &#123;<br>		  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>	  &#125;<br>	  <span class="hljs-comment">// 如果两个单词的长度相等，比较字典序</span><br>	  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>-&gt;word &gt;= right_word.word;<br>  &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> word_start;<br>	cin &gt;&gt; word_start;<br>	<span class="hljs-type">int</span> word_size;<br>	cin &gt;&gt; word_size;<br>	cin.<span class="hljs-built_in">ignore</span>();<br><br>	vector&lt;string&gt; wordVec;<br>	unordered_map&lt;<span class="hljs-type">char</span>, priority_queue&lt;Word&gt;&gt; word_table;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; word_size; ++i) &#123;<br>		std::string word;<br>		<span class="hljs-built_in">getline</span>(cin, word);<br>		<span class="hljs-function">Word <span class="hljs-title">w</span><span class="hljs-params">(word)</span></span>;<br>		word_table[word[<span class="hljs-number">0</span>]].<span class="hljs-built_in">push</span>(std::<span class="hljs-built_in">move</span>(w));<br>		wordVec.<span class="hljs-built_in">push_back</span>(word);<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> ((word_start &lt; <span class="hljs-number">0</span>) || (word_start &gt;= wordVec.<span class="hljs-built_in">size</span>())) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	std::string first_word = wordVec[word_start];<br>	std::string result = first_word;<br>	<span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>		<span class="hljs-type">char</span> last_ch = first_word[first_word.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>];<br>		<span class="hljs-keyword">auto</span> it = word_table.<span class="hljs-built_in">find</span>(last_ch);<br>		<span class="hljs-keyword">if</span> (it != word_table.<span class="hljs-built_in">end</span>()) &#123;<br>			std::string pop_str = it-&gt;second.<span class="hljs-built_in">top</span>().word;<br>			it-&gt;second.<span class="hljs-built_in">pop</span>();<br>			result += pop_str;<br>			first_word.<span class="hljs-built_in">swap</span>(pop_str);<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br>	&#125;<br><br>	cout &lt;&lt; result &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这道题如果没有容器的实战经验，我不认为是可以轻松拿下的题目。</p>
+<p>unordered_map 记录每个字符对应的单词集合，这里利用 priority_queue
+进行存储。但我看到题目这样描述“当存在多个首字母相同的单词时，取长度最长的单词，如果长度也相等，则取字典序最小的单词”的时候，我就知道要把数据放在一个结构体中，并且重载
+&lt; 运算符，并且放在 priority_queue
+中，添加和删除元素都可以自动排序。</p>
+<p>有如上的巧妙设计，解题也就不在话下了。</p>
+
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
-  </div>
-  <div class="post-list">
     
-      
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
   
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/ca8e88e1.html" class="post-title hover-line">单词接龙</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题如果没有容器的实战经验，我不认为是可以轻松拿下的题目</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/2cf7462c.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      磁盘容量排序
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
   <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-tag">#容器的应用</a>
 
 </div>
-    </div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\1578526b.html" title="IPv4地址转换成整数" rel="bookmark">IPv4地址转换成整数</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\29c8b6d6.html" title="TLV编码" rel="bookmark">TLV编码</a></div></div></div>
+    
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/2cf7462c.html" class="post-title hover-line">磁盘容量排序</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">substr 切割字符串要指定起始下标和终止下标，区间不是左闭右闭，而是左闭右开</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
-
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/29c8b6d6.html" class="post-title hover-line">TLV编码</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">有个地方题目有些误解，再者核心是 index 的更新，画在图纸上并不难写出来</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/1578526b.html" class="post-title hover-line">IPv4地址转换成整数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">主要是先排除各种特殊情况，这些特殊情况意味着 IPV4 地址的不规范。拿到合法的 IPV4 之后，计算整数即可</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
-
-</div>
-    </div>
-  </div>
-
 
     
+    
+      <div id="gitalk-container"></div>
     
   </div>
 
@@ -773,6 +795,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>
