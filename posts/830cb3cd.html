@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        call_once 和 once_flag | 
+        编写线程安全的代码 | 
       
     </title>
     <meta name="description" content="" />
@@ -159,13 +159,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">call_once 和 once_flag</div>
+        <div class="post-title">编写线程安全的代码</div>
         <div class="post-info">
           
-  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a>
+  <a href="/tags/CPP/" class="post-tag">#CPP</a><a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" class="post-tag">#技术摘录</a>
 
 
-          <span class="post-date">2024-09-11</span>
+          <span class="post-date">2025-02-25</span>
         </div>
       </div>
       
@@ -175,34 +175,66 @@
             
           </div>
         
-        <p>std::call_once 和 std::once_flag 是 C++11
-中引入的<strong>线程安全</strong>的函数和类型，用于<strong>确保某个函数只被调用一次</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Fn</span>, <span class="hljs-keyword">class</span>... Args&gt;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">call_once</span> <span class="hljs-params">(once_flag&amp; flag, Fn&amp;&amp; fn, Args&amp;&amp;... args)</span></span>;<br></code></pre></td></tr></table></figure>
-<p><strong>flag</strong>：<code>std::once_flag</code>
-对象，用来确保某个函数只被调用一次</p>
-<p><strong>fn</strong>：要调用的函数</p>
-<p><strong>args</strong>：传递给函数 <code>fn</code> 的参数</p>
-<p>官网概述：</p>
+        <!-- toc -->
 <ul>
-<li>如果另一个线程已经主动执行了带有相同标记的 call_once
-调用，则会导致被动执行： 被动执行不会调用 fn</li>
-<li>如果对 call_once
-的主动调用因抛出异常而结束（异常会传播给调用线程），并且存在被动执行，则会从这些被动执行中选择一个，并调用它作为新的主动调用</li>
-<li>如果一旦主动执行返回，所有当前的被动执行和未来对 call_once
-的调用（使用相同的标志）也会返回，而不会成为主动执行</li>
+<li><a href="#进程的内存空间布局">进程的内存空间布局</a></li>
+<li><a href="#线程的私有资源">线程的私有资源</a></li>
+<li><a href="#线程间的共享资源">线程间的共享资源</a>
+<ul>
+<li><a href="#代码区">代码区</a></li>
+<li><a href="#数据区">数据区</a></li>
+<li><a href="#堆区">堆区</a></li>
+<li><a href="#动态链接库与文件">动态链接库与文件</a></li>
+<li><a href="#栈区">栈区</a></li>
+</ul></li>
+<li><a href="#编写线程安全的代码">编写线程安全的代码</a></li>
 </ul>
-<p>如果一个线程 A 正在执行带有 call_once 标记的函数 fn，其它线程企图调用
-fn
-是无法成功的（标记为被动执行）。如果前面的线程A执行成功，那么标记为被动执行的其它线程将没有调用
-fn
-的机会。如果前面的线程A执行失败，哪些标记为被动执行的线程中会有一个被选择化为主动执行，即可以调用
-fn，其它没被选中的依旧保持被动执行的标记</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span>       </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span>         </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span>        </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span>          <span class="hljs-comment">// std::call_once, std::once_flag</span></span><br><br><span class="hljs-type">int</span> winner;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">set_winner</span> <span class="hljs-params">(<span class="hljs-type">int</span> x)</span> </span>&#123; winner = x; &#125;<br>std::once_flag winner_flag;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">wait_1000ms</span> <span class="hljs-params">(<span class="hljs-type">int</span> id)</span> </span>&#123;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">1000</span>; ++i)<br>    std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">milliseconds</span>(<span class="hljs-number">1</span>));<br>  std::<span class="hljs-built_in">call_once</span> (winner_flag,set_winner,id);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span> <span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>  std::thread threads[<span class="hljs-number">10</span>];<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">10</span>; ++i)<br>    threads[i] = std::<span class="hljs-built_in">thread</span>(wait_1000ms,i<span class="hljs-number">+1</span>);<br><br>  std::cout &lt;&lt; <span class="hljs-string">&quot;waiting for the first among 10 threads to count 1000 ms...\n&quot;</span>;<br><br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; th : threads) th.<span class="hljs-built_in">join</span>();<br>  std::cout &lt;&lt; <span class="hljs-string">&quot;winner thread: &quot;</span> &lt;&lt; winner &lt;&lt; <span class="hljs-string">&#x27;\n&#x27;</span>;<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>输出结果：</p>
+<!-- tocstop -->
+<h1><span id="进程的内存空间布局">进程的内存空间布局</span></h1>
 <figure>
-<img src="/images/2024/09/11/e9f8b0a0-6fe8-11ef-bdaf-31a8545cb19b.png" alt="call_once验证.png">
-<figcaption aria-hidden="true">call_once验证.png</figcaption>
+<img src="/images/2025/02/25/c31b8ba0-f36a-11ef-a9cc-c9450baa5f0a.png" alt="进程的内存布局.png">
+<figcaption aria-hidden="true">进程的内存布局.png</figcaption>
 </figure>
+<p>栈区：函数的运行时栈</p>
+<p>共享内存映射区：用于存储进程的映射文件、共享内存、动态链接库等内容。也可以用于映射设备文件或其他资源。</p>
+<p>堆区：malloc 分配的内存区域</p>
+<p>数据区：保存全局变量和静态变量</p>
+<p>代码区：代码编译后形成的机器指令</p>
+<p>注意：数据段又分为已初始化的数据段和未初始化的数据段，即数据段存储程序中已初始化和未初始化的全局变量及静态变量。</p>
+<h1><span id="线程的私有资源">线程的私有资源</span></h1>
+<p>栈：线程运行函数的栈区，用于存储该线程的局部变量、函数参数、返回地址等信息</p>
+<p>寄存器：每个线程在CPU上执行时都会使用寄存器存储当前的执行状态，例如程序计数器（PC）</p>
+<p>线程局部存储：线程局部存储允许线程拥有自己独立的全局变量副本，而这些变量在不同线程之间不会共享</p>
+<h1><span id="线程间的共享资源">线程间的共享资源</span></h1>
+<figure>
+<img src="/images/2025/02/25/c76d3280-f36a-11ef-a9cc-c9450baa5f0a.png" alt="线程的私有资源e.png">
+<figcaption aria-hidden="true">线程的私有资源e.png</figcaption>
+</figure>
+<p>一个线程就是执行一个函数，进程中的线程就是对应着进程内存布局中的栈区，除去栈区是每个线程独有的资源，其余区域就属于多个线程共享的资源，下面逐一分析。</p>
+<h2><span id="代码区">代码区</span></h2>
+<p>线程之间共享代码区，意味着程序中的任何一个函数都可以放到线程中去执行，不存在某个函数只能被特定线程执行的情况。</p>
+<p>由于代码区是只读的，因此这个区域在多个线程之间<strong>不存在线程安全问题</strong>。</p>
+<h2><span id="数据区">数据区</span></h2>
+<p>存放静态变量和全局变量，多个线程共享，可读可写，<strong>存在线程安全问题</strong>。</p>
+<h2><span id="堆区">堆区</span></h2>
+<p>存放 malloc
+申请的内存，多个线程只要拿到执行这块内存的指针，就可以操作这块内存数据（可读可写），<strong>存在线程安全问题</strong>。</p>
+<h2><span id="动态链接库与文件">动态链接库与文件</span></h2>
+<p>动态库的代码和数据都放在空闲区域，即共享内存映射区。这种第三方库的问题，就<strong>很难明确说是否线程安全</strong>，还得看调用者和被调用者代码的情况。</p>
+<h2><span id="栈区">栈区</span></h2>
+<p>明明我们前面已经谈及
+栈区是各个线程私有的，为什么还会纳入共享资源呢？</p>
+<p>不同的进程的地址空间相互隔离，虚拟内存系统确保这点，但是不同的线程的栈区没有严格的隔离机制来保护。</p>
+<p>因此如果一个线程能拿到来自另一个线程栈帧上的指针，<strong>那么该线程就可以改变另一个线程的栈区</strong>，也就是说这些线程可以任意修改本属于另一个线程栈区中的变量。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">thread</span><span class="hljs-params">(<span class="hljs-type">void</span>* var)</span> </span>&#123;<br>    <span class="hljs-type">int</span>* p = (<span class="hljs-type">int</span>*)var;<br>    *p = <span class="hljs-number">2</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> a = <span class="hljs-number">1</span>;<br>    <span class="hljs-type">pthread_t</span> tid;<br>    <br>    <span class="hljs-built_in">pthread_create</span>(&amp;tid, <span class="hljs-literal">NULL</span>, thread, (<span class="hljs-type">void</span>*)&amp;a);	<span class="hljs-comment">// 子线程 修改 主线程的局部变量 a </span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>一个线程修改另一个线程的数据，真是相当危险，且难以排查。你以为是你写的函数有问题，结果是其他函数修改你的数据，这让人怎么去查？</p>
+<p>如果你不足够熟悉涉及到的代码，debug 可是不那么容易弄出来的。</p>
+<h1><span id="编写线程安全的代码">编写线程安全的代码</span></h1>
+<p>只使用线程的私有资源：函数内定义的局部变量</p>
+<p>函数的局部参数：参数传递有值传递和引用传递，值传递是线程安全，引用传递不是线程安全</p>
+<p>线程局部存储：虽然多线程共享，但是各自有各自的副本，确保是线程安全</p>
+<p>函数的返回值：返回值没有问题，但是返回指针会存在线程安全问题</p>
+<p>原子操作和同步互斥：原子操作是线程安全，同步和互斥是常见的保证线程安全的方法</p>
 
       </div>
 	<div id="zan" class="clearfix">
@@ -251,23 +283,11 @@ fn，其它没被选中的依旧保持被动执行的标记</p>
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/posts/f1601c3e.html">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>单例模式</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/posts/150e036b.html">
+    <a class="post-nav-item-right" href="/posts/54788f73.html">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -279,7 +299,7 @@ fn，其它没被选中的依旧保持被动执行的标记</p>
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      模板模式
+      工厂模式
     </a>
   
 </div>
@@ -287,12 +307,12 @@ fn，其它没被选中的依旧保持被动执行的标记</p>
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a>
+  <a href="/tags/CPP/" class="post-tag">#CPP</a><a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" class="post-tag">#技术摘录</a>
 
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\7d6c0c8.html" title="为什么子类需要调用父类的构造函数 ？" rel="bookmark">为什么子类需要调用父类的构造函数 ？</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\830cb3cd.html" title="编写线程安全的代码" rel="bookmark">编写线程安全的代码</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\2e4990f4.html" title="CAS机制" rel="bookmark">CAS机制</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7d8fe760.html" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\a90d3c02.html" title="C++中的多态" rel="bookmark">C++中的多态</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
