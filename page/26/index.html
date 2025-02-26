@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        最小编辑距离 | 
+        
       
     </title>
     <meta name="description" content="" />
@@ -62,8 +62,10 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+  
+  <link rel="stylesheet"
+        type="text/css"
+        href='/css/index.css'/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -156,186 +158,111 @@
     </div>
     <div class="body">
       
-  <article class="post-content">
-    <div class="post-inner">
-      <div class="post-content__head">
-        <div class="post-title">最小编辑距离</div>
-        <div class="post-info">
+  <div class="wall wall-index">
+    <div class="wall-main" id="wall-main">
+	  <div style="text-align: right;">
+        <img alt="normal" width="250px" height="" src="/images/t1.png"/>
+      </div>  
+      <div class="wall-title"></div>
+      <div class="wall-subtitle"></div>
+      <div class="wall-description">看清一个事实：人是发展的，有些人快，有些人慢</div>
+    </div>
+    <div class="wall-bg">
+      <div class="wall-bg-index">
+        <div class="normal-eqt">
+          <img alt="normal" width="250px" height="" src="/images/t3.png"/>
+        </div>
+        <canvas width="400" height="400" id=""></canvas>
+        <div class="motto">举头望明月，低头心悲凉</div>
+        <div class="poem">
           
-  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
-
-
-          <span class="post-date">2025-02-26</span>
         </div>
       </div>
-      
-      <div class="post-content__body">
-        
-          <div class="post-gallery">
-            
-          </div>
-        
-        <!-- toc -->
-<ul>
-<li><a href="#编辑距离">编辑距离</a></li>
-<li><a href="#最小编辑距离">最小编辑距离</a></li>
-<li><a href="#参考链接">参考链接</a></li>
-</ul>
-<!-- tocstop -->
-<p>最小编辑距离旨在定义两个字符串之间的相似度。</p>
-<h1><span id="编辑距离">编辑距离</span></h1>
-<figure>
-<img src="/images/2025/02/26/df82d3b0-f3e8-11ef-a53d-516108227740.png" alt="5e5afdda16b50a58aad923b4b513bd89.png">
-<figcaption aria-hidden="true">5e5afdda16b50a58aad923b4b513bd89.png</figcaption>
-</figure>
-<p>从 intention 到 execution 需要 1 次删除，3 次替换，和 1 次插入。</p>
-<p>如果我们把三种操作的代价都记为 1 ，则其编辑距离为 5。</p>
-<p>除此之外还有一种计算方法将替换的记为
-2（即一次删除和一次插入），此时的总距离为 8。</p>
-<h1><span id="最小编辑距离">最小编辑距离</span></h1>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">minDistance</span><span class="hljs-params">(string word1, string word2)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = word<span class="hljs-number">1.</span><span class="hljs-built_in">size</span>(),m = word<span class="hljs-number">2.</span><span class="hljs-built_in">size</span>();<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">dp</span>(n<span class="hljs-number">+1</span>, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(m<span class="hljs-number">+1</span>));<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;i &lt;= n; ++i) dp[i][<span class="hljs-number">0</span>] =  i;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;j &lt;= m; ++j) dp[<span class="hljs-number">0</span>][j] =  j;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;i&lt;=n;++i)&#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>;j&lt;=m;++j)&#123;<br>                <span class="hljs-keyword">if</span>(word1[i<span class="hljs-number">-1</span>] == word2[j<span class="hljs-number">-1</span>])<br>                    dp[i][j] = dp[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-1</span>];<br>                <span class="hljs-keyword">else</span><br>                    dp[i][j] = <span class="hljs-number">1</span> +<span class="hljs-built_in">min</span>(dp[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-1</span>],<span class="hljs-built_in">min</span>(dp[i][j<span class="hljs-number">-1</span>],dp[i<span class="hljs-number">-1</span>][j]));<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp[n][m];<br>    &#125;<br>&#125;;<br><br></code></pre></td></tr></table></figure>
-<p><code>dp[i][j]</code> 代表 <code>word1</code> 中前 <code>i</code>
-个字符，变换到 <code>word2</code> 中前 <code>j</code>
-个字符，最短需要操作的次数。</p>
-<p>需要考虑 <code>word1</code> 或 <code>word2</code>
-一个字母都没有，即全增加/删除的情况，所以预留 <code>dp[0][j]</code> 和
-<code>dp[i][0]</code>。也就是图中左边的圆圈被划了一线的那个。</p>
-<figure>
-<img src="/images/2025/02/26/ec4bd650-f3e8-11ef-a53d-516108227740.png" alt="image20250226093515582.png">
-<figcaption aria-hidden="true">image20250226093515582.png</figcaption>
-</figure>
-<p>如果两个字符的最后一个字符相等，那么接下来就只需要考虑 [i-1]
-前面的字符 和 [j-1] 前面的字符的高度相似性。</p>
-<p>由于没有进行任何插入，删除，替换中的一个，不要进行距离加 1
-操作。直接赋值就可以：<code>dp[i][j] = dp[i-1][j-1]</code></p>
-<figure>
-<img src="/images/2025/02/26/f0c21c30-f3e8-11ef-a53d-516108227740.png" alt="image20250226101851345.png">
-<figcaption aria-hidden="true">image20250226101851345.png</figcaption>
-</figure>
-<p>如果当前两个单词的字符不相等，那就要进行插入，删除，替换中的一个，求三个操作的最小值，然后
-+ 1 即可。</p>
-<p><code>dp[i-1][j-1]</code>：替换之后，s1 的 x 变为 y，s1 和 s2
-的最后一个字符就相等了，接下来就需要考虑 [i-1] 前面的字符 和 [j-1]
-前面的字符的高度相似性</p>
-<figure>
-<img src="/images/2025/02/26/f6066070-f3e8-11ef-a53d-516108227740.png" alt="image20250226100755272.png">
-<figcaption aria-hidden="true">image20250226100755272.png</figcaption>
-</figure>
-<p><code>dp[i][j-1]</code>：插入，在 s1 的 末尾添加 y 字符，s1 和 s2
-的最后一个字符就相等了，接下来就需要考虑 [i] 前面的字符 和 [j - 1]
-前面的字符的高度相似性</p>
-<figure>
-<img src="/images/2025/02/26/f9ba8ed0-f3e8-11ef-a53d-516108227740.png" alt="image20250226101447007.png">
-<figcaption aria-hidden="true">image20250226101447007.png</figcaption>
-</figure>
-<p><code>dp[i-1][j]</code>：删除，把 s1 的 x 字符删除，接下来就需要考虑
-[i-1] 前面的字符 和 [j] 前面的字符的高度相似性</p>
-<figure>
-<img src="/images/2025/02/26/fd593960-f3e8-11ef-a53d-516108227740.png" alt="image20250226101305809.png">
-<figcaption aria-hidden="true">image20250226101305809.png</figcaption>
-</figure>
-<h1><span id="参考链接">参考链接</span></h1>
-<p>https://www.cnblogs.com/RioTian/p/12640881.html</p>
-<p>https://www.bilibili.com/video/BV1sA411B73r/?spm_id_from=333.880.my_history.page.click</p>
-
-      </div>
-	<div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
-  </div>  
     </div>
-    
-      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
-      <script>
-        if (window.mermaid) {
-          mermaid.initialize({"startOnload":true});
-        }
-      </script>
-    
-  </article>
-  <div class="post__foot">
-    
-      <div class="like-author">
-  <input type="checkbox" id="likeCode" />
-  <div class="author-face">
-    <img height="100px"
-         width="100px"
-         id="front-face"
-         alt="author face"
-         src="/images/logo.png" />
-    <img height="100px"
-         width="100px"
-         id="back-face"
-         alt="like code"
-         src="/images/pay.jpg" />
   </div>
-  <div class="like-text">“给作者倒杯卡布奇诺”</div>
-  <label for="likeCode" class="like-btn">
-    <svg viewBox="0 0 1024 1024"
-         width="20px"
-         style="margin-right: 10px"
-         height="20px">
-      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
-    </svg>
-    喜欢作者
-  </label>
-</div>
-
-    
-    <div class="post-nav">
-  
-    <a class="post-nav-item-left" href="/posts/deb2b869.html">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
+  <div class="about">
+    <div class="about-photo"
+         style="background-image: url(/images/about.jpg)"></div>
+    <div class="about-text">
+      <div class="about-title">
+        
+          <div class="matts">关</div>
+        
+          <div class="matts">于</div>
+        
       </div>
-      <div>读取磁盘文件的整个过程</div>
-    </a>
-  
-  <div class="vhr"></div>
-  
-    <a class="post-nav-item-right" href="/posts/830cb3cd.html">
-      <div class="text-align">
-        <span class="text-small">下一篇</span>
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             transform="scale(-1,-1)"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
+      <div class="about-detail">
+        <div class="about-text-p">
+          
+            
+              有种体验总被反复证明
+              <br/>
+            
+          
+            
+              带来希望之后，失望早已附着在
+              <br/>
+            
+          
+            
+              迟早要被揭穿，迟早
+              <br/>
+            
+          
+            
+              直到有天，失去她，我才弄明白
+              <br/>
+            
+          
+            
+              喜欢一个人的好，爱一个人的不足
+              <br/>
+            
+          
+        </div>
       </div>
-      编写线程安全的代码
-    </a>
+    </div>
+  </div>
   
-</div>
-
-    
-      <div class="related-post">
-  <div class="related__head">
-  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
-
-</div>
-  <div class="realated__body">
-    
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\83ace12e.html" title="call_once 和 once_flag" rel="bookmark">call_once 和 once_flag</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7d6c0c8.html" title="为什么子类需要调用父类的构造函数 ？" rel="bookmark">为什么子类需要调用父类的构造函数 ？</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\830cb3cd.html" title="编写线程安全的代码" rel="bookmark">编写线程安全的代码</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
-    
-  </div>
-</div>
-
-    
-    
-      <div id="gitalk-container"></div>
-    
-  </div>
+    <div class="timeline">
+      <div class="timeline-head">
+        <div class="title">时间线</div>
+        <div class="radio-wrapper">
+          
+            <div class="radio">
+              <input id="radio-article"
+                     type="checkbox"
+                     />
+              <label class="radio-skin--article" for="radio-article"></label>
+            </div>
+          
+            <div class="radio">
+              <input id="radio-apps"
+                     type="checkbox"
+                     />
+              <label class="radio-skin--apps" for="radio-apps"></label>
+            </div>
+          
+            <div class="radio">
+              <input id="radio-event"
+                     type="checkbox"
+                     checked/>
+              <label class="radio-skin--event" for="radio-event"></label>
+            </div>
+          
+        </div>
+      </div>
+      <div class="timeline-body">
+        <div class="timeline-item-first">
+          <div class="line-anchor line-anchor--now"></div>
+        </div>
+        <div class="timeline-list" id="timeline-list"></div>
+        <div class="timeline-item-last">
+          <div class="line-anchor line-anchor--end"></div>
+        </div>
+      </div>
+    </div>
+  
 
     </div>
     <div class="foot">
@@ -862,14 +789,189 @@
     
     <script src="/js/copy-code.js"></script>
     
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script type="text/javascript">
-  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
-  let title = location.pathname.substr(0, 50); 
-  param.id = title
-  const gitalk = new Gitalk(param)
-  gitalk.render('gitalk-container')
+  <script type="text/javascript">
+  function HeartCurve(w, h) {
+    this.w = w;
+    this.h = h;
+    this.a = undefined;
+    this.ctx = undefined;
+    this.deg = 0;
+    this.speed = 0.4;
+    this.isPause = false;
+    this.init();
+  }
+  HeartCurve.prototype.init = function () {
+    const {
+      w,
+      h
+    } = this;
+    const canvas = document.querySelector('#heart-curve');
+    if (!canvas) throw Error('no canvas element!');
+
+    this.ctx = canvas.getContext('2d');
+    this.ctx.translate(2 * w / 3, h / 2);
+    this.ctx.lineJoin = 'round';
+    this.a = w / 6.2;
+    this.id = null;
+    return this;
+  };
+  HeartCurve.prototype._drawAxis = function () {
+    const {
+      ctx,
+      w,
+      h
+    } = this;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#999";
+    ctx.beginPath();
+    ctx.moveTo(-w * 2 / 3, 0);
+    ctx.lineTo(w / 3, 0);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, -h * 0.48);
+    ctx.lineTo(0, h * 0.48);
+    ctx.stroke();
+  };
+  HeartCurve.prototype._drawCure = function () {
+    const {
+      ctx,
+      a
+    } = this;
+    ctx.beginPath();
+    let x, y, deg = 0;
+    ctx.moveTo(0, 0);
+    ctx.strokeStyle = "#ff0000";
+    while (deg <= 360) {
+      const theta = deg / 180 * Math.PI;
+      r = 2 * a * (1 - Math.cos(theta));
+      x = r * Math.cos(theta);
+      y = r * Math.sin(theta);
+      ctx.lineTo(x, y);
+      deg++;
+    }
+    ctx.stroke();
+  };
+  HeartCurve.prototype.spin = function () {
+    let {
+      a,
+      w,
+      h,
+      deg,
+      ctx
+    } = this;
+    if (deg >= 360) deg = 0;
+
+    ctx.clearRect(-w / 3 * 2, -h / 2, w, h);
+    const theta = deg / 180 * Math.PI;
+    this._drawAxis();
+    ctx.lineWidth = 2;
+    this._drawCure();
+    ctx.strokeStyle = "#000";
+    ctx.beginPath();
+    ctx.arc(-a, 0, a, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(2 * a * Math.cos(theta) - a, 2 * a * Math.sin(theta), a, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.beginPath();
+    let r = 2 * a * (1 - Math.cos(theta));
+    let x = r * Math.cos(theta);
+    let y = r * Math.sin(theta);
+    ctx.arc(x, y, 3, 0, 2 * Math.PI);
+    ctx.fill();
+    if (this.isPause) return;
+
+    this.deg = deg + this.speed;
+    this.id = window.requestAnimationFrame(this.spin.bind(this));
+  };
+  HeartCurve.prototype.pause = function () {
+    this.isPause = true;
+    if (window.cancelAnimationFrame) {
+      window.cancelAnimationFrame(this.id);
+    }
+  };
+  HeartCurve.prototype.resume = function () {
+    this.isPause = false;
+    this.spin();
+  };
+
+  (function () {
+    const heartCurve = new HeartCurve(400, 400);
+    heartCurve.spin();
+    mobileAdjust(window.matchMedia("(hover:none"));
+    window.matchMedia("(hover:none)").addListener(mobileAdjust);
+
+    function mobileAdjust(media) {
+      const wallEl = document.querySelector('#wall-main')
+      if (!media.matches) {
+        heartCurve.pause();
+        wallEl.addEventListener('mouseenter', () => {
+          console.log('resume');
+          heartCurve.resume();
+        });
+        wallEl.addEventListener('mouseleave', () => {
+          console.log('pause');
+          heartCurve.pause();
+        });
+      }
+    }
+  })();
 </script>
+  
+  
+  <script type="text/javascript">
+    const timelineData = {"types":["article","apps","event"],"posts":[{"title":"为思想找到一片空间","path":"/posts/baa9374.html","icon":"/images/icon/icon-event.svg","type":"event","date":"2025-01-21"}]}
+    const {types, posts} = timelineData
+    listEl = document.querySelector("#timeline-list");
+
+    elRefs = getElRefs(types)
+    bindListener(types, elRefs)
+
+    setTimeout(init.bind(this, types, elRefs))
+
+    function getElRefs(types) {
+      return types.map(type => document.querySelector(`#radio-${type}`))
+    }
+
+    function bindListener(names, els) {
+      names.map((name, i) => els[i].addEventListener('change', e => updateList(name, e.target.checked)))
+    }
+
+    function updateList(type, value) {
+      listDom
+        .filter(line => line.type === type)
+        .forEach(line => {
+          line.el.className = line
+            .el
+            .className
+            .replace(
+              /(--hidden)?$/, value
+              ? ""
+              : "--hidden");
+        });
+    }
+
+    const listDom = posts.map(t => getLine(t));
+    listEl.append(...listDom.map(i => i.el));
+
+    function getLine(data) {
+      const item = document.createElement("DIV");
+      item.className = `timeline-item-${data.type} timeline-item--hidden`;
+      item.innerHTML = `
+                          <div class="line-date">
+                          <div class="line-date-tag">${data.date}</div></div>
+                          <div class="line-anchor"></div>
+                          <div class="line-title">
+                              <img class="text-icon" src="${data.icon}" /><a class="timeline-post" href="${data.path}">${data.title}</a>
+                          </div>
+                          `;
+      return {el: item, type: data.type};
+    };
+
+    function init(names, els) {
+      names.map((name, i) => updateList(name, els[i].checked))
+    }
+  </script>
 
   
 

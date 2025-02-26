@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        LFU 和 LRU 内存淘汰策略 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/OD">华为OD真题</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">LFU 和 LRU 内存淘汰策略</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+
+
+          <span class="post-date">2025-02-26</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#lruleast-recently-used-内存淘汰">LRU（Least Recently
+Used） 内存淘汰</a></li>
+<li><a href="#lfu-least-frequently-used内存淘汰">LFU （Least Frequently
+Used）内存淘汰</a></li>
+<li><a href="#lru缓存设计">LRU缓存设计</a>
+<ul>
+<li><a href="#公共lru缓存">公共LRU缓存</a></li>
+<li><a href="#私有lru缓存公共lru缓存">私有LRU缓存+公共LRU缓存</a></li>
+<li><a href="#更新和同步分离">更新和同步分离</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="lruleast-recently-used内存淘汰">LRU（Least Recently Used）
+内存淘汰</span></h1>
+<p>首先淘汰最长时间未被使用的页面。</p>
+<figure>
+<img src="/images/2025/02/26/ba243720-f43e-11ef-bfe7-c1c71ee325e4.png" alt="db36af13a4544f63947e5c7aa4d4cdac.png">
+<figcaption aria-hidden="true">db36af13a4544f63947e5c7aa4d4cdac.png</figcaption>
+</figure>
+<p>实现代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;list&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unordered_map&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;optional&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdexcept&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">LRUCache</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">LRUCache</span><span class="hljs-params">(<span class="hljs-type">int</span> capacity)</span> : capacity_(capacity) &#123;</span><br>        <span class="hljs-keyword">if</span> (capacity_ &lt;= <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-built_in">invalid_argument</span>(<span class="hljs-string">&quot;Capacity must be greater than 0&quot;</span>);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function">optional&lt;string&gt; <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; key)</span> </span>&#123;<br>        <span class="hljs-keyword">auto</span> it = findUMap_.<span class="hljs-built_in">find</span>(key);<br>        <span class="hljs-keyword">if</span> (it != findUMap_.<span class="hljs-built_in">end</span>()) &#123;<br>            <span class="hljs-comment">// 更新最近使用位置</span><br>            dataList_.<span class="hljs-built_in">splice</span>(dataList_.<span class="hljs-built_in">begin</span>(), dataList_, it-&gt;second);<br>            <span class="hljs-keyword">return</span> it-&gt;second-&gt;second;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullopt</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">put</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; key, <span class="hljs-type">const</span> string&amp; val)</span> </span>&#123;<br>        <span class="hljs-keyword">auto</span> it = findUMap_.<span class="hljs-built_in">find</span>(key);<br>        <span class="hljs-keyword">if</span> (it != findUMap_.<span class="hljs-built_in">end</span>()) &#123;<br>            <span class="hljs-comment">// 更新数据及位置</span><br>            it-&gt;second-&gt;second = val;<br>            dataList_.<span class="hljs-built_in">splice</span>(dataList_.<span class="hljs-built_in">begin</span>(), dataList_, it-&gt;second);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br><br>        <span class="hljs-comment">// 淘汰逻辑</span><br>        <span class="hljs-keyword">if</span> (dataList_.<span class="hljs-built_in">size</span>() &gt;= capacity_) &#123;<br>            <span class="hljs-keyword">auto</span>&amp; last = dataList_.<span class="hljs-built_in">back</span>();<br>            findUMap_.<span class="hljs-built_in">erase</span>(last.first);<br>            dataList_.<span class="hljs-built_in">pop_back</span>();<br>        &#125;<br><br>        <span class="hljs-comment">// 插入新数据</span><br>        dataList_.<span class="hljs-built_in">emplace_front</span>(key, val);<br>        findUMap_[key] = dataList_.<span class="hljs-built_in">begin</span>();<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">int</span> capacity_;<br>    list&lt;pair&lt;string, string&gt;&gt; dataList_;	<span class="hljs-comment">// key,value</span><br>    unordered_map&lt;string, list&lt;pair&lt;string, string&gt;&gt;::iterator&gt; findUMap_;	<span class="hljs-comment">// key,迭代器</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>关键说明：</p>
+<ul>
+<li>get 和 put 都会导致 缓存更新</li>
+<li>put 时，如果缓存中有数据，就更新数据，还要记得更新到链表头部</li>
+<li>unordered_map 存储 list 元素的迭代器，因为 splice
+操作的第三个参数需要迭代器，这样才能更新链表的记录</li>
+<li>splice
+第一个参数表示要移动到的位置，第三个参数表示要移动的元素位置（迭代器）</li>
+</ul>
+<h1><span id="lfu-least-frequentlyused内存淘汰">LFU （Least Frequently
+Used）内存淘汰</span></h1>
+<p>首先淘汰一定时期内被访问次数（频次）最少的页。</p>
+<p>因此，LFU 的实现会比 LRU
+麻烦一些，要给缓存中的元素额外添加一些信息。</p>
+<figure>
+<img src="/images/2025/02/26/c19e9540-f43e-11ef-bfe7-c1c71ee325e4.png" alt="94a2d253eec8f285c8d39443827ce8de.png">
+<figcaption aria-hidden="true">94a2d253eec8f285c8d39443827ce8de.png</figcaption>
+</figure>
+<p>代码实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unordered_map&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;list&gt;</span>	</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;set&gt;</span>	</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><br><span class="hljs-comment">// 缓存的节点信息</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span> &#123;<br>    <span class="hljs-type">int</span> key, val, freq;<br>    <span class="hljs-built_in">Node</span>(<span class="hljs-type">int</span> _key, <span class="hljs-type">int</span> _val, <span class="hljs-type">int</span> _freq) : <span class="hljs-built_in">key</span>(_key), <span class="hljs-built_in">val</span>(_val), <span class="hljs-built_in">freq</span>(_freq) &#123;&#125;<br>&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">LFUCache</span> &#123;<br>    <span class="hljs-type">int</span> minfreq, capacity;<br>    unordered_map&lt;<span class="hljs-type">int</span>, list&lt;Node&gt;::iterator&gt; cache_table;<br>    unordered_map&lt;<span class="hljs-type">int</span>, list&lt;Node&gt;&gt; freq_table;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> key)</span> </span>&#123;<br>		<span class="hljs-keyword">auto</span> it = cache_table.<span class="hljs-built_in">find</span>(key);<br>        list&lt;Node&gt;::iterator node = it-&gt;second;<br>        <span class="hljs-type">int</span> val = node-&gt;val, freq = node-&gt;freq;<br>        freq_table[freq].<span class="hljs-built_in">erase</span>(node);<br>        <span class="hljs-keyword">if</span> (freq_table[freq].<span class="hljs-built_in">size</span>() == <span class="hljs-number">0</span>) &#123;<br>            freq_table.<span class="hljs-built_in">erase</span>(freq);<br>            <span class="hljs-keyword">if</span> (minfreq == freq) minfreq += <span class="hljs-number">1</span>;<br>        &#125;<br>        freq_table[freq + <span class="hljs-number">1</span>].<span class="hljs-built_in">push_front</span>(<span class="hljs-built_in">Node</span>(key, val, freq + <span class="hljs-number">1</span>));<br>        cache_table[key] = freq_table[freq + <span class="hljs-number">1</span>].<span class="hljs-built_in">begin</span>();<br><br>        <span class="hljs-keyword">return</span> val;<br>    &#125;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">LFUCache</span>(<span class="hljs-type">int</span> _capacity) &#123;<br>        minfreq = <span class="hljs-number">0</span>;<br>        capacity = _capacity;<br>        cache_table.<span class="hljs-built_in">clear</span>();<br>        freq_table.<span class="hljs-built_in">clear</span>();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">int</span> key)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (capacity == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br><br>        <span class="hljs-keyword">auto</span> it = cache_table.<span class="hljs-built_in">find</span>(key);<br>        <span class="hljs-keyword">if</span> (it == cache_table.<span class="hljs-built_in">end</span>()) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">update</span>(key);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">put</span><span class="hljs-params">(<span class="hljs-type">int</span> key, <span class="hljs-type">int</span> value)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (capacity == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>;<br>        <span class="hljs-keyword">auto</span> it = cache_table.<span class="hljs-built_in">find</span>(key);<br>        <span class="hljs-keyword">if</span> (it == cache_table.<span class="hljs-built_in">end</span>()) &#123;<br>            <span class="hljs-comment">// 缓存已满，淘汰</span><br>            <span class="hljs-keyword">if</span> (cache_table.<span class="hljs-built_in">size</span>() == capacity) &#123;<br>                <span class="hljs-keyword">auto</span> it2 = freq_table[minfreq].<span class="hljs-built_in">back</span>();<br>                cache_table.<span class="hljs-built_in">erase</span>(it<span class="hljs-number">2.</span>key);<br>                freq_table[minfreq].<span class="hljs-built_in">pop_back</span>();<br>                <span class="hljs-keyword">if</span> (freq_table[minfreq].<span class="hljs-built_in">size</span>() == <span class="hljs-number">0</span>) &#123;<br>                    freq_table.<span class="hljs-built_in">erase</span>(minfreq);<br>                &#125;<br>            &#125;<br>            freq_table[<span class="hljs-number">1</span>].<span class="hljs-built_in">push_front</span>(<span class="hljs-built_in">Node</span>(key, value, <span class="hljs-number">1</span>));<br>            cache_table[key] = freq_table[<span class="hljs-number">1</span>].<span class="hljs-built_in">begin</span>();<br>            minfreq = <span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-keyword">else</span> &#123;<br>            list&lt;Node&gt;::iterator node = it-&gt;second;<br>			node-&gt;val = value;<br>			<span class="hljs-built_in">update</span>(key);<br>        &#125;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h1><span id="lru缓存设计">LRU缓存设计</span></h1>
+<h2><span id="公共lru缓存">公共LRU缓存</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LRU</span> &#123;<br>  <span class="hljs-keyword">using</span> cacheList = std::list&lt;std::pair&lt;std::string, std::unordered_set&lt;std::string&gt;&gt;&gt;;<br>  <span class="hljs-keyword">using</span> cacheMap = std::unordered_map&lt;std::string, cacheList::iterator&gt;;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-built_in">LRU</span>(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> capacity);<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">put</span><span class="hljs-params">(std::string key, std::string value)</span></span>;<br>  std::optional&lt;std::unordered_set&lt;std::string&gt;&gt; <span class="hljs-built_in">get</span>(std::string key);<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> m_capacity;<br>  cacheList m_cache;<br>  cacheMap m_map;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>多个线程加锁访问主线程中的一个 LRU
+缓存，同时只能有一个线程能工作，其他线程等待锁，不能工作。</p>
+<figure>
+<img src="/images/2025/02/26/c87141b0-f43e-11ef-bfe7-c1c71ee325e4.png" alt="image20250226142413562.png">
+<figcaption aria-hidden="true">image20250226142413562.png</figcaption>
+</figure>
+<h2><span id="私有lru缓存公共lru缓存">私有LRU缓存+公共LRU缓存</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">using</span> cacheList = std::list&lt;std::unordered_map&lt;std::string, std::set&lt;std::string&gt;&gt;&gt;;<br><span class="hljs-keyword">using</span> cacheMap = std::unordered_map&lt;std::string, cacheList::iterator&gt;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">LRU</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">LRU</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> capacity)</span></span>;<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">put</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; key,<span class="hljs-type">const</span> std::set&lt;std::string&gt;&amp; value)</span></span>;<br>  std::optional&lt;std::set&lt;std::string&gt;&gt; <span class="hljs-built_in">get</span>(<span class="hljs-type">const</span> std::string&amp; key);<br>  <span class="hljs-function">cacheList <span class="hljs-title">getPending</span><span class="hljs-params">()</span></span>; <span class="hljs-comment">// cacheManager 需要</span><br>  <span class="hljs-function">cacheList <span class="hljs-title">getCache</span><span class="hljs-params">()</span></span>;<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearPending</span><span class="hljs-params">()</span></span>;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearAll</span><span class="hljs-params">()</span></span>;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> m_capacity;<br>  cacheList m_cache;<br>  cacheList m_pending;	<span class="hljs-comment">// 增量缓存</span><br>  cacheMap m_map;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>每个线程独有一个自己的 LRU 缓存，主线程中有一个公共的 LRU
+缓存，需要考虑缓存的一致性问题。</p>
+<figure>
+<img src="/images/2025/02/26/cd83eea0-f43e-11ef-bfe7-c1c71ee325e4.png" alt="image20250226143126729.png">
+<figcaption aria-hidden="true">image20250226143126729.png</figcaption>
+</figure>
+<p>这个时候是初始状态，各个 LRU
+缓存中都没有记录，因此所有请求都不会命中缓存，不管你是在哪个线程下。</p>
+<p>因此，在没有同步之前（定时器定时同步），所有的请求数据会先去读磁盘，然后缓存到
+Redis，再缓存到 pending 中。</p>
+<figure>
+<img src="/images/2025/02/26/d20bc0b0-f43e-11ef-bfe7-c1c71ee325e4.png" alt="image20250226150717267.png">
+<figcaption aria-hidden="true">image20250226150717267.png</figcaption>
+</figure>
+<p>过一段时间，定时器就会触发同步缓存的回调。逐一把各个线程中 LRU 内部的
+pending 缓存同步到公共 LRU，最后再把公共 LRU 缓存逐一同步给各个线程的
+LRU 缓存，并清空 pending 缓存。</p>
+<p>同步期间，无法对外提供搜索服务，因为所有的 LRU
+缓存都被加锁了，直到收集完所有 pending 并最终同步到所有子线程的 LRU
+缓存中，才能提供服务。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">TcpServer::synWebPage</span><span class="hljs-params">()</span> </span>&#123;<br>  <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_WMtx)</span></span>;<br>  <span class="hljs-comment">// 收集 pending</span><br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;webpage : m_web_page_server) &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;开始收集&quot;</span> &lt;&lt; std::endl;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;item : webpage-&gt;<span class="hljs-built_in">getPending</span>()) &#123;	<span class="hljs-comment">// getPending 函数内部加锁</span><br>      <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;page_set : item) &#123;<br>        m_Wlru-&gt;<span class="hljs-built_in">put</span>(page_set.first, page_set.second);<br>      &#125;<br>    &#125;<br>    webpage-&gt;m_lru-&gt;<span class="hljs-built_in">clearPending</span>();<br>  &#125;<br><br>  <span class="hljs-comment">// 同步 LRU</span><br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;webpage : m_web_page_server) &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;开始同步&quot;</span> &lt;&lt; std::endl;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;item : m_Wlru-&gt;<span class="hljs-built_in">getCache</span>()) &#123;	    <span class="hljs-comment">// getCache 函数内部加锁</span><br>      <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;word_set : item) &#123;<br>        webpage-&gt;m_lru-&gt;<span class="hljs-built_in">put</span>(word_set.first, word_set.second);<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>流程如下：</p>
+<p>加锁同步 pending</p>
+<figure>
+<img src="/images/2025/02/26/d81ccad0-f43e-11ef-bfe7-c1c71ee325e4.png" alt="image20250226151836971.png">
+<figcaption aria-hidden="true">image20250226151836971.png</figcaption>
+</figure>
+<p>收集完所有线程的 pending 缓存（增量缓存），加锁同步给所有线程，并清空
+pending，用于以后继续记录后面没有命中的增量缓存。</p>
+<figure>
+<img src="/images/2025/02/26/dc815d70-f43e-11ef-bfe7-c1c71ee325e4.png" alt="image20250226152534119.png">
+<figcaption aria-hidden="true">image20250226152534119.png</figcaption>
+</figure>
+<p>明显看到，同步期间，我们是无法对外提供服务的，有必要优化这个问题。</p>
+<h2><span id="更新和同步分离">更新和同步分离</span></h2>
+<p>从现在开始一个线程 有两个 LRU，LRU 用于对外提供服务，LRU‘
+用于后续同步缓存给公共 LRU，并再次同步回来。</p>
+<p>然后把 LRU 和 LRU’
+进行交换即可，在交换期间需要进行短暂的加锁，禁止对外提供服务的时间大大缩减。</p>
+<figure>
+<img src="/images/2025/02/26/e2cdc2e0-f43e-11ef-bfe7-c1c71ee325e4.png" alt="image20250226154805198.png">
+<figcaption aria-hidden="true">image20250226154805198.png</figcaption>
+</figure>
+<p>开始交换 LRU 和
+LRU’，期间要加锁，但这个过程很快，因为只是交换两个指针的指向。</p>
+<figure>
+<img src="/images/2025/02/26/e77c56d0-f43e-11ef-bfe7-c1c71ee325e4.png" alt="image20250226155740419.png">
+<figcaption aria-hidden="true">image20250226155740419.png</figcaption>
+</figure>
+<p>明显看到有个问题，就是会有一次缓存失效的问题。你看第一次交换之后，所有
+LRU 都是空的，得等到下一次交换的时候才能命中缓存。</p>
+<figure>
+<img src="/images/2025/02/26/ec3041f0-f43e-11ef-bfe7-c1c71ee325e4.png" alt="image20250226160733258.png">
+<figcaption aria-hidden="true">image20250226160733258.png</figcaption>
+</figure>
+<p>又来到
+交换的时候，这一次交换会让之前的缓存得以有效。并且在下一次同步的时候，哪怕是交换，之前的缓存依旧有效（只要没有超过大小，导致被淘汰）。</p>
+<figure>
+<img src="/images/2025/02/26/f074c970-f43e-11ef-bfe7-c1c71ee325e4.png" alt="image20250226193218142.png">
+<figcaption aria-hidden="true">image20250226193218142.png</figcaption>
+</figure>
+<p>由此可见，这种方式虽然性能有所提升，但是最近一次的 pending
+缓存会在交换之后无法被命中，因为要先去同步到公共
+LRU，才能有机会同步过来。</p>
+<p>但是往后都会有效，只要 LRU 缓存没有触发淘汰机制。</p>
+<figure>
+<img src="/images/2025/02/26/f3fbf460-f43e-11ef-bfe7-c1c71ee325e4.png" alt="image20250226193732291.png">
+<figcaption aria-hidden="true">image20250226193732291.png</figcaption>
+</figure>
+
+      </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/deb2b869.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      读取磁盘文件的整个过程
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\22a22b79.html" title="三大经典排序算法" rel="bookmark">三大经典排序算法</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ec6973f6.html" title="基于二叉搜索树实现Map容器的基本操作" rel="bookmark">基于二叉搜索树实现Map容器的基本操作</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\d8d692f8.html" title="实现海量数据快速查找之哈希表" rel="bookmark">实现海量数据快速查找之哈希表</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cloud.siliconflow.cn/i/lvbqskg1">siliconflow免费AI推理服务（点击注册，你有我有）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>

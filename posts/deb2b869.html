@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        最小编辑距离 | 
+        读取磁盘文件的整个过程 | 
       
     </title>
     <meta name="description" content="" />
@@ -159,10 +159,10 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">最小编辑距离</div>
+        <div class="post-title">读取磁盘文件的整个过程</div>
         <div class="post-info">
           
-  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a><a href="/tags/OS/" class="post-tag">#OS</a>
 
 
           <span class="post-date">2025-02-26</span>
@@ -177,66 +177,39 @@
         
         <!-- toc -->
 <ul>
-<li><a href="#编辑距离">编辑距离</a></li>
-<li><a href="#最小编辑距离">最小编辑距离</a></li>
-<li><a href="#参考链接">参考链接</a></li>
+<li><a href="#理解-io">理解 I/O</a></li>
+<li><a href="#执行io时底层都发生了什么">执行I/O时底层都发生了什么</a></li>
 </ul>
 <!-- tocstop -->
-<p>最小编辑距离旨在定义两个字符串之间的相似度。</p>
-<h1><span id="编辑距离">编辑距离</span></h1>
+<h1><span id="理解-io">理解 I/O</span></h1>
+<p>I/O 就是数据的拷贝，再无其它。</p>
+<p>内存 与 外部设备 之间不嫌麻烦的来回拷贝数据就是Input and Output：</p>
+<p><strong>输入（Input）</strong>：从外部设备接收数据到内存中，例如从键盘输入文字，从磁盘读取文件数据，网络中主机发过来的消息。</p>
+<p><strong>输出（Output）</strong>：将内存里面的数据发送到外部设备，例如将数据显示在屏幕上，或将数据写入到文件中，发送信息到网络中的主机。</p>
+<h1><span id="执行io时底层都发生了什么">执行I/O时底层都发生了什么</span></h1>
+<p>进程 A 从磁盘中拷贝文件到内存中，当前进程 A
+就会<strong>阻塞</strong>，进入到阻塞队列中，等待 I/O
+操作完成才可以继续往下执行指令。</p>
+<p>虽然这时进程 A
+已经被<strong>暂停执行</strong>了，但这并不妨碍磁盘向内存中拷贝数据，因为这件事情并不是
+CPU 来做的，而是让 <strong>DMA 来做</strong>。</p>
+<p>进程 A 阻塞期间，操作系统会保存当前进程 A 的上下文信息，并把 CPU
+资源调度分配给就绪队列中的其他进程（比方说进程 B)。</p>
+<p>等到 进程A 的 I/O
+操作完成之后，<strong>触发中断</strong>来通知操作系统。操作系统就把阻塞队列中的进程
+A 移动到 就绪队列中去，尽管这个时候进程 A 不能立即获得 CPU
+资源，因为这是一种公平策略，就绪队列中还有其他进程也在等待调度。</p>
+<p>进程 B
+还在执行，时间片耗完之后也加入到就绪队列中，等待下一次被调度。</p>
+<p>这个时候我们假定就绪队列中只有进程A 和 进程
+B，那么从前面的操作来看，进程A 排在 进程 B 之前，因此这个时候 CPU 调度
+进程 A，进程 A 也知道
+数据已经从磁盘中拷贝文件到内存中，恢复上下文信息，继续往下执行指令。</p>
 <figure>
-<img src="/images/2025/02/26/df82d3b0-f3e8-11ef-a53d-516108227740.png" alt="5e5afdda16b50a58aad923b4b513bd89.png">
-<figcaption aria-hidden="true">5e5afdda16b50a58aad923b4b513bd89.png</figcaption>
+<img src="/images/2025/02/26/4c4058f0-f3f4-11ef-bfee-7b5c84daf73e.png" alt="b8740a904a50d44a7fbdd6a64e96828f.png">
+<figcaption aria-hidden="true">b8740a904a50d44a7fbdd6a64e96828f.png</figcaption>
 </figure>
-<p>从 intention 到 execution 需要 1 次删除，3 次替换，和 1 次插入。</p>
-<p>如果我们把三种操作的代价都记为 1 ，则其编辑距离为 5。</p>
-<p>除此之外还有一种计算方法将替换的记为
-2（即一次删除和一次插入），此时的总距离为 8。</p>
-<h1><span id="最小编辑距离">最小编辑距离</span></h1>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">minDistance</span><span class="hljs-params">(string word1, string word2)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = word<span class="hljs-number">1.</span><span class="hljs-built_in">size</span>(),m = word<span class="hljs-number">2.</span><span class="hljs-built_in">size</span>();<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">dp</span>(n<span class="hljs-number">+1</span>, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(m<span class="hljs-number">+1</span>));<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;i &lt;= n; ++i) dp[i][<span class="hljs-number">0</span>] =  i;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;j &lt;= m; ++j) dp[<span class="hljs-number">0</span>][j] =  j;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;i&lt;=n;++i)&#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>;j&lt;=m;++j)&#123;<br>                <span class="hljs-keyword">if</span>(word1[i<span class="hljs-number">-1</span>] == word2[j<span class="hljs-number">-1</span>])<br>                    dp[i][j] = dp[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-1</span>];<br>                <span class="hljs-keyword">else</span><br>                    dp[i][j] = <span class="hljs-number">1</span> +<span class="hljs-built_in">min</span>(dp[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-1</span>],<span class="hljs-built_in">min</span>(dp[i][j<span class="hljs-number">-1</span>],dp[i<span class="hljs-number">-1</span>][j]));<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp[n][m];<br>    &#125;<br>&#125;;<br><br></code></pre></td></tr></table></figure>
-<p><code>dp[i][j]</code> 代表 <code>word1</code> 中前 <code>i</code>
-个字符，变换到 <code>word2</code> 中前 <code>j</code>
-个字符，最短需要操作的次数。</p>
-<p>需要考虑 <code>word1</code> 或 <code>word2</code>
-一个字母都没有，即全增加/删除的情况，所以预留 <code>dp[0][j]</code> 和
-<code>dp[i][0]</code>。也就是图中左边的圆圈被划了一线的那个。</p>
-<figure>
-<img src="/images/2025/02/26/ec4bd650-f3e8-11ef-a53d-516108227740.png" alt="image20250226093515582.png">
-<figcaption aria-hidden="true">image20250226093515582.png</figcaption>
-</figure>
-<p>如果两个字符的最后一个字符相等，那么接下来就只需要考虑 [i-1]
-前面的字符 和 [j-1] 前面的字符的高度相似性。</p>
-<p>由于没有进行任何插入，删除，替换中的一个，不要进行距离加 1
-操作。直接赋值就可以：<code>dp[i][j] = dp[i-1][j-1]</code></p>
-<figure>
-<img src="/images/2025/02/26/f0c21c30-f3e8-11ef-a53d-516108227740.png" alt="image20250226101851345.png">
-<figcaption aria-hidden="true">image20250226101851345.png</figcaption>
-</figure>
-<p>如果当前两个单词的字符不相等，那就要进行插入，删除，替换中的一个，求三个操作的最小值，然后
-+ 1 即可。</p>
-<p><code>dp[i-1][j-1]</code>：替换之后，s1 的 x 变为 y，s1 和 s2
-的最后一个字符就相等了，接下来就需要考虑 [i-1] 前面的字符 和 [j-1]
-前面的字符的高度相似性</p>
-<figure>
-<img src="/images/2025/02/26/f6066070-f3e8-11ef-a53d-516108227740.png" alt="image20250226100755272.png">
-<figcaption aria-hidden="true">image20250226100755272.png</figcaption>
-</figure>
-<p><code>dp[i][j-1]</code>：插入，在 s1 的 末尾添加 y 字符，s1 和 s2
-的最后一个字符就相等了，接下来就需要考虑 [i] 前面的字符 和 [j - 1]
-前面的字符的高度相似性</p>
-<figure>
-<img src="/images/2025/02/26/f9ba8ed0-f3e8-11ef-a53d-516108227740.png" alt="image20250226101447007.png">
-<figcaption aria-hidden="true">image20250226101447007.png</figcaption>
-</figure>
-<p><code>dp[i-1][j]</code>：删除，把 s1 的 x 字符删除，接下来就需要考虑
-[i-1] 前面的字符 和 [j] 前面的字符的高度相似性</p>
-<figure>
-<img src="/images/2025/02/26/fd593960-f3e8-11ef-a53d-516108227740.png" alt="image20250226101305809.png">
-<figcaption aria-hidden="true">image20250226101305809.png</figcaption>
-</figure>
-<h1><span id="参考链接">参考链接</span></h1>
-<p>https://www.cnblogs.com/RioTian/p/12640881.html</p>
-<p>https://www.bilibili.com/video/BV1sA411B73r/?spm_id_from=333.880.my_history.page.click</p>
+<p>我们现在谈论的就是图中硬件设备到内核空间的事情。</p>
 
       </div>
 	<div id="zan" class="clearfix">
@@ -285,7 +258,7 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/posts/deb2b869.html">
+    <a class="post-nav-item-left" href="/posts/6139a6a3.html">
       <div class="text-align">
         <svg t="1670570876164"
              class="icon"
@@ -296,12 +269,12 @@
         </svg>
         <span class="text-small">上一篇</span>
       </div>
-      <div>读取磁盘文件的整个过程</div>
+      <div>LFU 和 LRU 内存淘汰策略</div>
     </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/posts/830cb3cd.html">
+    <a class="post-nav-item-right" href="/posts/65e37d31.html">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -313,7 +286,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      编写线程安全的代码
+      最小编辑距离
     </a>
   
 </div>
@@ -321,7 +294,7 @@
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a><a href="/tags/OS/" class="post-tag">#OS</a>
 
 </div>
   <div class="realated__body">
