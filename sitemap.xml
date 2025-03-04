@@ -2,7 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://xiaoyangst.github.io/posts/6935a6f4.html</loc>
+    <loc>https://xiaoyangst.github.io/posts/7c71c6be.html</loc>
+    
+    <lastmod>2025-03-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xiaoyangst.github.io/posts/c364089f.html</loc>
     
     <lastmod>2025-03-04</lastmod>
     
@@ -13,7 +22,7 @@
   <url>
     <loc>https://xiaoyangst.github.io/posts/4849de5d.html</loc>
     
-    <lastmod>2025-03-02</lastmod>
+    <lastmod>2025-03-04</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -22,7 +31,16 @@
   <url>
     <loc>https://xiaoyangst.github.io/posts/9e140c4a.html</loc>
     
-    <lastmod>2025-02-28</lastmod>
+    <lastmod>2025-03-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xiaoyangst.github.io/posts/6935a6f4.html</loc>
+    
+    <lastmod>2025-03-04</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
