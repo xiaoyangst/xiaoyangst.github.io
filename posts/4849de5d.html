@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        Redis常用命令和应用场景 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/OD">华为OD真题</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">Redis常用命令和应用场景</div>
+        <div class="post-info">
+          
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+
+          <span class="post-date">2025-03-02</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#string">String</a>
+<ul>
+<li><a href="#命令">命令</a>
+<ul>
+<li><a href="#基本操作">基本操作</a></li>
+<li><a href="#过期和获取-ttl">过期和获取 TTL</a></li>
+<li><a href="#自增自减用于计数">自增/自减（用于计数）</a></li>
+<li><a href="#批量操作">批量操作</a></li>
+<li><a href="#追加和修改">追加和修改</a></li>
+</ul></li>
+<li><a href="#应用场景">应用场景</a>
+<ul>
+<li><a href="#用户登录管理场景">用户登录管理场景</a></li>
+<li><a href="#商品仓库管理">商品仓库管理</a></li>
+<li><a href="#计数器网站访问统计">计数器（网站访问统计）</a></li>
+<li><a href="#限流防止用户频繁操作">限流（防止用户频繁操作）</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#list支持下标操作">List（支持下标操作）</a>
+<ul>
+<li><a href="#命令-1">命令</a>
+<ul>
+<li><a href="#添加与删除元素">添加与删除元素</a></li>
+<li><a href="#获取列表元素">获取列表元素</a></li>
+<li><a href="#删除和修剪列表">删除和修剪列表</a></li>
+<li><a href="#阻塞操作适用于消息队列">阻塞操作（适用于消息队列）</a></li>
+<li><a href="#其他操作">其他操作</a></li>
+</ul></li>
+<li><a href="#应用场景-1">应用场景</a>
+<ul>
+<li><a href="#任务队列生产者-消费者模型">任务队列（生产者-消费者模型）</a></li>
+<li><a href="#实现点赞排行榜">实现点赞排行榜</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#set">Set</a>
+<ul>
+<li><a href="#命令-2">命令</a>
+<ul>
+<li><a href="#添加与删除元素-1">添加与删除元素</a></li>
+<li><a href="#查询集合元素">查询集合元素</a></li>
+<li><a href="#集合运算交集-并集-差集">集合运算（交集、并集、差集）</a></li>
+<li><a href="#其他操作-1">其他操作</a></li>
+</ul></li>
+<li><a href="#应用场景-2">应用场景</a>
+<ul>
+<li><a href="#用户兴趣标签管理">用户兴趣标签管理</a></li>
+<li><a href="#共同兴趣标签查询">共同兴趣标签查询</a></li>
+<li><a href="#网站访问记录">网站访问记录</a></li>
+<li><a href="#集合的联合操作">集合的联合操作</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#hash支持-value-为多个字段">Hash（支持 value
+为多个字段）</a>
+<ul>
+<li><a href="#命令-3">命令</a>
+<ul>
+<li><a href="#添加与修改字段">添加与修改字段</a></li>
+<li><a href="#获取字段值">获取字段值</a></li>
+<li><a href="#删除字段">删除字段</a></li>
+<li><a href="#统计字段">统计字段</a></li>
+<li><a href="#遍历与获取所有字段">遍历与获取所有字段</a></li>
+<li><a href="#数值操作">数值操作</a></li>
+<li><a href="#其他操作-2">其他操作</a></li>
+</ul></li>
+<li><a href="#应用场景-3">应用场景</a>
+<ul>
+<li><a href="#商品库存管理">商品库存管理</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#zset有序且支持范围操作">Zset（有序且支持范围操作）</a>
+<ul>
+<li><a href="#命令-4">命令</a>
+<ul>
+<li><a href="#添加与修改元素">添加与修改元素</a></li>
+<li><a href="#获取元素">获取元素</a></li>
+<li><a href="#按-score-进行范围查询">按 <code>score</code>
+进行范围查询</a></li>
+<li><a href="#删除元素">删除元素</a></li>
+<li><a href="#其他操作-3">其他操作</a></li>
+</ul></li>
+<li><a href="#应用场景-4">应用场景</a>
+<ul>
+<li><a href="#商品价格排序">商品价格排序</a></li>
+<li><a href="#文章点赞排行榜">文章点赞排行榜</a></li>
+<li><a href="#运动打卡排行榜">运动打卡排行榜</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#数据结构的选择策略">数据结构的选择策略</a>
+<ul>
+<li><a href="#string字符串">String（字符串）</a></li>
+<li><a href="#list列表">List（列表）</a></li>
+<li><a href="#set集合">Set（集合）</a></li>
+<li><a href="#sorted-set有序集合">Sorted Set（有序集合）</a></li>
+<li><a href="#hash哈希表">Hash（哈希表）</a></li>
+</ul></li>
+<li><a href="#命名策略">命名策略</a></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="string">String</span></h1>
+<h2><span id="命令">命令</span></h2>
+<h3><span id="基本操作">基本操作</span></h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 33%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SET key value</code></td>
+<td>设置键 <code>key</code> 的值为 <code>value</code></td>
+<td><code>SET name "Alice"</code></td>
+</tr>
+<tr>
+<td><code>GET key</code></td>
+<td>获取键 <code>key</code> 的值</td>
+<td><code>GET name</code> → <code>"Alice"</code></td>
+</tr>
+<tr>
+<td><code>DEL key</code></td>
+<td>删除键 <code>key</code></td>
+<td><code>DEL name</code></td>
+</tr>
+<tr>
+<td><code>EXISTS key</code></td>
+<td>判断 <code>key</code> 是否存在</td>
+<td><code>EXISTS name</code> → <code>1</code>（存在）</td>
+</tr>
+<tr>
+<td><code>EXPIRE key seconds</code></td>
+<td>设定 <code>key</code> 的过期时间</td>
+<td><code>EXPIRE name 10</code>（10秒后自动删除）</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="过期和获取-ttl">过期和获取 TTL</span></h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TTL key</code></td>
+<td>获取 <code>key</code> 剩余的过期时间（秒）</td>
+<td><code>TTL name</code></td>
+</tr>
+<tr>
+<td><code>PERSIST key</code></td>
+<td>移除 <code>key</code> 的过期时间</td>
+<td><code>PERSIST name</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="自增自减用于计数">自增/自减（用于计数）</span></h3>
+<table>
+<colgroup>
+<col style="width: 31%">
+<col style="width: 41%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INCR key</code></td>
+<td>将 <code>key</code> 的值自增 1</td>
+<td><code>INCR counter</code></td>
+</tr>
+<tr>
+<td><code>INCRBY key increment</code></td>
+<td>将 <code>key</code> 的值增加 <code>increment</code></td>
+<td><code>INCRBY counter 10</code></td>
+</tr>
+<tr>
+<td><code>DECR key</code></td>
+<td>将 <code>key</code> 的值自减 1</td>
+<td><code>DECR counter</code></td>
+</tr>
+<tr>
+<td><code>DECRBY key decrement</code></td>
+<td>将 <code>key</code> 的值减少 <code>decrement</code></td>
+<td><code>DECRBY counter 5</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="批量操作">批量操作</span></h3>
+<table>
+<colgroup>
+<col style="width: 43%">
+<col style="width: 32%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MSET key1 value1 key2 value2 ...</code></td>
+<td>一次设置多个键值对</td>
+<td><code>MSET k1 v1 k2 v2</code></td>
+</tr>
+<tr>
+<td><code>MGET key1 key2 ...</code></td>
+<td>获取多个键的值</td>
+<td><code>MGET k1 k2</code></td>
+</tr>
+<tr>
+<td><code>MSETNX key1 value1 key2 value2 ...</code></td>
+<td>仅当所有 <code>key</code> 不存在时设置</td>
+<td><code>MSETNX k3 v3 k4 v4</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="追加和修改">追加和修改</span></h3>
+<table>
+<colgroup>
+<col style="width: 32%">
+<col style="width: 35%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>APPEND key value</code></td>
+<td>追加 <code>value</code> 到 <code>key</code> 的末尾</td>
+<td><code>APPEND name " Bob"</code></td>
+</tr>
+<tr>
+<td><code>SETEX key seconds value</code></td>
+<td>设置 <code>key</code> 并指定秒级过期时间</td>
+<td><code>SETEX session 60 "data"</code></td>
+</tr>
+<tr>
+<td><code>SETNX key value</code></td>
+<td>仅当 <code>key</code> 不存在时设置值</td>
+<td><code>SETNX lock "locked"</code></td>
+</tr>
+<tr>
+<td><code>SETRANGE key offset value</code></td>
+<td>从 <code>offset</code> 位置起修改字符串</td>
+<td><code>SETRANGE mykey 6 "Redis"</code></td>
+</tr>
+<tr>
+<td><code>GETRANGE key start end</code></td>
+<td>获取子字符串（类似 <code>substr</code>）</td>
+<td><code>GETRANGE name 0 4</code></td>
+</tr>
+</tbody>
+</table>
+<h2><span id="应用场景">应用场景</span></h2>
+<h3><span id="用户登录管理场景">用户登录管理场景</span></h3>
+<p><strong>需求：</strong> 你正在实现一个用户管理系统，需要存储用户的
+Session（登录令牌）并设置过期时间。 <strong>练习：</strong></p>
+<ol type="1">
+<li>创建一个用户登录 Session，值为
+<code>"user_12345_logged_in"</code>，并设置 30 分钟过期</li>
+<li>查询该 Session 是否存在</li>
+<li>模拟用户访问系统，重置 Session 的过期时间为 30 分钟</li>
+<li>让 Session 永不过期</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">SET user:session &quot;user_12345_logged_in&quot; EX 1800  # 1. 设置 session 30 分钟过期<br>EXISTS user:session                              # 2. 检查 session 是否存在<br>EXPIRE user:session 1800                         # 3. 重新设置过期时间<br>PERSIST user:session                             # 4. 让 session 永不过期<br></code></pre></td></tr></table></figure>
+<h3><span id="商品仓库管理">商品仓库管理</span></h3>
+<p><strong>需求：</strong>
+你在实现一个电商系统，需要管理商品库存，每次用户购买时，库存减少。
+<strong>练习：</strong></p>
+<ol type="1">
+<li>创建一个商品库存（商品 ID 为 1001），库存数量为 <code>50</code></li>
+<li>用户购买 3 件商品，更新库存</li>
+<li>查询当前库存量</li>
+<li>商品卖完后，删除库存记录</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">SET stock:1001 50    # 1. 设置商品库存<br>DECRBY stock:1001 3  # 2. 用户购买 3 件，库存减少<br>GET stock:1001       # 3. 查询当前库存<br>DEL stock:1001       # 4. 删除库存记录（商品卖完）<br></code></pre></td></tr></table></figure>
+<h3><span id="计数器网站访问统计">计数器（网站访问统计）</span></h3>
+<p><strong>需求：</strong> 你在开发一个博客网站，需要统计文章的浏览量。
+<strong>练习：</strong></p>
+<ol type="1">
+<li>文章 ID 为 <code>2001</code>，初始化浏览次数为 <code>0</code></li>
+<li>模拟用户访问文章 3 次</li>
+<li>查询当前的浏览次数</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">SET views:2001 0   # 1. 初始化文章浏览量<br>INCR views:2001    # 2. 文章被访问 1 次<br>INCR views:2001    # 2.1 文章被访问 1 次<br>INCR views:2001    # 2.2 文章被访问 1 次<br>GET views:2001     # 3. 查询当前浏览次数<br></code></pre></td></tr></table></figure>
+<h3><span id="限流防止用户频繁操作">限流（防止用户频繁操作）</span></h3>
+<p><strong>需求：</strong> 你在开发一个 API，限制用户 <strong>1
+分钟内最多请求 3 次</strong>，超出则禁止访问。
+<strong>练习：</strong></p>
+<ol type="1">
+<li>用户 ID 为 <code>789</code>，请求 API，记录访问次数。</li>
+<li>检查用户的请求次数，若超过 <code>3</code> 次，则拒绝访问。</li>
+<li>设置该计数器 60 秒后自动过期。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">INCR user:limit:789   		# 1. 记录用户请求次数<br>GET user:limit:789   		# 2. 检查访问次数是否超过 3 次<br>EXPIRE user:limit:789 60   	 # 3. 设置 60 秒过期<br></code></pre></td></tr></table></figure>
+<h1><span id="list支持下标操作">List（支持下标操作）</span></h1>
+<h2><span id="命令">命令</span></h2>
+<h3><span id="添加与删除元素">添加与删除元素</span></h3>
+<table>
+<colgroup>
+<col style="width: 29%">
+<col style="width: 43%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LPUSH key value [value ...]</code></td>
+<td>从左侧插入一个或多个元素</td>
+<td><code>LPUSH mylist "a" "b" "c"</code></td>
+</tr>
+<tr>
+<td><code>RPUSH key value [value ...]</code></td>
+<td>从右侧插入一个或多个元素</td>
+<td><code>RPUSH mylist "x" "y" "z"</code></td>
+</tr>
+<tr>
+<td><code>LPOP key</code></td>
+<td>从左侧弹出一个元素</td>
+<td><code>LPOP mylist</code> → <code>"c"</code></td>
+</tr>
+<tr>
+<td><code>RPOP key</code></td>
+<td>从右侧弹出一个元素</td>
+<td><code>RPOP mylist</code> → <code>"z"</code></td>
+</tr>
+<tr>
+<td><code>LPUSHX key value</code></td>
+<td><strong>仅当 <code>key</code> 存在</strong>
+时，从左侧插入一个元素</td>
+<td><code>LPUSHX mylist "new"</code></td>
+</tr>
+<tr>
+<td><code>RPUSHX key value</code></td>
+<td><strong>仅当 <code>key</code> 存在</strong>
+时，从右侧插入一个元素</td>
+<td><code>RPUSHX mylist "end"</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="获取列表元素">获取列表元素</span></h3>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 54%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LRANGE key start stop</code></td>
+<td>获取列表指定范围的元素（索引从 <code>0</code> 开始，<code>-1</code>
+表示最后一个元素）</td>
+<td><code>LRANGE mylist 0 -1</code></td>
+</tr>
+<tr>
+<td><code>LLEN key</code></td>
+<td>获取列表长度</td>
+<td><code>LLEN mylist</code></td>
+</tr>
+<tr>
+<td><code>LINDEX key index</code></td>
+<td>获取索引 <code>index</code> 处的元素</td>
+<td><code>LINDEX mylist 2</code></td>
+</tr>
+<tr>
+<td><code>LSET key index value</code></td>
+<td>修改索引 <code>index</code> 处的值</td>
+<td><code>LSET mylist 1 "new_value"</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="删除和修剪列表">删除和修剪列表</span></h3>
+<table>
+<colgroup>
+<col style="width: 29%">
+<col style="width: 45%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LREM key count value</code></td>
+<td>删除 <code>count</code> 个值为 <code>value</code> 的元素</td>
+<td><code>LREM mylist 2 "a"</code></td>
+</tr>
+<tr>
+<td><code>LTRIM key start stop</code></td>
+<td><strong>保留指定范围内的元素</strong>，其余删除</td>
+<td><code>LTRIM mylist 1 -1</code></td>
+</tr>
+<tr>
+<td><code>DEL key</code></td>
+<td>删除整个列表</td>
+<td><code>DEL mylist</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="阻塞操作适用于消息队列">阻塞操作（适用于消息队列）</span></h3>
+<table>
+<colgroup>
+<col style="width: 31%">
+<col style="width: 45%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BLPOP key [key ...] timeout</code></td>
+<td><strong>阻塞</strong>，直到从左侧弹出元素或超时</td>
+<td><code>BLPOP mylist 5</code></td>
+</tr>
+<tr>
+<td><code>BRPOP key [key ...] timeout</code></td>
+<td><strong>阻塞</strong>，直到从右侧弹出元素或超时</td>
+<td><code>BRPOP mylist 5</code></td>
+</tr>
+<tr>
+<td><code>BRPOPLPUSH source destination timeout</code></td>
+<td><strong>阻塞</strong>，从 <code>source</code> 右侧弹出并推入
+<code>destination</code> 左侧</td>
+<td><code>BRPOPLPUSH mylist backup 5</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="其他操作">其他操作</span></h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 50%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RPOPLPUSH source destination</code></td>
+<td><strong>非阻塞</strong>，从 <code>source</code> 右侧弹出并推入
+<code>destination</code> 左侧</td>
+<td><code>RPOPLPUSH mylist backup</code></td>
+</tr>
+<tr>
+<td><code>EXPIRE key seconds</code></td>
+<td>设置 <code>key</code> 过期时间</td>
+<td><code>EXPIRE mylist 60</code></td>
+</tr>
+<tr>
+<td><code>TTL key</code></td>
+<td>查询 <code>key</code> 还有多少秒过期</td>
+<td><code>TTL mylist</code></td>
+</tr>
+</tbody>
+</table>
+<h2><span id="应用场景">应用场景</span></h2>
+<h3><span id="任务队列生产者-消费者模型">任务队列（生产者-消费者模型）</span></h3>
+<p><strong>场景：</strong>
+假设你有一个消息队列，生产者不断向队列中添加任务，消费者从队列中获取任务处理。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">生产者：添加任务到任务队列（队列名：task_queue）</span><br>LPUSH task_queue &quot;任务1&quot; &quot;任务2&quot; &quot;任务3&quot;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看当前任务队列</span><br>LRANGE task_queue 0 -1<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">消费者：从队列中获取任务并处理</span><br>RPOP task_queue<br>RPOP task_queue<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">再次查看队列剩余任务</span><br>LRANGE task_queue 0 -1<br></code></pre></td></tr></table></figure>
+<h3><span id="实现点赞排行榜">实现点赞排行榜</span></h3>
+<p><strong>场景：</strong>
+记录帖子点赞情况，最新的点赞用户排在最前面（前插入），展示最近 5
+个点赞用户（只保留前五个数据）。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">用户点赞</span><br>LPUSH like_list &quot;用户A&quot;<br>LPUSH like_list &quot;用户B&quot;<br>LPUSH like_list &quot;用户C&quot;<br>LPUSH like_list &quot;用户D&quot;<br>LPUSH like_list &quot;用户E&quot;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">只保留最近 5 个点赞用户</span><br>LTRIM like_list 0 4<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">展示最近点赞的 5 个用户</span><br>LRANGE like_list 0 -1<br></code></pre></td></tr></table></figure>
+<h1><span id="set">Set</span></h1>
+<h2><span id="命令">命令</span></h2>
+<h3><span id="添加与删除元素">添加与删除元素</span></h3>
+<table>
+<colgroup>
+<col style="width: 32%">
+<col style="width: 35%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SADD key member [member ...]</code></td>
+<td>向集合 <code>key</code> 添加一个或多个元素</td>
+<td><code>SADD myset "apple" "banana"</code></td>
+</tr>
+<tr>
+<td><code>SREM key member [member ...]</code></td>
+<td>移除集合 <code>key</code> 中的一个或多个元素</td>
+<td><code>SREM myset "apple"</code></td>
+</tr>
+<tr>
+<td><code>SPOP key [count]</code></td>
+<td>随机移除并返回 <code>count</code> 个元素</td>
+<td><code>SPOP myset 2</code></td>
+</tr>
+<tr>
+<td><code>SRANDMEMBER key [count]</code></td>
+<td>随机获取 <code>count</code> 个元素（不删除）</td>
+<td><code>SRANDMEMBER myset 2</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="查询集合元素">查询集合元素</span></h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 38%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SMEMBERS key</code></td>
+<td>获取集合中所有元素</td>
+<td><code>SMEMBERS myset</code></td>
+</tr>
+<tr>
+<td><code>SCARD key</code></td>
+<td>获取集合的元素数量</td>
+<td><code>SCARD myset</code></td>
+</tr>
+<tr>
+<td><code>SISMEMBER key member</code></td>
+<td>判断元素 <code>member</code> 是否在集合中</td>
+<td><code>SISMEMBER myset "banana"</code></td>
+</tr>
+<tr>
+<td><code>SMOVE source destination member</code></td>
+<td>将元素从 <code>source</code> 移动到 <code>destination</code></td>
+<td><code>SMOVE myset newset "banana"</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="集合运算交集-并集-差集">集合运算（交集、并集、差集）</span></h3>
+<table>
+<colgroup>
+<col style="width: 39%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SINTER key1 key2 ...</code></td>
+<td>求多个集合的交集</td>
+<td><code>SINTER set1 set2</code></td>
+</tr>
+<tr>
+<td><code>SINTERSTORE destination key1 key2 ...</code></td>
+<td>计算交集并存储到 <code>destination</code></td>
+<td><code>SINTERSTORE result set1 set2</code></td>
+</tr>
+<tr>
+<td><code>SUNION key1 key2 ...</code></td>
+<td>求多个集合的并集</td>
+<td><code>SUNION set1 set2</code></td>
+</tr>
+<tr>
+<td><code>SUNIONSTORE destination key1 key2 ...</code></td>
+<td>计算并集并存储到 <code>destination</code></td>
+<td><code>SUNIONSTORE result set1 set2</code></td>
+</tr>
+<tr>
+<td><code>SDIFF key1 key2 ...</code></td>
+<td>求 <code>key1</code> 相对于 <code>key2</code> 的差集</td>
+<td><code>SDIFF set1 set2</code></td>
+</tr>
+<tr>
+<td><code>SDIFFSTORE destination key1 key2 ...</code></td>
+<td>计算差集并存储到 <code>destination</code></td>
+<td><code>SDIFFSTORE result set1 set2</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="其他操作">其他操作</span></h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEL key</code></td>
+<td>删除整个集合</td>
+<td><code>DEL myset</code></td>
+</tr>
+<tr>
+<td><code>EXPIRE key seconds</code></td>
+<td>设置集合的过期时间</td>
+<td><code>EXPIRE myset 60</code></td>
+</tr>
+<tr>
+<td><code>TTL key</code></td>
+<td>查看集合的剩余存活时间</td>
+<td><code>TTL myset</code></td>
+</tr>
+</tbody>
+</table>
+<h2><span id="应用场景">应用场景</span></h2>
+<h3><span id="用户兴趣标签管理">用户兴趣标签管理</span></h3>
+<p>假设你正在为一个社交媒体平台开发功能，用户可以选择自己感兴趣的标签。使用
+Redis 的 Set 来管理每个用户的兴趣标签，避免重复标签。</p>
+<ul>
+<li><strong>添加标签</strong>：<code>SADD user:123:interests "sports" "technology" "music"</code></li>
+<li><strong>获取标签</strong>：<code>SMEMBERS user:123:interests</code></li>
+<li><strong>移除标签</strong>：<code>SREM user:123:interests "music"</code></li>
+<li><strong>检查是否有某标签</strong>：<code>SISMEMBER user:123:interests "technology"</code></li>
+</ul>
+<h3><span id="共同兴趣标签查询">共同兴趣标签查询</span></h3>
+<p>你可以使用 Redis Set 来查询两个用户之间的共同兴趣标签。</p>
+<ul>
+<li><strong>用户A的兴趣标签</strong>：<code>SADD user:1:interests "sports" "music" "technology"</code></li>
+<li><strong>用户B的兴趣标签</strong>：<code>SADD user:2:interests "sports" "cooking" "music"</code></li>
+<li><strong>获取共同标签</strong>：<code>SINTER user:1:interests user:2:interests</code></li>
+</ul>
+<h3><span id="网站访问记录">网站访问记录</span></h3>
+<p>假设你需要记录每个用户访问的网站，每个用户的访问记录可以使用 Redis
+Set 来存储，避免重复的访问记录。</p>
+<ul>
+<li><strong>添加访问记录</strong>：<code>SADD user:123:visited "siteA.com" "siteB.com" "siteC.com"</code></li>
+<li><strong>判断是否访问过某个网站</strong>：<code>SISMEMBER user:123:visited "siteB.com"</code></li>
+</ul>
+<h3><span id="集合的联合操作">集合的联合操作</span></h3>
+<p>使用 Redis
+Set，你可以实现多个集合的并集操作，例如获取两个用户关注的标签的所有标签（不重复）。</p>
+<ul>
+<li><strong>用户A的兴趣标签</strong>：<code>SADD user:1:interests "sports" "music" "technology"</code></li>
+<li><strong>用户B的兴趣标签</strong>：<code>SADD user:2:interests "sports" "cooking"</code></li>
+<li><strong>获取所有标签</strong>：<code>SUNION user:1:interests user:2:interests</code></li>
+</ul>
+<h1><span id="hash支持-value-为多个字段">Hash（支持 value 为多个字段）</span></h1>
+<h2><span id="命令">命令</span></h2>
+<h3><span id="添加与修改字段">添加与修改字段</span></h3>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 37%">
+<col style="width: 29%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HSET key field value</code></td>
+<td>设置 <code>field</code> 对应的值，如果 <code>field</code>
+存在则覆盖</td>
+<td><code>HSET user:1 name "Alice"</code></td>
+</tr>
+<tr>
+<td><code>HSET key field1 value1 field2 value2 ...</code></td>
+<td>一次性设置多个字段</td>
+<td><code>HSET user:1 age 25 city "Shanghai"</code></td>
+</tr>
+<tr>
+<td><code>HSETNX key field value</code></td>
+<td><strong>仅当 <code>field</code> 不存在</strong> 时才设置</td>
+<td><code>HSETNX user:1 country "China"</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="获取字段值">获取字段值</span></h3>
+<table>
+<colgroup>
+<col style="width: 34%">
+<col style="width: 38%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HGET key field</code></td>
+<td>获取 <code>field</code> 对应的值</td>
+<td><code>HGET user:1 name</code></td>
+</tr>
+<tr>
+<td><code>HMGET key field1 field2 ...</code></td>
+<td>获取多个字段的值</td>
+<td><code>HMGET user:1 name age</code></td>
+</tr>
+<tr>
+<td><code>HGETALL key</code></td>
+<td>获取所有字段及其值（类似 <code>dict</code>）</td>
+<td><code>HGETALL user:1</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="删除字段">删除字段</span></h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HDEL key field [field ...]</code></td>
+<td>删除指定 <code>field</code></td>
+<td><code>HDEL user:1 age</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="统计字段">统计字段</span></h3>
+<table>
+<colgroup>
+<col style="width: 30%">
+<col style="width: 36%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HLEN key</code></td>
+<td>获取 <code>key</code> 中字段的数量</td>
+<td><code>HLEN user:1</code></td>
+</tr>
+<tr>
+<td><code>HEXISTS key field</code></td>
+<td>判断 <code>field</code> 是否存在</td>
+<td><code>HEXISTS user:1 name</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="遍历与获取所有字段">遍历与获取所有字段</span></h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HKEYS key</code></td>
+<td>获取所有字段（keys）</td>
+<td><code>HKEYS user:1</code></td>
+</tr>
+<tr>
+<td><code>HVALS key</code></td>
+<td>获取所有值（values）</td>
+<td><code>HVALS user:1</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="数值操作">数值操作</span></h3>
+<table>
+<colgroup>
+<col style="width: 34%">
+<col style="width: 31%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HINCRBY key field increment</code></td>
+<td>将 <code>field</code> 的值增加 <code>increment</code></td>
+<td><code>HINCRBY user:1 age 1</code></td>
+</tr>
+<tr>
+<td><code>HINCRBYFLOAT key field increment</code></td>
+<td>以浮点数方式递增</td>
+<td><code>HINCRBYFLOAT user:1 balance 10.5</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="其他操作">其他操作</span></h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEL key</code></td>
+<td>删除整个 <code>hash</code></td>
+<td><code>DEL user:1</code></td>
+</tr>
+<tr>
+<td><code>EXPIRE key seconds</code></td>
+<td>设置 <code>hash</code> 过期时间</td>
+<td><code>EXPIRE user:1 3600</code></td>
+</tr>
+</tbody>
+</table>
+<h2><span id="应用场景">应用场景</span></h2>
+<h3><span id="商品库存管理">商品库存管理</span></h3>
+<p>需求：你正在开发一个电商系统，需要存储商品的名称、库存、价格，并能更新库存和价格。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">添加商品信息</span><br>HSET product:2001 name &quot;Laptop&quot; stock 50 price 4999.99<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查询商品所有信息</span><br>HGETALL product:2001<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查询库存</span><br>HGET product:2001 stock<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">增加库存（进货）</span><br>HINCRBY product:2001 stock 10<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">减少库存（销售）</span><br>HINCRBY product:2001 stock -5<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">更新价格</span><br>HSET product:2001 price 4799.99<br></code></pre></td></tr></table></figure>
+<h1><span id="zset有序且支持范围操作">Zset（有序且支持范围操作）</span></h1>
+<h2><span id="命令">命令</span></h2>
+<h3><span id="添加与修改元素">添加与修改元素</span></h3>
+<table>
+<colgroup>
+<col style="width: 37%">
+<col style="width: 27%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ZADD key score member</code></td>
+<td>添加元素 <code>member</code>，并设置 <code>score</code></td>
+<td><code>ZADD leaderboard 100 "Alice"</code></td>
+</tr>
+<tr>
+<td><code>ZADD key score1 member1 score2 member2 ...</code></td>
+<td>一次性添加多个元素</td>
+<td><code>ZADD leaderboard 95 "Bob" 110 "Charlie"</code></td>
+</tr>
+<tr>
+<td><code>ZINCRBY key increment member</code></td>
+<td>增加 <code>member</code> 的 <code>score</code></td>
+<td><code>ZINCRBY leaderboard 10 "Alice"</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="获取元素">获取元素</span></h3>
+<table>
+<colgroup>
+<col style="width: 31%">
+<col style="width: 37%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ZRANGE key start stop [WITHSCORES]</code></td>
+<td>按 <code>score</code> <strong>升序</strong> 获取元素（索引从
+<code>0</code> 开始）</td>
+<td><code>ZRANGE leaderboard 0 -1 WITHSCORES</code></td>
+</tr>
+<tr>
+<td><code>ZREVRANGE key start stop [WITHSCORES]</code></td>
+<td>按 <code>score</code> <strong>降序</strong> 获取元素</td>
+<td><code>ZREVRANGE leaderboard 0 2 WITHSCORES</code></td>
+</tr>
+<tr>
+<td><code>ZRANK key member</code></td>
+<td>获取 <code>member</code>
+在有序集合中的<strong>排名（升序）</strong></td>
+<td><code>ZRANK leaderboard "Alice"</code></td>
+</tr>
+<tr>
+<td><code>ZREVRANK key member</code></td>
+<td>获取 <code>member</code>
+在有序集合中的<strong>排名（降序）</strong></td>
+<td><code>ZREVRANK leaderboard "Alice"</code></td>
+</tr>
+<tr>
+<td><code>ZSCORE key member</code></td>
+<td>获取 <code>member</code> 的 <code>score</code></td>
+<td><code>ZSCORE leaderboard "Alice"</code></td>
+</tr>
+<tr>
+<td><code>ZCARD key</code></td>
+<td>获取有序集合的元素数量</td>
+<td><code>ZCARD leaderboard</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="按-score-进行范围查询">按 <code>score</code> 进行范围查询</span></h3>
+<table>
+<colgroup>
+<col style="width: 31%">
+<col style="width: 33%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ZRANGEBYSCORE key min max [WITHSCORES]</code></td>
+<td>按 <code>score</code> 范围（<strong>升序</strong>）获取元素</td>
+<td><code>ZRANGEBYSCORE leaderboard 90 110 WITHSCORES</code></td>
+</tr>
+<tr>
+<td><code>ZREVRANGEBYSCORE key max min [WITHSCORES]</code></td>
+<td>按 <code>score</code> 范围（<strong>降序</strong>）获取元素</td>
+<td><code>ZREVRANGEBYSCORE leaderboard 110 90 WITHSCORES</code></td>
+</tr>
+<tr>
+<td><code>ZCOUNT key min max</code></td>
+<td>统计 <code>score</code> 在 <code>[min, max]</code>
+范围内的元素数量</td>
+<td><code>ZCOUNT leaderboard 90 110</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="删除元素">删除元素</span></h3>
+<table>
+<colgroup>
+<col style="width: 29%">
+<col style="width: 37%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ZREM key member</code></td>
+<td>删除 <code>member</code></td>
+<td><code>ZREM leaderboard "Bob"</code></td>
+</tr>
+<tr>
+<td><code>ZREMRANGEBYRANK key start stop</code></td>
+<td>删除排名在 <code>[start, stop]</code> 范围内的元素</td>
+<td><code>ZREMRANGEBYRANK leaderboard 0 2</code></td>
+</tr>
+<tr>
+<td><code>ZREMRANGEBYSCORE key min max</code></td>
+<td>删除 <code>score</code> 在 <code>[min, max]</code> 范围内的元素</td>
+<td><code>ZREMRANGEBYSCORE leaderboard 80 90</code></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="其他操作">其他操作</span></h3>
+<table>
+<colgroup>
+<col style="width: 30%">
+<col style="width: 30%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEL key</code></td>
+<td>删除整个有序集合</td>
+<td><code>DEL leaderboard</code></td>
+</tr>
+<tr>
+<td><code>EXPIRE key seconds</code></td>
+<td>设置 <code>ZSet</code> 过期时间</td>
+<td><code>EXPIRE leaderboard 3600</code></td>
+</tr>
+</tbody>
+</table>
+<h2><span id="应用场景">应用场景</span></h2>
+<h3><span id="商品价格排序">商品价格排序</span></h3>
+<p><strong>背景</strong>：一个电商平台需要对商品按照价格进行排序。
+<strong>目标</strong>：使用 <code>ZADD</code>
+存储价格，<code>ZRANGEBYSCORE</code> 获取某价格区间商品。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">添加商品价格</span><br>ZADD product_prices 99.99 product_1 199.99 product_2 49.99 product_3<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">获取价格区间 50-150 的商品</span><br>ZRANGEBYSCORE product_prices 50 150 WITHSCORES<br></code></pre></td></tr></table></figure>
+<h3><span id="文章点赞排行榜">文章点赞排行榜</span></h3>
+<p><strong>背景</strong>：开发一个文章系统，用户可以点赞文章，需要维护点赞数排行榜。
+<strong>目标</strong>：使用 <code>ZINCRBY</code>
+更新点赞数，<code>ZRANGE</code> 获取排行榜。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">给文章 101、102、103 赋初始点赞数</span><br>ZADD article_likes 10 101 5 102 8 103<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">用户点赞文章 101</span><br>ZINCRBY article_likes 1 101<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">获取点赞排行榜（按点赞数降序）</span><br>ZRANGE article_likes 0 -1 WITHSCORES REV<br></code></pre></td></tr></table></figure>
+<h3><span id="运动打卡排行榜">运动打卡排行榜</span></h3>
+<p><strong>背景</strong>：健身 APP
+需要记录用户本月跑步的总公里数，展示排行榜。 <strong>目标</strong>：使用
+<code>ZINCRBY</code> 记录公里数，<code>ZREVRANGE</code> 排行。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">记录跑步公里数</span><br>ZADD running_rank 42 user_X 30 user_Y 50 user_Z<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">用户 Y 跑步 10 公里</span><br>ZINCRBY running_rank 10 user_Y<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">获取跑步排行榜</span><br>ZREVRANGE running_rank 0 -1 WITHSCORES<br></code></pre></td></tr></table></figure>
+<h1><span id="数据结构的选择策略">数据结构的选择策略</span></h1>
+<h2><span id="string字符串">String（字符串）</span></h2>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>适合作为缓存，存储单个键值对（如用户信息、配置项）。</li>
+<li>计数器（<code>INCR</code> / <code>DECR</code> 操作）。</li>
+<li>分布式锁（<code>SETNX</code> + <code>EX</code>）。</li>
+<li>存储 JSON、序列化对象（但需要应用端解析）。</li>
+</ul>
+<p><strong>选择策略：</strong></p>
+<ul>
+<li>适用于简单的键值存储，避免存储超大字符串（建议 &lt;512MB）。</li>
+<li>使用 <code>SETEX</code> 实现带过期时间的缓存。</li>
+</ul>
+<h2><span id="list列表">List（列表）</span></h2>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li><strong>消息队列</strong>（<code>LPUSH + BRPOP</code>）。</li>
+<li><strong>任务队列</strong>（如生产者/消费者模型）。</li>
+<li><strong>时间序列数据</strong>（有序插入的数据）。</li>
+</ul>
+<p><strong>选择策略：</strong></p>
+<ul>
+<li>需要<strong>严格顺序</strong>的场景选择 <code>List</code>。</li>
+<li>避免列表过长（如 <code>LPUSH</code> 操作的列表），影响
+<code>LRANGE</code> 查询性能。</li>
+</ul>
+<h2><span id="set集合">Set（集合）</span></h2>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>需要去重存储的数据（如不重复的用户 ID、标签）。</li>
+<li><strong>社交网络</strong>（如共同关注 <code>SINTER</code>，关注列表
+<code>SADD</code>）。</li>
+<li>随机推荐（<code>SRANDMEMBER</code>）。</li>
+</ul>
+<p><strong>选择策略：</strong></p>
+<ul>
+<li>适用于无序、唯一性的数据。</li>
+<li>需要做交集、并集、差集运算时更适合 <code>Set</code>。</li>
+</ul>
+<h2><span id="sorted-set有序集合">Sorted Set（有序集合）</span></h2>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li><strong>排行榜</strong>（按分数排序，如用户积分榜）。</li>
+<li><strong>延时任务</strong>（如定时消息推送 <code>ZADD</code> +
+<code>ZRANGEBYSCORE</code>）。</li>
+<li><strong>最近访问记录</strong>（最新的 N 条数据）。</li>
+</ul>
+<p><strong>选择策略：</strong></p>
+<ul>
+<li>适用于需要<strong>排序</strong>的数据，避免大规模删除影响性能。</li>
+<li><code>ZREMRANGEBYRANK</code> 用于定期清理数据，避免集合过大。</li>
+</ul>
+<h2><span id="hash哈希表">Hash（哈希表）</span></h2>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li><strong>对象存储</strong>（如用户信息
+<code>HSET user:1 name "张三"</code>）。</li>
+<li><strong>减少键的数量</strong>（多个字段归属于一个键）。</li>
+</ul>
+<p><strong>选择策略：</strong></p>
+<ul>
+<li>适用于存储结构化数据，比 <code>String</code> 适合存储多个字段。</li>
+<li>如果字段少，使用 <code>String</code>
+可能更合适（避免额外的内存开销）。</li>
+</ul>
+<h1><span id="命名策略">命名策略</span></h1>
+<ul>
+<li><strong>避免过长的 Key</strong>（推荐 10~50
+字符）：短小精悍，避免占用太多内存</li>
+<li><strong>避免使用空格</strong>：Redis 的 Key 不能包含空格</li>
+<li><strong>使用统一的分隔符</strong>（建议使用
+<code>:</code>）：有层次结构，便于查询和管理</li>
+<li><strong>使用可读的单词</strong>：避免随机字符，确保可读性</li>
+<li><strong>尽量避免特殊字符</strong>：如 <code>\n</code>,
+<code>\r</code>, <code>\t</code>，可能导致命令解析错误</li>
+<li><strong>保证 Key 的唯一性</strong>：避免 Key
+冲突，尤其是在多个应用共享 Redis 时</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">命名空间:模块:对象:id<br></code></pre></td></tr></table></figure>
+
+      </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/posts/6935a6f4.html">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>01背包问题</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/9e140c4a.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      缓存问题
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/Redis/" class="post-tag">#Redis</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\9c91e4fe.html" title="RDB 持久化" rel="bookmark">RDB 持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\5fc0b1ce.html" title="Redis 事件驱动框架思路浅读" rel="bookmark">Redis 事件驱动框架思路浅读</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7d8fe760.html" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.d2school.com/">第二学堂</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
