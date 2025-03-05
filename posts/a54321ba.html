@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        单词接龙 | 
+        数据压缩之霍夫曼树 | 
       
     </title>
     <meta name="description" content="" />
@@ -159,13 +159,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">单词接龙</div>
+        <div class="post-title">数据压缩之霍夫曼树</div>
         <div class="post-info">
           
-  <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-tag">#容器的应用</a>
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
 
 
-          <span class="post-date">2025-02-19</span>
+          <span class="post-date">2025-03-05</span>
         </div>
       </div>
       
@@ -175,13 +175,129 @@
             
           </div>
         
-        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unordered_map&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;queue&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-comment">// 当存在多个首字母相同的单词时，取长度最长的单词，如果长度也相等，则取字典序最小的单词</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Word</span> &#123;<br>  std::string word;<br><br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Word</span><span class="hljs-params">(std::string w)</span> : word(std::move(w)) &#123;</span>&#125;<br><br>  <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Word &amp;right_word) <span class="hljs-type">const</span> &#123;<br>	  <span class="hljs-comment">// 如果当前单词比右边的单词长，则当前单词较大</span><br>	  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;word.<span class="hljs-built_in">size</span>() &gt; right_word.word.<span class="hljs-built_in">size</span>()) &#123;<br>		  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	  &#125;<br>	  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;word.<span class="hljs-built_in">size</span>() &lt; right_word.word.<span class="hljs-built_in">size</span>()) &#123;<br>		  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>	  &#125;<br>	  <span class="hljs-comment">// 如果两个单词的长度相等，比较字典序</span><br>	  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>-&gt;word &gt;= right_word.word;<br>  &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>	<span class="hljs-type">int</span> word_start;<br>	cin &gt;&gt; word_start;<br>	<span class="hljs-type">int</span> word_size;<br>	cin &gt;&gt; word_size;<br>	cin.<span class="hljs-built_in">ignore</span>();<br><br>	vector&lt;string&gt; wordVec;<br>	unordered_map&lt;<span class="hljs-type">char</span>, priority_queue&lt;Word&gt;&gt; word_table;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; word_size; ++i) &#123;<br>		std::string word;<br>		<span class="hljs-built_in">getline</span>(cin, word);<br>		<span class="hljs-keyword">if</span> (word_start != i) &#123;	<span class="hljs-comment">// 由于 word_start 下标的元素会作为起始单词，word_table就不需要记录，避免重复拼接的情况</span><br>			<span class="hljs-function">Word <span class="hljs-title">w</span><span class="hljs-params">(word)</span></span>;<br>			word_table[word[<span class="hljs-number">0</span>]].<span class="hljs-built_in">push</span>(std::<span class="hljs-built_in">move</span>(w));<br>		&#125;<br>		wordVec.<span class="hljs-built_in">push_back</span>(word);<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> ((word_start &lt; <span class="hljs-number">0</span>) || (word_start &gt;= wordVec.<span class="hljs-built_in">size</span>())) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	std::string first_word = wordVec[word_start];<br>	std::string result = first_word;<br>	<span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>		<span class="hljs-type">char</span> last_ch = first_word[first_word.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>];<br>		<span class="hljs-keyword">auto</span> it = word_table.<span class="hljs-built_in">find</span>(last_ch);<br>		<span class="hljs-keyword">if</span> (it != word_table.<span class="hljs-built_in">end</span>()) &#123;<br>			<span class="hljs-keyword">if</span> (it-&gt;second.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">break</span>;    <span class="hljs-comment">// 完善，如果队列中已经没有数据，退出循环</span><br>			std::string pop_str = it-&gt;second.<span class="hljs-built_in">top</span>().word;<br>			it-&gt;second.<span class="hljs-built_in">pop</span>();<br>			result += pop_str;<br>			first_word.<span class="hljs-built_in">swap</span>(pop_str);<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br>	&#125;<br><br>	cout &lt;&lt; result &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>这道题如果没有容器的实战经验，我不认为是可以轻松拿下的题目。</p>
-<p>unordered_map 记录每个字符对应的单词集合，这里利用 priority_queue
-进行存储。但我看到题目这样描述“当存在多个首字母相同的单词时，取长度最长的单词，如果长度也相等，则取字典序最小的单词”的时候，我就知道要把数据放在一个结构体中，并且重载
-&lt; 运算符，并且放在 priority_queue
-中，添加和删除元素都可以自动排序。</p>
-<p>有如上的巧妙设计，解题也就不在话下了。</p>
+        <h1><span id="基础知识">基础知识</span></h1>
+<p>霍夫曼编码是一种无损数据压缩算法。这个想法是为输入字符分配可变长度的代码，分配代码的长度基于相应字符的频率。</p>
+<h2><span id="观察霍夫曼树">观察霍夫曼树</span></h2>
+<figure>
+<img src="/images/2025/03/05/b1c04c00-f9d3-11ef-b8f9-9d2244891ef7.png" alt="image20250305204450235.png">
+<figcaption aria-hidden="true">image20250305204450235.png</figcaption>
+</figure>
+<p>叶子节点存储字符和频率，非叶子节点子存储存储（是其两个子节点频率之和）。</p>
+<p>左子树的路径上是 0，右子树上的路径是 1。</p>
+<p>频率越高的字符，叶子节点越靠近根节点。</p>
+<h2><span id="为什么采用前缀编码">为什么采用前缀编码？</span></h2>
+<p>不会出现歧义，不需要额外的分隔符。</p>
+<p>假设 bitstream 是
+<code>0110111110</code>，按照前缀码的解码方式，我们从左到右匹配：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">0 	 → 这是 A<br>1	 → 这是 C<br>0	 → 这是 A<br>111  → 这是 D<br>10   → 这是 B<br></code></pre></td></tr></table></figure>
+<p>所以 <code>0110111110</code> 只能解码为
+<code>ACADB</code>，不会有歧义。</p>
+<p>如果某个字符的编码是另一个字符编码的前缀（例如
+<code>A = 0</code>，<code>B = 01</code>），那么当我们读取
+<code>01</code> 时，我们无法确定它是 <code>A</code> 的 <code>0</code>
+加上某个后续 bit，还是 <code>B</code> 的 <code>01</code>。</p>
+<h1><span id="整个过程">整个过程</span></h1>
+<h2><span id="统计字符串中字符及其频率">统计字符串中字符及其频率</span></h2>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>频率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>5</td>
+</tr>
+<tr>
+<td>B</td>
+<td>9</td>
+</tr>
+<tr>
+<td>C</td>
+<td>12</td>
+</tr>
+<tr>
+<td>D</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E</td>
+<td>16</td>
+</tr>
+<tr>
+<td>F</td>
+<td>45</td>
+</tr>
+</tbody>
+</table>
+<h2><span id="构建霍夫曼树">构建霍夫曼树</span></h2>
+<p>把如上信息加入到优先级队列中，按照频率从小到大排列：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">(A,<span class="hljs-number">5</span>) (B,<span class="hljs-number">9</span>) (C,<span class="hljs-number">12</span>) (D,<span class="hljs-number">13</span>) (E,<span class="hljs-number">16</span>) (F,<span class="hljs-number">45</span>)<br></code></pre></td></tr></table></figure>
+<p>不断取两个最小的节点并进行合并为一个节点，直到不可再合并为止：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">选取 (A,5) 和 (B,9)，合并为新节点 (A+B, 14)<br><br>选取 (C,12) 和 (D,13)，合并为新节点 (C+D, 25)<br><br>选取 (A+B,14) 和 (E,16)，合并为新节点 (A+B+E,30)<br><br>选取 (C+D,25) 和 (A+B+E,30)，合并为新节点 (A+B+C+D+E,55)<br><br>选取 (A+B+C+D+E,55) 和 (F,45)，合并为根节点 (A+B+C+D+E+F,100)<br></code></pre></td></tr></table></figure>
+<p>示意图如下：</p>
+<figure>
+<img src="/images/2025/03/05/b678a3f0-f9d3-11ef-b8f9-9d2244891ef7.png" alt="image20250305212619718.png">
+<figcaption aria-hidden="true">image20250305212619718.png</figcaption>
+</figure>
+<h2><span id="编码和解码">编码和解码</span></h2>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>编码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>0000</td>
+</tr>
+<tr>
+<td>B</td>
+<td>0001</td>
+</tr>
+<tr>
+<td>C</td>
+<td>010</td>
+</tr>
+<tr>
+<td>D</td>
+<td>011</td>
+</tr>
+<tr>
+<td>E</td>
+<td>001</td>
+</tr>
+<tr>
+<td>F</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>由于字符太多，假定我们要编码字符串
+<code>"ACFDEB"</code>，得到的编码结果为：0000 010 1 011 001 0001</p>
+<p>解码就是它的逆向操作。</p>
+<h1><span id="代码实现">代码实现</span></h1>
+<p>完整代码：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9%E4%B9%8B%E9%9C%8D%E5%A4%AB%E6%9B%BC%E6%A0%91/Huffman">霍夫曼树</a></p>
+<h2><span id="节点定义">节点定义</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span> &#123;<br>	<span class="hljs-type">char</span>	data_;<br>	<span class="hljs-type">int</span>	frequency_;<br>	Node	*left_;<br>	Node	*right_;<br><br>	<span class="hljs-built_in">Node</span>( <span class="hljs-type">char</span> data, <span class="hljs-type">int</span> frequency ) : <span class="hljs-built_in">data_</span>( data ), <span class="hljs-built_in">frequency_</span>( frequency ), <span class="hljs-built_in">left_</span>( <span class="hljs-literal">nullptr</span> ), <span class="hljs-built_in">right_</span>( <span class="hljs-literal">nullptr</span> )<br>	&#123;&#125;<br><br><br>	<span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;( <span class="hljs-type">const</span> Node &amp;right ) <span class="hljs-type">const</span> <span class="hljs-comment">/* 频率越低，越靠前 */</span><br>	&#123;<br>		<span class="hljs-keyword">return</span>(<span class="hljs-keyword">this</span>-&gt;frequency_ &gt; right.frequency_);<br>	&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h2><span id="构建霍夫曼树">构建霍夫曼树</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">buildHuffman</span><span class="hljs-params">( <span class="hljs-type">const</span> string &amp;str )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-comment">/* 统计词频 */</span><br>	std::unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; wordFre;<br>	<span class="hljs-keyword">for</span> ( <span class="hljs-type">char</span> c : str )<br>	&#123;<br>		wordFre[c]++;<br>	&#125;<br>	<span class="hljs-comment">/* 加入优先级队列 */</span><br>	priority_queue&lt;Node *&gt; NodeQue;<br>	<span class="hljs-keyword">for</span> ( <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;word : wordFre )<br>	&#123;<br>		NodeQue.<span class="hljs-built_in">push</span>( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>( word.first, word.second ) );<br>	&#125;<br>	<span class="hljs-comment">/*</span><br><span class="hljs-comment">	 * 构建哈夫曼树</span><br><span class="hljs-comment">	 * 不断取出优先级队列中的两个节点，并创建一个节点记录两个节点的权值和，直到只剩下一个节点才终止</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-keyword">while</span> ( NodeQue.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">1</span> )<br>	&#123;<br>		<span class="hljs-keyword">auto</span> leftNode = NodeQue.<span class="hljs-built_in">top</span>();<br>		NodeQue.<span class="hljs-built_in">pop</span>();<br>		<span class="hljs-keyword">auto</span> rightNode = NodeQue.<span class="hljs-built_in">top</span>();<br>		NodeQue.<span class="hljs-built_in">pop</span>();<br><br>		<span class="hljs-keyword">auto</span> parent_node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>( <span class="hljs-string">&#x27;\0&#x27;</span>, leftNode-&gt;frequency_ + rightNode-&gt;frequency_ );<br>		parent_node-&gt;left_	= leftNode;<br>		parent_node-&gt;right_	= rightNode;<br>		NodeQue.<span class="hljs-built_in">push</span>( parent_node );<br>	&#125;<br>	root_ = NodeQue.<span class="hljs-built_in">top</span>();<br>	NodeQue.<span class="hljs-built_in">pop</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="生成哈夫曼表-方便后面编码操作">生成哈夫曼表--方便后面编码操作</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">generateCodes</span><span class="hljs-params">( Node *node, string code )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> ( node == <span class="hljs-literal">nullptr</span> )<br>		<span class="hljs-keyword">return</span>;<br>	<span class="hljs-keyword">if</span> ( node-&gt;left_ == <span class="hljs-literal">nullptr</span> &amp;&amp; node-&gt;right_ == <span class="hljs-literal">nullptr</span> ) <span class="hljs-comment">/* 叶子节点，记录字符的编码 */</span><br>	&#123;<br>		huffmanCodeTable_[node-&gt;data_] = code;<br>	&#125;<br>	<span class="hljs-built_in">generateCodes</span>( node-&gt;left_, code + <span class="hljs-string">&quot;0&quot;</span> );<br>	<span class="hljs-built_in">generateCodes</span>( node-&gt;right_, code + <span class="hljs-string">&quot;1&quot;</span> );<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="编码">编码</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">string <span class="hljs-title">encode</span><span class="hljs-params">( <span class="hljs-type">const</span> string &amp;text )</span> <span class="hljs-type">const</span>               <span class="hljs-comment">/* 把字符串编码 */</span></span><br><span class="hljs-function"></span>&#123;<br>	string result;<br>	<span class="hljs-keyword">for</span> ( <span class="hljs-type">char</span> c : text )<br>	&#123;<br>		result += huffmanCodeTable_.<span class="hljs-built_in">at</span>( c );    <span class="hljs-comment">/* at 确保能匹配到，否则报错 */</span><br>	&#125;<br>	<span class="hljs-keyword">return</span>(result);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>有前面构建好的哈夫曼编码表，这里的编码操作就再简单不过了。</p>
+<h2><span id="解码">解码</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">string <span class="hljs-title">decode</span><span class="hljs-params">( <span class="hljs-type">const</span> string &amp;encodedString )</span> <span class="hljs-type">const</span>      <span class="hljs-comment">/* 解码--》字符串 */</span></span><br><span class="hljs-function"></span>&#123;<br>	string	result;<br>	<span class="hljs-keyword">auto</span>	cur_node = root_;<br><br>	<span class="hljs-keyword">for</span> ( <span class="hljs-type">char</span> c : encodedString )<br>	&#123;<br>		<span class="hljs-keyword">if</span> ( c == <span class="hljs-string">&#x27;0&#x27;</span> )<br>		&#123;<br>			cur_node = cur_node-&gt;left_;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			cur_node = cur_node-&gt;right_;<br>		&#125;<br><br>		<span class="hljs-keyword">if</span> ( cur_node-&gt;left_ == <span class="hljs-literal">nullptr</span> &amp;&amp; cur_node-&gt;right_ == <span class="hljs-literal">nullptr</span> )        <span class="hljs-comment">/* 解析出一个字符 */</span><br>		&#123;<br>			result		+= cur_node-&gt;data_;<br>			cur_node	= root_;                                        <span class="hljs-comment">/* 回到根节点，因为任何字符串编码都是从根节点开始的 */</span><br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span>(result);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们都知道，任何一个字符的对应的编码都是从根节点开始构建出来。</p>
+<p>那么，我们只需要遍历字符串，0 就往左边走，1
+就往右边走，当前节点成为叶子节点，那么这个节点的 data
+就是解析出来的字符。</p>
+<p>然后，把 cur_node 继续替换为 root_，再次重复上面的操作即可。</p>
 
       </div>
 	<div id="zan" class="clearfix">
@@ -230,23 +346,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/posts/54788f73.html">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>工厂模式</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/posts/2cf7462c.html">
+    <a class="post-nav-item-right" href="/posts/8ce77716.html">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -258,7 +362,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      磁盘容量排序
+      斗地主之顺子
     </a>
   
 </div>
@@ -266,12 +370,12 @@
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-tag">#容器的应用</a>
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
 
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\c364089f.html" title="打印任务排序" rel="bookmark">打印任务排序</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\8ce77716.html" title="斗地主之顺子" rel="bookmark">斗地主之顺子</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\1578526b.html" title="IPv4地址转换成整数" rel="bookmark">IPv4地址转换成整数</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\29c8b6d6.html" title="TLV编码" rel="bookmark">TLV编码</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\22a22b79.html" title="三大经典排序算法" rel="bookmark">三大经典排序算法</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ec6973f6.html" title="基于二叉搜索树实现Map容器的基本操作" rel="bookmark">基于二叉搜索树实现Map容器的基本操作</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\d8d692f8.html" title="实现海量数据快速查找之哈希表" rel="bookmark">实现海量数据快速查找之哈希表</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
