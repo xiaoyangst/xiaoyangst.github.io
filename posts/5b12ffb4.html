@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-         | 
+        缓存设计 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,205 +156,244 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/blog)"></div>
-        博客
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">缓存设计</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a>
+
+
+          <span class="post-date">2025-03-06</span>
+        </div>
       </div>
-      <div class="wall-category-description"></div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Asio/" rel="tag">Asio</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" rel="tag">C++11新特性</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">C++性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CMake/" rel="tag">CMake</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CPP/" rel="tag">CPP</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clion/" rel="tag">Clion</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MIT/" rel="tag">MIT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OS/" rel="tag">OS</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/STL/" rel="tag">STL</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/" rel="tag">Tools</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vim/" rel="tag">Vim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag">函数式编程</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86/" rel="tag">前缀和与差分</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8C%BB%E5%AD%A6/" rel="tag">医学</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" rel="tag">单调栈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" rel="tag">单调队列</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E5%92%8C%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" rel="tag">原子变量和内存模型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8C%E6%8C%87%E9%92%88/" rel="tag">双指针</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" rel="tag">哈希表</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF/" rel="tag">回溯</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" rel="tag">基础组件</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">字符串</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B6%E5%BA%AD%E5%81%A5%E5%BA%B7/" rel="tag">家庭健康</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" rel="tag">容器的应用</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag">并发编程</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" rel="tag">技术摘录</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" rel="tag">技术杂文</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" rel="tag">操作系统导论</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" rel="tag">数据结构与算法</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag">杂项</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%88/" rel="tag">栈</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91/" rel="tag">树</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" rel="tag">模板元编程</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B0%B4%E6%9E%9C/" rel="tag">水果</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" rel="tag">深入理解计算机系统</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" rel="tag">源码剖析</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag">线性代数</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag">网络编程</a><span class="tag-list-count">30</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%90%A5%E5%85%BB%E5%AD%A6/" rel="tag">营养学</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">计算机组成原理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag">链表</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%9F%E5%88%97/" rel="tag">队列</a><span class="tag-list-count">4</span></li></ul></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#查询过程">查询过程</a></li>
+<li><a href="#如何提升缓存的收益">如何提升缓存的收益</a></li>
+<li><a href="#key的设计要求">Key的设计要求</a></li>
+<li><a href="#缓存的更新机制">缓存的更新机制</a>
+<ul>
+<li><a href="#被动更新">被动更新</a></li>
+<li><a href="#主动更新">主动更新</a></li>
+</ul></li>
+<li><a href="#缓存的位置">缓存的位置</a>
+<ul>
+<li><a href="#客户端缓存">客户端缓存</a></li>
+<li><a href="#应用层缓存">应用层缓存</a></li>
+<li><a href="#分布式缓存">分布式缓存</a></li>
+<li><a href="#代理层缓存">代理层缓存</a></li>
+<li><a href="#数据库层缓存">数据库层缓存</a></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<p>将原本复杂操作的请求，引导到简单的操作上。以后再来查，不需要经过复杂的计算。</p>
+<p>引入缓存就是用空间换时间的行为。</p>
+<h2><span id="查询过程">查询过程</span></h2>
+<ol type="1">
+<li>接受到用户的查询请求，计算出 K（查询依据）</li>
+<li>到缓存中进行查询</li>
+<li>得到对应的 V（用户需要的数据）</li>
+</ol>
+<p>如果没有在缓存中查询对应的数据，即为无法命中，记得从原数据库中查询到数据并返回给用户，并把此数据记录到缓存中。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs tex">数据查询时间：123步骤 + (1-命中率)*查原数据时间<br><br>命中率：缓存中的数据/数据库中的原数据<br></code></pre></td></tr></table></figure>
+<h2><span id="如何提升缓存的收益">如何提升缓存的收益</span></h2>
+<p>从前面的分析来看，减少 123 步骤的时间 和 提高缓存命中率。</p>
+<p>并且从公式看出缓存适用于读多写少的场景，而写操作最终也是为读操作服务。还有查询原数据时间特别长的场景。</p>
+<h2><span id="key的设计要求">Key的设计要求</span></h2>
+<ul>
+<li>无碰撞：保证 Key 的唯一性，否则相同的 Key
+但是对应不同的业务会导致之前的业务数据被替换</li>
+<li>高效生成：不需要，提前约定好 Key 的生成规则，比方说
+<code>user:login:username:实际用户名</code>，这样只需要根据用户传递的用户名填充上去，然后整体作为
+Key 即可</li>
+<li>高效比较：Key 尽量简短，通过字符串比较</li>
+</ul>
+<h2><span id="缓存的更新机制">缓存的更新机制</span></h2>
+<p>对于大部分 <strong>读多写少</strong> 的数据，使用
+<strong>被动更新</strong>，减少缓存维护成本。对于一致性要求高的数据（如
+<strong>订单状态</strong>、<strong>用户余额</strong>），采用
+<strong>主动更新</strong>。</p>
+<p>还可以结合 <strong>缓存淘汰策略</strong>（如
+LRU）、<strong>异步刷新</strong> 等优化方案，提高性能。</p>
+<h3><span id="被动更新">被动更新</span></h3>
+<p>只有当数据 <strong>被访问</strong>
+时，才检查缓存是否存在，若不存在（缓存未命中或过期），则从数据库或其他数据源加载数据，并更新缓存。</p>
+<p>适用于 <strong>读多写少</strong>
+的场景，例如用户个人资料、商品信息等。</p>
+<h3><span id="主动更新">主动更新</span></h3>
+<p>在数据源（数据库）发生变更时，<strong>主动</strong>
+更新缓存，而不是等到缓存失效后再查询数据库。</p>
+<p>适用于 <strong>写多读多</strong>
+的场景，例如排行榜、热搜榜、热门商品等。</p>
+<p>常见的实现方式就是：数据库更新后，<strong>删除对应缓存</strong>，下次请求时重新加载最新数据。避免旧数据留在缓存中，但仍然允许短时间的数据不一致。</p>
+<h2><span id="缓存的位置">缓存的位置</span></h2>
+<h3><span id="客户端缓存">客户端缓存</span></h3>
+<p><strong>位置</strong>：数据存储在客户端设备上，比如浏览器缓存。</p>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li><strong>静态资源缓存</strong>（HTML、CSS、JS、图片等）</li>
+<li><strong>用户个性化数据</strong>（如用户设置、最近访问记录）</li>
+<li><strong>移动端离线模式</strong>（如 PWA 离线缓存）</li>
+</ul>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs tex">优点<br>✅ 减少服务器请求，降低带宽消耗，提高加载速度<br>✅ 本地存取，延迟极低，性能最佳<br>✅ 支持离线模式，即使无网络也能使用部分功能<br><br>缺点<br>❌ 存储空间有限（浏览器 LocalStorage 最大 5MB）<br>❌ 安全性较低（数据可能被篡改或窃取）<br>❌ 更新困难（需要额外的缓存策略管理，例如 ETag、Cache-Control）<br></code></pre></td></tr></table></figure>
+<h3><span id="应用层缓存">应用层缓存</span></h3>
+<p><strong>位置</strong>：存储在应用服务器的内存中，如自己设计的LRU缓存数据结构。</p>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li><strong>计算结果缓存</strong>（避免重复计算，减少 CPU 开销）</li>
+<li><strong>短生命周期数据</strong>（如临时会话数据）</li>
+<li><strong>数据库查询缓存</strong>（减少数据库压力）</li>
+</ul>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs tex">优点<br>✅ 访问速度最快（数据直接存储在进程内存中，无需网络传输）<br>✅ 实现简单（适用于单机应用，无需额外的分布式缓存服务）<br>✅ 避免高频数据库查询，提高应用性能<br><br>缺点<br>❌ 受限于服务器内存（无法存储大规模数据）<br>❌ 进程重启后数据丢失（非持久化存储）<br>❌ 不适用于分布式系统（多个实例无法共享缓存）<br></code></pre></td></tr></table></figure>
+<h3><span id="分布式缓存">分布式缓存</span></h3>
+<p><strong>位置</strong>：缓存存储在专门的缓存服务器，如Redis。</p>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li><strong>高并发、高吞吐量</strong>（如秒杀、推荐系统）</li>
+<li><strong>数据库前置缓存</strong>（减少数据库查询压力）</li>
+<li><strong>会话管理</strong>（如分布式 Session 共享）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">优点<br>✅ 支持分布式部署，适用于大规模集群<br>✅ 高性能读写，特别适合高并发场景<br>✅ 支持数据持久化（Redis 支持 RDB、AOF）<br><br>缺点<br>❌ 额外运维成本（需要独立的 Redis/Memcached 服务器）<br>❌ 数据一致性管理复杂（缓存与数据库同步更新问题）<br></code></pre></td></tr></table></figure>
+<h3><span id="代理层缓存">代理层缓存</span></h3>
+<p><strong>位置</strong>：缓存部署在 <strong>CDN</strong> 或
+<strong>Nginx、Varnish</strong>
+这样的代理服务器上，通常用于加速静态资源访问。</p>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li><strong>静态资源缓存</strong>（HTML、CSS、JS、图片）</li>
+<li><strong>视频流媒体加速</strong></li>
+<li><strong>API 响应缓存</strong>（避免服务器重复计算）</li>
+</ul>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs tex">优点<br>✅ 减少服务器压力（用户请求先到 CDN，降低源站负载）<br>✅ 就近访问，减少网络延迟，提高访问速度<br>✅ 适用于大规模分发（如视频网站、电子商务）<br><br>缺点<br>❌ 适用于静态内容，动态数据管理复杂<br>❌ 缓存更新延迟（需配置过期时间或主动刷新）<br></code></pre></td></tr></table></figure>
+<h3><span id="数据库层缓存">数据库层缓存</span></h3>
+<p><strong>位置</strong>：缓存存储在数据库内，例如 <strong>MySQL Query
+Cache</strong>，减少 SQL 查询执行时间。</p>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li><strong>SQL 结果集缓存</strong>（避免重复查询）</li>
+<li><strong>预计算数据存储</strong>（如物化视图）</li>
+<li><strong>数据库索引缓存</strong>（加速查询）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">优点<br>✅ 直接在数据库层优化，无需修改应用代码<br>✅ 适用于复杂 SQL 计算结果缓存，提高查询效率<br><br>缺点<br>❌ 更新不灵活，某些数据库（如 MySQL 8.0）已移除 Query Cache，因其维护成本高<br>❌ 数据库负担增加，缓存查询仍然占用数据库资源<br></code></pre></td></tr></table></figure>
+<h3><span id="总结">总结</span></h3>
+<p><strong>业务优先级高</strong>，数据访问频繁？➡ <strong>Redis</strong>
+作为分布式缓存。</p>
+<p><strong>静态资源加载慢</strong>？➡ <strong>CDN、Nginx
+代理缓存</strong>。</p>
+<p><strong>计算量大，数据短暂有效</strong>？➡
+<strong>进程内缓存</strong>（LRU Cache）。</p>
+<p><strong>需要存储计算结果</strong>？➡
+<strong>数据库缓存（索引）</strong>。</p>
+<p><strong>减少数据库压力</strong>？➡ <strong>结合数据库 + Redis
+分层缓存</strong>。</p>
+
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/732a7f7c.html" class="post-title hover-line">理解面向连接和无连接协议之间的区别</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">它们的本质区别在于，对无连接协议来说，每个分组的处理都独立于所有其他分组，而对面向连接的协议来说，协议实现则维护了与后继分组有关的状态信息</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/dc6e956f.html" class="post-title hover-line">提防对等实体的不友好动作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">亦如在程序中接受用户的输入前，要对用户的输入进行“安全检测”，以防止恶意输入破坏应用程序的正常运行。可见，防御性编程在编码中是必备的意识，网络编程中也要考虑各种概率看似很小的事件，做出相应的处理动作</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/194fa9a8.html" class="post-title hover-line">40.组合总和 II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">前面做的组合题，不管强调与否，数组中的元素都是没有重复的，但这道题恰恰相反。看来只要解决重复元素可能带来的问题就可以了。我们就用一个布尔值 note 标记，如果 note 为 false 表明在同一层（同一个栈），否则在不同层（不同栈）。同层的元素相同可被忽略，不同层的元素相同不可被忽略</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/be58eeab.html" class="post-title hover-line">39.组合总和</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我们的回溯会把当前元素和后面的元素所有可能都尝试一遍，而组合不强调顺序性，这就是为什么组合中其后的元素没有必要往前看</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/8ffbed9b.html" class="post-title hover-line">17.电话号码的字母组合</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">在完成《77.组合》基础上，这道题你要会两个技能，分别是建立映射关系（通常是数组）和单个数字字符转换为对应的整数（ch - '0'）</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/63e09d47.html" class="post-title hover-line">218.组合III</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">在完成《77.组合》基础上，这道题无外乎增加一个额外的条件，即需要 path 中数的总和为 n，其中限制元素个数为 k</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/8fb50100.html" class="post-title hover-line">77.组合</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">组合不在意顺序，因此 [1,4] 和 [4,1] 属于同一个路径，不能同时加入到总路径中，只能取其一。为了方便，按照有序进行排布会容易做题，在代码中也是通过 i + 1 传递 到 backtrace 中作为 start 参数，表示遍历路径的起始位置</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/29e12c89.html" class="post-title hover-line">8. 字符串转换整数 (atoi)</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果再给我一次做此题的机会，绝对不想再碰。逻辑上要考虑的太多，以至于容易逻辑混乱，但真要说此题的技巧，那一定是及时阻止无效数字的转换，即检测到超过范围就到处理返回值的阶段了。</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/953d5cfc.html" class="post-title hover-line">CPP 中 cctype 库的常用方法</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">通常用于处理字符串中字母、数字、特殊字符，还包括大小写转换</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/f8f95126.html" class="post-title hover-line">66.加一</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题容易让人误解，应该把题意讲得清楚些。有一个自然数，被拆分成个位数存储在数组中，对这个自然数进行加 1 操作。很明显，如果我们的自然是99，那么加 1 的结果就是 100，显然原数组是存储不下的，因为vector容器不支持头部插入元素</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/23/">23</a><a class="page-number" href="/blog/page/24/">24</a><span class="page-number current">25</span><a class="page-number" href="/blog/page/26/">26</a><a class="page-number" href="/blog/page/27/">27</a></div>
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/posts/20e6bfc.html">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>d叉堆</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/a54321ba.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      数据压缩之霍夫曼树
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\83ace12e.html" title="call_once 和 once_flag" rel="bookmark">call_once 和 once_flag</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7d6c0c8.html" title="为什么子类需要调用父类的构造函数 ？" rel="bookmark">为什么子类需要调用父类的构造函数 ？</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\830cb3cd.html" title="编写线程安全的代码" rel="bookmark">编写线程安全的代码</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -881,6 +921,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        数据压缩之霍夫曼树 | 
+        观察者模式 | 
       
     </title>
     <meta name="description" content="" />
@@ -159,13 +159,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">数据压缩之霍夫曼树</div>
+        <div class="post-title">观察者模式</div>
         <div class="post-info">
           
-  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
 
 
-          <span class="post-date">2025-03-05</span>
+          <span class="post-date">2025-03-13</span>
         </div>
       </div>
       
@@ -175,129 +175,30 @@
             
           </div>
         
-        <h1><span id="基础知识">基础知识</span></h1>
-<p>霍夫曼编码是一种无损数据压缩算法。这个想法是为输入字符分配可变长度的代码，分配代码的长度基于相应字符的频率。</p>
-<h2><span id="观察霍夫曼树">观察霍夫曼树</span></h2>
+        <!-- toc -->
+<ul>
+<li><a href="#观察者模式">观察者模式</a></li>
+<li><a href="#和发布-订阅模式的区别">和发布-订阅模式的区别</a></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="观察者模式">观察者模式</span></h1>
 <figure>
-<img src="/images/2025/03/05/b1c04c00-f9d3-11ef-b8f9-9d2244891ef7.png" alt="image20250305204450235.png">
-<figcaption aria-hidden="true">image20250305204450235.png</figcaption>
+<img src="/images/2025/03/13/6cf931d0-ffec-11ef-b5e3-b774a49c20be.png" alt="3e2d09a0d658725d19171a878dacd5cd.png">
+<figcaption aria-hidden="true">3e2d09a0d658725d19171a878dacd5cd.png</figcaption>
 </figure>
-<p>叶子节点存储字符和频率，非叶子节点子存储频率（是其两个子节点频率之和）。</p>
-<p>左子树的路径上是 0，右子树上的路径是 1。</p>
-<p>频率越高的字符，叶子节点越靠近根节点。</p>
-<h2><span id="为什么采用前缀编码">为什么采用前缀编码？</span></h2>
-<p>不会出现歧义，不需要额外的分隔符。</p>
-<p>假设 bitstream 是
-<code>0110111110</code>，按照前缀码的解码方式，我们从左到右匹配：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">0 	 → 这是 A<br>1	 → 这是 C<br>0	 → 这是 A<br>111  → 这是 D<br>10   → 这是 B<br></code></pre></td></tr></table></figure>
-<p>所以 <code>0110111110</code> 只能解码为
-<code>ACADB</code>，不会有歧义。</p>
-<p>如果某个字符的编码是另一个字符编码的前缀（例如
-<code>A = 0</code>，<code>B = 01</code>），那么当我们读取
-<code>01</code> 时，我们无法确定它是 <code>A</code> 的 <code>0</code>
-加上某个后续 bit，还是 <code>B</code> 的 <code>01</code>。</p>
-<h1><span id="整个过程">整个过程</span></h1>
-<h2><span id="统计字符串中字符及其频率">统计字符串中字符及其频率</span></h2>
-<table>
-<thead>
-<tr>
-<th>字符</th>
-<th>频率</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A</td>
-<td>5</td>
-</tr>
-<tr>
-<td>B</td>
-<td>9</td>
-</tr>
-<tr>
-<td>C</td>
-<td>12</td>
-</tr>
-<tr>
-<td>D</td>
-<td>13</td>
-</tr>
-<tr>
-<td>E</td>
-<td>16</td>
-</tr>
-<tr>
-<td>F</td>
-<td>45</td>
-</tr>
-</tbody>
-</table>
-<h2><span id="构建霍夫曼树">构建霍夫曼树</span></h2>
-<p>把如上信息加入到优先级队列中，按照频率从小到大排列：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">(A,<span class="hljs-number">5</span>) (B,<span class="hljs-number">9</span>) (C,<span class="hljs-number">12</span>) (D,<span class="hljs-number">13</span>) (E,<span class="hljs-number">16</span>) (F,<span class="hljs-number">45</span>)<br></code></pre></td></tr></table></figure>
-<p>不断取两个最小的节点并进行合并为一个节点，直到不可再合并为止：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">选取 (A,5) 和 (B,9)，合并为新节点 (A+B, 14)<br><br>选取 (C,12) 和 (D,13)，合并为新节点 (C+D, 25)<br><br>选取 (A+B,14) 和 (E,16)，合并为新节点 (A+B+E,30)<br><br>选取 (C+D,25) 和 (A+B+E,30)，合并为新节点 (A+B+C+D+E,55)<br><br>选取 (A+B+C+D+E,55) 和 (F,45)，合并为根节点 (A+B+C+D+E+F,100)<br></code></pre></td></tr></table></figure>
-<p>示意图如下：</p>
+<p>适用于“<strong>一对多</strong>”的依赖关系。当<strong>一个对象的状态发生变化</strong>时，它能够自动<strong>通知所有依赖于它的对象</strong>，而不需要主动调用它们。</p>
+<p>其中，观察者（Observer）随时可以离开（将不会收到通知），随时可以加入（收到通知后会更新）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;list&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Observer</span>;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Subject</span> &#123;    <span class="hljs-comment">// 主题基类</span><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-comment">// 添加观察者</span><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add</span><span class="hljs-params">(Observer *observer)</span> </span>&#123;<br>	  observer_list.<span class="hljs-built_in">push_back</span>(observer);<br>  &#125;<br><br>  <span class="hljs-comment">// 删除观察者</span><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">del</span><span class="hljs-params">(Observer *observer)</span> </span>&#123;<br>	  observer_list.<span class="hljs-built_in">remove</span>(observer);<br>  &#125;<br><br>  <span class="hljs-comment">// 通知观察者</span><br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">notify</span><span class="hljs-params">(std::string msg)</span> </span>= <span class="hljs-number">0</span>;<br><br>  <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">Subject</span>() &#123;<br>	  cout &lt;&lt; <span class="hljs-string">&quot; ~Subject() &quot;</span> &lt;&lt; endl;<br>  &#125;;<br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-comment">// 管理观察者</span><br>  list&lt;Observer *&gt; observer_list;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Observer</span> &#123;    <span class="hljs-comment">// 观察者基类</span><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(std::string msg)</span> </span>= <span class="hljs-number">0</span>;<br><br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Observer</span><span class="hljs-params">(std::string name)</span> : name_(std::move(name)) &#123;</span>&#125;<br><br>  <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">Observer</span>() &#123;<br>	  cout &lt;&lt; <span class="hljs-string">&quot; ~Observer() &quot;</span> &lt;&lt; endl;<br>  &#125;;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">subscribe</span><span class="hljs-params">(shared_ptr&lt;Subject&gt; subject)</span> </span>&#123;    <span class="hljs-comment">// 订阅</span><br>	  subject_ = subject;<br>	  subject_-&gt;<span class="hljs-built_in">add</span>(<span class="hljs-keyword">this</span>);<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unsubscribe</span><span class="hljs-params">()</span> </span>&#123;    <span class="hljs-comment">// 取消订阅</span><br>	  subject_-&gt;<span class="hljs-built_in">del</span>(<span class="hljs-keyword">this</span>);<br>  &#125;<br><br> <span class="hljs-keyword">public</span>:<br>  std::string name_;<br>  shared_ptr&lt;Subject&gt; subject_;    <span class="hljs-comment">// 只能订阅一个主题</span><br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">New</span> : <span class="hljs-keyword">public</span> Subject &#123;    <span class="hljs-comment">// 具体主题（新闻）</span><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">notify</span><span class="hljs-params">(std::string msg)</span> <span class="hljs-keyword">override</span> </span>&#123;<br>	  cout &lt;&lt; <span class="hljs-string">&quot;subscribe New people : &quot;</span> &lt;&lt; observer_list.<span class="hljs-built_in">size</span>() &lt;&lt; endl;<br>	  <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;observer : observer_list) &#123;<br>		  observer-&gt;<span class="hljs-built_in">update</span>(msg);<br>	  &#125;<br>  &#125;<br><br>  ~<span class="hljs-built_in">New</span>() <span class="hljs-keyword">override</span> &#123;<br>	  cout &lt;&lt; <span class="hljs-string">&quot; ~New() &quot;</span> &lt;&lt; endl;<br>  &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">TV</span> : <span class="hljs-keyword">public</span> Subject &#123;    <span class="hljs-comment">// 具体主题（电视台）</span><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">notify</span><span class="hljs-params">(std::string msg)</span> <span class="hljs-keyword">override</span> </span>&#123;<br>	  cout &lt;&lt; <span class="hljs-string">&quot;subscribe TV people : &quot;</span> &lt;&lt; observer_list.<span class="hljs-built_in">size</span>() &lt;&lt; endl;<br>	  <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;observer : observer_list) &#123;<br>		  observer-&gt;<span class="hljs-built_in">update</span>(msg);<br>	  &#125;<br>  &#125;<br><br>  ~<span class="hljs-built_in">TV</span>() <span class="hljs-keyword">override</span> &#123;<br>	  cout &lt;&lt; <span class="hljs-string">&quot; ~TV() &quot;</span> &lt;&lt; endl;<br>  &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Teacher</span> : <span class="hljs-keyword">public</span> Observer &#123;    <span class="hljs-comment">// 具体观察者（老师）</span><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(std::string msg)</span> <span class="hljs-keyword">override</span> </span>&#123;<br>	  cout &lt;&lt; <span class="hljs-string">&quot;Teacher &quot;</span> &lt;&lt; name_ &lt;&lt; <span class="hljs-string">&quot; get message : &quot;</span> &lt;&lt; msg &lt;&lt; endl;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(std::string name)</span> : Observer(std::move(name)) &#123;</span>&#125;<br><br>  ~<span class="hljs-built_in">Teacher</span>() <span class="hljs-keyword">override</span> &#123;<br>	  cout &lt;&lt; <span class="hljs-string">&quot; ~Teacher() &quot;</span> &lt;&lt; endl;<br>  &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> : <span class="hljs-keyword">public</span> Observer &#123;    <span class="hljs-comment">// 具体观察者（学生）</span><br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(std::string msg)</span> <span class="hljs-keyword">override</span> </span>&#123;<br>	  cout &lt;&lt; <span class="hljs-string">&quot;Student &quot;</span> &lt;&lt; name_ &lt;&lt; <span class="hljs-string">&quot; get message : &quot;</span> &lt;&lt; msg &lt;&lt; endl;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Student</span><span class="hljs-params">(std::string name)</span> : Observer(std::move(name)) &#123;</span>&#125;<br><br>  ~<span class="hljs-built_in">Student</span>() <span class="hljs-keyword">override</span> &#123;<br>	  cout &lt;&lt; <span class="hljs-string">&quot; ~Student() &quot;</span> &lt;&lt; endl;<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br><br>	<span class="hljs-comment">// 创建一个主题</span><br>	shared_ptr&lt;Subject&gt; new_sub = <span class="hljs-built_in">make_shared</span>&lt;New&gt;();<br><br>	<span class="hljs-comment">// 创建多个观察者</span><br>	std::string name_xy = <span class="hljs-string">&quot;xy&quot;</span>;<br>	shared_ptr&lt;Observer&gt; s_xy = <span class="hljs-built_in">make_shared</span>&lt;Student&gt;(name_xy);<br>	s_xy-&gt;<span class="hljs-built_in">subscribe</span>(new_sub);<br><br>	std::string name_li = <span class="hljs-string">&quot;li&quot;</span>;<br>	shared_ptr&lt;Observer&gt; t_li = <span class="hljs-built_in">make_shared</span>&lt;Teacher&gt;(name_li);<br>	t_li-&gt;<span class="hljs-built_in">subscribe</span>(new_sub);<br><br>	new_sub-&gt;<span class="hljs-built_in">notify</span>(<span class="hljs-string">&quot;New news available!&quot;</span>);<br><br>	t_li-&gt;<span class="hljs-built_in">unsubscribe</span>();<br><br>	new_sub-&gt;<span class="hljs-built_in">notify</span>(<span class="hljs-string">&quot;New news Test&quot;</span>);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1><span id="和发布-订阅模式的区别">和发布-订阅模式的区别</span></h1>
 <figure>
-<img src="/images/2025/03/05/b678a3f0-f9d3-11ef-b8f9-9d2244891ef7.png" alt="image20250305212619718.png">
-<figcaption aria-hidden="true">image20250305212619718.png</figcaption>
+<img src="/images/2025/03/13/71d405e0-ffec-11ef-b5e3-b774a49c20be.png" alt="4fd5710dbf0981453cf21c45f84931b8.png">
+<figcaption aria-hidden="true">4fd5710dbf0981453cf21c45f84931b8.png</figcaption>
 </figure>
-<h2><span id="编码和解码">编码和解码</span></h2>
-<table>
-<thead>
-<tr>
-<th>字符</th>
-<th>编码</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A</td>
-<td>0000</td>
-</tr>
-<tr>
-<td>B</td>
-<td>0001</td>
-</tr>
-<tr>
-<td>C</td>
-<td>010</td>
-</tr>
-<tr>
-<td>D</td>
-<td>011</td>
-</tr>
-<tr>
-<td>E</td>
-<td>001</td>
-</tr>
-<tr>
-<td>F</td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
-<p>由于字符太多，假定我们要编码字符串
-<code>"ACFDEB"</code>，得到的编码结果为：0000 010 1 011 001 0001</p>
-<p>解码就是它的逆向操作。</p>
-<h1><span id="代码实现">代码实现</span></h1>
-<p>完整代码：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9%E4%B9%8B%E9%9C%8D%E5%A4%AB%E6%9B%BC%E6%A0%91/Huffman">霍夫曼树</a></p>
-<h2><span id="节点定义">节点定义</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span> &#123;<br>	<span class="hljs-type">char</span>	data_;<br>	<span class="hljs-type">int</span>	frequency_;<br>	Node	*left_;<br>	Node	*right_;<br><br>	<span class="hljs-built_in">Node</span>( <span class="hljs-type">char</span> data, <span class="hljs-type">int</span> frequency ) : <span class="hljs-built_in">data_</span>( data ), <span class="hljs-built_in">frequency_</span>( frequency ), <span class="hljs-built_in">left_</span>( <span class="hljs-literal">nullptr</span> ), <span class="hljs-built_in">right_</span>( <span class="hljs-literal">nullptr</span> )<br>	&#123;&#125;<br><br><br>	<span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;( <span class="hljs-type">const</span> Node &amp;right ) <span class="hljs-type">const</span> <span class="hljs-comment">/* 频率越低，越靠前 */</span><br>	&#123;<br>		<span class="hljs-keyword">return</span>(<span class="hljs-keyword">this</span>-&gt;frequency_ &gt; right.frequency_);<br>	&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-<h2><span id="构建霍夫曼树">构建霍夫曼树</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">buildHuffman</span><span class="hljs-params">( <span class="hljs-type">const</span> string &amp;str )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-comment">/* 统计词频 */</span><br>	std::unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; wordFre;<br>	<span class="hljs-keyword">for</span> ( <span class="hljs-type">char</span> c : str )<br>	&#123;<br>		wordFre[c]++;<br>	&#125;<br>	<span class="hljs-comment">/* 加入优先级队列 */</span><br>	priority_queue&lt;Node *&gt; NodeQue;<br>	<span class="hljs-keyword">for</span> ( <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;word : wordFre )<br>	&#123;<br>		NodeQue.<span class="hljs-built_in">push</span>( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>( word.first, word.second ) );<br>	&#125;<br>	<span class="hljs-comment">/*</span><br><span class="hljs-comment">	 * 构建哈夫曼树</span><br><span class="hljs-comment">	 * 不断取出优先级队列中的两个节点，并创建一个节点记录两个节点的权值和，直到只剩下一个节点才终止</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-keyword">while</span> ( NodeQue.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">1</span> )<br>	&#123;<br>		<span class="hljs-keyword">auto</span> leftNode = NodeQue.<span class="hljs-built_in">top</span>();<br>		NodeQue.<span class="hljs-built_in">pop</span>();<br>		<span class="hljs-keyword">auto</span> rightNode = NodeQue.<span class="hljs-built_in">top</span>();<br>		NodeQue.<span class="hljs-built_in">pop</span>();<br><br>		<span class="hljs-keyword">auto</span> parent_node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>( <span class="hljs-string">&#x27;\0&#x27;</span>, leftNode-&gt;frequency_ + rightNode-&gt;frequency_ );<br>		parent_node-&gt;left_	= leftNode;<br>		parent_node-&gt;right_	= rightNode;<br>		NodeQue.<span class="hljs-built_in">push</span>( parent_node );<br>	&#125;<br>	root_ = NodeQue.<span class="hljs-built_in">top</span>();<br>	NodeQue.<span class="hljs-built_in">pop</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
-<h2><span id="生成哈夫曼表-方便后面编码操作">生成哈夫曼表--方便后面编码操作</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">generateCodes</span><span class="hljs-params">( Node *node, string code )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> ( node == <span class="hljs-literal">nullptr</span> )<br>		<span class="hljs-keyword">return</span>;<br>	<span class="hljs-keyword">if</span> ( node-&gt;left_ == <span class="hljs-literal">nullptr</span> &amp;&amp; node-&gt;right_ == <span class="hljs-literal">nullptr</span> ) <span class="hljs-comment">/* 叶子节点，记录字符的编码 */</span><br>	&#123;<br>		huffmanCodeTable_[node-&gt;data_] = code;<br>	&#125;<br>	<span class="hljs-built_in">generateCodes</span>( node-&gt;left_, code + <span class="hljs-string">&quot;0&quot;</span> );<br>	<span class="hljs-built_in">generateCodes</span>( node-&gt;right_, code + <span class="hljs-string">&quot;1&quot;</span> );<br>&#125;<br></code></pre></td></tr></table></figure>
-<h2><span id="编码">编码</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">string <span class="hljs-title">encode</span><span class="hljs-params">( <span class="hljs-type">const</span> string &amp;text )</span> <span class="hljs-type">const</span>               <span class="hljs-comment">/* 把字符串编码 */</span></span><br><span class="hljs-function"></span>&#123;<br>	string result;<br>	<span class="hljs-keyword">for</span> ( <span class="hljs-type">char</span> c : text )<br>	&#123;<br>		result += huffmanCodeTable_.<span class="hljs-built_in">at</span>( c );    <span class="hljs-comment">/* at 确保能匹配到，否则报错 */</span><br>	&#125;<br>	<span class="hljs-keyword">return</span>(result);<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>有前面构建好的哈夫曼编码表，这里的编码操作就再简单不过了。</p>
-<h2><span id="解码">解码</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">string <span class="hljs-title">decode</span><span class="hljs-params">( <span class="hljs-type">const</span> string &amp;encodedString )</span> <span class="hljs-type">const</span>      <span class="hljs-comment">/* 解码--》字符串 */</span></span><br><span class="hljs-function"></span>&#123;<br>	string	result;<br>	<span class="hljs-keyword">auto</span>	cur_node = root_;<br><br>	<span class="hljs-keyword">for</span> ( <span class="hljs-type">char</span> c : encodedString )<br>	&#123;<br>		<span class="hljs-keyword">if</span> ( c == <span class="hljs-string">&#x27;0&#x27;</span> )<br>		&#123;<br>			cur_node = cur_node-&gt;left_;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			cur_node = cur_node-&gt;right_;<br>		&#125;<br><br>		<span class="hljs-keyword">if</span> ( cur_node-&gt;left_ == <span class="hljs-literal">nullptr</span> &amp;&amp; cur_node-&gt;right_ == <span class="hljs-literal">nullptr</span> )        <span class="hljs-comment">/* 解析出一个字符 */</span><br>		&#123;<br>			result		+= cur_node-&gt;data_;<br>			cur_node	= root_;                                        <span class="hljs-comment">/* 回到根节点，因为任何字符串编码都是从根节点开始的 */</span><br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span>(result);<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>我们都知道，任何一个字符的对应的编码都是从根节点开始构建出来。</p>
-<p>那么，我们只需要遍历字符串，0 就往左边走，1
-就往右边走，当前节点成为叶子节点，那么这个节点的 data
-就是解析出来的字符。</p>
-<p>然后，把 cur_node 继续替换为 root_，再次重复上面的操作即可。</p>
+<p>前面我们看到观察者模式，可以有多个主题，一个主题有多个观察者，而一个观察者只能订阅一个主题。</p>
+<p>但是发布订阅就不同，由一个发布者管理多个主题，多个主题有多个订阅者，一个订阅者可以订阅多个主题，这就是两者的区别。</p>
+<p>发布订阅中，订阅者通过发布者订阅主题，主题有消息通过发布者通知订阅者。</p>
 
       </div>
 	<div id="zan" class="clearfix">
@@ -346,23 +247,11 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/posts/5b12ffb4.html">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>缓存设计</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/posts/8ce77716.html">
+    <a class="post-nav-item-right" href="/posts/20e6bfc.html">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -374,7 +263,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      斗地主之顺子
+      d叉堆
     </a>
   
 </div>
@@ -382,12 +271,12 @@
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
 
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\22a22b79.html" title="三大经典排序算法" rel="bookmark">三大经典排序算法</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ec6973f6.html" title="基于二叉搜索树实现Map容器的基本操作" rel="bookmark">基于二叉搜索树实现Map容器的基本操作</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\d8d692f8.html" title="实现海量数据快速查找之哈希表" rel="bookmark">实现海量数据快速查找之哈希表</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\77755875.html" title="UML类图绘制" rel="bookmark">UML类图绘制</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7b510e10.html" title="代理模式" rel="bookmark">代理模式</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\f1601c3e.html" title="单例模式" rel="bookmark">单例模式</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
