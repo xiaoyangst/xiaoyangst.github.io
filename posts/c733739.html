@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-         | 
+        模板特化 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,205 +156,149 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/blog)"></div>
-        博客
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">模板特化</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" class="post-tag">#模板元编程</a>
+
+
+          <span class="post-date">2025-03-15</span>
+        </div>
       </div>
-      <div class="wall-category-description"></div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Asio/" rel="tag">Asio</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" rel="tag">C++11新特性</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">C++性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CMake/" rel="tag">CMake</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CPP/" rel="tag">CPP</a><span class="tag-list-count">26</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clion/" rel="tag">Clion</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MIT/" rel="tag">MIT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OS/" rel="tag">OS</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/STL/" rel="tag">STL</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/" rel="tag">Tools</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vim/" rel="tag">Vim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag">函数式编程</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86/" rel="tag">前缀和与差分</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8C%BB%E5%AD%A6/" rel="tag">医学</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" rel="tag">单调栈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" rel="tag">单调队列</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E5%92%8C%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" rel="tag">原子变量和内存模型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8C%E6%8C%87%E9%92%88/" rel="tag">双指针</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" rel="tag">哈希表</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF/" rel="tag">回溯</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" rel="tag">基础组件</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">字符串</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B6%E5%BA%AD%E5%81%A5%E5%BA%B7/" rel="tag">家庭健康</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" rel="tag">容器的应用</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag">并发编程</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" rel="tag">技术摘录</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" rel="tag">技术杂文</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" rel="tag">操作系统导论</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" rel="tag">数据结构与算法</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag">杂项</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%88/" rel="tag">栈</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91/" rel="tag">树</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" rel="tag">模板元编程</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B0%B4%E6%9E%9C/" rel="tag">水果</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" rel="tag">深入理解计算机系统</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" rel="tag">源码剖析</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag">线性代数</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag">网络编程</a><span class="tag-list-count">30</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%90%A5%E5%85%BB%E5%AD%A6/" rel="tag">营养学</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">计算机组成原理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag">链表</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%9F%E5%88%97/" rel="tag">队列</a><span class="tag-list-count">4</span></li></ul></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#全特化">全特化</a></li>
+<li><a href="#偏特化">偏特化</a></li>
+<li><a href="#c-为什么没有直接支持函数模板的部分特化">C++
+为什么没有直接支持函数模板的部分特化</a></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="全特化">全特化</span></h1>
+<p><strong>针对某个特定的模板参数</strong>
+提供一个完全独立的实现，<strong>完全替代</strong> 原始的模板定义。</p>
+<p>函数模板全特化：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 通用模板定义</span><br><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span> U&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Message</span><span class="hljs-params">(T n1, U n2)</span> </span>&#123;<br>	std::cout &lt;&lt; n1 &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; n2 &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-comment">// 全特化</span><br><span class="hljs-keyword">template</span>&lt;&gt;<br><span class="hljs-type">void</span> <span class="hljs-built_in">Message</span>&lt;<span class="hljs-type">int</span>, <span class="hljs-type">double</span>&gt;(<span class="hljs-type">int</span> n1, <span class="hljs-type">double</span> n2) &#123;<br>	std::cout &lt;&lt; <span class="hljs-string">&quot;全特化&quot;</span> &lt;&lt; std::endl;<br>	std::cout &lt;&lt; n1 &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; n2 &lt;&lt; std::endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>类模板全特化：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 通用模板</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Printer</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;通用打印器\n&quot;</span>;<br>    &#125;<br>&#125;;<br><br><span class="hljs-comment">// 针对 int 类型的全特化</span><br><span class="hljs-keyword">template</span> &lt;&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Printer</span>&lt;<span class="hljs-type">int</span>&gt; &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;专门处理 int 类型的打印器\n&quot;</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>从全特化可以看出这样几个特点：</p>
+<ol type="1">
+<li>由于全特化是把模板中的参数或者参数类型全部都确定，也就无需在
+template&lt;&gt;
+中写任何内容，而是在函数名或者类名后面添加确定的参数类型或参数</li>
+<li>全特化就和原始模板没有关系，可以看出全特化的 Message
+函数可以实现其他内容</li>
+<li>如果用户在 确定 第一个参数类型是 int，第二个参数类型是
+double，那么就会优先走全特化，而不是通用模板定义</li>
+</ol>
+<p>你可能有个疑问，如果是非类型参数，全特化是不是也要确定？没错！！！</p>
+<h1><span id="偏特化">偏特化</span></h1>
+<p>在 <strong>不完全固定所有模板参数</strong>
+的情况下，为特定情况提供<strong>自定义实现</strong>。它适用于<strong>类模板</strong>，但<strong>不适用于函数模板</strong>（C++
+没有直接支持函数模板的部分特化，但可以用重载+SFINAE等方式模拟）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 通用模板</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T1, <span class="hljs-keyword">typename</span> T2&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Example</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">show</span><span class="hljs-params">()</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;通用模板: T1, T2\n&quot;</span>;<br>    &#125;<br>&#125;;<br><br><span class="hljs-comment">// 偏特化：当 T2 固定为 int 时</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T1&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Example</span>&lt;T1, <span class="hljs-type">int</span>&gt; &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">show</span><span class="hljs-params">()</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;偏特化: T2 被固定为 int\n&quot;</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h1><span id="c为什么没有直接支持函数模板的部分特化">C++
+为什么没有直接支持函数模板的部分特化</span></h1>
+<p>C++
+通过函数重载来选择最匹配的函数，而类模板的部分特化是通过模式匹配来选择最匹配的模板特化。</p>
+<p>函数模板的部分特化会与现有的函数模板重载机制产生歧义，导致编译器无法明确选择合适的匹配方式。</p>
+<p>我们可以使用重载、SFINAE（C++11 支持） 和 concepts（C++20 支持）
+来实现相同的功能，同时避免编译器的二义性问题。</p>
+
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/db549e14.html" class="post-title hover-line">要认识到TCP是一个可靠的，但并不绝对可靠的协议</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我们会误以为只要基于 TCP 编程，那么通信的数据必然能够到达对端主机，毕竟 TCP 是可靠的传输协议。然而， TCP 是处在传输层的协议，其可靠性只针对传输层，但是消息最终要达到应用层才算有价值。从传输层到应用层的消息会不会出现问题，可不由 TCP 来保证</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/c296b7ce.html" class="post-title hover-line">记住：TCP是一种流协议</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">TCP 是一种流协议，这就意味着数据是以字节流的形式传递给接收者的，没有固有的”报文”或”报文边界”的概念。从这方面来说，读取 TCP 数据就像从串行端口读取数据一样——无法预先得知在一次指定的读调用中会返回多少字节</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/86fee3b7.html" class="post-title hover-line">基本套接字 API 的回顾</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">网络编程必备的基础 API 应用知识</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/bb1d5a95.html" class="post-title hover-line">记住：TCP不是轮询的</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">TCP 不提供连接丢失即时通知最重要的原因与其主要设计目标之一有关：出现网络故障时维护通信的能力。国防部赞助的一项研究要提供一种即使在发生战争或自然灾害这种严重网络损坏的情况下，也能维护可靠网络通信的网络协议，TCP就是这种研究的产物</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/732a7f7c.html" class="post-title hover-line">理解面向连接和无连接协议之间的区别</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">它们的本质区别在于，对无连接协议来说，每个分组的处理都独立于所有其他分组，而对面向连接的协议来说，协议实现则维护了与后继分组有关的状态信息</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/dc6e956f.html" class="post-title hover-line">提防对等实体的不友好动作</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">亦如在程序中接受用户的输入前，要对用户的输入进行“安全检测”，以防止恶意输入破坏应用程序的正常运行。可见，防御性编程在编码中是必备的意识，网络编程中也要考虑各种概率看似很小的事件，做出相应的处理动作</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag">#网络编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/194fa9a8.html" class="post-title hover-line">40.组合总和 II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">前面做的组合题，不管强调与否，数组中的元素都是没有重复的，但这道题恰恰相反。看来只要解决重复元素可能带来的问题就可以了。我们就用一个布尔值 note 标记，如果 note 为 false 表明在同一层（同一个栈），否则在不同层（不同栈）。同层的元素相同可被忽略，不同层的元素相同不可被忽略</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/be58eeab.html" class="post-title hover-line">39.组合总和</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我们的回溯会把当前元素和后面的元素所有可能都尝试一遍，而组合不强调顺序性，这就是为什么组合中其后的元素没有必要往前看</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/8ffbed9b.html" class="post-title hover-line">17.电话号码的字母组合</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">在完成《77.组合》基础上，这道题你要会两个技能，分别是建立映射关系（通常是数组）和单个数字字符转换为对应的整数（ch - '0'）</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/63e09d47.html" class="post-title hover-line">218.组合III</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">在完成《77.组合》基础上，这道题无外乎增加一个额外的条件，即需要 path 中数的总和为 n，其中限制元素个数为 k</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%9B%9E%E6%BA%AF/" class="post-tag">#回溯</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/23/">23</a><a class="page-number" href="/blog/page/24/">24</a><span class="page-number current">25</span><a class="page-number" href="/blog/page/26/">26</a><a class="page-number" href="/blog/page/27/">27</a></div>
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/a29a8e8e.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      模板参数
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" class="post-tag">#模板元编程</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\a26bcf95.html" title="模板中头文件和源文件的处置方式" rel="bookmark">模板中头文件和源文件的处置方式</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\8c292530.html" title="模板编程中的可变参展开" rel="bookmark">模板编程中的可变参展开</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\55a8871d.html" title="模板元编程的意义" rel="bookmark">模板元编程的意义</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -881,6 +826,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>
