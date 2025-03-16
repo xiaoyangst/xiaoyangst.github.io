@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        万能引用和完美转发 | 
+        SFINAE | 
       
     </title>
     <meta name="description" content="" />
@@ -159,7 +159,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">万能引用和完美转发</div>
+        <div class="post-title">SFINAE</div>
         <div class="post-info">
           
   <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" class="post-tag">#模板元编程</a>
@@ -175,77 +175,35 @@
             
           </div>
         
-        <!-- toc -->
-<ul>
-<li><a href="#万能引用">万能引用</a></li>
-<li><a href="#完美转发">完美转发</a></li>
-<li><a href="#remove_reference">remove_reference</a></li>
-<li><a href="#forward-源码">forward 源码</a></li>
-<li><a href="#move-源码">move 源码</a></li>
-</ul>
-<!-- tocstop -->
-<h1><span id="万能引用">万能引用</span></h1>
-<p>万能引用是 C++11
-引入的一种<strong>特殊引用类型</strong>，其语法形式是
-<strong><code>T&amp;&amp;</code></strong>，但只有在<strong>模板参数推导</strong>时，才能成为万能引用。</p>
-<p>显式类型不会触发万能引用。</p>
-<p>特点：</p>
-<ul>
-<li><strong>左值可以匹配 <code>T&amp;</code>，右值匹配
-<code>T&amp;&amp;</code></strong></li>
-<li><strong>类型推导时，<code>T</code> 可能是
-<code>U&amp;</code>（左值）或 <code>U</code>（右值）</strong></li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">func</span><span class="hljs-params">(T&amp;&amp; arg)</span></span>;<br><br><span class="hljs-comment">// 传递左值</span><br><span class="hljs-type">int</span> x = <span class="hljs-number">42</span>;<br><span class="hljs-built_in">func</span>(x);   <span class="hljs-comment">// T -&gt; int&amp;，arg 变为 int&amp; &amp;&amp; -&gt; int&amp; （万能引用匹配左值）</span><br><br><span class="hljs-comment">// 传递右值</span><br><span class="hljs-built_in">func</span>(<span class="hljs-number">42</span>);  <span class="hljs-comment">// T -&gt; int，arg 变为 int&amp;&amp; （万能引用匹配右值）</span><br></code></pre></td></tr></table></figure>
-<h1><span id="完美转发">完美转发</span></h1>
-<p>完美转发是指<strong>保持参数原始的左值/右值属性，将其传递给另一个函数</strong>。它主要依赖
-<code>std::forward</code>。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">forwarder</span><span class="hljs-params">(T&amp;&amp; arg)</span> </span>&#123;  <span class="hljs-comment">// arg 是万能引用</span><br>    <span class="hljs-built_in">process</span>(std::forward&lt;T&gt;(arg));  <span class="hljs-comment">// 完美转发</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<h1><span id="remove_reference">remove_reference</span></h1>
-<p>适用于<strong>非引用类型</strong>，如
-<code>int</code>、<code>double</code>、<code>std::string</code> 等。</p>
-<p><code>type</code> 直接定义为 <code>_Tp</code>，即保持原类型不变。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">remove_reference</span><br>&#123; <span class="hljs-keyword">typedef</span> _Tp type; &#125;;<br></code></pre></td></tr></table></figure>
-<p>适用于<strong>左值引用</strong> <code>T&amp;</code>，它将
-<code>T&amp;</code> <strong>去掉引用，变为 <code>T</code></strong>。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">remove_reference</span>&lt;_Tp&amp;&gt;<br>&#123; <span class="hljs-keyword">typedef</span> _Tp type; &#125;;<br></code></pre></td></tr></table></figure>
-<p>适用于<strong>右值引用</strong> <code>T&amp;&amp;</code>，它将
-<code>T&amp;&amp;</code> <strong>去掉引用，变为
-<code>T</code></strong>。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">remove_reference</span>&lt;_Tp&amp;&amp;&gt;<br>&#123; <span class="hljs-keyword">typedef</span> _Tp type; &#125;;<br></code></pre></td></tr></table></figure>
-<h1><span id="forward-源码">forward 源码</span></h1>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 左值版本</span><br><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">constexpr</span> _Tp&amp;&amp;</span><br><span class="hljs-function"><span class="hljs-title">forward</span><span class="hljs-params">(<span class="hljs-keyword">typename</span> std::remove_reference&lt;_Tp&gt;::type&amp; <span class="hljs-type">__t</span>)</span> <span class="hljs-keyword">noexcept</span></span><br><span class="hljs-function"></span>&#123; <br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;_Tp&amp;&amp;&gt;(<span class="hljs-type">__t</span>); <br>&#125;<br><br><span class="hljs-comment">// 右值版本</span><br><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">constexpr</span> _Tp&amp;&amp;</span><br><span class="hljs-function"><span class="hljs-title">forward</span><span class="hljs-params">(<span class="hljs-keyword">typename</span> std::remove_reference&lt;_Tp&gt;::type&amp;&amp; <span class="hljs-type">__t</span>)</span> <span class="hljs-keyword">noexcept</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-built_in">static_assert</span>(!std::is_lvalue_reference&lt;_Tp&gt;::value, 	<br>                  <span class="hljs-string">&quot;template argument substituting _Tp is an lvalue reference type&quot;</span>);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;_Tp&amp;&amp;&gt;(<span class="hljs-type">__t</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>接受左值版本：</p>
-<ul>
-<li><code>typename std::remove_reference&lt;_Tp&gt;::type&amp; __t</code>
-表示把接受到的参数的引用去除得到原始类型 T，原始类型 T 再加上后面的
-&amp;，成为左值引用 T&amp;，故而接受左值，称为左值版本</li>
-<li>强转为<strong><code>_Tp&amp;&amp;</code></strong>（右值引用），并返回</li>
-</ul>
-<p>由于 _TP 是 T&amp;，那么替换过来 T&amp; &amp;&amp; --&gt;
-T&amp;，确保传进来是左值，传出去还是左值。</p>
-<p> </p>
-<p>接受右值版本：</p>
-<ul>
-<li><code>typename std::remove_reference&lt;_Tp&gt;::type&amp;&amp; __t</code>
-表示把接受到的参数的引用去除得到原始类型 T，原始类型 T 再加上后面的
-&amp;&amp;，成为右值引用 T&amp;&amp;，故而接受右值，称为右值版本</li>
-<li>断言判断防止传递左值，只接受右值</li>
-<li>强转为<strong><code>_Tp&amp;&amp;</code></strong>（右值引用），并返回</li>
-</ul>
-<p>由于 _TP 是 T&amp;&amp;，那么替换过来 T&amp;&amp; &amp;&amp; --&gt;
-T&amp;&amp;，确保传进来是右值，传出去还是右值。</p>
-<h1><span id="move-源码">move 源码</span></h1>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> _Tp&gt;	<br><span class="hljs-keyword">constexpr</span> <span class="hljs-keyword">typename</span> std::remove_reference&lt;_Tp&gt;::<span class="hljs-function">type&amp;&amp;</span><br><span class="hljs-function"><span class="hljs-title">move</span><span class="hljs-params">(_Tp&amp;&amp; <span class="hljs-type">__t</span>)</span> <span class="hljs-keyword">noexcept</span></span><br><span class="hljs-function"></span>&#123; <br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">typename</span> std::remove_reference&lt;_Tp&gt;::type&amp;&amp;&gt;(<span class="hljs-type">__t</span>); <br>&#125;<br></code></pre></td></tr></table></figure>
-<ul>
-<li>_Tp 是泛型参数，可以接受左值或右值</li>
-<li>先用 <code>std::remove_reference</code> 去掉 _Tp 的引用，再加上
-&amp;&amp;，使其变成右值引用</li>
-<li>使用 <code>static_cast</code> <strong>强制转换 <code>__t</code>
-为右值引用</strong>。</li>
-</ul>
-<p><code>std::move</code>
-<strong>总是转换为右值</strong>，不会区分原本是左值还是右值。</p>
+        <p>SFINAE 是 C++
+中的一种语言规则，其大意是：编译器在尝试将模版形参替换为模板实参的时候，如果替换后得到的结果不是合法的代码（替换失败），编译器不会报错，而仅仅是忽略它。</p>
+<h1><span id="sfinae">SFINAE</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">equal</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果是 int 类型的数据这里不会出错，但是 double
+浮点型就有问题，因为浮点数无法判断是否相等。</p>
+<p>也许你想到特化模板，对浮点数特别处理，比方说：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;&gt;<br><span class="hljs-type">bool</span> <span class="hljs-built_in">equal</span>&lt;<span class="hljs-type">double</span>&gt;(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b) &#123;<br>	cout &lt;&lt; <span class="hljs-string">&quot;无法处理 double&quot;</span> &lt;&lt; endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>但如果我们用 SFINAE 规则会如何处理？</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;type_traits&gt;</span></span><br><br><span class="hljs-comment">// 借助 SFINAE 对 T 进行约束</span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T,<br>         <span class="hljs-keyword">typename</span> = std::<span class="hljs-type">enable_if_t</span>&lt;std::is_integral_v&lt;T&gt;&gt;<br>&gt;<br><span class="hljs-type">bool</span> <span class="hljs-built_in">equal</span>(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b) &#123;<br>    <span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>std::enable_if&lt;条件&gt;::type</code>
+用于启用或禁用模板。而代码中的<code>std::enable_if_t&lt;条件&gt;</code>
+是 <code>std::enable_if&lt;条件&gt;::type</code> 的简写。</p>
+<p><code>std::is_integral&lt;T&gt;::value</code> 是 C++
+类型特征的一部分，如果是 int 类型返回 true，如果不是就返回
+false。而代码中的<code>std::is_integral_v&lt;T&gt;</code> 是
+<code>std::is_integral&lt;T&gt;::value</code> 的简写。</p>
+<h1><span id="sfinae-的替代品c20concepts">SFINAE 的替代品：C++20
+Concepts</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">requires</span> std::is_integral_v&lt;T&gt;</span><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">equal</span><span class="hljs-params">(<span class="hljs-type">const</span> T &amp;a, <span class="hljs-type">const</span> T &amp;b)</span> </span>&#123;<br>	<span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>更简洁的写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;std::integral T&gt;</span><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">equal</span><span class="hljs-params">(<span class="hljs-type">const</span> T &amp;a, <span class="hljs-type">const</span> T &amp;b)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果你要限制多个不同的类型，怎么办？通过 || 来连接多个限制。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;concepts&gt;</span></span><br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-built_in">requires</span> (std::integral&lt;T&gt; || std::floating_point&lt;T&gt;)<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">equal</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>你还可以这么做：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">concept</span> Number = std::integral&lt;T&gt; || std::floating_point&lt;T&gt;;<br><br><span class="hljs-keyword">template</span> &lt;Number T&gt;<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">equal</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1><span id="参考文章">参考文章</span></h1>
+<p><a target="_blank" rel="noopener" href="https://shuai.guru/2023-07-08-c-sfinae-to-concepts/"><strong>从
+SFINAE 到 C++20 Concepts</strong></a></p>
 
       </div>
 	<div id="zan" class="clearfix">
@@ -294,23 +252,11 @@ T&amp;&amp;，确保传进来是右值，传出去还是右值。</p>
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/posts/9fa70a35.html">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>SFINAE</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/posts/a44af387.html">
+    <a class="post-nav-item-right" href="/posts/3141e8d8.html">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -322,7 +268,7 @@ T&amp;&amp;，确保传进来是右值，传出去还是右值。</p>
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      模板元编程
+      万能引用和完美转发
     </a>
   
 </div>
