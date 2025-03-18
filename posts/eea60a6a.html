@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        SFINAE | 
+        字典树 | 
       
     </title>
     <meta name="description" content="" />
@@ -159,13 +159,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">SFINAE</div>
+        <div class="post-title">字典树</div>
         <div class="post-info">
           
-  <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" class="post-tag">#模板元编程</a>
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
 
 
-          <span class="post-date">2025-03-16</span>
+          <span class="post-date">2025-03-18</span>
         </div>
       </div>
       
@@ -175,35 +175,69 @@
             
           </div>
         
-        <p>SFINAE 是 C++
-中的一种语言规则，其大意是：编译器在尝试将模版形参替换为模板实参的时候，如果替换后得到的结果不是合法的代码（替换失败），编译器不会报错，而仅仅是忽略它。</p>
-<h1><span id="sfinae">SFINAE</span></h1>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">equal</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>如果是 int 类型的数据这里不会出错，但是 double
-浮点型就有问题，因为浮点数无法判断是否相等。</p>
-<p>也许你想到特化模板，对浮点数特别处理，比方说：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;&gt;<br><span class="hljs-type">bool</span> <span class="hljs-built_in">equal</span>&lt;<span class="hljs-type">double</span>&gt;(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b) &#123;<br>	cout &lt;&lt; <span class="hljs-string">&quot;无法处理 double&quot;</span> &lt;&lt; endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>但如果我们用 SFINAE 规则会如何处理？</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;type_traits&gt;</span></span><br><br><span class="hljs-comment">// 借助 SFINAE 对 T 进行约束</span><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T,<br>         <span class="hljs-keyword">typename</span> = std::<span class="hljs-type">enable_if_t</span>&lt;std::is_integral_v&lt;T&gt;&gt;<br>&gt;<br><span class="hljs-type">bool</span> <span class="hljs-built_in">equal</span>(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b) &#123;<br>    <span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p><code>std::enable_if&lt;条件&gt;::type</code>
-用于启用或禁用模板。而代码中的<code>std::enable_if_t&lt;条件&gt;</code>
-是 <code>std::enable_if&lt;条件&gt;::type</code> 的简写。</p>
-<p><code>std::is_integral&lt;T&gt;::value</code> 是 C++
-类型特征的一部分，如果是 int 类型返回 true，如果不是就返回
-false。而代码中的<code>std::is_integral_v&lt;T&gt;</code> 是
-<code>std::is_integral&lt;T&gt;::value</code> 的简写。</p>
-<h1><span id="sfinae-的替代品c20concepts">SFINAE 的替代品：C++20
-Concepts</span></h1>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">requires</span> std::is_integral_v&lt;T&gt;</span><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">equal</span><span class="hljs-params">(<span class="hljs-type">const</span> T &amp;a, <span class="hljs-type">const</span> T &amp;b)</span> </span>&#123;<br>	<span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>更简洁的写法：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;std::integral T&gt;</span><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">equal</span><span class="hljs-params">(<span class="hljs-type">const</span> T &amp;a, <span class="hljs-type">const</span> T &amp;b)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>如果你要限制多个不同的类型，怎么办？通过 || 来连接多个限制。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;concepts&gt;</span></span><br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-built_in">requires</span> (std::integral&lt;T&gt; || std::floating_point&lt;T&gt;)<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">equal</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>你还可以这么做：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">concept</span> Number = std::integral&lt;T&gt; || std::floating_point&lt;T&gt;;<br><br><span class="hljs-keyword">template</span> &lt;Number T&gt;<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">equal</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; a, <span class="hljs-type">const</span> T&amp; b)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> a == b;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h1><span id="参考文章">参考文章</span></h1>
-<p><a target="_blank" rel="noopener" href="https://shuai.guru/2023-07-08-c-sfinae-to-concepts/"><strong>从
-SFINAE 到 C++20 Concepts</strong></a></p>
+        <!-- toc -->
+<ul>
+<li><a href="#插入">插入</a></li>
+<li><a href="#查找">查找</a></li>
+<li><a href="#删除">删除</a></li>
+<li><a href="#前缀匹配">前缀匹配</a></li>
+<li><a href="#输出全部字符串">输出全部字符串</a></li>
+</ul>
+<!-- tocstop -->
+<figure>
+<img src="/images/2025/03/18/50546b00-03e1-11f0-b6b4-25a3e2d262db.png" alt="fdbbee5af42e12decf3fb156f232fd28.png">
+<figcaption aria-hidden="true">fdbbee5af42e12decf3fb156f232fd28.png</figcaption>
+</figure>
+<p>性质：</p>
+<ul>
+<li>它是一棵多叉树，每个节点代表一个字符。<strong>根节点不包含字符</strong>，除根节点外的每个节点都包含一个字符</li>
+<li>从根节点到某一节点的路径上经过的字符连接起来，即为该节点对应的字符串</li>
+<li>每个节点可能有多个子节点，每个子节点对应一个不同的字符</li>
+<li>通常在表示字符串集合的字典树中，会有一些特殊标记来表示某个节点是否是一个字符串的结尾</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span> &#123;<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Node</span><span class="hljs-params">(<span class="hljs-type">char</span> ch, <span class="hljs-type">size_t</span> freq = <span class="hljs-number">0</span>)</span> : ch_(ch), freq_(freq) &#123;</span>&#125;<br><br>  <span class="hljs-type">char</span> ch_;<br>  <span class="hljs-type">size_t</span> freq_;<br>  unordered_map&lt;<span class="hljs-type">char</span>, Node *&gt; children_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>完整代码：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%AD%97%E5%85%B8%E6%A0%91/TrieTree">字典树</a></p>
+<h1><span id="插入">插入</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">const</span> string &amp;word)</span> </span>&#123;<br> <span class="hljs-keyword">if</span> (word.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span>;<br><br> <span class="hljs-keyword">auto</span> curNode = root_;<br> <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;ch : word) &#123;<br>  <span class="hljs-keyword">auto</span> it = curNode-&gt;children_.<span class="hljs-built_in">find</span>(ch);<br>  <span class="hljs-keyword">if</span> (it == curNode-&gt;children_.<span class="hljs-built_in">end</span>()) &#123;    <span class="hljs-comment">// 不存在就新增节点</span><br>	  curNode-&gt;children_[ch] = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(ch);<br>  &#125;<br>  curNode = curNode-&gt;children_[ch];        <span class="hljs-comment">// 移动到下一个节点</span><br> &#125;<br> curNode-&gt;freq_++;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>遍历字符串的每个字符，如果当前节点中没有该字符就新增。</p>
+<p>当遍历完成，curNode 就是记录字符串的末尾字符，频率加
+1，代表当前字符添加成功。</p>
+<p>特别注意，除了记录添加字符串的末尾字符的节点频率加
+1，其余频率为默认值 0：</p>
+<figure>
+<img src="/images/2025/03/18/5571c650-03e1-11f0-b6b4-25a3e2d262db.png" alt="image20250318175119267.png">
+<figcaption aria-hidden="true">image20250318175119267.png</figcaption>
+</figure>
+<h1><span id="查找">查找</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">search</span><span class="hljs-params">(<span class="hljs-type">const</span> string &amp;word)</span> </span>&#123;<br> <span class="hljs-keyword">if</span> (word.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br> <span class="hljs-keyword">auto</span> curNode = root_;<br> <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;ch : word) &#123;<br>  <span class="hljs-keyword">auto</span> it = curNode-&gt;children_.<span class="hljs-built_in">find</span>(ch);<br>  <span class="hljs-keyword">if</span> (it == root_-&gt;children_.<span class="hljs-built_in">end</span>()) &#123;<br>	  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>  &#125;<br>  curNode = curNode-&gt;children_[ch];<br> &#125;<br> <span class="hljs-keyword">return</span> curNode-&gt;freq_;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果 频率 为 0，代表不存在该字符串的记录。</p>
+<h1><span id="删除">删除</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">remove</span><span class="hljs-params">(<span class="hljs-type">const</span> string &amp;word)</span> </span>&#123;<br> <span class="hljs-keyword">if</span> (word.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span>;<br> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">search</span>(word) == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>;    <span class="hljs-comment">// 确保删除的单词是存在的</span><br><br> <span class="hljs-built_in">remove</span>(root_, word, <span class="hljs-number">0</span>);<br>&#125;<br><br><span class="hljs-function">Node *<span class="hljs-title">remove</span><span class="hljs-params">(Node *curNode, <span class="hljs-type">const</span> string &amp;word, <span class="hljs-type">size_t</span> depth)</span> </span>&#123;<br> <span class="hljs-keyword">if</span> (curNode == <span class="hljs-literal">nullptr</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br> <span class="hljs-keyword">if</span> (depth == word.<span class="hljs-built_in">size</span>()) &#123;<br>  <span class="hljs-keyword">if</span> (curNode-&gt;freq_ &gt; <span class="hljs-number">0</span>) &#123;<br>	  curNode-&gt;freq_ = <span class="hljs-number">0</span>;    <span class="hljs-comment">// 表示删除字符串</span><br>  &#125;<br>  <span class="hljs-keyword">if</span> (curNode-&gt;children_.<span class="hljs-built_in">empty</span>()) &#123;    <span class="hljs-comment">// 后面没有连接任何字符，该节点可以移除了</span><br>	  <span class="hljs-keyword">delete</span> curNode;<br>	  curNode = <span class="hljs-literal">nullptr</span>;<br>  &#125;<br>  <span class="hljs-keyword">return</span> curNode;<br> &#125;<br><br> <span class="hljs-keyword">auto</span> it = curNode-&gt;children_.<span class="hljs-built_in">find</span>(word[depth]);<br> <span class="hljs-keyword">auto</span> node = <span class="hljs-built_in">remove</span>(it-&gt;second, word, depth + <span class="hljs-number">1</span>);<br> <span class="hljs-keyword">if</span> (node == <span class="hljs-literal">nullptr</span>) &#123;<br>  curNode-&gt;children_.<span class="hljs-built_in">erase</span>(it);	<span class="hljs-comment">// 删除当前节点记录的某个子节点</span><br> &#125;<br><br> <span class="hljs-keyword">if</span> (curNode-&gt;children_.<span class="hljs-built_in">empty</span>() &amp;&amp; curNode-&gt;freq_ &lt; <span class="hljs-number">1</span>) &#123;	<span class="hljs-comment">// 表面当前节点没有存在的必要，可删除了</span><br>  <span class="hljs-keyword">delete</span> curNode;<br>  curNode = <span class="hljs-literal">nullptr</span>;<br> &#125;<br> <span class="hljs-keyword">return</span> curNode;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过前面的 search 方法确保有字符串的记录，才去考虑删除。</p>
+<p>depth
+既可以获取当前要查询的字符，还可以知道什么时候不再往下继续查询，到删除的必要了。</p>
+<p>如果 当前节点 的 freq_ &gt; 0，置为 0 就代表删除该字符。</p>
+<p>可是这远远不够，还需要删除这些字符连接起来的节点，但是也不能一股气全部删除，还是要考虑删除的情景：</p>
+<ul>
+<li>当要删除的单词是其它单词的前缀时，只需将该节点的 freq 设置为 0
+即可，不需要删除该节点及其子节点。例如，字典树中有 apple 和
+app，若要删除 app，则只需将 app 对应的节点的 freq 设为 0，apple
+仍然保留。</li>
+<li>若要删除的单词和其它单词有公共前缀，该路径上的公共前缀需要保留，删除公共前缀之后的部分即可。例如，字典树中有
+app 和 apple，若要删除 apple，app 仍然会保留。</li>
+<li>如果删除的单词后面没有后缀，可以递归从后往前删除，直到遇到当前节点依旧是其他节点的前缀位置。</li>
+</ul>
+<h1><span id="前缀匹配">前缀匹配</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">vector&lt;string&gt; <span class="hljs-title">prefix</span><span class="hljs-params">(<span class="hljs-type">const</span> string &amp;word)</span> </span>&#123;    <span class="hljs-comment">// 根据前缀匹配单词集合</span><br> vector&lt;string&gt; res;<br> <span class="hljs-keyword">if</span> (word.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> res;<br><br> <span class="hljs-keyword">auto</span> curNode = root_;<br> <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> ch : word) &#123;<br>  <span class="hljs-keyword">auto</span> it = curNode-&gt;children_.<span class="hljs-built_in">find</span>(ch);<br>  <span class="hljs-keyword">if</span> (it == root_-&gt;children_.<span class="hljs-built_in">end</span>()) &#123;    <span class="hljs-comment">// 没有完全匹配该前缀</span><br>	  <span class="hljs-keyword">return</span> res;<br>  &#125;<br>  curNode = curNode-&gt;children_[ch];<br> &#125;<br><br> <span class="hljs-keyword">if</span> (curNode-&gt;freq_ &gt; <span class="hljs-number">0</span>) &#123;    <span class="hljs-comment">// 如果前缀本身也构成一个单词，加入</span><br>  res.<span class="hljs-built_in">push_back</span>(word);<br> &#125;<br><br> <span class="hljs-comment">//拿到前缀节点后，收集后面所有的完整字符</span><br> <span class="hljs-built_in">nodeBack</span>(curNode, <span class="hljs-built_in">const_cast</span>&lt;string &amp;&gt;(word), res);<br> <span class="hljs-keyword">return</span> res;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">nodeBack</span><span class="hljs-params">(Node *curNode, string &amp;word, vector&lt;string&gt; &amp;wordVec)</span> </span>&#123;<br> <span class="hljs-keyword">if</span> (curNode == <span class="hljs-literal">nullptr</span>) <span class="hljs-keyword">return</span>;<br> <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;child : curNode-&gt;children_) &#123;<br>  word.<span class="hljs-built_in">push_back</span>(child.first);<br>  <span class="hljs-built_in">nodeBack</span>(child.second, word, wordVec);<br>  <span class="hljs-keyword">if</span> (child.second-&gt;freq_ &gt; <span class="hljs-number">0</span>) &#123;<br>	  wordVec.<span class="hljs-built_in">push_back</span>(word);<br>  &#125;<br>  word.<span class="hljs-built_in">pop_back</span>();<br> &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>先把用户输入的前缀匹配一下，这是最根本的。</p>
+<p>用户输入的前缀也可以视为一个单词，如果 freq_ 大于 0，添加到
+容器中。</p>
+<p>接下来 nodeBack 函数开始递归收集
+前缀后面的所有字符串并添加到容器中，这里用到回溯的思想。</p>
+<h1><span id="输出全部字符串">输出全部字符串</span></h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">preOrder</span><span class="hljs-params">()</span> </span>&#123;        <span class="hljs-comment">//前序遍历输出所有单词</span><br> vector&lt;string&gt; res;<br> string word;<br> <span class="hljs-keyword">auto</span> root = root_;<br> <span class="hljs-built_in">nodeBack</span>(root, word, res);<br> <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;str : res) &#123;<br>  cout &lt;&lt; str &lt;&lt; endl;<br> &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>理解前面的 nodeBack
+也就不难，字典树的根节点是不包含任何字符的，作为第一个参数，就可以把所有字符串都收集起来了。</p>
 
       </div>
 	<div id="zan" class="clearfix">
@@ -252,23 +286,11 @@ SFINAE 到 C++20 Concepts</strong></a></p>
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/posts/eea60a6a.html">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>字典树</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/posts/3141e8d8.html">
+    <a class="post-nav-item-right" href="/posts/9fa70a35.html">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -280,7 +302,7 @@ SFINAE 到 C++20 Concepts</strong></a></p>
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      万能引用和完美转发
+      SFINAE
     </a>
   
 </div>
@@ -288,12 +310,12 @@ SFINAE 到 C++20 Concepts</strong></a></p>
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" class="post-tag">#模板元编程</a>
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
 
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\a26bcf95.html" title="模板中头文件和源文件的处置方式" rel="bookmark">模板中头文件和源文件的处置方式</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\8c292530.html" title="模板编程中的可变参展开" rel="bookmark">模板编程中的可变参展开</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\55a8871d.html" title="模板元编程的意义" rel="bookmark">模板元编程的意义</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\22a22b79.html" title="三大经典排序算法" rel="bookmark">三大经典排序算法</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ec6973f6.html" title="基于二叉搜索树实现Map容器的基本操作" rel="bookmark">基于二叉搜索树实现Map容器的基本操作</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\d8d692f8.html" title="实现海量数据快速查找之哈希表" rel="bookmark">实现海量数据快速查找之哈希表</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>
