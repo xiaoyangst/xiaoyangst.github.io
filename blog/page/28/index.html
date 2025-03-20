@@ -174,16 +174,16 @@
   
   <div class="post-card">
     <div class="post__head">
-      <a href="/posts/e7a231a6.html" class="post-title hover-line">UML绘制工具：Visual Paradigm</a>
+      <a href="/posts/749f31c1.html" class="post-title hover-line">多线程中的虚假唤醒</a>
       
     </div>
     <div class="post__body">
       
-      <div class="post-excerpt">反正，我觉得比 StartUML 好用，而且这是免费且支持中文</div>
+      <div class="post-excerpt">避免虚假唤醒，就不应该采用 if 条件判断，而应该采用 while 循环判断</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
-  <a href="/tags/Tools/" class="post-tag">#Tools</a>
+  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
 
 </div>
     </div>
@@ -192,156 +192,12 @@
   
   <div class="post-card">
     <div class="post__head">
-      <a href="/posts/77755875.html" class="post-title hover-line">UML类图绘制</a>
+      <a href="/posts/d452053b.html" class="post-title hover-line">虚析构函数的场景</a>
       
     </div>
     <div class="post__body">
       
-      <div class="post-excerpt">这对于学习 设计模式很有帮助，包括阅读代码时也有助益</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/2e4990f4.html" class="post-title hover-line">CAS机制</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">乐观锁却不这么想，但是资源只有一份，你乐观锁不加锁操作并不代表就可以直接访问资源而不管有没有人访问，所以乐观锁也有“加锁”机制，但是和悲观锁的行为不同。悲观锁是实际加锁和解锁来达到原子性，而乐观锁在正式更新数据之前会检查数据是否被其他线程改变过，如果未被其他线程改变过就将共享变量更新成最新值，如果发现共享变量已经被其他线程更新过了，就重试，直到成功为止。整个过程不涉及加锁和解锁操作，但却已实现原子性</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a><a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/7f55efee.html" class="post-title hover-line">谈一谈 RAII 技术</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">利用 C++ 局部对象离开作用域，自动调用析构函数的特点。RAII 让资源的生命周期和对象绑定，对象生命周期结束会带走资源。在构造函数中获取资源，要记得在析构函数中回收资源</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/74b7a5d4.html" class="post-title hover-line">关联式容器</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">只要弄清楚一个容器，其他的也就没什么好讲的</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/STL/" class="post-tag">#STL</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/943d183f.html" class="post-title hover-line">移动构造函数和移动赋值函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">看来移动语义和复制语义的根本不同点就是，移动语义是浅拷贝（改变指向），复制语义是深拷贝（重新 new）</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/a4254c16.html" class="post-title hover-line">拷贝赋值函数</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">拷贝构造函数是用一个已经存在的对象初始化一个正在创建的对象，而赋值运算符函数是用一个已经存在的对象赋值另一个已经存在的对象，这是二者本质的区别</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/e00bd05d.html" class="post-title hover-line">再谈单例</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">线程安全的单例和单例资源的回收，实现单例模板类支持快速创建单例</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/1ae3852a.html" class="post-title hover-line">序列式容器</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">vector 和 list 核心源码解读</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/STL/" class="post-tag">#STL</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/44f00eb0.html" class="post-title hover-line">单继承和多继承</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">当创建一个类时，您不需要重新编写新的数据成员和成员函数，只需指定新建的类继承了一个已有的类的成员即可。这个已有的类称为基类，新建的类称为派生类</div>
+      <div class="post-excerpt">如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？阅读此文，给你解惑</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
@@ -353,7 +209,7 @@
 
 
     
-    <div class="paginator"><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/7/">7</a><a class="page-number" href="/blog/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/blog/page/10/">10</a><a class="page-number" href="/blog/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/28/">28</a></div>
+    <div class="paginator"><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/26/">26</a><a class="page-number" href="/blog/page/27/">27</a><span class="page-number current">28</span></div>
   </div>
 
     </div>
