@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        Json 的处理 | 
+        代码异味 | 
       
     </title>
     <meta name="description" content="" />
@@ -159,13 +159,13 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">Json 的处理</div>
+        <div class="post-title">代码异味</div>
         <div class="post-info">
           
-  <a href="/tags/Qt/" class="post-tag">#Qt</a>
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a>
 
 
-          <span class="post-date">2024-09-22</span>
+          <span class="post-date">2025-03-28</span>
         </div>
       </div>
       
@@ -177,33 +177,201 @@
         
         <!-- toc -->
 <ul>
-<li><a href="#创建json">创建JSON</a></li>
-<li><a href="#解析json">解析JSON</a></li>
+<li><a href="#代码膨胀">代码膨胀</a></li>
+<li><a href="#面向对象滥用">面向对象滥用</a></li>
+<li><a href="#变更阻碍者">变更阻碍者</a></li>
+<li><a href="#冗余代码">冗余代码</a></li>
+<li><a href="#过度耦合">过度耦合</a></li>
 </ul>
 <!-- tocstop -->
-<p>在 Qt 中处理 JSON 数据时，通常会使用以下头文件：</p>
+<h1><span id="代码膨胀">代码膨胀</span></h1>
+<p>指的是代码、方法或类变得过于庞大，难以维护。这些问题通常不会立即出现，而是随着项目的演进逐渐积累，特别是在没有人主动优化它们的情况下。</p>
 <ol type="1">
-<li><strong><code>QJsonDocument</code></strong>：用于封装 JSON
-文档（可以是 JSON 对象或 JSON 数组）</li>
-<li><strong><code>QJsonObject</code></strong>：用于表示 JSON
-对象（key-value 形式的 JSON 数据）</li>
-<li><strong><code>QJsonArray</code></strong>：用于表示 JSON 数组</li>
-<li><strong><code>QJsonValue</code></strong>：用于表示 JSON
-对象或数组中的值（可以是字符串、数字、布尔值等）</li>
-<li><strong><code>QJsonParseError</code></strong>：用于捕捉 JSON
-解析中的错误</li>
+<li><p><strong>过长的方法</strong></p>
+<p>方法的代码行数过多，通常来说，如果一个方法超过 10
+行，就应该开始考虑是否需要拆分或优化。</p></li>
+<li><p><strong>过大的类</strong></p>
+<p>一个类包含了太多的字段、方法或者代码行数，导致类的职责不清晰，难以理解和维护。</p></li>
+<li><p><strong>原始类型偏执</strong></p>
+<p>过度使用基本数据类型，而不是封装成更具体的小对象。例如：</p>
+<ul>
+<li>直接使用整数、字符串来表示复杂概念（如货币、范围、电话号码等），而不是定义专门的类。</li>
+<li>使用常量来表示特定的信息，比如
+<code>const int USER_ADMIN_ROLE = 1</code>
+代表管理员权限，而不是使用枚举或封装类。</li>
+<li>在数据结构（如数组或哈希表）中使用字符串常量作为字段名称，而不是使用对象封装这些数据。</li>
+</ul></li>
+<li><p><strong>过长的参数列表</strong></p>
+<p>方法的参数超过 3~4
+个，可能导致调用复杂、可读性下降。通常可以使用对象封装参数，或者利用构造函数和
+setter 方法逐步构建参数。</p></li>
+<li><p><strong>数据堆积</strong></p>
+<p>代码的不同部分包含了相同的一组变量（例如数据库连接参数经常一起出现）。这种情况通常意味着这些数据应该被封装到一个独立的类中，以减少重复代码并提高可维护性。</p></li>
 </ol>
-<p>序列化和反序列化 JSON 用 QJsonDocument，创建 JSON 用
-QJsonObject。</p>
-<p>想要在网络中进行传输，需要把 QJsonObject 转换为 QByteArray。</p>
-<figure>
-<img src="/images/2024/09/22/3aee0120-7883-11ef-9d1d-2119386dba73.png" alt="Json.png">
-<figcaption aria-hidden="true">Json.png</figcaption>
-</figure>
-<h2><span id="创建json">创建JSON</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonDocument&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonObject&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonArray&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonValue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QDebug&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">createJson</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 创建 JSON 对象</span><br>    QJsonObject jsonObj;<br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;John Doe&quot;</span>);	<span class="hljs-comment">// 添加 JSON 数据</span><br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;age&quot;</span>, <span class="hljs-number">30</span>);<br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;isStudent&quot;</span>, <span class="hljs-literal">false</span>);<br><br>    QJsonArray jsonArray;<br>    jsonArray.<span class="hljs-built_in">append</span>(<span class="hljs-string">&quot;Reading&quot;</span>);<br>    jsonArray.<span class="hljs-built_in">append</span>(<span class="hljs-string">&quot;Traveling&quot;</span>);<br>    jsonArray.<span class="hljs-built_in">append</span>(<span class="hljs-string">&quot;Swimming&quot;</span>);<br><br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;hobbies&quot;</span>, jsonArray);<br><br>    <span class="hljs-comment">// 把 JSON 转换为可在网络传输的 QByteArray</span><br>    <span class="hljs-function">QJsonDocument <span class="hljs-title">jsonDoc</span><span class="hljs-params">(jsonObj)</span></span>;<br>    QByteArray jsonData = jsonDoc.<span class="hljs-built_in">toJson</span>();	<br>    <br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Created JSON:&quot;</span> &lt;&lt; jsonData;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h2><span id="解析json">解析JSON</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonDocument&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonObject&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonArray&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonValue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QDebug&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">parseJson</span><span class="hljs-params">(<span class="hljs-type">const</span> QByteArray &amp;jsonData)</span> </span>&#123;<br>    QJsonParseError jsonError;<br>    QJsonDocument jsonDoc = QJsonDocument::<span class="hljs-built_in">fromJson</span>(jsonData, &amp;jsonError);	 <span class="hljs-comment">// 将 JSON 解析为 UTF-8 编码的 JSON 文档，并从中创建 QJsonDocument</span><br><br>    <span class="hljs-keyword">if</span> (jsonError.error != QJsonParseError::NoError) &#123;	<span class="hljs-comment">// 如果 解析有误，退出</span><br>        <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;JSON parse error:&quot;</span> &lt;&lt; jsonError.<span class="hljs-built_in">errorString</span>();<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (jsonDoc.<span class="hljs-built_in">isObject</span>()) &#123;	<span class="hljs-comment">// 确保是一个对象</span><br>        QJsonObject jsonObj = jsonDoc.<span class="hljs-built_in">object</span>();	<span class="hljs-comment">// 得到 JSON 对象</span><br>        <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Parsed JSON object:&quot;</span> &lt;&lt; jsonObj;<br><br>        <span class="hljs-keyword">if</span> (jsonObj.<span class="hljs-built_in">contains</span>(<span class="hljs-string">&quot;name&quot;</span>)) &#123;	<span class="hljs-comment">// 确保 key 是合法的</span><br>            <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Name:&quot;</span> &lt;&lt; jsonObj.<span class="hljs-built_in">value</span>(<span class="hljs-string">&quot;name&quot;</span>).<span class="hljs-built_in">toString</span>();	<span class="hljs-comment">//获取 key 对应的  v</span><br>        &#125;<br>        <span class="hljs-keyword">if</span> (jsonObj.<span class="hljs-built_in">contains</span>(<span class="hljs-string">&quot;age&quot;</span>)) &#123;<br>            <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Age:&quot;</span> &lt;&lt; jsonObj.<span class="hljs-built_in">value</span>(<span class="hljs-string">&quot;age&quot;</span>).<span class="hljs-built_in">toInt</span>();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1><span id="面向对象滥用">面向对象滥用</span></h1>
+<p>这些代码问题通常是由于<strong>不完整或不正确地应用面向对象编程（OOP）原则</strong>导致的。</p>
+<ol type="1">
+<li><p><strong><code>switch</code> 语句（Switch
+Statements）</strong></p>
+<p>代码中存在<strong>复杂的 <code>switch</code>
+语句</strong>或<strong>大量的 <code>if-else</code> 语句</strong>。</p>
+<p>这通常表明代码<strong>没有充分利用多态</strong>，而是基于条件判断执行不同逻辑，而这些逻辑本可以通过<strong>继承和重写方法</strong>来实现。</p>
+<p>解决方案通常是<strong>使用策略模式、状态模式或工厂模式</strong>来代替
+<code>switch</code> 语句。</p></li>
+<li><p><strong>临时字段（Temporary Field）</strong></p>
+<p>类的某些字段<strong>只在特定情况下才被赋值</strong>，在其他情况下这些字段是<strong>空的或无意义的</strong>。</p>
+<p>这可能意味着：</p>
+<ul>
+<li>这些字段应该被移入<strong>一个单独的类</strong>（如一个封装上下文的类）。</li>
+<li>这些字段<strong>应该在需要的时候才创建</strong>，避免无意义的实例变量。</li>
+<li>可能需要<strong>重构方法，减少不必要的字段依赖</strong>。</li>
+</ul></li>
+<li><p><strong>拒绝继承（Refused Bequest）</strong></p>
+<p>子类<strong>只使用了父类的部分方法或属性</strong>，导致继承层次结构不合理。</p>
+<p>可能的后果：</p>
+<ul>
+<li>子类<strong>要么不使用父类的方法</strong>，造成代码浪费。</li>
+<li>子类<strong>要么重写父类方法并抛出异常</strong>，违背了<strong>里氏替换原则（Liskov
+Substitution Principle, LSP）</strong>。</li>
+</ul>
+<p>解决方案：</p>
+<ul>
+<li><strong>重新评估继承关系</strong>，看看是否可以改用<strong>组合而非继承</strong>。</li>
+<li><strong>拆分父类</strong>，只让子类继承它真正需要的部分。</li>
+</ul></li>
+<li><p><strong>不同接口但功能相似的类（Alternative Classes with
+Different Interfaces）</strong></p>
+<p><strong>两个类的功能基本相同</strong>，但它们的<strong>方法名称不同</strong>，导致使用它们的代码<strong>缺乏统一性</strong>。</p>
+<p>这通常是因为不同团队或不同时间开发时<strong>没有统一约定</strong>，导致多个类做着类似的事情但接口不同。</p>
+<p>解决方案：</p>
+<ul>
+<li><strong>重构这两个类，合并成一个类</strong>，或者让它们<strong>实现同一个接口</strong>。</li>
+<li><strong>提供适配器模式（Adapter
+Pattern）</strong>，让它们可以通过相同的方式被调用。</li>
+</ul></li>
+</ol>
+<h1><span id="变更阻碍者">变更阻碍者</span></h1>
+<p>这些代码问题意味着，如果你需要修改某个代码的某一部分，<strong>就不得不在许多地方做出相应的修改</strong>，导致开发变得更加复杂和昂贵。</p>
+<ol type="1">
+<li><p><strong>多向变更（Divergent Change）</strong></p>
+<p><strong>修改一个类时，需要修改许多不相关的方法</strong>。</p>
+<p>例如：如果你添加一个新产品类型，<strong>不仅要修改查询方法</strong>，还要修改<strong>显示方法、下单方法等</strong>，说明这个类<strong>承担了过多的职责</strong>。</p>
+<p>解决方案：</p>
+<ul>
+<li><strong>拆分类</strong>，将不同的功能放入各自独立的类中。</li>
+<li><strong>使用策略模式（Strategy
+Pattern）</strong>，将变化的逻辑封装到独立的类中，减少对核心类的修改。</li>
+</ul></li>
+<li><p><strong>散弹式修改（Shotgun Surgery）</strong></p>
+<p>修改某个功能时，需要在多个类中进行多处小修改，例如：你需要修改数据库字段名称，但不仅要改数据库代码，还得改多个业务逻辑类、UI
+代码等。</p>
+<p>这种情况通常表明某个功能被<strong>过度分散</strong>，导致修改变得复杂。</p>
+<p>解决方案：</p>
+<ul>
+<li><strong>将相关逻辑集中到单个类或模块中</strong>，减少对多个类的依赖。</li>
+<li><strong>使用封装（Encapsulation）</strong>，例如提供公共
+API，避免直接访问多个类的内部数据。</li>
+</ul></li>
+<li><p><strong>平行继承体系（Parallel Inheritance
+Hierarchies）</strong></p>
+<p><strong>每次为某个类创建一个子类时，都必须为另一个类创建一个对应的子类</strong>。</p>
+<p>例如：你有一个 <code>Product</code> 类，每次你创建一个新的
+<code>DigitalProduct</code> 子类，你也不得不为
+<code>ProductManager</code> 创建
+<code>DigitalProductManager</code>，导致继承结构<strong>成对增长</strong>。</p>
+<p>问题：这种做法会导致<strong>继承体系过于复杂</strong>，修改某个类时，另一个类也必须跟着修改，降低了灵活性。</p>
+<p>解决方案：</p>
+<ul>
+<li><strong>使用组合代替继承</strong>（优先考虑“组合优于继承”原则）。</li>
+<li><strong>使用抽象工厂（Abstract
+Factory）</strong>来管理对象的创建，避免手动扩展多个平行的类层次。</li>
+</ul></li>
+</ol>
+<h1><span id="冗余代码">冗余代码</span></h1>
+<p>冗余代码指的是<strong>不必要的、不起作用的代码</strong>，如果删除它们，代码会更加<strong>清晰、简洁且易于维护</strong>。</p>
+<ol type="1">
+<li><p><strong>过多注释（Comments）</strong></p>
+<p>方法里充满了解释性的<strong>注释</strong>，可能是因为代码<strong>难以理解</strong>，或者<strong>过于冗长</strong>。</p>
+<p>问题：<strong>好的代码应该自解释</strong>，如果代码需要大量注释才能理解，说明可能存在<strong>命名不清晰</strong>或<strong>逻辑过于复杂</strong>的问题。</p>
+<p>解决方案：</p>
+<ul>
+<li><strong>使用清晰的变量名、方法名</strong>，让代码本身表达意图，而不是依赖注释。</li>
+<li><strong>重构代码，拆分复杂的方法</strong>，减少对注释的依赖。</li>
+</ul></li>
+<li><p><strong>重复代码（Duplicate Code）</strong></p>
+<p>两个代码片段几乎相同，可能是：</p>
+<ul>
+<li><strong>两个方法内部逻辑类似</strong>。</li>
+<li><strong>多个类有类似的方法或代码块</strong>。</li>
+</ul>
+<p>问题：代码<strong>冗余</strong>，修改时需要同步修改多个地方，<strong>容易出错</strong>。</p>
+<p>解决方案：</p>
+<ul>
+<li><strong>提取公共方法</strong>，减少重复代码。</li>
+<li><strong>使用继承或组合</strong>，将相同逻辑集中到<strong>基类或独立模块</strong>中。</li>
+</ul></li>
+<li><p><strong>懒惰类（Lazy Class）</strong></p>
+<p>一个类存在但几乎没有作用，比如：</p>
+<ul>
+<li>这个类原本是为了扩展而创建的，但后来并没有增加新的功能。</li>
+<li>代码结构调整后，这个类变得<strong>不再有实际用途</strong>。</li>
+</ul>
+<p>解决方案：</p>
+<ul>
+<li><strong>合并类</strong>，把它的功能整合到相关的类中。</li>
+<li><strong>删除类</strong>，如果它不再有实际作用。</li>
+</ul></li>
+<li><p><strong>数据类（Data Class）</strong></p>
+<p>这个类<strong>只有字段和对应的
+getter/setter</strong>，但<strong>不包含任何逻辑</strong>，仅作为<strong>数据存储</strong>。</p>
+<p>问题：这种类<strong>缺乏封装</strong>，所有逻辑都在其他类中，<strong>导致代码分散</strong>。</p>
+<p>解决方案：</p>
+<ul>
+<li><strong>将数据操作方法放入数据类</strong>，让它能<strong>独立处理自己的数据</strong>（遵循面向对象的封装原则）。</li>
+<li><strong>使用领域对象（Domain
+Objects）</strong>，让数据类<strong>不仅仅存储数据，还能执行相关的业务逻辑</strong>。</li>
+</ul></li>
+<li><p><strong>死代码（Dead Code）</strong></p>
+<p>变量、参数、字段、方法或类已经不再被使用，通常是由于：</p>
+<ul>
+<li><strong>代码重构后忘记删除旧代码</strong>。</li>
+<li><strong>曾经用于某个功能，但功能被废弃了</strong>。</li>
+</ul>
+<p>问题：</p>
+<ul>
+<li>代码<strong>越来越庞大</strong>，增加维护难度。</li>
+<li><strong>影响阅读</strong>，让开发者误以为某些代码仍然重要。</li>
+</ul>
+<p>解决方案：</p>
+<ul>
+<li><strong>定期清理代码</strong>，删除不再使用的变量、方法或类。</li>
+<li><strong>使用静态代码分析工具</strong>（如
+Clang-Tidy、SonarQube）来检测死代码。</li>
+</ul></li>
+<li><p><strong>过度设计（Speculative Generality）</strong></p>
+<p>代码<strong>包含未被使用的类、方法、字段或参数</strong>，通常是因为<strong>开发者为了“未来可能用到”而提前设计</strong>。</p>
+<p>问题：</p>
+<ul>
+<li>过度设计<strong>增加了代码复杂度</strong>，但这些功能<strong>实际上从未被使用</strong>。</li>
+<li>维护这样的代码<strong>浪费时间和精力</strong>。</li>
+</ul>
+<p>解决方案：</p>
+<ul>
+<li><strong>遵循 YAGNI 原则（You Ain't Gonna Need
+It）</strong>，不要提前实现不确定的功能。</li>
+<li><strong>删除未使用的代码</strong>，如果未来确实需要，可以<strong>基于实际需求重新设计</strong>。</li>
+</ul></li>
+</ol>
+<h1><span id="过度耦合">过度耦合</span></h1>
+<p><strong>特性嫉妒（Feature Envy）</strong></p>
+<p>某个方法访问另一个对象的数据比访问自身数据还多。</p>
+<p><strong>不恰当的亲密关系（Inappropriate Intimacy）</strong></p>
+<p>一个类使用了另一个类的内部字段和方法。</p>
+<p><strong>消息链（Message Chains）</strong></p>
+<p>代码中出现一系列调用，如
+<code>$a-&gt;b()-&gt;c()-&gt;d()</code>。</p>
+<p><strong>中间人（Middle Man）</strong></p>
+<p>如果一个类只执行一个操作，并且只是将工作委托给另一个类，那么这个类的存在是否必要？</p>
 
       </div>
 	<div id="zan" class="clearfix">
@@ -252,23 +420,11 @@ QJsonObject。</p>
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/posts/81c4ab50.html">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>HTTP 网络的请求发送和响应处理</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/posts/8ccaefee.html">
+    <a class="post-nav-item-right" href="/posts/ff3fcfe3.html">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -280,7 +436,7 @@ QJsonObject。</p>
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      第八章：协程
+      Clion 如何进行 QT 开发
     </a>
   
 </div>
@@ -288,12 +444,12 @@ QJsonObject。</p>
     
       <div class="related-post">
   <div class="related__head">
-  <a href="/tags/Qt/" class="post-tag">#Qt</a>
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a>
 
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\81c4ab50.html" title="HTTP 网络的请求发送和响应处理" rel="bookmark">HTTP 网络的请求发送和响应处理</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ff3fcfe3.html" title="Clion 如何进行 QT 开发" rel="bookmark">Clion 如何进行 QT 开发</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7d8fe760.html" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\83ace12e.html" title="call_once 和 once_flag" rel="bookmark">call_once 和 once_flag</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7d6c0c8.html" title="为什么子类需要调用父类的构造函数 ？" rel="bookmark">为什么子类需要调用父类的构造函数 ？</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\830cb3cd.html" title="编写线程安全的代码" rel="bookmark">编写线程安全的代码</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
     
   </div>
 </div>

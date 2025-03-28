@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        Json 的处理 | 
+        技术杂文 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,8 +62,9 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+  <link rel="stylesheet"
+        type="text/css"
+        href="/css/category.css" />
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -156,152 +157,47 @@
     </div>
     <div class="body">
       
-  <article class="post-content">
-    <div class="post-inner">
-      <div class="post-content__head">
-        <div class="post-title">Json 的处理</div>
-        <div class="post-info">
-          
-  <a href="/tags/Qt/" class="post-tag">#Qt</a>
-
-
-          <span class="post-date">2024-09-22</span>
-        </div>
-      </div>
+  <div class="tag-page-title">#技术杂文</div>
+  <div class="post-list">
+    
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/posts/7d6c0c8.html" class="post-title hover-line">为什么子类需要调用父类的构造函数 ？</a>
       
-      <div class="post-content__body">
-        
-          <div class="post-gallery">
-            
-          </div>
-        
-        <!-- toc -->
-<ul>
-<li><a href="#创建json">创建JSON</a></li>
-<li><a href="#解析json">解析JSON</a></li>
-</ul>
-<!-- tocstop -->
-<p>在 Qt 中处理 JSON 数据时，通常会使用以下头文件：</p>
-<ol type="1">
-<li><strong><code>QJsonDocument</code></strong>：用于封装 JSON
-文档（可以是 JSON 对象或 JSON 数组）</li>
-<li><strong><code>QJsonObject</code></strong>：用于表示 JSON
-对象（key-value 形式的 JSON 数据）</li>
-<li><strong><code>QJsonArray</code></strong>：用于表示 JSON 数组</li>
-<li><strong><code>QJsonValue</code></strong>：用于表示 JSON
-对象或数组中的值（可以是字符串、数字、布尔值等）</li>
-<li><strong><code>QJsonParseError</code></strong>：用于捕捉 JSON
-解析中的错误</li>
-</ol>
-<p>序列化和反序列化 JSON 用 QJsonDocument，创建 JSON 用
-QJsonObject。</p>
-<p>想要在网络中进行传输，需要把 QJsonObject 转换为 QByteArray。</p>
-<figure>
-<img src="/images/2024/09/22/3aee0120-7883-11ef-9d1d-2119386dba73.png" alt="Json.png">
-<figcaption aria-hidden="true">Json.png</figcaption>
-</figure>
-<h2><span id="创建json">创建JSON</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonDocument&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonObject&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonArray&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonValue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QDebug&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">createJson</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 创建 JSON 对象</span><br>    QJsonObject jsonObj;<br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;John Doe&quot;</span>);	<span class="hljs-comment">// 添加 JSON 数据</span><br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;age&quot;</span>, <span class="hljs-number">30</span>);<br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;isStudent&quot;</span>, <span class="hljs-literal">false</span>);<br><br>    QJsonArray jsonArray;<br>    jsonArray.<span class="hljs-built_in">append</span>(<span class="hljs-string">&quot;Reading&quot;</span>);<br>    jsonArray.<span class="hljs-built_in">append</span>(<span class="hljs-string">&quot;Traveling&quot;</span>);<br>    jsonArray.<span class="hljs-built_in">append</span>(<span class="hljs-string">&quot;Swimming&quot;</span>);<br><br>    jsonObj.<span class="hljs-built_in">insert</span>(<span class="hljs-string">&quot;hobbies&quot;</span>, jsonArray);<br><br>    <span class="hljs-comment">// 把 JSON 转换为可在网络传输的 QByteArray</span><br>    <span class="hljs-function">QJsonDocument <span class="hljs-title">jsonDoc</span><span class="hljs-params">(jsonObj)</span></span>;<br>    QByteArray jsonData = jsonDoc.<span class="hljs-built_in">toJson</span>();	<br>    <br>    <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Created JSON:&quot;</span> &lt;&lt; jsonData;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h2><span id="解析json">解析JSON</span></h2>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonDocument&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonObject&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonArray&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QJsonValue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;QDebug&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">parseJson</span><span class="hljs-params">(<span class="hljs-type">const</span> QByteArray &amp;jsonData)</span> </span>&#123;<br>    QJsonParseError jsonError;<br>    QJsonDocument jsonDoc = QJsonDocument::<span class="hljs-built_in">fromJson</span>(jsonData, &amp;jsonError);	 <span class="hljs-comment">// 将 JSON 解析为 UTF-8 编码的 JSON 文档，并从中创建 QJsonDocument</span><br><br>    <span class="hljs-keyword">if</span> (jsonError.error != QJsonParseError::NoError) &#123;	<span class="hljs-comment">// 如果 解析有误，退出</span><br>        <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;JSON parse error:&quot;</span> &lt;&lt; jsonError.<span class="hljs-built_in">errorString</span>();<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (jsonDoc.<span class="hljs-built_in">isObject</span>()) &#123;	<span class="hljs-comment">// 确保是一个对象</span><br>        QJsonObject jsonObj = jsonDoc.<span class="hljs-built_in">object</span>();	<span class="hljs-comment">// 得到 JSON 对象</span><br>        <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Parsed JSON object:&quot;</span> &lt;&lt; jsonObj;<br><br>        <span class="hljs-keyword">if</span> (jsonObj.<span class="hljs-built_in">contains</span>(<span class="hljs-string">&quot;name&quot;</span>)) &#123;	<span class="hljs-comment">// 确保 key 是合法的</span><br>            <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Name:&quot;</span> &lt;&lt; jsonObj.<span class="hljs-built_in">value</span>(<span class="hljs-string">&quot;name&quot;</span>).<span class="hljs-built_in">toString</span>();	<span class="hljs-comment">//获取 key 对应的  v</span><br>        &#125;<br>        <span class="hljs-keyword">if</span> (jsonObj.<span class="hljs-built_in">contains</span>(<span class="hljs-string">&quot;age&quot;</span>)) &#123;<br>            <span class="hljs-built_in">qDebug</span>() &lt;&lt; <span class="hljs-string">&quot;Age:&quot;</span> &lt;&lt; jsonObj.<span class="hljs-built_in">value</span>(<span class="hljs-string">&quot;age&quot;</span>).<span class="hljs-built_in">toInt</span>();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-      </div>
-	<div id="zan" class="clearfix">
-    <div class="heart" onclick="goodplus(url, flag)"></div>
-    <br>
-    <div id="zan_text"></div>
-  </div>  
     </div>
-    
-      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
-      <script>
-        if (window.mermaid) {
-          mermaid.initialize({"startOnload":true});
-        }
-      </script>
-    
-  </article>
-  <div class="post__foot">
-    
-      <div class="like-author">
-  <input type="checkbox" id="likeCode" />
-  <div class="author-face">
-    <img height="100px"
-         width="100px"
-         id="front-face"
-         alt="author face"
-         src="/images/logo.png" />
-    <img height="100px"
-         width="100px"
-         id="back-face"
-         alt="like code"
-         src="/images/pay.jpg" />
+    <div class="post__body">
+      
+      <div class="post-excerpt">因为长时间没有写过继承相关的代码，竟然忘记子类需要给父类初始化成员，即调用父类的构造函数初始化继承过来的成员变量</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a>
+
+</div>
+    </div>
   </div>
-  <div class="like-text">“给作者倒杯卡布奇诺”</div>
-  <label for="likeCode" class="like-btn">
-    <svg viewBox="0 0 1024 1024"
-         width="20px"
-         style="margin-right: 10px"
-         height="20px">
-      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
-    </svg>
-    喜欢作者
-  </label>
-</div>
 
-    
-    <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/posts/81c4ab50.html">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>HTTP 网络的请求发送和响应处理</div>
-    </a>
-  
-  <div class="vhr"></div>
-  
-    <a class="post-nav-item-right" href="/posts/8ccaefee.html">
-      <div class="text-align">
-        <span class="text-small">下一篇</span>
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             transform="scale(-1,-1)"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
-        </svg>
-      </div>
-      第八章：协程
-    </a>
-  
-</div>
-
-    
-      <div class="related-post">
-  <div class="related__head">
-  <a href="/tags/Qt/" class="post-tag">#Qt</a>
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/posts/83ace12e.html" class="post-title hover-line">call_once 和 once_flag</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt">std::call_once 和 std::once_flag 是 C++11 中引入的线程安全的函数和类型，用于确保某个函数只被调用一次</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" class="post-tag">#技术杂文</a>
 
 </div>
-  <div class="realated__body">
-    
-      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\81c4ab50.html" title="HTTP 网络的请求发送和响应处理" rel="bookmark">HTTP 网络的请求发送和响应处理</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ff3fcfe3.html" title="Clion 如何进行 QT 开发" rel="bookmark">Clion 如何进行 QT 开发</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\7d8fe760.html" title="C++中的友元类" rel="bookmark">C++中的友元类</a></div></div></div>
-    
+    </div>
   </div>
-</div>
 
-    
-    
-      <div id="gitalk-container"></div>
-    
+
+    <div class="paginator"><a class="page-number" href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/">1</a><span class="page-number current">2</span></div>
   </div>
 
     </div>
@@ -829,16 +725,6 @@ QJsonObject。</p>
     
     <script src="/js/copy-code.js"></script>
     
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script type="text/javascript">
-  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
-  let title = location.pathname.substr(0, 50); 
-  param.id = title
-  const gitalk = new Gitalk(param)
-  gitalk.render('gitalk-container')
-</script>
-
-  
-
+    
   </body>
 </html>
