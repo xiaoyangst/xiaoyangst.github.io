@@ -174,16 +174,16 @@
   
   <div class="post-card">
     <div class="post__head">
-      <a href="/posts/f8f95126.html" class="post-title hover-line">66.加一</a>
+      <a href="/posts/b63e0d80.html" class="post-title hover-line">为什么在你的进程退出时没有内存泄露？</a>
       
     </div>
     <div class="post__body">
       
-      <div class="post-excerpt">这道题容易让人误解，应该把题意讲得清楚些。有一个自然数，被拆分成个位数存储在数组中，对这个自然数进行加 1 操作。很明显，如果我们的自然是99，那么加 1 的结果就是 100，显然原数组是存储不下的，因为vector容器不支持头部插入元素</div>
+      <div class="post-excerpt">对于短时间运行的程序，泄露内存通常不会导致任何操作问题（尽管它可能被认为是不好的形式）。如果你编写一个长期运行的服务器（例如 Web 服务器或数据库管理系统，它永远不会退出），泄露内存就是很大的问题，最终会导致应用程序在内存不足时崩溃</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
+  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" class="post-tag">#技术摘录</a>
 
 </div>
     </div>
@@ -192,16 +192,16 @@
   
   <div class="post-card">
     <div class="post__head">
-      <a href="/posts/fed1388b.html" class="post-title hover-line">26.删除有序数组中的重复项</a>
+      <a href="/posts/749f31c1.html" class="post-title hover-line">多线程中的虚假唤醒</a>
       
     </div>
     <div class="post__body">
       
-      <div class="post-excerpt">双指针法，right 用于指向更新值的下标，left 用于比较是否重复</div>
+      <div class="post-excerpt">避免虚假唤醒，就不应该采用 if 条件判断，而应该采用 while 循环判断</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a>
+  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
 
 </div>
     </div>
@@ -210,142 +210,16 @@
   
   <div class="post-card">
     <div class="post__head">
-      <a href="/posts/31ab7872.html" class="post-title hover-line">19.删除链表的倒数第 N 个结点</a>
+      <a href="/posts/d452053b.html" class="post-title hover-line">虚析构函数的场景</a>
       
     </div>
     <div class="post__body">
       
-      <div class="post-excerpt">只要明白链表的特性，以及删除的特点就很容易想到该怎么处理这道题，不会想复杂</div>
+      <div class="post-excerpt">如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？阅读此文，给你解惑</div>
     </div>
     <div class="post__foot">
       <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/1f082419.html" class="post-title hover-line">2.两数相加</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">关于进位的处理，这并不难，只需要用一个标记位 note 来标识是否有进位，还有要记得正确更新 note 的情况</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/1648e7be.html" class="post-title hover-line">143.重排链表</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题只要能够把题目看明白，即它究竟是如何重排，逻辑上理清楚并不难</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/931e954.html" class="post-title hover-line">142.环形链表II</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我企图用之前的代码来套用到本题，却发现犯了一个大错误，那就是 slow 和 fast 不是同一个起点开始，导致上面的推导公式失效。所以，我们务必保证最初的快慢指针的起点是一致的，即指向头节点</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/b45ed06c.html" class="post-title hover-line">141.环形链表</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果这是一条直线，快的车永远不可能遇到慢的车，如果遇到必然就是一个环</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/b55528ce.html" class="post-title hover-line">1. 两数之和</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">个人遇到的问题是记不清 map 容器的 find 的方法究竟寻找的 key 还是 value？答案是 key！！！</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%95%B0%E7%BB%84/" class="post-tag">#数组</a><a href="/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/" class="post-tag">#哈希表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/4dab3910.html" class="post-title hover-line">百香果</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">每100克（3.5盎司）的生西番莲提供97卡路里的热量，是维生素C（33%每日摄入量）的丰富来源（指比每日摄入量的20%更多），也是核黄素与钾的中等来源（10-19%每日摄入量）。其他微量营养素的含量不显著</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%B0%B4%E6%9E%9C/" class="post-tag">#水果</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/55a8871d.html" class="post-title hover-line">模板元编程的意义</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">模板元编程可以只需要设计一份代码，传入不同的类型并生成实际的代码，完美解决面向过程和面向对象的不足</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a><a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" class="post-tag">#模板元编程</a>
+  <a href="/tags/CPP/" class="post-tag">#CPP</a>
 
 </div>
     </div>
@@ -353,7 +227,7 @@
 
 
     
-    <div class="paginator"><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/26/">26</a><a class="page-number" href="/blog/page/27/">27</a><span class="page-number current">28</span><a class="page-number" href="/blog/page/29/">29</a></div>
+    <div class="paginator"><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/27/">27</a><a class="page-number" href="/blog/page/28/">28</a><span class="page-number current">29</span></div>
   </div>
 
     </div>
