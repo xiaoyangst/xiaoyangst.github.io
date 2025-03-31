@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        计算机技术 | 
+        服务的并行和并发 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,79 +156,163 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/computer.svg)"></div>
-        计算机技术
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">服务的并行和并发</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" class="post-tag">#分布式</a>
+
+
+          <span class="post-date">2025-03-31</span>
+        </div>
       </div>
-      <div class="wall-category-description">A repository for computer technology articles</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/Asio/" style="font-size: 1em;">Asio</a> <a href="/tags/C/" style="font-size: 1em;">C</a> <a href="/tags/C-11%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 1em;">C++11新特性</a> <a href="/tags/C-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">C++性能优化</a> <a href="/tags/CMake/" style="font-size: 1em;">CMake</a> <a href="/tags/CPP/" style="font-size: 1em;">CPP</a> <a href="/tags/Clion/" style="font-size: 1em;">Clion</a> <a href="/tags/Linux/" style="font-size: 1em;">Linux</a> <a href="/tags/MySQL/" style="font-size: 1em;">MySQL</a> <a href="/tags/Nginx/" style="font-size: 1em;">Nginx</a> <a href="/tags/OS/" style="font-size: 1em;">OS</a> <a href="/tags/Qt/" style="font-size: 1em;">Qt</a> <a href="/tags/Redis/" style="font-size: 1em;">Redis</a> <a href="/tags/STL/" style="font-size: 1em;">STL</a> <a href="/tags/Tools/" style="font-size: 1em;">Tools</a> <a href="/tags/Vim/" style="font-size: 1em;">Vim</a> <a href="/tags/git/" style="font-size: 1em;">git</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">函数式编程</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 1em;">分布式</a> <a href="/tags/%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E5%92%8C%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 1em;">原子变量和内存模型</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6/" style="font-size: 1em;">基础组件</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 1em;">微服务</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" style="font-size: 1em;">技术摘录</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E6%96%87/" style="font-size: 1em;">技术杂文</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/" style="font-size: 1em;">操作系统导论</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 1em;">数据结构与算法</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">模板元编程</a> <a href="/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" style="font-size: 1em;">深入理解计算机系统</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" style="font-size: 1em;">源码剖析</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1em;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 1em;">计算机组成原理</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2><span id="单一服务节点集群一个用户一个节点">单一服务节点集群（一个用户一个节点）</span></h2>
+<figure>
+<img src="/images/2025/03/31/889c7b60-0e04-11f0-9f8a-0d01874ed094.png" alt="image20250331125638252.png">
+<figcaption aria-hidden="true">image20250331125638252.png</figcaption>
+</figure>
+<p>集群中的服务器服务的对象是固定的，该集群中的服务器不需要同步服务对象的信息，都是自行单独处理。</p>
+<p>缺点也就显而易见，那就是其中一台服务器丢失，服务的对象也就得不到服务，数据也丢失了。</p>
+<h2><span id="信息共享节点集群所有节点连接到一个公共的信息池">信息共享节点集群（所有节点连接到一个公共的信息池）</span></h2>
+<figure>
+<img src="/images/2025/03/31/9173d170-0e04-11f0-9f8a-0d01874ed094.png" alt="image20250331130513426.png">
+<figcaption aria-hidden="true">image20250331130513426.png</figcaption>
+</figure>
+<p>所有服务器的信息都从同一个数据库中获取和写入，操作数据库的时候必须加锁访问，避免并发问题。</p>
+<p>可以看到我们的服务器很多，明显提升集群的计算能力（CPU）。</p>
+<p>如果你的压力是在磁盘 I/O
+，数据库吞吐能力上，由于只有一台公共数据库，压力会非常大，此方案就不合适了。</p>
+<p>还有，存在单点故障问题，如果数据库崩溃就无法提供服务了，可用性不足。</p>
+<h2><span id="信息一致节点集群数据信息是一致的">信息一致节点集群（数据信息是一致的）</span></h2>
+<figure>
+<img src="/images/2025/03/31/999d5b50-0e04-11f0-9f8a-0d01874ed094.png" alt="image20250331132939523.png">
+<figcaption aria-hidden="true">image20250331132939523.png</figcaption>
+</figure>
+<p>有多服务器的计算能力，单一数据库的单点故障和压力过大问题。</p>
+<p>多数据库需要通过同步来解决数据一致性问题，而同步必然存在延迟，关键是延迟是否在接受范围以内。</p>
+<ul>
+<li>强一致性：更新操作完成后，任何多个后续进行访问时都会返回最新的值，就是用户刚提交就能看到更新了的数据，这对用户是最友好的。但根据
+CAP 理论，这势必也要牺牲可用性。</li>
+<li>最终一致性：要求系统中数据副本最终能够一致，而不需要实时保证数据副本一致。</li>
+</ul>
+<h2><span id="分布式系统">分布式系统</span></h2>
+<figure>
+<img src="/images/2025/03/31/80c8d9b0-0e04-11f0-9f8a-0d01874ed094.jpg" alt="142435920220927200520248344100852.jpg">
+<figcaption aria-hidden="true">142435920220927200520248344100852.jpg</figcaption>
+</figure>
+<p><strong>把一个业务拆分成多个子业务，部署在多个不同的服务器提供服务</strong>，一旦处理该业务的服务器出现问题，那么该业务就无法实现了。</p>
+<p>分布式是一种工作方式。就是把所有的功能、模块拆分成不同的子项目，部署在多台不同的服务器上，这些子项目<strong>相互协作</strong>共同对外提供服务。</p>
+<h2><span id="微服务系统">微服务系统</span></h2>
+<p>微服务架构是在前面分布式架构（SOA架构）上进行进一步的扩展和拆分。在微服务架构下，一个大的项目拆分为一个个小的<strong>可独立部署</strong>的微服务，每个微服务都有自己的数据库。原有的单个业务系统会拆分为多个可以独立开发、设计、运行的小应用，这些小应用之间通过服务完成交互和集成。</p>
+<p>服务彻底拆分，各服务独立打包、独立部署和独立升级。每个微服务负责的业务比较清晰，利于后期扩展和维护。微服务之间可以采用
+REST 和 RPC 协议进行通信。</p>
+<h2><span id="分布式和微服务架构的区别">分布式和微服务架构的区别</span></h2>
+<p>总的来说，分布式主要是有多个服务器，而微服务主要注重服务的拆分，微服务并不一定是部署在多个服务器上，也可能只是在一个服务器上（基本很少见）。即分布式是多节点多模块，而微服务有可能是单节点多模块，但通常也是多节点多模块的。</p>
+<p>微服务与分布式的细微差别是，微服务的应用不一定是分散在多个服务器上也可以是同一个服务器。</p>
+<p>分布式服务架构强调的是服务化以及服务的分散化，而微服务则更强调服务拆分的专业化和精细分工。<strong>分布式也可以理解为属于微服务，但可能服务拆分没那么细致，而微服务架构通常也是分布式的架构</strong>。</p>
+<h2><span id="内部并发">内部并发</span></h2>
+<p>进程：多进程中，一个进程崩溃不会影响其他进程</p>
+<p>线程：多线程，在开发中倒是非常常见，比进程更轻量，如果某个线程崩溃可能导致其他线程出现问题</p>
+<p>协程：C++20
+支持协程，网上也有很多协程库，追求更高的性能可以考虑协程</p>
+<h2><span id="参考文章">参考文章</span></h2>
+<p>https://www.cnblogs.com/wenxuehai/p/16156219.html</p>
+<p>https://blog.csdn.net/qq_34246965/article/details/131134555</p>
+
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/b63e0d80.html" class="post-title hover-line">为什么在你的进程退出时没有内存泄露？</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">对于短时间运行的程序，泄露内存通常不会导致任何操作问题（尽管它可能被认为是不好的形式）。如果你编写一个长期运行的服务器（例如 Web 服务器或数据库管理系统，它永远不会退出），泄露内存就是很大的问题，最终会导致应用程序在内存不足时崩溃</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E6%8A%80%E6%9C%AF%E6%91%98%E5%BD%95/" class="post-tag">#技术摘录</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/749f31c1.html" class="post-title hover-line">多线程中的虚假唤醒</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">避免虚假唤醒，就不应该采用 if 条件判断，而应该采用 while 循环判断</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-tag">#并发编程</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/d452053b.html" class="post-title hover-line">虚析构函数的场景</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">如果这个类不作为任何类的基类，析构函数是否为虚函数并不重要，因为它不必承担回收派生类资源的责任。那什么情况下给析构函数声明为虚函数是必要的？阅读此文，给你解惑</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/CPP/" class="post-tag">#CPP</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><a class="page-number" href="/technology/">1</a><span class="space">&hellip;</span><a class="page-number" href="/technology/page/19/">19</a><a class="page-number" href="/technology/page/20/">20</a><span class="page-number current">21</span></div>
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/b56090e8.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      单向链表中间节点
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" class="post-tag">#分布式</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\57d29ea9.html" title="CAP 与 BASE 理论" rel="bookmark">CAP 与 BASE 理论</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\35781f65.html" title="分布式架构设计" rel="bookmark">分布式架构设计</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -755,6 +840,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>
