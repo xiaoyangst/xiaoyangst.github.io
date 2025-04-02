@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        华为OD真题 | 
+        图的存储结构和遍历 | 
       
     </title>
     <meta name="description" content="" />
@@ -62,7 +62,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 7.3.0"></head>
   <body>
@@ -155,205 +156,229 @@
     </div>
     <div class="body">
       
-  <div class="wall wall-category--plain">
-    <div class="wall-main">
-      <div class="wall-category-title">
-        <div class="title-icon"
-             style="background-image: url(/images/icon/huawei.svg)"></div>
-        华为OD真题
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">图的存储结构和遍历</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+
+
+          <span class="post-date">2025-04-02</span>
+        </div>
       </div>
-      <div class="wall-category-description">douban read Record</div>
-      <div class="wall-category-tags">
-        <div id="tags-outer"><a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 1em;">动态规划</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 1em;">字符串</a> <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" style="font-size: 1em;">容器的应用</a> <a href="/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/" style="font-size: 1em;">并查集</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1em;">链表</a></div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#图的存储结构">图的存储结构</a>
+<ul>
+<li><a href="#邻接矩阵">邻接矩阵</a>
+<ul>
+<li><a href="#无向图">无向图</a></li>
+<li><a href="#有向图">有向图</a></li>
+<li><a href="#带权图">带权图</a></li>
+</ul></li>
+<li><a href="#邻接表">邻接表</a>
+<ul>
+<li><a href="#无向图-1">无向图</a></li>
+<li><a href="#有向图-1">有向图</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#图的遍历">图的遍历</a>
+<ul>
+<li><a href="#深度优先搜索">深度优先搜索</a>
+<ul>
+<li><a href="#递归方式实现">递归方式实现</a></li>
+<li><a href="#栈方式实现">栈方式实现</a></li>
+</ul></li>
+<li><a href="#广度优先搜索">广度优先搜索</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="图的存储结构">图的存储结构</span></h1>
+<h2><span id="邻接矩阵">邻接矩阵</span></h2>
+<h3><span id="无向图">无向图</span></h3>
+<p>如果顶点 vi 和 vj
+之间存在一条边，则<code>A[i][j]=A[j][i]=1</code>。</p>
+<p>如果顶点 vi 和 vj 之间不存在边，则
+<code>A[i][j]=A[j][i]=0</code>。</p>
+<figure>
+<img src="/images/2025/04/02/f9f3a780-0f84-11f0-94bb-4bb3e7faff3f.png" alt="20200311113240.png">
+<figcaption aria-hidden="true">20200311113240.png</figcaption>
+</figure>
+<p>无向图的邻接矩阵是<strong>对称矩阵</strong>，即
+<code>A[i][j]=A[j][i]</code> ，这是因为无向图的边没有方向，若 vi 到 vj
+有边，那么 vj 到 vi 也必然有边。</p>
+<h3><span id="有向图">有向图</span></h3>
+<p>如果存在一条从顶点 vi 到顶点 vj 的有向边，则
+<code>A[i][j]=1</code>。</p>
+<p>如果不存在从顶点 vi 到顶点 vj 的有向边，则
+<code>A[i][j]=0</code>。</p>
+<figure>
+<img src="/images/2025/04/02/ffae5440-0f84-11f0-94bb-4bb3e7faff3f.png" alt="20200311114055.png">
+<figcaption aria-hidden="true">20200311114055.png</figcaption>
+</figure>
+<p>有向图的领接矩阵不一定是对称的，因为顶点 vi 到顶点 vj
+有方向，但是顶点 vj 到顶点 vi 不一定有。</p>
+<h3><span id="带权图">带权图</span></h3>
+<figure>
+<img src="/images/2025/04/02/07001bc0-0f85-11f0-94bb-4bb3e7faff3f.png" alt="b19ec146dc50350e1282c54143c237fe.png">
+<figcaption aria-hidden="true">b19ec146dc50350e1282c54143c237fe.png</figcaption>
+</figure>
+<p>对于带权图（包括带权有向图和带权无向图），邻接矩阵中的元素
+<code>A[i][j]</code> 存储的是顶点 vi 到顶点 vj 的边的权值。</p>
+<p>如果顶点 vi 和 vj 之间存在边，<code>A[i][j]</code> 存储该边的权值
+w。</p>
+<p>如果顶点 vi 和
+vj之间不存在边，通常用一个<strong>特殊值</strong>（如无穷大
+∞，在编程实现中可以用一个足够大的数来表示）表示，同时
+<code>A[i][i]=0</code>（表示顶点到自身的距离为 0）。</p>
+<h2><span id="邻接表">邻接表</span></h2>
+<h3><span id="无向图">无向图</span></h3>
+<figure>
+<img src="/images/2025/04/02/0db5a340-0f85-11f0-94bb-4bb3e7faff3f.png" alt="20200311113749.png">
+<figcaption aria-hidden="true">20200311113749.png</figcaption>
+</figure>
+<h3><span id="有向图">有向图</span></h3>
+<figure>
+<img src="/images/2025/04/02/12e8f790-0f85-11f0-94bb-4bb3e7faff3f.png" alt="20200311115937.png">
+<figcaption aria-hidden="true">20200311115937.png</figcaption>
+</figure>
+<p>更多存储结构，推荐文章：https://subingwen.cn/data-structure/graph/</p>
+<h1><span id="图的遍历">图的遍历</span></h1>
+<p>栈实现深度优先搜索，队列实现广度优先搜索。</p>
+<h2><span id="深度优先搜索">深度优先搜索</span></h2>
+<figure>
+<img src="/images/2025/04/02/1a1e0f50-0f85-11f0-94bb-4bb3e7faff3f.gif" alt="DFSEx174351664423113.gif">
+<figcaption aria-hidden="true">DFSEx174351664423113.gif</figcaption>
+</figure>
+<p>部分代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Graph</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Graph</span><span class="hljs-params">(<span class="hljs-type">size_t</span> nodeNum)</span> : nodeNum_(nodeNum) &#123;</span><br>	  graph_.<span class="hljs-built_in">resize</span>(nodeNum_);<br>  &#125;<br><br>  <span class="hljs-comment">// 添加边</span><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">addEdge</span><span class="hljs-params">(<span class="hljs-type">int</span> u, <span class="hljs-type">int</span> v)</span> </span>&#123;<br>	  <span class="hljs-keyword">if</span> (u &gt;= <span class="hljs-number">0</span> &amp;&amp; u &lt; nodeNum_ &amp;&amp; v &gt;= <span class="hljs-number">0</span> &amp;&amp; v &lt; nodeNum_) &#123;<br>		  graph_[u].<span class="hljs-built_in">push_back</span>(v);<br>		  graph_[v].<span class="hljs-built_in">push_back</span>(u);<br>	  &#125;<br>  &#125;<br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">size_t</span> nodeNum_;<br>  std::vector&lt;std::vector&lt;<span class="hljs-type">int</span>&gt;&gt; graph_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3><span id="递归方式实现">递归方式实现</span></h3>
+<ol type="1">
+<li>随意选择一个起始顶点作为当前顶点，并将其标记为已访问。</li>
+<li>递归地访问当前顶点的所有未访问过的邻接顶点。</li>
+<li>当当前顶点的所有邻接顶点都被访问过后，回溯到上一个顶点。</li>
+<li>重复步骤 2 和 3，直到所有可达的顶点都被访问。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">recursionDFS</span><span class="hljs-params">(<span class="hljs-type">int</span> start,std::unordered_set&lt;<span class="hljs-type">int</span>&gt;&amp; visited)</span></span>&#123;<br> visited.<span class="hljs-built_in">insert</span>(start);	<span class="hljs-comment">// 表示已经访问过</span><br> <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i : graph_[start]) &#123;	<span class="hljs-comment">// 访问与 start 相邻的节点</span><br>  <span class="hljs-keyword">if</span> (visited.<span class="hljs-built_in">find</span>(i) == visited.<span class="hljs-built_in">end</span>()) &#123;	<span class="hljs-comment">// 如果没有访问过,递归访问</span><br>	  <span class="hljs-built_in">recursionDFS</span>(i, visited);<br>  &#125;<br> &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3><span id="栈方式实现">栈方式实现</span></h3>
+<ol type="1">
+<li>随意选择一个起始顶点，将其压入栈中，并标记为已访问。</li>
+<li>当栈不为空时，弹出栈顶顶点。</li>
+<li>将该顶点的所有未访问过的邻接顶点压入栈中，并标记为已访问。</li>
+<li>重复步骤 2 和 3，直到栈为空。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">stackDFS</span><span class="hljs-params">(<span class="hljs-type">int</span> start,std::unordered_set&lt;<span class="hljs-type">int</span>&gt;&amp; visited)</span></span>&#123;<br> std::stack&lt;<span class="hljs-type">int</span>&gt; s;<br> s.<span class="hljs-built_in">push</span>(start);<br> visited.<span class="hljs-built_in">insert</span>(start);<br> <span class="hljs-keyword">while</span> (!s.<span class="hljs-built_in">empty</span>()) &#123;<br>  <span class="hljs-type">int</span> node = s.<span class="hljs-built_in">top</span>();<br>  s.<span class="hljs-built_in">pop</span>();<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i : graph_[node]) &#123;<br>	  <span class="hljs-keyword">if</span> (visited.<span class="hljs-built_in">find</span>(i) == visited.<span class="hljs-built_in">end</span>()) &#123;<br>		  s.<span class="hljs-built_in">push</span>(i);<br>		  visited.<span class="hljs-built_in">insert</span>(i);<br>	  &#125;<br>  &#125;<br> &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2><span id="广度优先搜索">广度优先搜索</span></h2>
+<figure>
+<img src="/images/2025/04/02/203b7580-0f85-11f0-94bb-4bb3e7faff3f.gif" alt="DFSEx.gif">
+<figcaption aria-hidden="true">DFSEx.gif</figcaption>
+</figure>
+<p>步骤：</p>
+<ol type="1">
+<li>选择起始顶点：任选图中的一个顶点作为起始点，将其标记为已访问，并将其加入到一个队列中。</li>
+<li>队列操作 –&gt; 当队列不为空时，执行以下操作：
+<ul>
+<li>从队列的头部取出一个顶点。</li>
+<li>访问该顶点的所有未被访问过的邻接顶点，将这些邻接顶点标记为已访问，并将它们依次加入到队列的尾部。</li>
+</ul></li>
+<li>结束条件：重复上述队列操作，直到队列为空，此时图中所有可达顶点都已被访问。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">BFS</span><span class="hljs-params">(<span class="hljs-type">int</span> start, std::unordered_set&lt;<span class="hljs-type">int</span>&gt; &amp;visited)</span> </span>&#123;<br> std::queue&lt;<span class="hljs-type">int</span>&gt; q;<br> q.<span class="hljs-built_in">push</span>(start);<br> visited.<span class="hljs-built_in">insert</span>(start);<br> <span class="hljs-keyword">while</span> (!q.<span class="hljs-built_in">empty</span>()) &#123;<br>  <span class="hljs-type">int</span> node = q.<span class="hljs-built_in">front</span>();<br>  q.<span class="hljs-built_in">pop</span>();<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i : graph_[node]) &#123;<br>	  <span class="hljs-keyword">if</span> (visited.<span class="hljs-built_in">find</span>(i) == visited.<span class="hljs-built_in">end</span>()) &#123;<br>		  q.<span class="hljs-built_in">push</span>(i);<br>		  visited.<span class="hljs-built_in">insert</span>(i);<br>	  &#125;<br>  &#125;<br> &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
       </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
     </div>
-  </div>
-  <div class="post-list">
     
-      
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/88e0b5fe.html" class="post-title hover-line">通过软盘拷贝文件</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">01背包问题</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="post-tag">#动态规划</a>
-
-</div>
-    </div>
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
   </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/e814b6a1.html" class="post-title hover-line">比赛</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题本身并不难，结合之前的做题经验完全不在话下</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-tag">#容器的应用</a>
-
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
 </div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/b56090e8.html" class="post-title hover-line">单向链表中间节点</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">buildLink 构建链表的时候，记得更新节点信息，同时记录最开始的 头结点信息返回</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E9%93%BE%E8%A1%A8/" class="post-tag">#链表</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/13253c62.html" class="post-title hover-line">报数游戏</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">时刻要关注的就是 it 迭代器是不是到达 end()，时刻检查并且把 it 更新为 begin() 迭代器</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-tag">#容器的应用</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/6090d7e1.html" class="post-title hover-line">Linux并行版数量</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">并查集的路径压缩写法是固定的，但是合并两个集合就不一定，往往要根据题意来看</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/" class="post-tag">#并查集</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/8ce77716.html" class="post-title hover-line">斗地主之顺子</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">怀疑在输出上存在要求，但是题目中明显没有提到这件事情，可谓害人不浅</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-tag">#容器的应用</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/c364089f.html" class="post-title hover-line">打印任务排序</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">我觉得这道题最唬人的就是题意，有必要讲清楚这个，但是官方给的示例又不妥当</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-tag">#容器的应用</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/ca8e88e1.html" class="post-title hover-line">单词接龙</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">这道题如果没有容器的实战经验，我不认为是可以轻松拿下的题目</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-tag">#容器的应用</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/2cf7462c.html" class="post-title hover-line">磁盘容量排序</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">substr 切割字符串要指定起始下标和终止下标，区间不是左闭右闭，而是左闭右开</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
-
-</div>
-    </div>
-  </div>
-
-  
-  <div class="post-card">
-    <div class="post__head">
-      <a href="/posts/29c8b6d6.html" class="post-title hover-line">TLV编码</a>
-      
-    </div>
-    <div class="post__body">
-      
-      <div class="post-excerpt">有个地方题目有些误解，再者核心是 index 的更新，画在图纸上并不难写出来</div>
-    </div>
-    <div class="post__foot">
-      <div class="post-tags">
-  <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-tag">#字符串</a>
-
-</div>
-    </div>
-  </div>
-
 
     
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/OD/page/2/">2</a></div>
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/88e0b5fe.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      通过软盘拷贝文件
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\22a22b79.html" title="三大经典排序算法" rel="bookmark">三大经典排序算法</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\ec6973f6.html" title="基于二叉搜索树实现Map容器的基本操作" rel="bookmark">基于二叉搜索树实现Map容器的基本操作</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\d8d692f8.html" title="实现海量数据快速查找之哈希表" rel="bookmark">实现海量数据快速查找之哈希表</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -881,6 +906,15 @@
     
     <script src="/js/copy-code.js"></script>
     
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
   
 
   </body>
