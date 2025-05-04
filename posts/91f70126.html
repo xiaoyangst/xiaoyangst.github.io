@@ -137,8 +137,6 @@
               
                 <a class="nav-menu-item" href="/technology">计算机技术</a>
               
-                <a class="nav-menu-item" href="/AI">人工智能</a>
-              
                 <a class="nav-menu-item" href="/knowledge">学科知识库</a>
               
                 <a class="nav-menu-item" href="/life">生活</a>
@@ -291,8 +289,8 @@ std::tie
 对元组进行拆包，但我们依然必须非常清楚这个元组包含多少个对象，各个对象是什么类型，非常麻烦。</p>
 <p>C++17 完善了这一设定：</p>
 <figure>
-<img src="C++杂谈（二）.assets/image-20250313231407765.png" alt="image-20250313231407765">
-<figcaption aria-hidden="true">image-20250313231407765</figcaption>
+<img src="/images/2025/05/04/5a58f6a0-28a5-11f0-a7d4-1bb298fa3df3.png" alt="image20250313231407765.png">
+<figcaption aria-hidden="true">image20250313231407765.png</figcaption>
 </figure>
 <p>语法：<code>auto [变量1, 变量2, ...] = 表达式</code></p>
 <p>表达式 必须是可以拆解的类型（如
@@ -347,8 +345,8 @@ std::tie
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">decltype</span>(表达式)<br></code></pre></td></tr></table></figure>
 <p>还可以用于 返回值类型的推导：</p>
 <figure>
-<img src="C++杂谈（二）.assets/image-20250313233249154.png" alt="image-20250313233249154">
-<figcaption aria-hidden="true">image-20250313233249154</figcaption>
+<img src="/images/2025/05/04/636c6b50-28a5-11f0-a7d4-1bb298fa3df3.png" alt="image20250313233249154.png">
+<figcaption aria-hidden="true">image20250313233249154.png</figcaption>
 </figure>
 <p>只不过 C++11 要如此，C++14 后面已经支持让返回值类型为 auto
 自动推导了。</p>
@@ -384,13 +382,13 @@ std::tie
 中为了引入强大的右值引用，将右值的概念进行了进一步的划分，分为：纯右值、将亡值。</p>
 <p>纯右值：</p>
 <figure>
-<img src="C++杂谈（二）.assets/image-20250314005057060.png" alt="image-20250314005057060">
-<figcaption aria-hidden="true">image-20250314005057060</figcaption>
+<img src="/images/2025/05/04/6acab5f0-28a5-11f0-a7d4-1bb298fa3df3.png" alt="image20250314005057060.png">
+<figcaption aria-hidden="true">image20250314005057060.png</figcaption>
 </figure>
 <p>将亡值：</p>
 <figure>
-<img src="C++杂谈（二）.assets/image-20250314005145456.png" alt="image-20250314005145456">
-<figcaption aria-hidden="true">image-20250314005145456</figcaption>
+<img src="/images/2025/05/04/6e846290-28a5-11f0-a7d4-1bb298fa3df3.png" alt="image20250314005145456.png">
+<figcaption aria-hidden="true">image20250314005145456.png</figcaption>
 </figure>
 <p>temp 不会被拷贝一份返回，而是被 v
 复制后，将立即被销毁，无法获取、也不能修改。</p>
