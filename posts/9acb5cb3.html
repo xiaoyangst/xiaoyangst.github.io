@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        最小生成树 | 
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/logo.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/logo.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.png"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/MapleMono-CN-Bold.ttf);
+        font-weight: MapleMono-CN-Bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a2cae4eb8b82546e147114262bd550f1";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.png" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/technology">计算机技术</a>
+              
+                <a class="nav-menu-item" href="/knowledge">学科知识库</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+                <a class="nav-menu-item" href="/leetcode">力扣</a>
+              
+                <a class="nav-menu-item" href="/OD">华为OD真题</a>
+              
+                <a class="nav-menu-item" href="/books">豆瓣读书</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">最小生成树</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+
+
+          <span class="post-date">2025-05-08</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <!-- toc -->
+<ul>
+<li><a href="#最小生成树的性质">最小生成树的性质</a></li>
+<li><a href="#克鲁斯卡尔算法并查集">克鲁斯卡尔算法（并查集）</a>
+<ul>
+<li><a href="#基本步骤">基本步骤</a></li>
+<li><a href="#为什么并查集可以判断是否有环">为什么并查集可以判断是否有环？</a></li>
+<li><a href="#代码实现">代码实现</a></li>
+<li><a href="#为什么代码中必须判断当前边的数量是否等于-n-1">为什么代码中必须判断当前边的数量是否等于
+n - 1？</a></li>
+</ul></li>
+<li><a href="#普里姆算法">普里姆算法</a>
+<ul>
+<li><a href="#基本步骤-1">基本步骤</a></li>
+<li><a href="#代码实现-1">代码实现</a></li>
+</ul></li>
+<li><a href="#两种算法的区别">两种算法的区别</a>
+<ul>
+<li><a href="#既可以应用于有向图也可以应用于无向图">既可以应用于有向图，也可以应用于无向图？</a></li>
+<li><a href="#图的存储不同">图的存储不同</a></li>
+<li><a href="#树的结构可能不同权重值不变">树的结构可能不同，权重值不变</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="最小生成树的性质">最小生成树的性质</span></h1>
+<ul>
+<li><p>包含图中所有的节点</p></li>
+<li><p>边数是 n - 1（n 代表节点总数）</p></li>
+<li><p>子图中不包含任何回路（无环），即不存在一条从某个顶点出发，经过若干条边后又回到该顶点的路径</p></li>
+<li><p>这个子图是连通的，也就是说对于图中任意两个顶点，都存在一条路径可以从一个顶点到达另一个顶点</p></li>
+<li><p>在所有可能的生成树中，总边权（边的权值之和）最小</p></li>
+</ul>
+<figure>
+<img src="/images/2025/05/08/f9a5e110-2bdd-11f0-9afb-53a088efdd23.png" alt="image20250508130718977.png">
+<figcaption aria-hidden="true">image20250508130718977.png</figcaption>
+</figure>
+<h1><span id="克鲁斯卡尔算法并查集">克鲁斯卡尔算法（并查集）</span></h1>
+<p>基本思想：每次选取权值最小的边，加入生成树中，只要不构成环，直到所有点连通。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/%E5%85%8B%E9%B2%81%E6%96%AF%E5%8D%A1%E5%B0%94%E7%AE%97%E6%B3%95">克鲁斯卡尔算法</a></p>
+<h2><span id="基本步骤">基本步骤</span></h2>
+<ol type="1">
+<li>排序边：把图中所有的边按照权重从小到大进行排序，<strong>每次选择一条权重最小的边</strong></li>
+<li>初始化并查集：为图中的<strong>每个顶点创建一个独立的集合</strong>（创建一个并查集即可），用于后面判断加入边是否会形成环</li>
+<li>选择边：从排序好的边列表中依次选取边，如果该边的两个顶点不在同一个集合（即加入这条变不会形成环），则将这条边加入最小生成树的边集，并将这两个顶点所在的集合合并</li>
+<li>重复步骤 3：不断重复步骤 3，直到最小生成树的边数到达 n -
+1，此时就得到了图的最小生成树</li>
+</ol>
+<h2><span id="为什么并查集可以判断是否有环">为什么并查集可以判断是否有环？</span></h2>
+<p>假设我们尝试加入边 <code>(0, 3)</code>，并查集当前状态：</p>
+<ul>
+<li><code>find(0) = 0</code></li>
+<li><code>find(3) = 3</code></li>
+<li>因为 <code>0 ≠ 3</code>，所以不成环，可以加入，并执行
+<code>union(0, 3)</code> 把它们并在一起。</li>
+</ul>
+<p>之后再来一条边 <code>(3, 0)</code>：</p>
+<ul>
+<li><code>find(3) = 0</code></li>
+<li><code>find(0) = 0</code></li>
+<li>因为相同 →
+<strong>表示已有路径相连，加这条边会成环</strong>，所以拒绝它。</li>
+</ul>
+<h2><span id="代码实现">代码实现</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span> &#123;<br>  <span class="hljs-type">int</span> from;<br>  <span class="hljs-type">int</span> to;<br>  <span class="hljs-type">int</span> weight;<br><br>  <span class="hljs-built_in">Edge</span>(<span class="hljs-type">int</span> from, <span class="hljs-type">int</span> to, <span class="hljs-type">int</span> weight) : <span class="hljs-built_in">from</span>(from), <span class="hljs-built_in">to</span>(to), <span class="hljs-built_in">weight</span>(weight) &#123;&#125;<br><br>  <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Edge &amp;other) <span class="hljs-type">const</span> &#123;<br>	  <span class="hljs-keyword">return</span> weight &gt; other.weight;<br>  &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">UnionFind</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">UnionFind</span><span class="hljs-params">(<span class="hljs-type">int</span> size)</span> : parent(size) &#123;</span><br>	  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; size; ++i) &#123;<br>		  parent[i] = i;<br>	  &#125;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> </span>&#123;<br>	  <span class="hljs-keyword">if</span> (x != parent[x]) &#123;<br>		  parent[x] = <span class="hljs-built_in">find</span>(parent[x]);<br>	  &#125;<br>	  <span class="hljs-keyword">return</span> parent[x];<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">merge</span><span class="hljs-params">(<span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> x2)</span> </span>&#123;<br>	  <span class="hljs-keyword">auto</span> new_x1 = <span class="hljs-built_in">find</span>(x1);<br>	  <span class="hljs-keyword">auto</span> new_x2 = <span class="hljs-built_in">find</span>(x2);<br>	  <span class="hljs-keyword">if</span> (new_x1 != new_x2) &#123;<br>		  parent[new_x1] = new_x2;<br>	  &#125;<br>  &#125;<br><br> <span class="hljs-keyword">private</span>:<br>  vector&lt;<span class="hljs-type">int</span>&gt; parent;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">kruskal</span><span class="hljs-params">(<span class="hljs-type">int</span> n, priority_queue&lt;Edge&gt; &amp;edges, list&lt;Edge&gt; &amp;mst)</span> </span>&#123;<br>	<span class="hljs-function">UnionFind <span class="hljs-title">union_find</span><span class="hljs-params">(n)</span></span>;<br>	<span class="hljs-type">int</span> total_weight = <span class="hljs-number">0</span>;<br><br>	<span class="hljs-keyword">while</span> (!edges.<span class="hljs-built_in">empty</span>()) &#123;<br>		<span class="hljs-keyword">auto</span> item = edges.<span class="hljs-built_in">top</span>();<br>		edges.<span class="hljs-built_in">pop</span>();<br>		<span class="hljs-keyword">if</span> (union_find.<span class="hljs-built_in">find</span>(item.from) != union_find.<span class="hljs-built_in">find</span>(item.to)) &#123;    <span class="hljs-comment">// 不在同一个集合中</span><br>			union_find.<span class="hljs-built_in">merge</span>(item.from, item.to);<br>			mst.<span class="hljs-built_in">push_back</span>(item);            <span class="hljs-comment">// 记录优先加入的边</span><br>			total_weight += item.weight;    <span class="hljs-comment">// 记录总的权重</span><br><br>			<span class="hljs-keyword">if</span> (mst.<span class="hljs-built_in">size</span>() == n - <span class="hljs-number">1</span>) &#123;		<span class="hljs-comment">// 最小生成树已经完成</span><br>				<span class="hljs-keyword">break</span>;<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> total_weight;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>示意图：</p>
+<figure>
+<img src="/images/2025/05/08/003f06f0-2bde-11f0-9afb-53a088efdd23.png" alt="image20250508150029093.png">
+<figcaption aria-hidden="true">image20250508150029093.png</figcaption>
+</figure>
+<h2><span id="为什么代码中必须判断当前边的数量是否等于n-1">为什么代码中必须判断当前边的数量是否等于
+n - 1？</span></h2>
+<p><strong>可以不判断，但效率低</strong>。</p>
+<p>如果不加这句，程序会继续遍历所有边，即使已经找到了完整的最小生成树。</p>
+<p>这
+<strong>不会影响正确性</strong>，但会造成<strong>不必要的计算</strong>，尤其是在边很多（例如稠密图）时，效率会差很多。</p>
+<h1><span id="普里姆算法">普里姆算法</span></h1>
+<p>基本思想：从一个点出发，每次选择连接当前生成树和“外部”最近的一条边，直到所有点被包含在树中。</p>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoyangst/Code/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/%E6%99%AE%E9%87%8C%E5%A7%86%E7%AE%97%E6%B3%95">普里姆算法</a></p>
+<h2><span id="基本步骤">基本步骤</span></h2>
+<ol type="1">
+<li>选择起始顶点：任意选择一个顶点作为起始点，将其加入最小生成树的顶点集合（用一个<strong>数组
+<code>visited[]</code></strong> 标记哪些点已经在生成树中）</li>
+<li>选择最小边：使用优先队列维护当前顶点所有可以连接树的边，每次就从优先队列中取出权重最小的边，我们就可以拿到当前顶点（from）对应的另一个顶点（to）。如果这条边连接的点（to）还不在生成树中（没有被访问过），就加进去，并把这个点所有的出边加入优先队列中</li>
+<li>重复步骤 3，直到所有点都加入生成树</li>
+</ol>
+<h2><span id="代码实现">代码实现</span></h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span> &#123;<br>  <span class="hljs-type">int</span> from;<br>  <span class="hljs-type">int</span> to;<br>  <span class="hljs-type">int</span> weight;<br><br>  <span class="hljs-built_in">Edge</span>(<span class="hljs-type">int</span> from, <span class="hljs-type">int</span> to, <span class="hljs-type">int</span> weight) : <span class="hljs-built_in">from</span>(from), <span class="hljs-built_in">to</span>(to), <span class="hljs-built_in">weight</span>(weight) &#123;&#125;<br><br>  <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Edge &amp;other) <span class="hljs-type">const</span> &#123;<br>	  <span class="hljs-keyword">return</span> weight &gt; other.weight;<br>  &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">prim</span><span class="hljs-params">(<span class="hljs-type">int</span> n, vector&lt;vector&lt;Edge&gt;&gt; &amp;edges, list&lt;Edge&gt; &amp;mst)</span> </span>&#123;<br>	<span class="hljs-comment">// 把所有定点设置为从未访问</span><br>	<span class="hljs-function">vector&lt;<span class="hljs-type">bool</span>&gt; <span class="hljs-title">visited</span><span class="hljs-params">(n, <span class="hljs-literal">false</span>)</span></span>;<br>	<span class="hljs-type">int</span> total_weight = <span class="hljs-number">0</span>;<br><br>	<span class="hljs-comment">// 随意选择一个顶点</span><br>	<span class="hljs-comment">// 将选择的顶点设置为已访问，并且把能连接的边加入优先队列，选择权重最小的一条边</span><br>	visited[<span class="hljs-number">0</span>] = <span class="hljs-literal">true</span>;<br>	priority_queue&lt;Edge&gt; pq;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> Edge &amp;e : edges[<span class="hljs-number">0</span>]) &#123;<br>		pq.<span class="hljs-built_in">push</span>(e);<br>	&#125;<br><br>	<span class="hljs-keyword">while</span> (!pq.<span class="hljs-built_in">empty</span>()) &#123;<br>		<span class="hljs-keyword">auto</span> [from, to, weight] = pq.<span class="hljs-built_in">top</span>();<br>		pq.<span class="hljs-built_in">pop</span>();<br><br>		<span class="hljs-keyword">if</span> (visited[to]) <span class="hljs-keyword">continue</span>;    <span class="hljs-comment">// 已经访问过</span><br><br>		mst.<span class="hljs-built_in">emplace_back</span>(from, to, weight);    <span class="hljs-comment">// 记录已访问的边</span><br>		total_weight += weight;<br><br>		<span class="hljs-comment">// 下面就是访问 to 顶点</span><br>		visited[to] = <span class="hljs-literal">true</span>;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;edge : edges[to]) &#123;<br>			<span class="hljs-keyword">if</span> (!visited[edge.to]) &#123;    <span class="hljs-comment">// 只加入未访问的边</span><br>				pq.<span class="hljs-built_in">push</span>(edge);<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> total_weight;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>示意图：</p>
+<figure>
+<img src="/images/2025/05/08/081826e0-2bde-11f0-9afb-53a088efdd23.png" alt="image20250508150755351.png">
+<figcaption aria-hidden="true">image20250508150755351.png</figcaption>
+</figure>
+<h1><span id="两种算法的区别">两种算法的区别</span></h1>
+<table>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 37%">
+<col style="width: 45%">
+</colgroup>
+<thead>
+<tr>
+<th>特性/维度</th>
+<th><strong>Kruskal 算法</strong></th>
+<th><strong>Prim 算法</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>思路核心</strong></td>
+<td>贪心选边：每次选最小边（不成环）</td>
+<td>贪心扩展点：从已选顶点延伸最小边</td>
+</tr>
+<tr>
+<td><strong>数据结构依赖</strong></td>
+<td><strong>并查集</strong>（检测是否成环）</td>
+<td><strong>优先队列（堆）</strong> + 访问标记</td>
+</tr>
+<tr>
+<td><strong>图结构依赖</strong></td>
+<td>边集（Edge List）</td>
+<td>邻接表或邻接矩阵</td>
+</tr>
+<tr>
+<td><strong>适合图类型</strong></td>
+<td><strong>稀疏图</strong>（边少，节点多）</td>
+<td><strong>稠密图</strong>（边多）</td>
+</tr>
+<tr>
+<td><strong>边处理方式</strong></td>
+<td>全局排序后按权重选取边</td>
+<td>从当前树延展，按权重扩展</td>
+</tr>
+<tr>
+<td><strong>终止条件</strong></td>
+<td>选满 n−1 条边</td>
+<td>所有点都加入生成树</td>
+</tr>
+<tr>
+<td><strong>环路处理</strong></td>
+<td>用并查集避免构成环</td>
+<td>用 visited 数组避免重复访问</td>
+</tr>
+<tr>
+<td><strong>灵活性</strong></td>
+<td>易用于处理离线边集、边是输入重点的图</td>
+<td>更适合点-邻接结构清晰的网络拓扑、地图等场景</td>
+</tr>
+<tr>
+<td><strong>起点依赖性</strong></td>
+<td>与起点<strong>无关</strong></td>
+<td>与起点<strong>有关</strong>（不同起点结果结构可能不同）</td>
+</tr>
+</tbody>
+</table>
+<h2><span id="既可以应用于有向图也可以应用于无向图">既可以应用于有向图，也可以应用于无向图？</span></h2>
+<p><strong>不可以直接用于有向图。两者都</strong>主要<strong>用于</strong>无向图的最小生成树（MST）问题。</p>
+<h2><span id="图的存储不同">图的存储不同</span></h2>
+<p><strong>Kruskal 算法</strong> 是以边为单位，而 <strong>Prim
+算法</strong> 是以顶点为单位，两者在存储图结构的时候有所不同：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Kruskal 算法</span><br><br>vector&lt;Edge&gt; edges = &#123;<br>	&#123;<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">10</span>&#125;,<br>	&#123;<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">6</span>&#125;,<br>	&#123;<span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>&#125;,<br>	&#123;<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">15</span>&#125;,<br>	&#123;<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;<br>&#125;;<br><br><span class="hljs-comment">// Prim 算法</span><br><br>graph[<span class="hljs-number">0</span>].<span class="hljs-built_in">emplace_back</span>(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>);<br>graph[<span class="hljs-number">1</span>].<span class="hljs-built_in">emplace_back</span>(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>);<br><br>graph[<span class="hljs-number">0</span>].<span class="hljs-built_in">emplace_back</span>(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>);<br>graph[<span class="hljs-number">3</span>].<span class="hljs-built_in">emplace_back</span>(<span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>);<br></code></pre></td></tr></table></figure>
+<h2><span id="树的结构可能不同权重值不变">树的结构可能不同，权重值不变</span></h2>
+<p><strong>Kruskal 算法</strong> ：树的结构确定，权重确定</p>
+<p><strong>Prim 算法</strong> ：树的结构不确定，权重确定</p>
+<p>Prim 算法选择不同的起始点，会导致树的结构不确定，但是 Kruskal 算法
+的边的选择是唯一的。</p>
+
+      </div>
+	<div id="zan" class="clearfix">
+    <div class="heart" onclick="goodplus(url, flag)"></div>
+    <br>
+    <div id="zan_text"></div>
+  </div>  
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/images/logo.png" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/images/pay.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/posts/91f70126.html">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      C++ 杂谈（二）
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tag">#数据结构与算法</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="\posts\6139a6a3.html" title="LFU 和 LRU 内存淘汰策略" rel="bookmark">LFU 和 LRU 内存淘汰策略</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\20e6bfc.html" title="d叉堆" rel="bookmark">d叉堆</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\22a22b79.html" title="三大经典排序算法" rel="bookmark">三大经典排序算法</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\e28a809.html" title="AOF持久化" rel="bookmark">AOF持久化</a></div></div><div class="null-item"><div class="null-title"><a href="\posts\c780f90e.html" title="Base64 和 MD5 的使用" rel="bookmark">Base64 和 MD5 的使用</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">我</div><div class="matts">们</div><div class="matts">应</div><div class="matts">该</div><div class="matts">坚</div><div class="matts">守</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">而</div><div class="matts">不</div><div class="matts">是</div><div class="matts">看</div><div class="matts">似</div><div class="matts">正</div><div class="matts">确</div><div class="matts">的</div><div class="matts">道</div><div class="matts">路</div><div class="matts">，</div><div class="matts">可</div><div class="matts">有</div><div class="matts">太</div><div class="matts">多</div><div class="matts">不</div><div class="matts">深</div><div class="matts">思</div><div class="matts">的</div><div class="matts">人</div><div class="matts">误</div><div class="matts">入</div><div class="matts">歧</div><div class="matts">途</div><div class="matts">了</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://zarathustrasay.github.io/">个人原创作品集</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hasucn.me/i/O7OXkNEk">推荐机场（用多少买多少，不重置）</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://subingwen.cn">爱编程的大丙</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://face2ai.com/">谭升的博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://dusays.com">杜老师说</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.d2school.com/">第二学堂</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://echosorari.github.io/">清和</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zzzzhi.com">祈星海</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://taifua.com/">太傅博客</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://noheart.cn">今今今生</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.javatiku.cn/gitguide.html">笨鸟教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://draveness.me/">draveness</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.incredibuild.cn/blog">incredibuild</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://blog.tangly1024.com/">Tangly的学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.kashiwabyte.tech">KashiwaのBlog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wiki.deepin.org/zh/home">deepin</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://colobu.com/">鸟窝</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.freeconvert.com/zh">文件转换免费网站</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://yihui.org/cn/">yihui</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wpfx.org/">wpfx网盘分享</a>
+          </div>
+        
+      
+    </div>
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://arthurchiao.art/articles-zh/">ArthurChiao's Blog</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://tech.dewu.com/">得物技术</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://www.uml.org.cn/wenzhang/artindex.asp">火龙果</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://knowledge.zhaoweiguo.com/">计算机技术学习笔记</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="http://kaito-kidd.com/">kaito</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.xiaojingge.com">筱晶IT知识库</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://wuli.wiki/online/">wuli.wiki</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.luozhiwen.com/categories">skynet教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.cnblogs.com/yidengjiagou">分享Java+MySQL+Redis教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://hewei.blog.csdn.net/category_9866493.html">libhv网络库教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://cppguide.cn/">C++后端开发进阶教程</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-link+.svg" />
+            <a class="foot-link" href="mailto:ydfox@foxmail.com?subject=申请https://xiaoyangst.github.io的友链">申请友链</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/xiaoyangst">xiaoyangst</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://xiaoyangst.github.io"></a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+      <script src="https://unpkg.com/js-polyfills@0.1.43/es6.js"></script>
+      <script id="MathJax-script"
+              async
+              src="https://www.unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"xiaoyangst","admin":["xiaoyangst"],"repo":"comment","clientID":"Ov23lithQvbR0TMcvtc1","clientSecret":"c85019d9e22adb662b6de5b3321d1db1c2107615","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
